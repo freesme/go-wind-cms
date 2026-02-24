@@ -66,7 +66,7 @@ async function reloadLanguages() {
     ]);
     languageOptions.value =
       resp.items?.map((lang) => ({
-        label: lang.languageName || '',
+        label: lang.nativeName || '',
         value: lang.languageCode || '',
       })) || [];
   } catch (error) {

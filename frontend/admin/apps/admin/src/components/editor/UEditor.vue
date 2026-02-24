@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, unref, watch } from 'vue';
+import { computed, nextTick, ref, unref, watch } from 'vue';
 
 import { useAccessStore } from '@vben/stores';
 
@@ -93,6 +93,7 @@ const editorConfig = computed(() => ({
   autoSyncData: false,
   autoFloatEnabled: true,
   theme: theme.value,
+  lang: unref(getCurrentLang),
   themePath: '/static/UEditorPlus/themes/',
   toolbars: props.toolbars,
   maximumWords: props.maximumWords,
@@ -307,6 +308,53 @@ watch(
   },
 );
 
+const switchEditorTheme = (isDarkMode: boolean) => {
+  if (!editorInst.value) return;
+
+  editorInst.value.setOpt({
+    theme: isDarkMode ? 'dark' : 'default',
+  });
+  editorInst.value.options.theme = isDarkMode ? 'dark' : 'default';
+
+  console.log('Editor theme set to', editorInst.value.options.theme);
+
+  // 2. 获取编辑器根容器，添加/移除暗黑类名
+  // const editorDom = document.getElementById(props.editorId);
+  // const editorRoot = editorDom?.parentNode?.parentNode as HTMLElement;
+  const editorRoot = document.querySelector('.edui-editor') as HTMLElement;
+
+  const applyThemeClasses = (node: Element) => {
+    const replaceClass = (oldClass: string, newClass: string) => {
+      if (node.classList.contains(oldClass)) {
+        node.classList.replace(oldClass, newClass);
+      }
+    };
+
+    if (isDarkMode) {
+      replaceClass('edui-editor-default', 'edui-editor-dark');
+      replaceClass('edui-default', 'edui-dark');
+    } else {
+      replaceClass('edui-editor-dark', 'edui-editor-default');
+      replaceClass('edui-dark', 'edui-default');
+    }
+  };
+
+  if (editorRoot) {
+    const nodes = [editorRoot, ...document.querySelectorAll('*')];
+    nodes.forEach((element) => {
+      applyThemeClasses(element);
+    });
+  }
+
+  // 3. 刷新编辑器样式（关键：避免样式不生效）
+  nextTick(() => {
+    // 重新渲染工具栏（解决工具栏样式未更新问题）
+    // editorInst.value?.ui.renderToolbar();
+    // 触发编辑器大小重绘，同步样式
+    editorInst.value?.setContent(editorInst.value.getContent(), false);
+  });
+};
+
 watch(contentRef, () => {
   const value = formatSaveShowContent('save', contentRef.value);
   emit('update:modelValue', value);
@@ -319,7 +367,12 @@ watch(
     if (!initialed || !editorInst.value) {
       return;
     }
-    editorInst.value.setOpt({ theme: theme.value });
+
+    console.log('Switching theme to', isDarkMode());
+
+    switchEditorTheme(isDarkMode());
+
+    console.log('Switched theme', editorInst.value.options.theme);
   },
   { immediate: true },
 );
