@@ -30,12 +30,13 @@ const currentEditorComponent = computed(() => {
   const type = props.editorType;
 
   switch (type) {
-    case EditorType.JSON: {
-      return JsonEditor;
+    case EditorType.CODE:
+    case EditorType.VISUAL_BUILDER: {
+      return CodeEditor;
     }
 
-    case EditorType.RICH_TEXT: {
-      return UEditor;
+    case EditorType.JSON: {
+      return JsonEditor;
     }
 
     case EditorType.MARKDOWN: {
@@ -46,8 +47,8 @@ const currentEditorComponent = computed(() => {
       return PlainTextEditor;
     }
 
-    case EditorType.CODE: {
-      return CodeEditor;
+    case EditorType.RICH_TEXT: {
+      return UEditor;
     }
 
     default: {
@@ -73,17 +74,20 @@ const handleReady = () => {
 const currentOptions = computed(() => {
   const type = props.editorType;
   switch (type) {
-    case EditorType.MARKDOWN:
-      return props.markdownOptions;
-    case EditorType.JSON:
-      return props.jsonOptions;
-    case EditorType.CODE:
+    case EditorType.CODE: {
       return props.codeOptions;
-    default:
+    }
+    case EditorType.JSON: {
+      return props.jsonOptions;
+    }
+    case EditorType.MARKDOWN: {
+      return props.markdownOptions;
+    }
+    default: {
       return undefined;
+    }
   }
 });
-
 </script>
 
 <template>

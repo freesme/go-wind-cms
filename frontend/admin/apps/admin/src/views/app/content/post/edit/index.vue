@@ -29,11 +29,23 @@ const postId = computed(() => {
 
 // 编辑器类型列表
 const editorTypeOptions = [
-  { label: 'Markdown Editor', value: EditorType.MARKDOWN },
-  { label: 'Rich Text Editor (UEditor)', value: EditorType.RICH_TEXT },
-  { label: 'JSON Editor', value: EditorType.JSON },
-  { label: 'Plain Text Editor', value: EditorType.PLAIN_TEXT },
-  { label: 'Code Editor', value: EditorType.CODE },
+  {
+    label: $t('enum.editorType.EDITOR_TYPE_MARKDOWN'),
+    value: EditorType.MARKDOWN,
+  },
+  {
+    label: $t('enum.editorType.EDITOR_TYPE_RICH_TEXT'),
+    value: EditorType.RICH_TEXT,
+  },
+  {
+    label: $t('enum.editorType.EDITOR_TYPE_JSON_BLOCK'),
+    value: EditorType.JSON,
+  },
+  {
+    label: $t('enum.editorType.EDITOR_TYPE_PLAIN_TEXT'),
+    value: EditorType.PLAIN_TEXT,
+  },
+  { label: $t('enum.editorType.EDITOR_TYPE_CODE'), value: EditorType.CODE },
 ];
 
 // 表单数据
