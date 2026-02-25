@@ -27,6 +27,7 @@ import Underline from '@tiptap/extension-underline';
 import StarterKit from '@tiptap/starter-kit';
 import { EditorContent, useEditor } from '@tiptap/vue-3';
 import { Input, Modal } from 'ant-design-vue';
+import { marked } from 'marked';
 
 interface Props {
   modelValue: string;
@@ -63,6 +64,7 @@ const isDark = ref(preferences.theme.mode === 'dark');
 const contentRef = ref(props.modelValue);
 let isInternalUpdate = false;
 const fileInputRef = ref<HTMLInputElement>();
+const markdownInputRef = ref<HTMLInputElement>();
 
 // Modal 状态
 const linkModalVisible = ref(false);
@@ -207,6 +209,26 @@ const handleImageUpload = async (event: Event) => {
   }
 };
 
+const handleMarkdownImport = async (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
+  if (!file) {
+    return;
+  }
+
+  try {
+    const markdown = await file.text();
+    const html = marked.parse(markdown);
+    if (editor.value) {
+      editor.value.commands.setContent(String(html));
+    }
+  } catch (error) {
+    console.error('Markdown import failed:', error);
+  } finally {
+    input.value = '';
+  }
+};
+
 // 工具栏操作
 const openLinkModal = () => {
   linkUrl.value = '';
@@ -264,6 +286,7 @@ const toolbarActions = {
   setHighlight: (color: string) =>
     editor.value?.chain().focus().toggleHighlight({ color }).run(),
   uploadImage: () => fileInputRef.value?.click(),
+  importMarkdown: () => markdownInputRef.value?.click(),
   undo: () => editor.value?.chain().focus().undo().run(),
   redo: () => editor.value?.chain().focus().redo().run(),
   clearContent: () => {
@@ -1067,12 +1090,27 @@ onUnmounted(() => {
             />
           </svg>
         </button>
+        <button
+          type="button"
+          class="toolbar-btn"
+          @click="toolbarActions.importMarkdown"
+          :title="$t('page.editor.importMarkdown')"
+        >
+          MD
+        </button>
         <input
           ref="fileInputRef"
           type="file"
           accept="image/*"
           class="hidden"
           @change="handleImageUpload"
+        />
+        <input
+          ref="markdownInputRef"
+          type="file"
+          accept=".md,text/markdown"
+          class="hidden"
+          @change="handleMarkdownImport"
         />
       </div>
     </div>

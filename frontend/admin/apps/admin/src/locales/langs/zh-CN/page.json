@@ -636,6 +636,7 @@
     "removeUrl": "移除链接",
     "insertUrl": "插入链接",
     "uploadImage": "插入图片",
+    "importMarkdown": "导入Markdown",
     "clearContent": "清空内容",
     "clearFormatting": "清除格式",
     "subscript": "下标",

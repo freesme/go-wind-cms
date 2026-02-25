@@ -21,7 +21,7 @@
     "permission": "Permissions"
   },
   "opm": {
-    "moduleName": "Organization & People",
+    "moduleName": "Org & People",
     "orgUnit": "Organizations",
     "position": "Positions",
     "user": "Users",
@@ -50,7 +50,7 @@
   },
   "internalMessage": {
     "moduleName": "Internal Messages",
-    "internalMessage": "Message Management",
+    "internalMessage": "Messages",
     "internalMessageCategory": "Message Categories"
   },
   "content": {

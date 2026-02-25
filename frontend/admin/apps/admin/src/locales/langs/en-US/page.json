@@ -638,6 +638,7 @@
     "removeUrl": "Remove Link",
     "insertUrl": "Insert Link",
     "uploadImage": "Insert Image",
+    "importMarkdown": "Import Markdown",
     "clearContent": "Clear Content",
     "clearFormatting": "Clear Formatting",
     "subscript": "Subscript",
