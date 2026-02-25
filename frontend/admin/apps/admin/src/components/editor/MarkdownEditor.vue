@@ -21,7 +21,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   height: '100%', // 默认撑满父容器
-  placeholder: $t('ui.editor.please_input_content'),
+  placeholder: $t('page.editor.please_input_content'),
   options: () => ({}),
 });
 

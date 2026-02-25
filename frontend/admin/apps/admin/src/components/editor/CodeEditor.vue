@@ -57,7 +57,7 @@ const props = withDefaults(defineProps<Props>(), {
   autoDetectLanguage: true, // 默认启用自动侦测
   disabled: false,
   height: '100%',
-  placeholder: $t('ui.editor.please_input_content'),
+  placeholder: $t('page.editor.please_input_content'),
   options: () => ({
     language: 'javascript',
     theme: 'light',

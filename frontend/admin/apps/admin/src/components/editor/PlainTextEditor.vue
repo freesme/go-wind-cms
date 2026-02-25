@@ -13,7 +13,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   height: '100%',
-  placeholder: $t('ui.editor.please_input_content'),
+  placeholder: $t('page.editor.please_input_content'),
 });
 
 const emit = defineEmits<{

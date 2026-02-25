@@ -2,37 +2,37 @@
   "dashboard": {
     "index": "Data Center",
     "dashboard": "Dashboard",
-    "analysis": "Analysis",
+    "analysis": "Analytics",
     "workbench": "Workbench",
     "about": "About"
   },
   "profile": {
-    "moduleName": "Personal Center",
-    "profile": "Personal Information",
-    "settings": "Personal Settings",
-    "security": "Security Settings",
-    "customize": "Interface Customization",
+    "moduleName": "Profile",
+    "profile": "Profile",
+    "settings": "Settings",
+    "security": "Security",
+    "customize": "Customize",
     "notification": "Notifications",
-    "internalMessage": "Internal Messages"
+    "internalMessage": "Inbox"
   },
   "permission": {
-    "moduleName": "Permission Management",
-    "role": "Role Management",
-    "permission": "Permission Management"
+    "moduleName": "Access Control",
+    "role": "Roles",
+    "permission": "Permissions"
   },
   "opm": {
-    "moduleName": "Organization & Personnel",
-    "orgUnit": "Organization Management",
-    "position": "Position Management",
-    "user": "User Management",
+    "moduleName": "Organization & People",
+    "orgUnit": "Organizations",
+    "position": "Positions",
+    "user": "Users",
     "userDetail": "User Details"
   },
   "tenant": {
-    "moduleName": "Tenant Management",
+    "moduleName": "Tenants",
     "member": "Tenant List"
   },
   "system": {
-    "moduleName": "System Management",
+    "moduleName": "System",
     "dict": "Data Dictionary",
     "task": "Task Scheduler",
     "file": "File Management",
@@ -44,7 +44,7 @@
     "moduleName": "Audit Logs",
     "loginAuditLog": "Login Logs",
     "apiAuditLog": "API Logs",
-    "dataAccessAuditLog": "Data Logs",
+    "dataAccessAuditLog": "Data Access Logs",
     "operationAuditLog": "Operation Logs",
     "permissionAuditLog": "Permission Logs"
   },
@@ -54,27 +54,29 @@
     "internalMessageCategory": "Message Categories"
   },
   "content": {
-    "moduleName": "Content Management",
-    "post": "Post Management",
-    "page": "Page Management",
-    "category": "Category Management",
-    "tag": "Tag Management"
+    "moduleName": "Content",
+    "post": "Posts",
+    "createPost": "Create Post",
+    "editPost": "Edit Post",
+    "page": "Pages",
+    "category": "Categories",
+    "tag": "Tags"
   },
   "media": {
-    "moduleName": "Media Center",
+    "moduleName": "Media",
     "mediaAsset": "Media Assets",
     "mediaCategory": "Media Categories"
   },
   "engagement": {
-    "moduleName": "Engagement Operations",
-    "comment": "Comment Management",
-    "feedback": "Feedback Management"
+    "moduleName": "Engagement",
+    "comment": "Comments",
+    "feedback": "Feedback"
   },
   "siteSetting": {
-    "moduleName": "Site Configuration",
-    "site": "Site Management",
+    "moduleName": "Site Settings",
+    "site": "Sites",
     "siteSetting": "Site Settings",
-    "navigation": "Navigation Management",
+    "navigation": "Navigation",
     "seoSetting": "SEO Settings",
     "socialSetting": "Social Settings",
     "analyticsSetting": "Analytics Settings"

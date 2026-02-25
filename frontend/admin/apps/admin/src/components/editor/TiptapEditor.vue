@@ -7,10 +7,21 @@ import { LucideCircleAlert } from '@vben/icons';
 import { $t } from '@vben/locales';
 import { preferences } from '@vben/preferences';
 
+import Color from '@tiptap/extension-color';
+import Highlight from '@tiptap/extension-highlight';
+import HorizontalRule from '@tiptap/extension-horizontal-rule';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
+import Subscript from '@tiptap/extension-subscript';
+import Superscript from '@tiptap/extension-superscript';
+import { Table } from '@tiptap/extension-table';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
+import TableRow from '@tiptap/extension-table-row';
 import TextAlign from '@tiptap/extension-text-align';
+import { TextStyle } from '@tiptap/extension-text-style';
+import Underline from '@tiptap/extension-underline';
 import StarterKit from '@tiptap/starter-kit';
 import { EditorContent, useEditor } from '@tiptap/vue-3';
 import { Input, Modal } from 'ant-design-vue';
@@ -30,7 +41,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   height: 500,
   disabled: false,
-  placeholder: $t('ui.editor.please_input_content'),
+  placeholder: $t('page.editor.please_input_content'),
   config: () => ({}),
   showToolbar: true,
   showStatusBar: true,
@@ -55,11 +66,32 @@ const fileInputRef = ref<HTMLInputElement>();
 const linkModalVisible = ref(false);
 const linkUrl = ref('');
 
+// 文本颜色状态
+const textColor = ref('#000000');
+const highlightColor = ref('#FFFF00');
+
 // 初始化编辑器
 const editor = useEditor({
   content: props.modelValue,
   extensions: [
-    StarterKit,
+    StarterKit.configure({
+      link: false,
+      underline: false,
+      horizontalRule: false,
+    }),
+    Underline,
+    Subscript,
+    Superscript,
+    HorizontalRule,
+    Highlight.configure({ multicolor: true }),
+    Color,
+    TextStyle,
+    Table.configure({
+      resizable: true,
+    }),
+    TableRow,
+    TableHeader,
+    TableCell,
     Placeholder.configure({ placeholder: props.placeholder }),
     Link.configure({ openOnClick: false, autolink: true }),
     Image.configure({ inline: true }),
@@ -174,6 +206,7 @@ const toolbarActions = {
   toggleBold: () => editor.value?.chain().focus().toggleBold().run(),
   toggleItalic: () => editor.value?.chain().focus().toggleItalic().run(),
   toggleStrike: () => editor.value?.chain().focus().toggleStrike().run(),
+  toggleUnderline: () => editor.value?.chain().focus().toggleUnderline().run(),
   toggleCode: () => editor.value?.chain().focus().toggleCode().run(),
   toggleHeading: (level: Level) =>
     editor.value?.chain().focus().toggleHeading({ level }).run(),
@@ -184,6 +217,18 @@ const toolbarActions = {
   toggleCodeBlock: () => editor.value?.chain().focus().toggleCodeBlock().run(),
   toggleBlockquote: () =>
     editor.value?.chain().focus().toggleBlockquote().run(),
+  toggleSubscript: () => editor.value?.chain().focus().toggleSubscript().run(),
+  toggleSuperscript: () =>
+    editor.value?.chain().focus().toggleSuperscript().run(),
+  insertHorizontalRule: () =>
+    editor.value?.chain().focus().setHorizontalRule().run(),
+  insertTable: () =>
+    editor.value
+      ?.chain()
+      .focus()
+      .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+      .run(),
+  deleteTable: () => editor.value?.chain().focus().deleteTable().run(),
   setAlign: (align: 'center' | 'justify' | 'left' | 'right') =>
     editor.value?.chain().focus().setTextAlign(align).run(),
   setLink: () => {
@@ -191,6 +236,10 @@ const toolbarActions = {
     linkModalVisible.value = true;
   },
   unsetLink: () => editor.value?.chain().focus().unsetLink().run(),
+  setTextColor: (color: string) =>
+    editor.value?.chain().focus().setColor(color).run(),
+  setHighlight: (color: string) =>
+    editor.value?.chain().focus().toggleHighlight({ color }).run(),
   uploadImage: () => fileInputRef.value?.click(),
   undo: () => editor.value?.chain().focus().undo().run(),
   redo: () => editor.value?.chain().focus().redo().run(),
@@ -394,6 +443,27 @@ onUnmounted(() => {
         <button
           type="button"
           class="toolbar-btn"
+          :class="{ active: isActive('underline') }"
+          @click="toolbarActions.toggleUnderline"
+          :title="$t('page.editor.underline')"
+        >
+          <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 3v8a6 6 0 006 6h0a6 6 0 006-6V3M3 21h18"
+            />
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="toolbar-btn"
           :class="{ active: isActive('code') }"
           @click="toolbarActions.toggleCode"
           :title="$t('page.editor.code')"
@@ -412,6 +482,59 @@ onUnmounted(() => {
             />
           </svg>
         </button>
+      </div>
+
+      <div class="toolbar-divider"></div>
+
+      <div class="toolbar-group">
+        <button
+          type="button"
+          class="toolbar-btn"
+          :class="{ active: isActive('subscript') }"
+          @click="toolbarActions.toggleSubscript"
+          :title="$t('page.editor.subscript')"
+        >
+          <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <text x="3" y="12" font-size="16" font-weight="bold">X</text>
+            <text x="14" y="18" font-size="10">2</text>
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="toolbar-btn"
+          :class="{ active: isActive('superscript') }"
+          @click="toolbarActions.toggleSuperscript"
+          :title="$t('page.editor.superscript')"
+        >
+          <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <text x="3" y="16" font-size="16" font-weight="bold">X</text>
+            <text x="14" y="8" font-size="10">2</text>
+          </svg>
+        </button>
+        <input
+          type="color"
+          v-model="textColor"
+          @change="toolbarActions.setTextColor(textColor)"
+          class="toolbar-color-picker"
+          :title="$t('page.editor.textColor')"
+        />
+        <input
+          type="color"
+          v-model="highlightColor"
+          @change="toolbarActions.setHighlight(highlightColor)"
+          class="toolbar-color-picker"
+          :title="$t('page.editor.highlightColor')"
+        />
       </div>
 
       <div class="toolbar-divider"></div>
@@ -516,6 +639,59 @@ onUnmounted(() => {
             />
           </svg>
         </button>
+        <button
+          @click="toolbarActions.insertTable"
+          type="button"
+          class="toolbar-btn"
+          :title="$t('page.editor.insertTable')"
+        >
+          <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2" />
+            <line x1="12" y1="3" x2="12" y2="21" stroke-width="2" />
+            <line x1="3" y1="12" x2="21" y2="12" stroke-width="2" />
+          </svg>
+        </button>
+        <button
+          v-if="isActive('table')"
+          type="button"
+          class="toolbar-btn text-red-500"
+          @click="toolbarActions.deleteTable"
+          :title="$t('page.editor.deleteTable')"
+        >
+          <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+            />
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="toolbar-btn"
+          @click="toolbarActions.insertHorizontalRule"
+          :title="$t('page.editor.insertHorizontalRule')"
+        >
+          <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <line x1="4" y1="12" x2="20" y2="12" stroke-width="2" />
+          </svg>
+        </button>
       </div>
 
       <div class="toolbar-divider"></div>
@@ -600,8 +776,8 @@ onUnmounted(() => {
           "
           :title="
             isActive('link')
-              ? $t('page.editor.remove_url')
-              : $t('page.editor.insert_url')
+              ? $t('page.editor.removeUrl')
+              : $t('page.editor.insertUrl')
           "
         >
           <svg
@@ -622,7 +798,7 @@ onUnmounted(() => {
           type="button"
           class="toolbar-btn"
           @click="toolbarActions.uploadImage"
-          :title="$t('page.editor.insert_image')"
+          :title="$t('page.editor.uploadImage')"
         >
           <svg
             class="icon"
@@ -752,7 +928,7 @@ onUnmounted(() => {
 
     <!-- Link Input Modal -->
     <Modal
-      v-model:visible="linkModalVisible"
+      v-model:open="linkModalVisible"
       :title="$t('ui.title.insert_url')"
       @ok="handleLinkOk"
       @cancel="handleLinkCancel"
@@ -879,6 +1055,29 @@ onUnmounted(() => {
 .toolbar-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+.toolbar-color-picker {
+  width: 28px;
+  height: 28px;
+  padding: 2px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.toolbar-color-picker:hover {
+  transform: scale(1.05);
+  border-color: #94a3b8;
+}
+
+.tiptap-editor-dark .toolbar-color-picker {
+  border-color: var(--tte-border-secondary);
+}
+
+.tiptap-editor-dark .toolbar-color-picker:hover {
+  border-color: var(--tte-text-primary);
 }
 
 .tiptap-editor-dark .toolbar-btn {
