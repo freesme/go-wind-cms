@@ -361,7 +361,7 @@ onUnmounted(() => {
   color: var(--error-text) !important;
 }
 
-:deep(.json-editor-core) {
+.json-editor-container :deep(.json-editor-core) {
   flex: 1;
   overflow: hidden;
   width: 100%;
@@ -496,7 +496,7 @@ onUnmounted(() => {
 }
 
 /* 禁用状态 */
-:deep(.jsoneditor-disabled) {
+.json-editor-container :deep(.jsoneditor-disabled) {
   opacity: 0.8 !important;
   cursor: not-allowed !important;
   background-color: #1a2436 !important;
@@ -526,16 +526,16 @@ onUnmounted(() => {
 }
 
 /* 亮色模式基础样式 */
-:deep(.jsoneditor) {
+.json-editor-container :deep(.jsoneditor) {
   font-family: Monaco, Consolas, 'Courier New', monospace !important;
   font-size: 14px !important;
 }
 
-:deep(.jsoneditor-menu) {
+.json-editor-container :deep(.jsoneditor-menu) {
   padding: 4px !important;
 }
 
-:deep(.jsoneditor-menu button) {
+.json-editor-container :deep(.jsoneditor-menu button) {
   border-radius: 4px !important;
   padding: 4px 8px !important;
 }

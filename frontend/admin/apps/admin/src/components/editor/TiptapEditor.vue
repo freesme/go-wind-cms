@@ -1979,7 +1979,7 @@ onUnmounted(() => {
   flex-direction: column;
 }
 
-:deep(.ProseMirror) {
+.tiptap-editor-wrapper :deep(.ProseMirror) {
   padding: 16px;
   outline: none;
   flex: 1;
@@ -2004,6 +2004,7 @@ onUnmounted(() => {
 }
 
 /* Placeholder */
+.tiptap-editor-wrapper,
 :deep(.ProseMirror p.is-editor-empty:first-child::before) {
   color: #9ca3af;
   content: attr(data-placeholder);
@@ -2019,19 +2020,19 @@ onUnmounted(() => {
 }
 
 /* Headings */
-:deep(.ProseMirror h1) {
+.tiptap-editor-wrapper :deep(.ProseMirror h1) {
   font-size: 28px;
   font-weight: 700;
   margin: 16px 0;
   color: #111827;
 }
-:deep(.ProseMirror h2) {
+.tiptap-editor-wrapper :deep(.ProseMirror h2) {
   font-size: 24px;
   font-weight: 700;
   margin: 12px 0;
   color: #1f2937;
 }
-:deep(.ProseMirror h3) {
+.tiptap-editor-wrapper :deep(.ProseMirror h3) {
   font-size: 20px;
   font-weight: 700;
   margin: 8px 0;
@@ -2048,20 +2049,20 @@ onUnmounted(() => {
 }
 
 /* Paragraphs & Lists */
-:deep(.ProseMirror p) {
+.tiptap-editor-wrapper :deep(.ProseMirror p) {
   margin: 8px 0;
 }
-:deep(.ProseMirror ul),
-:deep(.ProseMirror ol) {
+.tiptap-editor-wrapper :deep(.ProseMirror ul),
+.tiptap-editor-wrapper :deep(.ProseMirror ol) {
   margin: 8px 0;
   padding-left: 24px;
 }
-:deep(.ProseMirror li) {
+.tiptap-editor-wrapper :deep(.ProseMirror li) {
   margin: 4px 0;
 }
 
 /* Code */
-:deep(.ProseMirror code) {
+.tiptap-editor-wrapper :deep(.ProseMirror code) {
   background-color: #f3f4f6;
   padding: 2px 6px;
   border-radius: 3px;
@@ -2069,7 +2070,7 @@ onUnmounted(() => {
   font-size: 13px;
   color: #ef4444;
 }
-:deep(.ProseMirror pre) {
+.tiptap-editor-wrapper :deep(.ProseMirror pre) {
   background-color: #1f2937;
   color: #f3f4f6;
   padding: 12px;
@@ -2078,7 +2079,7 @@ onUnmounted(() => {
   margin: 8px 0;
   position: relative;
 }
-:deep(.ProseMirror pre code) {
+.tiptap-editor-wrapper :deep(.ProseMirror pre code) {
   background: none;
   color: inherit;
   padding: 0;
@@ -2090,18 +2091,19 @@ onUnmounted(() => {
 }
 
 /* Code Block Language Selector */
-:deep(.ProseMirror pre) {
+.tiptap-editor-wrapper :deep(.ProseMirror pre) {
   position: relative;
   padding-top: 36px; /* 为语言选择器留出空间 */
 }
 
-:deep(.ProseMirror pre .code-block-language-selector) {
+.tiptap-editor-wrapper :deep(.ProseMirror pre .code-block-language-selector) {
   position: absolute;
   top: 8px;
   right: 8px;
   z-index: 10;
 }
 
+.tiptap-editor-wrapper,
 :deep(.ProseMirror pre .code-block-language-selector select) {
   padding: 2px 20px 2px 8px;
   background-color: rgba(0, 0, 0, 0.3);
@@ -2120,11 +2122,13 @@ onUnmounted(() => {
   background-size: 8px;
 }
 
+.tiptap-editor-wrapper,
 :deep(.ProseMirror pre .code-block-language-selector select:hover) {
   background-color: rgba(0, 0, 0, 0.5);
   border-color: rgba(255, 255, 255, 0.2);
 }
 
+.tiptap-editor-wrapper,
 :deep(.ProseMirror pre .code-block-language-selector select:focus) {
   border-color: #3b82f6;
   background-color: rgba(0, 0, 0, 0.6);
@@ -2143,54 +2147,54 @@ onUnmounted(() => {
 }
 
 /* Syntax Highlighting (lowlight) */
-:deep(.ProseMirror .hljs-comment),
-:deep(.ProseMirror .hljs-quote) {
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-comment),
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-quote) {
   color: #6b7280;
   font-style: italic;
 }
 
-:deep(.ProseMirror .hljs-keyword),
-:deep(.ProseMirror .hljs-selector-tag),
-:deep(.ProseMirror .hljs-literal),
-:deep(.ProseMirror .hljs-type) {
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-keyword),
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-selector-tag),
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-literal),
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-type) {
   color: #c678dd;
 }
 
-:deep(.ProseMirror .hljs-string),
-:deep(.ProseMirror .hljs-number) {
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-string),
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-number) {
   color: #98c379;
 }
 
-:deep(.ProseMirror .hljs-title),
-:deep(.ProseMirror .hljs-function) {
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-title),
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-function) {
   color: #61afef;
 }
 
-:deep(.ProseMirror .hljs-params) {
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-params) {
   color: #d19a66;
 }
 
-:deep(.ProseMirror .hljs-built_in),
-:deep(.ProseMirror .hljs-class) {
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-built_in),
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-class) {
   color: #e6c07b;
 }
 
-:deep(.ProseMirror .hljs-attr),
-:deep(.ProseMirror .hljs-variable),
-:deep(.ProseMirror .hljs-property) {
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-attr),
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-variable),
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-property) {
   color: #e06c75;
 }
 
-:deep(.ProseMirror .hljs-tag),
-:deep(.ProseMirror .hljs-name) {
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-tag),
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-name) {
   color: #e06c75;
 }
 
-:deep(.ProseMirror .hljs-regexp) {
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-regexp) {
   color: #56b6c2;
 }
 
-:deep(.ProseMirror .hljs-meta) {
+.tiptap-editor-wrapper :deep(.ProseMirror .hljs-meta) {
   color: #abb2bf;
 }
 
@@ -2207,7 +2211,7 @@ onUnmounted(() => {
 }
 
 /* Blockquote */
-:deep(.ProseMirror blockquote) {
+.tiptap-editor-wrapper :deep(.ProseMirror blockquote) {
   border-left: 4px solid #d1d5db;
   padding-left: 12px;
   color: #6b7280;
@@ -2221,12 +2225,12 @@ onUnmounted(() => {
 }
 
 /* Links */
-:deep(.ProseMirror a) {
+.tiptap-editor-wrapper :deep(.ProseMirror a) {
   color: #3b82f6;
   text-decoration: underline;
   cursor: pointer;
 }
-:deep(.ProseMirror a:hover) {
+.tiptap-editor-wrapper :deep(.ProseMirror a:hover) {
   color: #2563eb;
 }
 .tiptap-editor-dark :deep(.ProseMirror a),
@@ -2239,7 +2243,7 @@ onUnmounted(() => {
 }
 
 /* Selection */
-:deep(.ProseMirror ::selection) {
+.tiptap-editor-wrapper :deep(.ProseMirror ::selection) {
   background-color: rgba(59, 130, 246, 0.3);
 }
 .tiptap-editor-dark :deep(.ProseMirror ::selection),
@@ -2248,7 +2252,7 @@ onUnmounted(() => {
 }
 
 /* Images */
-:deep(.ProseMirror img) {
+.tiptap-editor-wrapper :deep(.ProseMirror img) {
   max-width: 100%;
   height: auto;
   border-radius: 4px;
@@ -2440,7 +2444,7 @@ onUnmounted(() => {
 }
 
 /* ============ Video Styles ============ */
-:deep(.ProseMirror video) {
+.tiptap-editor-wrapper :deep(.ProseMirror video) {
   max-width: 100%;
   height: auto;
   border-radius: 6px;
@@ -2449,11 +2453,11 @@ onUnmounted(() => {
   cursor: pointer;
 }
 
-:deep(.ProseMirror video:hover) {
+.tiptap-editor-wrapper :deep(.ProseMirror video:hover) {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-:deep(.ProseMirror .ProseMirror-selectednode video) {
+.tiptap-editor-wrapper :deep(.ProseMirror .ProseMirror-selectednode video) {
   outline: 3px solid #3b82f6;
   outline-offset: 2px;
 }

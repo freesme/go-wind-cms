@@ -423,35 +423,22 @@ defineExpose({
   cursor: not-allowed;
 }
 
-/* 暗黑模式增强支持 */
-:global(.dark) .code-editor-container {
-  --border-color: #3e3e3e;
-  border-color: var(--border-color) !important;
-}
-
-/* 兼容全局暗黑模式类名（适配不同项目的暗黑模式标识） */
-:global(.theme-dark) .code-editor-container,
-:global(.json-editor-dark) .code-editor-container {
-  --border-color: #3e3e3e;
-  border-color: var(--border-color) !important;
-}
-
 /* Monaco编辑器样式穿透（优化默认样式） */
-:deep(.monaco-editor) {
+.code-editor-container :deep(.monaco-editor) {
   font-size: 14px !important;
 }
 
-:deep(.monaco-editor .monaco-scrollable-element) {
+.code-editor-container :deep(.monaco-editor .monaco-scrollable-element) {
   scrollbar-width: thin;
 }
 
 /* 暗黑模式下滚动条样式 */
-:global(.dark),
+.code-editor-container,
 :deep(.monaco-editor .monaco-scrollable-element::-webkit-scrollbar-thumb) {
   background-color: #555 !important;
 }
 
-:global(.dark),
+.code-editor-container,
 :deep(.monaco-editor .monaco-scrollable-element::-webkit-scrollbar-track) {
   background-color: #222 !important;
 }

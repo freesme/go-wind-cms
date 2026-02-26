@@ -293,28 +293,28 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
-:deep(.md-editor-inner) {
+.md-editor-wrapper :deep(.md-editor-inner) {
   width: 100% !important;
   height: 100% !important;
 }
 
-:deep(.m-md-editor) {
+.md-editor-wrapper :deep(.m-md-editor) {
   width: 100% !important;
   height: 100% !important;
   min-height: unset !important;
 }
 
-:deep(.m-md-editor .m-md-content) {
+.md-editor-wrapper :deep(.m-md-editor .m-md-content) {
   height: calc(100% - 40px) !important;
 }
 
-:deep(.m-md-editor .m-md-preview),
-:deep(.m-md-editor .m-md-edit-area) {
+.md-editor-wrapper :deep(.m-md-editor .m-md-preview),
+.md-editor-wrapper :deep(.m-md-editor .m-md-edit-area) {
   height: 100% !important;
   width: 100% !important;
 }
 
-:deep(.m-md-editor.dark) {
+.md-editor-wrapper :deep(.m-md-editor.dark) {
   height: 100% !important;
 }
 </style>

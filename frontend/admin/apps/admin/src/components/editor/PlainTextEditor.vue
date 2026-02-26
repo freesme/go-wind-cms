@@ -110,8 +110,8 @@ defineExpose({
   cursor: not-allowed;
 }
 
-/* 暗黑模式支持 */
-:global(.dark) .plain-text-editor-textarea {
+/* 暗黑模式支持 - 仅作用于当前组件 */
+.plain-text-editor-container.dark .plain-text-editor-textarea {
   --bg-color: #1e1e1e;
   --text-color: #d4d4d4;
   --border-color: #3e3e3e;
@@ -119,7 +119,7 @@ defineExpose({
   --disabled-text-color: #6e6e6e;
 }
 
-:global(.dark) .plain-text-editor-textarea:focus {
+.plain-text-editor-container.dark .plain-text-editor-textarea:focus {
   --primary-color: #1890ff;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
