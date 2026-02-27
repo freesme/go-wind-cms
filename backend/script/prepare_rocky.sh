@@ -52,16 +52,19 @@ ${SUDO} systemctl enable --now "pm2-${TARGET_USER}.service" || true
 # 为目标用户安装 pm2 bash 补全（尝试）
 ${SUDO} env HOME="${TARGET_HOME}" USER="${TARGET_USER}" PATH="/usr/bin:${PATH}" bash -lc 'pm2 completion install >/dev/null 2>&1 || true'
 
-log "安装并配置 Docker 官方仓库"
-${SUDO} dnf -y install dnf-plugins-core
-${SUDO} dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo || true
+if command -v docker >/dev/null 2>&1; then
+  log "检测到 Docker 已安装，跳过安装步骤"
+else
+  ${SUDO} dnf -y install dnf-plugins-core
+  ${SUDO} dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo || true
 
-${SUDO} dnf -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin || true
+  ${SUDO} dnf -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin || true
 
-log "启用并启动 Docker，添加用户到 docker 组"
-${SUDO} systemctl enable --now docker || true
-${SUDO} groupadd -f docker || true
-${SUDO} usermod -aG docker "${TARGET_USER}" || true
+  log "启用并启动 Docker，添加用户到 docker 组"
+  ${SUDO} systemctl enable --now docker || true
+  ${SUDO} groupadd -f docker || true
+  ${SUDO} usermod -aG docker "${TARGET_USER}" || true
+fi
 
 log "运行项目内的 Golang 安装脚本（如果存在且可执行）"
 # 获取当前脚本所在目录的绝对路径

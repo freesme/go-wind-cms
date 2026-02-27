@@ -56,19 +56,22 @@ ${SUDO} systemctl enable --now "pm2-${TARGET_USER}.service" 2>/dev/null || ${SUD
 # 尝试安装 pm2 tab 补全（为目标用户）
 ${SUDO} env HOME="${TARGET_HOME}" USER="${TARGET_USER}" PATH="/usr/bin:${PATH}" bash -lc 'pm2 completion install >/dev/null 2>&1 || true'
 
-log "清理可能残留的旧 Docker 包"
-for pkg in docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine podman-docker containerd runc; do
-  ${SUDO} ${PKG} -y remove $pkg >/dev/null 2>&1 || true
-done
+if command -v docker >/dev/null 2>&1; then
+  log "检测到 Docker 已安装，跳过卸载/安装步骤"
+else
+  for pkg in docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine podman-docker containerd runc; do
+    ${SUDO} ${PKG} -y remove $pkg >/dev/null 2>&1 || true
+  done
 
-log "配置 Docker 官方仓库并安装"
-${SUDO} yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo || true
-${SUDO} ${PKG} -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin || true
+  log "配置 Docker 官方仓库并安装"
+  ${SUDO} yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo || true
+  ${SUDO} ${PKG} -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin || true
 
-log "启用并启动 Docker，添加用户到 docker 组"
-${SUDO} systemctl enable --now docker || true
-${SUDO} groupadd -f docker || true
-${SUDO} usermod -aG docker "${TARGET_USER}" || true
+  log "启用并启动 Docker，添加用户到 docker 组"
+  ${SUDO} systemctl enable --now docker || true
+  ${SUDO} groupadd -f docker || true
+  ${SUDO} usermod -aG docker "${TARGET_USER}" || true
+fi
 
 log "运行项目内的 Golang 安装脚本（如果存在且可执行）"
 # 获取当前脚本所在目录的绝对路径

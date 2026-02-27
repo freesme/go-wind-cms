@@ -38,28 +38,31 @@ ${SUDO} env PATH="${PATH}:/usr/bin" pm2 startup systemd -u "${TARGET_USER}" --hp
 ${SUDO} systemctl daemon-reload || true
 ${SUDO} systemctl enable --now "pm2-${TARGET_USER}" || true
 
-log "清理可能残留的旧 Docker 包"
-for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do
-  ${SUDO} apt-get remove -y $pkg || true
-done
+if command -v docker >/dev/null 2>&1; then
+  log "检测到 Docker 已安装，跳过卸载/安装步骤"
+else
+  for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do
+    ${SUDO} apt-get remove -y $pkg || true
+  done
 
-log "配置 Docker 官方仓库并安装"
-${SUDO} mkdir -p /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | ${SUDO} gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-${SUDO} chmod a+r /etc/apt/keyrings/docker.gpg
-ARCH=$(dpkg --print-architecture)
-CODENAME=$(. /etc/os-release && echo "$VERSION_CODENAME")
-echo "deb [arch=${ARCH} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu ${CODENAME} stable" | ${SUDO} tee /etc/apt/sources.list.d/docker.list > /dev/null
+  log "配置 Docker 官方仓库并安装"
+  ${SUDO} mkdir -p /etc/apt/keyrings
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | ${SUDO} gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  ${SUDO} chmod a+r /etc/apt/keyrings/docker.gpg
+  ARCH=$(dpkg --print-architecture)
+  CODENAME=$(. /etc/os-release && echo "$VERSION_CODENAME")
+  echo "deb [arch=${ARCH} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu ${CODENAME} stable" | ${SUDO} tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-${SUDO} apt-get update -y
-${SUDO} apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  ${SUDO} apt-get update -y
+  ${SUDO} apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-log "将用户加入 docker 组（需要重新登录以生效）"
-${SUDO} groupadd -f docker
-${SUDO} usermod -aG docker "${TARGET_USER}" || true
+  log "将用户加入 docker 组（需要重新登录以生效）"
+  ${SUDO} groupadd -f docker
+  ${SUDO} usermod -aG docker "${TARGET_USER}" || true
 
-log "启用并启动 Docker"
-${SUDO} systemctl enable --now docker
+  log "启用并启动 Docker"
+  ${SUDO} systemctl enable --now docker
+fi
 
 log "运行项目内的 Golang 安装脚本（如果存在且可执行）"
 # 获取当前脚本所在目录的绝对路径

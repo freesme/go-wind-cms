@@ -47,7 +47,11 @@ pm2 save || true
 ## 安装 Docker Desktop
 ####################################
 echo "安装 Docker Desktop..."
-brew install --cask docker || true
+if command -v docker >/dev/null 2>&1; then
+  echo "检测到 Docker 已安装，跳过安装步骤"
+else
+  brew install --cask docker || true
+fi
 
 echo "尝试启动 Docker Desktop（可能需要手动允许权限）..."
 open -a Docker || true
