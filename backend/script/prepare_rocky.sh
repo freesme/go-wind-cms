@@ -28,7 +28,7 @@ ${SUDO} dnf -y install \
   https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm \
   https://dl.fedoraproject.org/pub/epel/epel-next-release-latest-9.noarch.rpm || true
 
-${SUDO} dnf -y install epel-release htop wget unzip git jq curl gnupg2 dnf-plugins-core make gcc
+${SUDO} dnf -y install epel-release htop wget unzip git jq curl gnupg2 dnf-plugins-core make
 
 log "安装 Node.js (NodeSource 22.x LTS) 并安装 pm2"
 # 使用 Node.js 22.x LTS（pm2 推荐版本）
