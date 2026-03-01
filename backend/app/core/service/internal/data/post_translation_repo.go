@@ -165,3 +165,18 @@ func (r *PostTranslationRepo) CountByBaseSlug(ctx context.Context, baseSlug stri
 
 	return int64(count), nil
 }
+
+func (r *PostTranslationRepo) IsExistTranslation(ctx context.Context, postId uint32, languageCode string) (bool, error) {
+	count, err := r.entClient.Client().PostTranslation.Query().
+		Where(
+			posttranslation.PostIDEQ(postId),
+			posttranslation.LanguageCodeEQ(languageCode),
+		).
+		Count(ctx)
+	if err != nil {
+		r.log.Errorf("count post translations by post id and language code failed: %s", err.Error())
+		return false, contentV1.ErrorInternalServerError("count post translations by post id and language code failed")
+	}
+
+	return count > 0, nil
+}

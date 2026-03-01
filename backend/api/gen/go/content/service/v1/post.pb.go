@@ -857,6 +857,102 @@ func (x *DeletePostRequest) GetId() uint32 {
 	return 0
 }
 
+type IsExistTranslationRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PostId        uint32                 `protobuf:"varint,1,opt,name=post_id,json=postId,proto3" json:"post_id,omitempty"`                  // 帖子ID
+	LanguageCode  string                 `protobuf:"bytes,2,opt,name=language_code,json=languageCode,proto3" json:"language_code,omitempty"` // 语言代码
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *IsExistTranslationRequest) Reset() {
+	*x = IsExistTranslationRequest{}
+	mi := &file_content_service_v1_post_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *IsExistTranslationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IsExistTranslationRequest) ProtoMessage() {}
+
+func (x *IsExistTranslationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_content_service_v1_post_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use IsExistTranslationRequest.ProtoReflect.Descriptor instead.
+func (*IsExistTranslationRequest) Descriptor() ([]byte, []int) {
+	return file_content_service_v1_post_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *IsExistTranslationRequest) GetPostId() uint32 {
+	if x != nil {
+		return x.PostId
+	}
+	return 0
+}
+
+func (x *IsExistTranslationRequest) GetLanguageCode() string {
+	if x != nil {
+		return x.LanguageCode
+	}
+	return ""
+}
+
+type IsExistTranslationResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Exist         bool                   `protobuf:"varint,1,opt,name=exist,proto3" json:"exist,omitempty"` // 翻译是否存在
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *IsExistTranslationResponse) Reset() {
+	*x = IsExistTranslationResponse{}
+	mi := &file_content_service_v1_post_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *IsExistTranslationResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IsExistTranslationResponse) ProtoMessage() {}
+
+func (x *IsExistTranslationResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_content_service_v1_post_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use IsExistTranslationResponse.ProtoReflect.Descriptor instead.
+func (*IsExistTranslationResponse) Descriptor() ([]byte, []int) {
+	return file_content_service_v1_post_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *IsExistTranslationResponse) GetExist() bool {
+	if x != nil {
+		return x.Exist
+	}
+	return false
+}
+
 var File_content_service_v1_post_proto protoreflect.FileDescriptor
 
 const file_content_service_v1_post_proto_rawDesc = "" +
@@ -1019,13 +1115,19 @@ const file_content_service_v1_post_proto_rawDesc = "" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
 	"\x0e_allow_missing\"#\n" +
 	"\x11DeletePostRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id2\x84\x03\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\"}\n" +
+	"\x19IsExistTranslationRequest\x12'\n" +
+	"\apost_id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b帖子IDR\x06postId\x127\n" +
+	"\rlanguage_code\x18\x02 \x01(\tB\x12\xbaG\x0f\x92\x02\f语言代码R\flanguageCode\"L\n" +
+	"\x1aIsExistTranslationResponse\x12.\n" +
+	"\x05exist\x18\x01 \x01(\bB\x18\xbaG\x15\x92\x02\x12翻译是否存在R\x05exist2\xfb\x03\n" +
 	"\vPostService\x12I\n" +
 	"\x04List\x12\x19.pagination.PagingRequest\x1a$.content.service.v1.ListPostResponse\"\x00\x12E\n" +
 	"\x03Get\x12\".content.service.v1.GetPostRequest\x1a\x18.content.service.v1.Post\"\x00\x12K\n" +
 	"\x06Create\x12%.content.service.v1.CreatePostRequest\x1a\x18.content.service.v1.Post\"\x00\x12K\n" +
 	"\x06Update\x12%.content.service.v1.UpdatePostRequest\x1a\x18.content.service.v1.Post\"\x00\x12I\n" +
-	"\x06Delete\x12%.content.service.v1.DeletePostRequest\x1a\x16.google.protobuf.Empty\"\x00B\xc2\x01\n" +
+	"\x06Delete\x12%.content.service.v1.DeletePostRequest\x1a\x16.google.protobuf.Empty\"\x00\x12u\n" +
+	"\x12IsExistTranslation\x12-.content.service.v1.IsExistTranslationRequest\x1a..content.service.v1.IsExistTranslationResponse\"\x00B\xc2\x01\n" +
 	"\x16com.content.service.v1B\tPostProtoP\x01Z3go-wind-cms/api/gen/go/content/service/v1;contentpb\xa2\x02\x03CSX\xaa\x02\x12Content.Service.V1\xca\x02\x12Content\\Service\\V1\xe2\x02\x1eContent\\Service\\V1\\GPBMetadata\xea\x02\x14Content::Service::V1b\x06proto3"
 
 var (
@@ -1041,53 +1143,57 @@ func file_content_service_v1_post_proto_rawDescGZIP() []byte {
 }
 
 var file_content_service_v1_post_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_content_service_v1_post_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_content_service_v1_post_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_content_service_v1_post_proto_goTypes = []any{
-	(Post_PostStatus)(0),          // 0: content.service.v1.Post.PostStatus
-	(*Post)(nil),                  // 1: content.service.v1.Post
-	(*PostTranslation)(nil),       // 2: content.service.v1.PostTranslation
-	(*PostCategory)(nil),          // 3: content.service.v1.PostCategory
-	(*ListPostResponse)(nil),      // 4: content.service.v1.ListPostResponse
-	(*GetPostRequest)(nil),        // 5: content.service.v1.GetPostRequest
-	(*CreatePostRequest)(nil),     // 6: content.service.v1.CreatePostRequest
-	(*UpdatePostRequest)(nil),     // 7: content.service.v1.UpdatePostRequest
-	(*DeletePostRequest)(nil),     // 8: content.service.v1.DeletePostRequest
-	nil,                           // 9: content.service.v1.Post.CustomFieldsEntry
-	(EditorType)(0),               // 10: content.service.v1.EditorType
-	(*timestamppb.Timestamp)(nil), // 11: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil), // 12: google.protobuf.FieldMask
-	(*v1.PagingRequest)(nil),      // 13: pagination.PagingRequest
-	(*emptypb.Empty)(nil),         // 14: google.protobuf.Empty
+	(Post_PostStatus)(0),               // 0: content.service.v1.Post.PostStatus
+	(*Post)(nil),                       // 1: content.service.v1.Post
+	(*PostTranslation)(nil),            // 2: content.service.v1.PostTranslation
+	(*PostCategory)(nil),               // 3: content.service.v1.PostCategory
+	(*ListPostResponse)(nil),           // 4: content.service.v1.ListPostResponse
+	(*GetPostRequest)(nil),             // 5: content.service.v1.GetPostRequest
+	(*CreatePostRequest)(nil),          // 6: content.service.v1.CreatePostRequest
+	(*UpdatePostRequest)(nil),          // 7: content.service.v1.UpdatePostRequest
+	(*DeletePostRequest)(nil),          // 8: content.service.v1.DeletePostRequest
+	(*IsExistTranslationRequest)(nil),  // 9: content.service.v1.IsExistTranslationRequest
+	(*IsExistTranslationResponse)(nil), // 10: content.service.v1.IsExistTranslationResponse
+	nil,                                // 11: content.service.v1.Post.CustomFieldsEntry
+	(EditorType)(0),                    // 12: content.service.v1.EditorType
+	(*timestamppb.Timestamp)(nil),      // 13: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil),      // 14: google.protobuf.FieldMask
+	(*v1.PagingRequest)(nil),           // 15: pagination.PagingRequest
+	(*emptypb.Empty)(nil),              // 16: google.protobuf.Empty
 }
 var file_content_service_v1_post_proto_depIdxs = []int32{
 	0,  // 0: content.service.v1.Post.status:type_name -> content.service.v1.Post.PostStatus
-	10, // 1: content.service.v1.Post.editor_type:type_name -> content.service.v1.EditorType
-	9,  // 2: content.service.v1.Post.custom_fields:type_name -> content.service.v1.Post.CustomFieldsEntry
+	12, // 1: content.service.v1.Post.editor_type:type_name -> content.service.v1.EditorType
+	11, // 2: content.service.v1.Post.custom_fields:type_name -> content.service.v1.Post.CustomFieldsEntry
 	2,  // 3: content.service.v1.Post.translations:type_name -> content.service.v1.PostTranslation
-	11, // 4: content.service.v1.Post.created_at:type_name -> google.protobuf.Timestamp
-	11, // 5: content.service.v1.Post.updated_at:type_name -> google.protobuf.Timestamp
-	11, // 6: content.service.v1.Post.deleted_at:type_name -> google.protobuf.Timestamp
-	11, // 7: content.service.v1.Post.publish_time:type_name -> google.protobuf.Timestamp
-	11, // 8: content.service.v1.PostTranslation.created_at:type_name -> google.protobuf.Timestamp
-	11, // 9: content.service.v1.PostTranslation.updated_at:type_name -> google.protobuf.Timestamp
-	11, // 10: content.service.v1.PostTranslation.deleted_at:type_name -> google.protobuf.Timestamp
+	13, // 4: content.service.v1.Post.created_at:type_name -> google.protobuf.Timestamp
+	13, // 5: content.service.v1.Post.updated_at:type_name -> google.protobuf.Timestamp
+	13, // 6: content.service.v1.Post.deleted_at:type_name -> google.protobuf.Timestamp
+	13, // 7: content.service.v1.Post.publish_time:type_name -> google.protobuf.Timestamp
+	13, // 8: content.service.v1.PostTranslation.created_at:type_name -> google.protobuf.Timestamp
+	13, // 9: content.service.v1.PostTranslation.updated_at:type_name -> google.protobuf.Timestamp
+	13, // 10: content.service.v1.PostTranslation.deleted_at:type_name -> google.protobuf.Timestamp
 	1,  // 11: content.service.v1.ListPostResponse.items:type_name -> content.service.v1.Post
-	12, // 12: content.service.v1.GetPostRequest.view_mask:type_name -> google.protobuf.FieldMask
+	14, // 12: content.service.v1.GetPostRequest.view_mask:type_name -> google.protobuf.FieldMask
 	1,  // 13: content.service.v1.CreatePostRequest.data:type_name -> content.service.v1.Post
 	1,  // 14: content.service.v1.UpdatePostRequest.data:type_name -> content.service.v1.Post
-	12, // 15: content.service.v1.UpdatePostRequest.update_mask:type_name -> google.protobuf.FieldMask
-	13, // 16: content.service.v1.PostService.List:input_type -> pagination.PagingRequest
+	14, // 15: content.service.v1.UpdatePostRequest.update_mask:type_name -> google.protobuf.FieldMask
+	15, // 16: content.service.v1.PostService.List:input_type -> pagination.PagingRequest
 	5,  // 17: content.service.v1.PostService.Get:input_type -> content.service.v1.GetPostRequest
 	6,  // 18: content.service.v1.PostService.Create:input_type -> content.service.v1.CreatePostRequest
 	7,  // 19: content.service.v1.PostService.Update:input_type -> content.service.v1.UpdatePostRequest
 	8,  // 20: content.service.v1.PostService.Delete:input_type -> content.service.v1.DeletePostRequest
-	4,  // 21: content.service.v1.PostService.List:output_type -> content.service.v1.ListPostResponse
-	1,  // 22: content.service.v1.PostService.Get:output_type -> content.service.v1.Post
-	1,  // 23: content.service.v1.PostService.Create:output_type -> content.service.v1.Post
-	1,  // 24: content.service.v1.PostService.Update:output_type -> content.service.v1.Post
-	14, // 25: content.service.v1.PostService.Delete:output_type -> google.protobuf.Empty
-	21, // [21:26] is the sub-list for method output_type
-	16, // [16:21] is the sub-list for method input_type
+	9,  // 21: content.service.v1.PostService.IsExistTranslation:input_type -> content.service.v1.IsExistTranslationRequest
+	4,  // 22: content.service.v1.PostService.List:output_type -> content.service.v1.ListPostResponse
+	1,  // 23: content.service.v1.PostService.Get:output_type -> content.service.v1.Post
+	1,  // 24: content.service.v1.PostService.Create:output_type -> content.service.v1.Post
+	1,  // 25: content.service.v1.PostService.Update:output_type -> content.service.v1.Post
+	16, // 26: content.service.v1.PostService.Delete:output_type -> google.protobuf.Empty
+	10, // 27: content.service.v1.PostService.IsExistTranslation:output_type -> content.service.v1.IsExistTranslationResponse
+	22, // [22:28] is the sub-list for method output_type
+	16, // [16:22] is the sub-list for method input_type
 	16, // [16:16] is the sub-list for extension type_name
 	16, // [16:16] is the sub-list for extension extendee
 	0,  // [0:16] is the sub-list for field type_name
@@ -1109,7 +1215,7 @@ func file_content_service_v1_post_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_content_service_v1_post_proto_rawDesc), len(file_content_service_v1_post_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   9,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -2,14 +2,11 @@ package data
 
 import (
 	"context"
-	"go-wind-cms/pkg/content/count"
-	"go-wind-cms/pkg/content/summary"
 	"strconv"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/tx7do/go-utils/slug"
 	"github.com/tx7do/kratos-bootstrap/bootstrap"
 
 	paginationV1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
@@ -17,6 +14,7 @@ import (
 
 	"github.com/tx7do/go-utils/copierutil"
 	"github.com/tx7do/go-utils/mapper"
+	"github.com/tx7do/go-utils/slug"
 	"github.com/tx7do/go-utils/trans"
 
 	"go-wind-cms/app/core/service/internal/data/ent"
@@ -24,6 +22,9 @@ import (
 	"go-wind-cms/app/core/service/internal/data/ent/predicate"
 
 	contentV1 "go-wind-cms/api/gen/go/content/service/v1"
+
+	"go-wind-cms/pkg/content/count"
+	"go-wind-cms/pkg/content/summary"
 )
 
 type PostRepo struct {
@@ -96,12 +97,12 @@ func (r *PostRepo) count(ctx context.Context, whereCond []func(s *sql.Selector))
 		builder.Modify(whereCond...)
 	}
 
-	count, err := builder.Count(ctx)
+	cnt, err := builder.Count(ctx)
 	if err != nil {
 		r.log.Errorf("query count failed: %s", err.Error())
 	}
 
-	return count, err
+	return cnt, err
 }
 
 func (r *PostRepo) IsExist(ctx context.Context, id uint32) (bool, error) {
@@ -428,4 +429,8 @@ func (r *PostRepo) Delete(ctx context.Context, req *contentV1.DeletePostRequest)
 	}
 
 	return err
+}
+
+func (r *PostRepo) IsExistTranslation(ctx context.Context, postId uint32, languageCode string) (bool, error) {
+	return r.postTranslationRepo.IsExistTranslation(ctx, postId, languageCode)
 }

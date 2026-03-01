@@ -6640,6 +6640,8 @@ export interface PostService {
   Update(request: contentservicev1_UpdatePostRequest): Promise<contentservicev1_Post>;
   // 删除帖子
   Delete(request: contentservicev1_DeletePostRequest): Promise<wellKnownEmpty>;
+  // 检查翻译是否存在
+  IsExistTranslation(request: contentservicev1_IsExistTranslationRequest): Promise<contentservicev1_IsExistTranslationResponse>;
 }
 
 export function createPostServiceClient(
@@ -6808,6 +6810,29 @@ export function createPostServiceClient(
         method: "Delete",
       }) as Promise<wellKnownEmpty>;
     },
+    IsExistTranslation(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      if (!request.postId) {
+        throw new Error("missing required field request.post_id");
+      }
+      if (!request.languageCode) {
+        throw new Error("missing required field request.language_code");
+      }
+      const path = `admin/v1/posts/${request.postId}/translations/${request.languageCode}`; // eslint-disable-line quotes
+      const body = null;
+      const queryParams: string[] = [];
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "GET",
+        body,
+      }, {
+        service: "PostService",
+        method: "IsExistTranslation",
+      }) as Promise<contentservicev1_IsExistTranslationResponse>;
+    },
   };
 }
 // 回应 - 帖子列表
@@ -6901,6 +6926,15 @@ export type contentservicev1_UpdatePostRequest = {
 // 请求 - 删除帖子
 export type contentservicev1_DeletePostRequest = {
   id: number | undefined;
+};
+
+export type contentservicev1_IsExistTranslationRequest = {
+  postId: number | undefined;
+  languageCode: string | undefined;
+};
+
+export type contentservicev1_IsExistTranslationResponse = {
+  exist: boolean | undefined;
 };
 
 // 角色管理服务

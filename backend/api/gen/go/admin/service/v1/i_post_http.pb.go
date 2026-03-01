@@ -25,6 +25,7 @@ const _ = http.SupportPackageIsVersion1
 const OperationPostServiceCreate = "/admin.service.v1.PostService/Create"
 const OperationPostServiceDelete = "/admin.service.v1.PostService/Delete"
 const OperationPostServiceGet = "/admin.service.v1.PostService/Get"
+const OperationPostServiceIsExistTranslation = "/admin.service.v1.PostService/IsExistTranslation"
 const OperationPostServiceList = "/admin.service.v1.PostService/List"
 const OperationPostServiceUpdate = "/admin.service.v1.PostService/Update"
 
@@ -35,6 +36,8 @@ type PostServiceHTTPServer interface {
 	Delete(context.Context, *v11.DeletePostRequest) (*emptypb.Empty, error)
 	// Get 获取帖子数据
 	Get(context.Context, *v11.GetPostRequest) (*v11.Post, error)
+	// IsExistTranslation 检查翻译是否存在
+	IsExistTranslation(context.Context, *v11.IsExistTranslationRequest) (*v11.IsExistTranslationResponse, error)
 	// List 获取帖子列表
 	List(context.Context, *v1.PagingRequest) (*v11.ListPostResponse, error)
 	// Update 更新帖子
@@ -48,6 +51,7 @@ func RegisterPostServiceHTTPServer(s *http.Server, srv PostServiceHTTPServer) {
 	r.POST("/admin/v1/posts", _PostService_Create17_HTTP_Handler(srv))
 	r.PUT("/admin/v1/posts/{id}", _PostService_Update17_HTTP_Handler(srv))
 	r.DELETE("/admin/v1/posts/{id}", _PostService_Delete17_HTTP_Handler(srv))
+	r.GET("/admin/v1/posts/{post_id}/translations/{language_code}", _PostService_IsExistTranslation0_HTTP_Handler(srv))
 }
 
 func _PostService_List23_HTTP_Handler(srv PostServiceHTTPServer) func(ctx http.Context) error {
@@ -160,6 +164,28 @@ func _PostService_Delete17_HTTP_Handler(srv PostServiceHTTPServer) func(ctx http
 	}
 }
 
+func _PostService_IsExistTranslation0_HTTP_Handler(srv PostServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in v11.IsExistTranslationRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationPostServiceIsExistTranslation)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.IsExistTranslation(ctx, req.(*v11.IsExistTranslationRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*v11.IsExistTranslationResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
 type PostServiceHTTPClient interface {
 	// Create 创建帖子
 	Create(ctx context.Context, req *v11.CreatePostRequest, opts ...http.CallOption) (rsp *v11.Post, err error)
@@ -167,6 +193,8 @@ type PostServiceHTTPClient interface {
 	Delete(ctx context.Context, req *v11.DeletePostRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	// Get 获取帖子数据
 	Get(ctx context.Context, req *v11.GetPostRequest, opts ...http.CallOption) (rsp *v11.Post, err error)
+	// IsExistTranslation 检查翻译是否存在
+	IsExistTranslation(ctx context.Context, req *v11.IsExistTranslationRequest, opts ...http.CallOption) (rsp *v11.IsExistTranslationResponse, err error)
 	// List 获取帖子列表
 	List(ctx context.Context, req *v1.PagingRequest, opts ...http.CallOption) (rsp *v11.ListPostResponse, err error)
 	// Update 更新帖子
@@ -215,6 +243,20 @@ func (c *PostServiceHTTPClientImpl) Get(ctx context.Context, in *v11.GetPostRequ
 	pattern := "/admin/v1/posts/{id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationPostServiceGet))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// IsExistTranslation 检查翻译是否存在
+func (c *PostServiceHTTPClientImpl) IsExistTranslation(ctx context.Context, in *v11.IsExistTranslationRequest, opts ...http.CallOption) (*v11.IsExistTranslationResponse, error) {
+	var out v11.IsExistTranslationResponse
+	pattern := "/admin/v1/posts/{post_id}/translations/{language_code}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationPostServiceIsExistTranslation))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

@@ -101,6 +101,17 @@ func (s *redactedPostServiceServer) Delete(ctx context.Context, in *DeletePostRe
 	return res, err
 }
 
+// IsExistTranslation is the redacted wrapper for the actual PostServiceServer.IsExistTranslation method
+// Unary RPC
+func (s *redactedPostServiceServer) IsExistTranslation(ctx context.Context, in *IsExistTranslationRequest) (*IsExistTranslationResponse, error) {
+	res, err := s.srv.IsExistTranslation(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Redact method implementation for Post
 func (x *Post) Redact() string {
 	if x == nil {
@@ -282,5 +293,27 @@ func (x *DeletePostRequest) Redact() string {
 	}
 
 	// Safe field: Id
+	return x.String()
+}
+
+// Redact method implementation for IsExistTranslationRequest
+func (x *IsExistTranslationRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: PostId
+
+	// Safe field: LanguageCode
+	return x.String()
+}
+
+// Redact method implementation for IsExistTranslationResponse
+func (x *IsExistTranslationResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Exist
 	return x.String()
 }

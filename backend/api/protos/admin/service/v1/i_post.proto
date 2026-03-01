@@ -46,4 +46,11 @@ service PostService {
       delete: "/admin/v1/posts/{id}"
     };
   }
+
+  // 检查翻译是否存在
+  rpc IsExistTranslation(content.service.v1.IsExistTranslationRequest) returns (content.service.v1.IsExistTranslationResponse) {
+    option (google.api.http) = {
+      get: "/admin/v1/posts/{post_id}/translations/{language_code}"
+    };
+  }
 }

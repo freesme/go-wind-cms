@@ -26,6 +26,9 @@ service PostService {
 
   // 删除帖子
   rpc Delete (DeletePostRequest) returns (google.protobuf.Empty) {}
+
+  // 检查翻译是否存在
+  rpc IsExistTranslation(IsExistTranslationRequest) returns (IsExistTranslationResponse) {}
 }
 
 // 帖子
@@ -297,4 +300,23 @@ message UpdatePostRequest {
 // 请求 - 删除帖子
 message DeletePostRequest {
   uint32 id = 1;
+}
+
+message IsExistTranslationRequest {
+  uint32 post_id = 1 [
+    json_name = "postId",
+    (gnostic.openapi.v3.property) = {description: "帖子ID"}
+  ]; // 帖子ID
+
+  string language_code = 2 [
+    json_name = "languageCode",
+    (gnostic.openapi.v3.property) = {description: "语言代码"}
+  ]; // 语言代码
+}
+
+message IsExistTranslationResponse {
+  bool exist = 1 [
+    json_name = "exist",
+    (gnostic.openapi.v3.property) = {description: "翻译是否存在"}
+  ]; // 翻译是否存在
 }

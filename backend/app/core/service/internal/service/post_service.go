@@ -5,7 +5,6 @@ import (
 
 	"github.com/go-kratos/kratos/v2/log"
 	paginationV1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
-	"github.com/tx7do/go-utils/slug"
 	"github.com/tx7do/go-utils/trans"
 	"github.com/tx7do/kratos-bootstrap/bootstrap"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -46,10 +45,6 @@ func (s *PostService) Create(ctx context.Context, req *contentV1.CreatePostReque
 }
 
 func (s *PostService) Update(ctx context.Context, req *contentV1.UpdatePostRequest) (*contentV1.Post, error) {
-	for i := range req.Data.Translations {
-		req.Data.Translations[i].Slug = trans.Ptr(slug.Generate(req.Data.Translations[i].GetTitle()))
-	}
-
 	return s.postRepo.Update(ctx, req)
 }
 
@@ -59,4 +54,15 @@ func (s *PostService) Delete(ctx context.Context, req *contentV1.DeletePostReque
 		return nil, err
 	}
 	return &emptypb.Empty{}, nil
+}
+
+func (s *PostService) IsExistTranslation(ctx context.Context, req *contentV1.IsExistTranslationRequest) (*contentV1.IsExistTranslationResponse, error) {
+	isExist, err := s.postRepo.IsExistTranslation(ctx, req.GetPostId(), req.GetLanguageCode())
+	if err != nil {
+		return nil, err
+	}
+
+	return &contentV1.IsExistTranslationResponse{
+		Exist: isExist,
+	}, nil
 }

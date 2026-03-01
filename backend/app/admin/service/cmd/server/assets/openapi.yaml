@@ -4181,6 +4181,31 @@ paths:
                 "200":
                     description: OK
                     content: {}
+    /admin/v1/posts/{postId}/translations/{languageCode}:
+        get:
+            tags:
+                - PostService
+            description: 检查翻译是否存在
+            operationId: PostService_IsExistTranslation
+            parameters:
+                - name: postId
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: languageCode
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/IsExistTranslationResponse'
     /admin/v1/refresh-token:
         post:
             tags:
@@ -7073,6 +7098,12 @@ components:
                     description: 删除时间
                     format: date-time
             description: 站内信消息用户接收信息
+        IsExistTranslationResponse:
+            type: object
+            properties:
+                exist:
+                    type: boolean
+                    description: 翻译是否存在
         KratosStatus:
             type: object
             properties:
