@@ -194,7 +194,7 @@ export function editorTypeToColor(editorType: contentservicev1_EditorType) {
   );
 }
 
-export function convertEditorType(
+export function convertToUIEditorType(
   editorType: contentservicev1_EditorType | undefined,
 ): EditorType {
   switch (editorType) {
@@ -219,3 +219,50 @@ export function convertEditorType(
   }
   return EditorType.MARKDOWN;
 }
+
+export function convertToEditorType(
+  editorType: EditorType | undefined,
+): contentservicev1_EditorType {
+  switch (editorType) {
+    case EditorType.CODE: {
+      return 'EDITOR_TYPE_CODE';
+    }
+    case EditorType.JSON: {
+      return 'EDITOR_TYPE_JSON_BLOCK';
+    }
+    case EditorType.MARKDOWN: {
+      return 'EDITOR_TYPE_MARKDOWN';
+    }
+    case EditorType.PLAIN_TEXT: {
+      return 'EDITOR_TYPE_PLAIN_TEXT';
+    }
+    case EditorType.RICH_TEXT: {
+      return 'EDITOR_TYPE_RICH_TEXT';
+    }
+    case EditorType.VISUAL_BUILDER: {
+      return 'EDITOR_TYPE_VISUAL_BUILDER';
+    }
+  }
+  return 'EDITOR_TYPE_MARKDOWN';
+}
+
+// 编辑器类型列表
+export const editorTypeOptions = computed(() => [
+  {
+    label: $t('enum.editorType.EDITOR_TYPE_MARKDOWN'),
+    value: EditorType.MARKDOWN,
+  },
+  {
+    label: $t('enum.editorType.EDITOR_TYPE_RICH_TEXT'),
+    value: EditorType.RICH_TEXT,
+  },
+  {
+    label: $t('enum.editorType.EDITOR_TYPE_JSON_BLOCK'),
+    value: EditorType.JSON,
+  },
+  { label: $t('enum.editorType.EDITOR_TYPE_CODE'), value: EditorType.CODE },
+  {
+    label: $t('enum.editorType.EDITOR_TYPE_PLAIN_TEXT'),
+    value: EditorType.PLAIN_TEXT,
+  },
+]);

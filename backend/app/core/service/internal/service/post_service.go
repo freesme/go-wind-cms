@@ -5,6 +5,8 @@ import (
 
 	"github.com/go-kratos/kratos/v2/log"
 	paginationV1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
+	"github.com/tx7do/go-utils/slug"
+	"github.com/tx7do/go-utils/trans"
 	"github.com/tx7do/kratos-bootstrap/bootstrap"
 	"google.golang.org/protobuf/types/known/emptypb"
 
@@ -36,10 +38,18 @@ func (s *PostService) Get(ctx context.Context, req *contentV1.GetPostRequest) (*
 }
 
 func (s *PostService) Create(ctx context.Context, req *contentV1.CreatePostRequest) (*contentV1.Post, error) {
+	if req.Data.Status == nil {
+		req.Data.Status = trans.Ptr(contentV1.Post_POST_STATUS_PUBLISHED)
+	}
+
 	return s.postRepo.Create(ctx, req)
 }
 
 func (s *PostService) Update(ctx context.Context, req *contentV1.UpdatePostRequest) (*contentV1.Post, error) {
+	for i := range req.Data.Translations {
+		req.Data.Translations[i].Slug = trans.Ptr(slug.Generate(req.Data.Translations[i].GetTitle()))
+	}
+
 	return s.postRepo.Update(ctx, req)
 }
 

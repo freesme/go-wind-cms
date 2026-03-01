@@ -238,6 +238,10 @@ github.com/gorilla/handlers v1.5.2 h1:cLTUSsNkgcwhgRqvCNmdbRWG0A3N4F+M2nWKdScwyE
 github.com/gorilla/handlers v1.5.2/go.mod h1:dX+xVpaxdSw+q0Qek8SSsl3dfMk3jNddUkMzo0GtH0w=
 github.com/gorilla/mux v1.8.1 h1:TuBL49tXwgrFYWhqrNgrUNEY92u81SPhu7sTdzQEiWY=
 github.com/gorilla/mux v1.8.1/go.mod h1:AKf9I4AEqPTmMytcMc0KkNouC66V3BtZ4qD5fmWSiMQ=
+github.com/gosimple/slug v1.15.0 h1:wRZHsRrRcs6b0XnxMUBM6WK1U1Vg5B0R7VkIf1Xzobo=
+github.com/gosimple/slug v1.15.0/go.mod h1:UiRaFH+GEilHstLUmcBgWcI42viBN7mAb818JrYOeFQ=
+github.com/gosimple/unidecode v1.0.1 h1:hZzFTMMqSswvf0LBJZCZgThIZrpDHFXux9KeGmn6T/o=
+github.com/gosimple/unidecode v1.0.1/go.mod h1:CP0Cr1Y1kogOtx0bJblKzsVWrqYaqfNOnHzpgWw4Awc=
 github.com/graph-gophers/dataloader/v7 v7.1.3 h1:mXCI1E3dBG0aG1Tzg1tXaz+nN140opFIgEfYhxHR0XA=
 github.com/graph-gophers/dataloader/v7 v7.1.3/go.mod h1:cnjGvZ3DuN2hU90Q72WCZNzkCEq/BHwh7fI7w7/GhIg=
 github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 h1:UH//fgunKIs4JdUbpDl1VZCDaL56wXCB/5+wF6uHfaI=
@@ -541,6 +545,8 @@ github.com/tx7do/go-utils/mapper v0.0.3 h1:Z7YoPVsa6I3lfWGSUoa9atujHWeF3kP+yKfS6
 github.com/tx7do/go-utils/mapper v0.0.3/go.mod h1:zziBbtoqCt8pRw+jmK9Ic9sRD7a2yCLWG40Hy2UCSCs=
 github.com/tx7do/go-utils/password v0.0.1 h1:AAnGdAIxgSZww0XpQQgoyvxQT5v5gXIpc0flWRMik5c=
 github.com/tx7do/go-utils/password v0.0.1/go.mod h1:Wjz9dIP9RFRjYTWCC0UymsI0yUS0HeNUL0rF9IC93Qk=
+github.com/tx7do/go-utils/slug v0.0.1 h1:U/8micay7kQGMQiEP0WTLX5JiyTrLP2M5rQ6iTBTEOA=
+github.com/tx7do/go-utils/slug v0.0.1/go.mod h1:xtwLns5uOYP+//LMsB9vXOBtycP5KW+n/N9gCl1Ag9M=
 github.com/tx7do/kratos-authn v1.1.9 h1:VrwBoyqURLSviqQM5eywzM3+RWPRYs6bNixQZwHbM80=
 github.com/tx7do/kratos-authn v1.1.9/go.mod h1:XHNrq3Ihz9owRRrIOY4oBW+IagB66eI7EdLQxmBvZ/8=
 github.com/tx7do/kratos-authn/engine/jwt v1.1.9 h1:t8OmImwie4K4itDlJYdRBxZT7k2x+Du0gZXpbNi4wlQ=

@@ -510,6 +510,20 @@
       "slug": "请输入帖子别名",
       "content": "请输入帖子内容",
       "untitled": "【无标题】"
+    },
+    "validation": {
+      "titleRequired": "帖子标题不能为空",
+      "contentRequired": "帖子内容不能为空",
+      "publishFailed": "发布失败，请稍后再试",
+      "publishSuccess": "发布成功",
+      "titleExists": "帖子标题已存在，请更换后重新创建",
+      "slugExists": "帖子别名已存在，请更换后重新创建",
+      "invalidSlug": "帖子别名只能包含字母、数字、下划线或连字符",
+      "inProgress": "帖子正在编辑中，是否放弃编辑？",
+      "deletePost": "您确定要删除该帖子吗？",
+      "deleteDraft": "您确定要删除该草稿吗？",
+      "publishPost": "您确定要发布该帖子吗？",
+      "unpublishPost": "您确定要取消发布该帖子吗？"
     }
   },
   "tag": {

@@ -1,5 +1,3 @@
-import { $t } from '@vben/locales';
-
 export enum EditorType {
   CODE = 'EDITOR_TYPE_CODE',
   JSON = 'EDITOR_TYPE_JSON_BLOCK',
@@ -8,27 +6,6 @@ export enum EditorType {
   RICH_TEXT = 'EDITOR_TYPE_RICH_TEXT',
   VISUAL_BUILDER = 'EDITOR_TYPE_VISUAL_BUILDER',
 }
-
-// 编辑器类型列表
-export const editorTypeOptions = [
-  {
-    label: $t('enum.editorType.EDITOR_TYPE_MARKDOWN'),
-    value: EditorType.MARKDOWN,
-  },
-  {
-    label: $t('enum.editorType.EDITOR_TYPE_RICH_TEXT'),
-    value: EditorType.RICH_TEXT,
-  },
-  {
-    label: $t('enum.editorType.EDITOR_TYPE_JSON_BLOCK'),
-    value: EditorType.JSON,
-  },
-  {
-    label: $t('enum.editorType.EDITOR_TYPE_PLAIN_TEXT'),
-    value: EditorType.PLAIN_TEXT,
-  },
-  { label: $t('enum.editorType.EDITOR_TYPE_CODE'), value: EditorType.CODE },
-];
 
 export interface EditorProps {
   modelValue: string;

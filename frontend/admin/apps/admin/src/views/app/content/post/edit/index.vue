@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Props } from './types';
+import type { PublishProps } from './types';
 
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { Page, useVbenModal } from '@vben/common-ui';
@@ -9,13 +9,14 @@ import { useTabs } from '@vben/hooks';
 import { LucideArrowLeft } from '@vben/icons';
 import { $t } from '@vben/locales';
 
+import { notification } from 'ant-design-vue';
+
+import { Editor, EditorType } from '#/adapter/component/Editor';
+import { router } from '#/router';
 import {
-  Editor,
-  EditorType,
+  convertToEditorType,
+  convertToUIEditorType,
   editorTypeOptions,
-} from '#/adapter/component/Editor';
-import {
-  convertEditorType,
   useFileTransferStore,
   useLanguageStore,
   usePostStore,
@@ -51,7 +52,7 @@ const postId = computed(() => {
 });
 
 // 表单数据
-const formData = ref<Props>({
+const formData = ref<PublishProps>({
   title: '',
   content: '',
   lang: initLanguage.value,
@@ -80,6 +81,41 @@ const [Modal, modalApi] = useVbenModal({
   connectedComponent: PublishPostModal,
 });
 
+/**
+ * 当用户切换语言时，同时更新URL查询参数
+ */
+function handleLanguageChange(newLang: string) {
+  formData.value.lang = newLang;
+
+  // 更新URL中的 lang 查询参数
+  router.replace({
+    path: route.path,
+    query: { ...route.query, lang: newLang },
+  });
+
+  // 如果是编辑模式，需要重新加载该语言版本的文章
+  if (isEditMode.value) {
+    loadPost();
+  }
+}
+
+/**
+ * 监听路由查询参数变化
+ * 当用户通过URL直接访问时（例如打开书签），自动更新表单语言
+ */
+watch(
+  () => route.query.lang,
+  (newLang) => {
+    if (newLang && formData.value.lang !== newLang) {
+      formData.value.lang = newLang as string;
+      // 如果是编辑模式，重新加载该语言版本的文章
+      if (isEditMode.value) {
+        loadPost();
+      }
+    }
+  },
+);
+
 /* 打开模态窗口 */
 function openModal() {
   modalApi.setData(formData.value);
@@ -88,7 +124,7 @@ function openModal() {
 
 function goBack() {
   closeCurrentTab();
-  // router.push('/content/posts');
+  router.push('/content/posts');
 }
 
 function handleSaveDraft() {
@@ -96,8 +132,54 @@ function handleSaveDraft() {
   // TODO: 调用保存接口
 }
 
-function handlePublish() {
-  openModal();
+async function handlePublish() {
+  if (!formData.value.title) {
+    notification.error({
+      message: $t('page.post.validation.titleRequired'),
+    });
+    return;
+  }
+  if (!formData.value.content) {
+    notification.error({
+      message: $t('page.post.validation.contentRequired'),
+    });
+    return;
+  }
+
+  try {
+    await (isCreateMode.value
+      ? postStore.createPost({
+          editorType: convertToEditorType(formData.value.editorType),
+          translations: [
+            {
+              title: formData.value.title,
+              content: formData.value.content,
+              languageCode: formData.value.lang,
+            },
+          ],
+        })
+      : postStore.updatePost(formData.value.id || 0, {
+          editorType: convertToEditorType(formData.value.editorType),
+          translations: [
+            {
+              title: formData.value.title,
+              content: formData.value.content,
+              languageCode: formData.value.lang,
+            },
+          ],
+        }));
+
+    notification.success({
+      message: $t('page.post.validation.publishSuccess'),
+    });
+
+    goBack();
+  } catch (error) {
+    console.error('Failed to publish post:', error);
+    notification.error({
+      message: $t('page.post.validation.publishFailed'),
+    });
+  }
 }
 
 async function handleUploadImage(file: File): Promise<string> {
@@ -139,10 +221,11 @@ async function loadPost() {
       return;
     }
 
+    formData.value.id = item.id;
     formData.value.title = langItem.title || '';
     formData.value.content = langItem.content || '';
     formData.value.lang = formData.value.lang || 'zh-CN';
-    formData.value.editorType = convertEditorType(item.editorType);
+    formData.value.editorType = convertToUIEditorType(item.editorType);
   } catch (error) {
     console.error('Failed to load post:', error);
   }
@@ -177,7 +260,11 @@ onMounted(async () => {
           size="large"
           class="flex-1"
         />
-        <a-select v-model:value="formData.lang" style="width: 200px">
+        <a-select
+          :value="formData.lang"
+          style="width: 200px"
+          @change="handleLanguageChange"
+        >
           <a-select-option
             v-for="option in languageOptions"
             :key="option.value"

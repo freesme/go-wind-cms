@@ -123,9 +123,12 @@ func (PostTranslation) Indexes() []ent.Index {
 		index.Fields("full_path"),
 		// 单字段索引，优化SEO关键词搜索
 		index.Fields("meta_keywords"),
+		// 复合唯一索引，确保同一帖子的同一语言下 slug 唯一（这是最重要的约束）
+		index.Fields("post_id", "language_code", "slug").
+			Unique(),
 		// 复合索引，优化按帖子和语言查询特定翻译版本
 		index.Fields("post_id", "language_code"),
-		// 复合索引，优化按语言代码和slug查询
+		// 复合索引，优化按语言代码和slug查询（用于 URL 路由）
 		index.Fields("language_code", "slug"),
 	}
 }

@@ -150,3 +150,18 @@ func (r *PostTranslationRepo) BatchCreate(ctx context.Context, tx *ent.Tx, items
 
 	return nil
 }
+
+// CountByBaseSlug counts the number of post translations with the given base slug (case-insensitive).
+func (r *PostTranslationRepo) CountByBaseSlug(ctx context.Context, baseSlug string) (int64, error) {
+	count, err := r.entClient.Client().PostTranslation.Query().
+		Where(
+			posttranslation.SlugHasPrefix(baseSlug),
+		).
+		Count(ctx)
+	if err != nil {
+		r.log.Errorf("count post translations by slug failed: %s", err.Error())
+		return 0, contentV1.ErrorInternalServerError("count post translations by slug failed")
+	}
+
+	return int64(count), nil
+}

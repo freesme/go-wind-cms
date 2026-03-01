@@ -2849,6 +2849,11 @@ var (
 				Columns: []*schema.Column{PostTranslationsColumns[18]},
 			},
 			{
+				Name:    "posttranslation_post_id_language_code_slug",
+				Unique:  true,
+				Columns: []*schema.Column{PostTranslationsColumns[7], PostTranslationsColumns[8], PostTranslationsColumns[10]},
+			},
+			{
 				Name:    "posttranslation_post_id_language_code",
 				Unique:  false,
 				Columns: []*schema.Column{PostTranslationsColumns[7], PostTranslationsColumns[8]},

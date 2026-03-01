@@ -24,15 +24,6 @@ const [BaseForm, baseFormApi] = useVbenForm({
   },
   schema: [
     {
-      component: 'VbenInput',
-      fieldName: 'slug',
-      label: $t('page.post.slug'),
-      componentProps: {
-        placeholder: $t('ui.placeholder.input'),
-      },
-      rules: 'required',
-    },
-    {
       component: 'Textarea',
       fieldName: 'summary',
       label: $t('page.post.summary'),
@@ -98,7 +89,7 @@ const [Modal, modalApi] = useVbenModal({
 
       setLoading(false);
 
-      console.log('onOpenChange', data.value?.create, data.value?.userId);
+      console.log('onOpenChange', data.value);
     }
   },
 });

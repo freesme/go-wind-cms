@@ -2,10 +2,14 @@ package data
 
 import (
 	"context"
+	"go-wind-cms/pkg/content/count"
+	"go-wind-cms/pkg/content/summary"
+	"strconv"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/tx7do/go-utils/slug"
 	"github.com/tx7do/kratos-bootstrap/bootstrap"
 
 	paginationV1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
@@ -189,6 +193,10 @@ func (r *PostRepo) Create(ctx context.Context, req *contentV1.CreatePostRequest)
 		return nil, contentV1.ErrorBadRequest("invalid parameter")
 	}
 
+	if len(req.Data.Translations) == 0 {
+		return nil, contentV1.ErrorBadRequest("at least one translation is required")
+	}
+
 	var tx *ent.Tx
 	tx, err = r.entClient.Client().Tx(ctx)
 	if err != nil {
@@ -236,11 +244,37 @@ func (r *PostRepo) Create(ctx context.Context, req *contentV1.CreatePostRequest)
 		return nil, contentV1.ErrorInternalServerError("insert post failed")
 	}
 
-	if req.Data.Translations != nil {
+	if len(req.Data.Translations) > 0 {
 		if err = r.postTranslationRepo.CleanTranslations(ctx, tx, entity.ID); err != nil {
 			r.log.Errorf("clean translations failed: %s", err.Error())
 			return nil, contentV1.ErrorInternalServerError("clean translations failed")
 		}
+
+		for i := range req.Data.Translations {
+			req.Data.Translations[i].PostId = trans.Ptr(entity.ID)
+
+			baseSlug := slug.Generate(req.Data.Translations[i].GetTitle())
+			slugCount, err := r.postTranslationRepo.CountByBaseSlug(ctx, baseSlug)
+			if err != nil {
+				r.log.Errorf("count slug failed: %s", err.Error())
+				return nil, contentV1.ErrorInternalServerError("count slug failed")
+			}
+
+			if slugCount > 0 {
+				baseSlug = slug.Generate(req.Data.Translations[i].GetTitle()) + "-" + strconv.Itoa(int(slugCount))
+			}
+
+			if req.Data.AutoSummary != nil && req.Data.GetAutoSummary() || len(req.Data.Translations[i].GetSummary()) == 0 {
+				sm := summary.GenerateSummaryByRule(req.Data.Translations[i].GetContent(), 100, true)
+				req.Data.Translations[i].Summary = trans.Ptr(sm)
+			}
+
+			counter := count.NewContentCounter(req.Data.Translations[i].GetContent())
+
+			req.Data.Translations[i].Slug = trans.Ptr(baseSlug)
+			req.Data.Translations[i].WordCount = trans.Ptr(uint32(counter.RawChars()))
+		}
+
 		if err = r.postTranslationRepo.BatchCreate(ctx, tx, req.Data.GetTranslations()); err != nil {
 			r.log.Errorf("batch insert translations failed: %s", err.Error())
 			return nil, contentV1.ErrorInternalServerError("batch insert translations failed")
@@ -288,11 +322,37 @@ func (r *PostRepo) Update(ctx context.Context, req *contentV1.UpdatePostRequest)
 		}
 	}()
 
-	if req.Data.Translations != nil {
+	if len(req.Data.Translations) > 0 {
 		if err = r.postTranslationRepo.CleanTranslations(ctx, tx, req.GetId()); err != nil {
 			r.log.Errorf("clean translations failed: %s", err.Error())
 			return nil, contentV1.ErrorInternalServerError("clean translations failed")
 		}
+
+		for i := range req.Data.Translations {
+			req.Data.Translations[i].PostId = trans.Ptr(req.GetId())
+
+			baseSlug := slug.Generate(req.Data.Translations[i].GetTitle())
+			slugCount, err := r.postTranslationRepo.CountByBaseSlug(ctx, baseSlug)
+			if err != nil {
+				r.log.Errorf("count slug failed: %s", err.Error())
+				return nil, contentV1.ErrorInternalServerError("count slug failed")
+			}
+
+			if slugCount > 0 {
+				baseSlug = slug.Generate(req.Data.Translations[i].GetTitle()) + "-" + strconv.Itoa(int(slugCount))
+			}
+
+			if req.Data.AutoSummary != nil && req.Data.GetAutoSummary() || len(req.Data.Translations[i].GetSummary()) == 0 {
+				sm := summary.GenerateSummaryByRule(req.Data.Translations[i].GetContent(), 100, true)
+				req.Data.Translations[i].Summary = trans.Ptr(sm)
+			}
+
+			counter := count.NewContentCounter(req.Data.Translations[i].GetContent())
+
+			req.Data.Translations[i].Slug = trans.Ptr(baseSlug)
+			req.Data.Translations[i].WordCount = trans.Ptr(uint32(counter.RawChars()))
+		}
+
 		if err = r.postTranslationRepo.BatchCreate(ctx, tx, req.Data.GetTranslations()); err != nil {
 			r.log.Errorf("batch insert translations failed: %s", err.Error())
 			return nil, contentV1.ErrorInternalServerError("batch insert translations failed")

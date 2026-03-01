@@ -1,6 +1,7 @@
-import { EditorType } from '#/components/editor';
+import { EditorType } from '#/adapter/component/Editor';
 
-export interface Props {
+export interface PublishProps {
+  id?: number;
   title: string;
   content: string;
   lang: string;

@@ -49,6 +49,11 @@ func (s *PostService) Create(ctx context.Context, req *contentV1.CreatePostReque
 	}
 
 	req.Data.CreatedBy = trans.Ptr(operator.UserId)
+	req.Data.AuthorId = trans.Ptr(operator.UserId)
+
+	for i := range req.Data.Translations {
+		req.Data.Translations[i].CreatedBy = trans.Ptr(operator.UserId)
+	}
 
 	return s.postServiceClient.Create(ctx, req)
 }
@@ -67,6 +72,10 @@ func (s *PostService) Update(ctx context.Context, req *contentV1.UpdatePostReque
 	req.Data.UpdatedBy = trans.Ptr(operator.GetUserId())
 	if req.UpdateMask != nil {
 		req.UpdateMask.Paths = append(req.UpdateMask.Paths, "updated_by")
+	}
+
+	for i := range req.Data.Translations {
+		req.Data.Translations[i].UpdatedBy = trans.Ptr(operator.UserId)
 	}
 
 	return s.postServiceClient.Update(ctx, req)
