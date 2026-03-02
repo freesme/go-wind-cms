@@ -504,7 +504,38 @@
     "visits": "访问量",
     "customFields": "是否自定义模板",
     "customHead": "自定义页面头部内容",
-    "customFoot": "自定义页面底部内容"
+    "customFoot": "自定义页面底部内容",
+    "summary": "页面摘要",
+    "button": {
+      "create": "创建页面",
+      "saveDraft": "保存草稿",
+      "publish": "发布页面",
+      "oneClickTranslate": "一键翻译"
+    },
+    "title": {
+      "create": "创建页面",
+      "edit": "编辑页面"
+    },
+    "placeholder": {
+      "title": "请输入页面标题",
+      "slug": "请输入页面别名",
+      "content": "请输入页面内容",
+      "hasTranslation": "已有翻译",
+      "noTranslation": "未翻译"
+    },
+    "validation": {
+      "titleRequired": "页面标题不能为空",
+      "slugRequired": "页面别名不能为空",
+      "contentRequired": "页面内容不能为空",
+      "publishFailed": "发布失败，请稍后再试",
+      "publishSuccess": "发布成功",
+      "saveDraftSuccess": "保存草稿成功",
+      "saveDraftFailed": "保存草稿失败，请稍后再试",
+      "translationNotExists": "翻译内容不存在，请先进行翻译",
+      "translateTitleFailed": "翻译标题失败，请稍后再试",
+      "translateContentFailed": "翻译内容失败，请稍后再试",
+      "loadLanguageFailed": "加载语言列表失败，请稍后再试"
+    }
   },
   "post": {
     "moduleName": "帖子管理",

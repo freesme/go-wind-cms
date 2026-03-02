@@ -503,7 +503,38 @@
     "visits": "Visits",
     "customFields": "Custom Fields",
     "customHead": "Custom Head Content",
-    "customFoot": "Custom Footer Content"
+    "customFoot": "Custom Footer Content",
+    "summary": "Page Summary",
+    "button": {
+      "create": "Create Page",
+      "saveDraft": "Save Draft",
+      "publish": "Publish Page",
+      "oneClickTranslate": "One-Click Translate"
+    },
+    "title": {
+      "create": "Create Page",
+      "edit": "Edit Page"
+    },
+    "placeholder": {
+      "title": "Please enter page title",
+      "slug": "Please enter page slug",
+      "content": "Please enter page content",
+      "hasTranslation": "Translation Available",
+      "noTranslation": "No Translation"
+    },
+    "validation": {
+      "titleRequired": "Page title is required",
+      "slugRequired": "Page slug is required",
+      "contentRequired": "Page content is required",
+      "publishFailed": "Publish failed, please try again later",
+      "publishSuccess": "Published successfully",
+      "saveDraftSuccess": "Draft saved successfully",
+      "saveDraftFailed": "Failed to save draft, please try again later",
+      "translationNotExists": "Translation does not exist, please translate first",
+      "translateTitleFailed": "Failed to translate title, please try again later",
+      "translateContentFailed": "Failed to translate content, please try again later",
+      "loadLanguageFailed": "Failed to load language list, please try again later"
+    }
   },
   "post": {
     "moduleName": "Posts",
