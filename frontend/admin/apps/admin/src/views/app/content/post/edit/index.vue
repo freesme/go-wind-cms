@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { computed, onMounted, watch } from 'vue';
+import { computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { Page, useVbenModal } from '@vben/common-ui';
 import { useTabs } from '@vben/hooks';
-import { LucideArrowLeft } from '@vben/icons';
+import { LucideArrowLeft, LucideSparkles } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import { notification } from 'ant-design-vue';
@@ -12,18 +12,17 @@ import { notification } from 'ant-design-vue';
 import { Editor } from '#/adapter/component/Editor';
 import { router } from '#/router';
 import {
-  convertToUIEditorType,
   editorTypeOptions,
   useFileTransferStore,
-  usePostStore,
+  useTranslatorStore,
 } from '#/stores';
 
 import { usePostEditViewStore } from './post-edit-view.state';
 import PublishPostModal from './publish-post-modal.vue';
 
-const postStore = usePostStore();
 const fileTransferStore = useFileTransferStore();
 const postEditViewStore = usePostEditViewStore();
+const translatorStore = useTranslatorStore();
 
 const route = useRoute();
 const { closeCurrentTab } = useTabs();
@@ -53,27 +52,6 @@ const [Modal] = useVbenModal({
   connectedComponent: PublishPostModal,
 });
 
-async function handleLanguageChange(newLang: string) {
-  postEditViewStore.formData.lang = newLang;
-
-  // 更新URL中的 lang 查询参数
-  await router.replace({
-    path: route.path,
-    query: { ...route.query, lang: newLang },
-  });
-
-  // 如果是编辑模式，需要重新加载该语言版本的文章
-  if (isEditMode.value) {
-    try {
-      await loadPost();
-    } catch {
-      notification.error({
-        message: $t('page.post.validation.loadFailed'),
-      });
-    }
-  }
-}
-
 /**
  * 监听路由查询参数变化
  * 当用户通过URL直接访问时（例如打开书签），自动更新表单语言
@@ -97,11 +75,79 @@ watch(
   },
 );
 
+/**
+ * 处理返回按钮点击
+ */
 function goBack() {
   closeCurrentTab();
   router.push('/content/posts');
 }
 
+/**
+ * 处理语言切换
+ */
+async function handleLanguageChange(newLang: string) {
+  console.log('handleLanguageChange', newLang);
+
+  postEditViewStore.formData.lang = newLang;
+
+  // 更新URL中的 lang 查询参数
+  await router.replace({
+    path: route.path,
+    query: { ...route.query, lang: newLang },
+  });
+
+  // 如果是编辑模式，需要重新加载该语言版本的文章
+  if (isEditMode.value) {
+    try {
+      await loadPost();
+    } catch {
+      notification.error({
+        message: $t('page.post.validation.loadFailed'),
+      });
+    }
+  }
+}
+
+/**
+ * 处理一键翻译
+ */
+async function handleTranslate() {
+  try {
+    const titleResp = await translatorStore.translate(
+      postEditViewStore.formData.lang,
+      postEditViewStore.formData.title,
+    );
+    console.log('Title translation response:', titleResp);
+    postEditViewStore.formData.title =
+      titleResp.translatedContent || postEditViewStore.formData.title;
+  } catch (error) {
+    console.error('Title translation failed:', error);
+    notification.error({
+      message: $t('page.post.validation.translateTitleFailed'),
+    });
+    return;
+  }
+
+  try {
+    const contentResp = await translatorStore.translate(
+      postEditViewStore.formData.lang,
+      postEditViewStore.formData.content,
+    );
+    console.log('Content translation response:', contentResp);
+    postEditViewStore.formData.content =
+      contentResp.translatedContent || postEditViewStore.formData.content;
+  } catch (error) {
+    console.error('Content translation failed:', error);
+    notification.error({
+      message: $t('page.post.validation.translateContentFailed'),
+    });
+  }
+}
+
+/**
+ * 处理保存草稿
+ */
 function handleSaveDraft() {
   try {
     postEditViewStore.savePostDraft();
@@ -116,6 +162,9 @@ function handleSaveDraft() {
   }
 }
 
+/**
+ * 处理发布文章
+ */
 async function handlePublish() {
   const resp = await postEditViewStore.publishPost();
   if (!resp || resp === '') {
@@ -131,6 +180,9 @@ async function handlePublish() {
   }
 }
 
+/**
+ * 处理图片上传
+ */
 async function handleUploadImage(file: File): Promise<string> {
   console.log('Upload image:', file);
 
@@ -143,48 +195,34 @@ async function handleUploadImage(file: File): Promise<string> {
   }
 }
 
+/**
+ * 加载文章数据（仅编辑模式）
+ */
 async function loadPost() {
   if (!isEditMode.value) {
     return;
   }
 
   try {
-    const item = await postStore.getPost(postId.value || 0);
-    if (!item) {
-      throw new Error('Post not found');
-    }
+    await postEditViewStore.fetchPost();
 
-    if (!item.translations || item.translations.length === 0) {
-      throw new Error('No translations found for post');
+    if (!postEditViewStore.needTranslate) {
+      notification.info({
+        message: $t('page.post.validation.'),
+      });
     }
-
-    let langItem = item.translations?.find(
-      (t) => t.languageCode === postEditViewStore.formData.lang,
-    );
-    if (!langItem) {
-      langItem = item.translations?.[0];
-      postEditViewStore.formData.lang =
-        langItem?.languageCode || postEditViewStore.formData.lang;
-    }
-
-    if (!langItem) {
-      throw new Error('No translations found for post');
-    }
-
-    postEditViewStore.formData.id = item.id;
-    postEditViewStore.formData.title = langItem.title || '';
-    postEditViewStore.formData.content = langItem.content || '';
-    postEditViewStore.formData.lang =
-      postEditViewStore.formData.lang || 'zh-CN';
-    postEditViewStore.formData.editorType = convertToUIEditorType(
-      item.editorType,
-    );
   } catch (error) {
     console.error('Failed to load post:', error);
+    notification.error({
+      message: $t('page.post.validation.translationNotExists'),
+    });
     throw error;
   }
 }
 
+/**
+ * 初始化页面数据
+ */
 async function init() {
   try {
     await postEditViewStore.fetchLanguageList();
@@ -198,21 +236,13 @@ async function init() {
     postEditViewStore.initCreateMode(initLanguage.value);
   } else if (isEditMode.value) {
     postEditViewStore.initEditMode(postId.value || 0, initLanguage.value);
-    try {
-      await postEditViewStore.fetchPost();
-    } catch {
-      notification.error({
-        message: $t('page.post.validation.loadFailed'),
-      });
-    }
+    await loadPost();
   } else {
     console.error('Unknown route name:', route.name);
   }
 }
 
-onMounted(async () => {
-  await init();
-});
+init();
 </script>
 
 <template>
@@ -246,6 +276,17 @@ onMounted(async () => {
             {{ option.label }}
           </a-select-option>
         </a-select>
+        <a-button
+          v-show="postEditViewStore.needTranslate"
+          type="primary"
+          class="translate-btn"
+          @click="handleTranslate"
+        >
+          <template #icon>
+            <LucideSparkles />
+          </template>
+          {{ $t('page.post.button.oneClickTranslate') }}
+        </a-button>
         <a-select
           v-model:value="postEditViewStore.formData.editorType"
           style="width: 200px"
@@ -292,5 +333,20 @@ onMounted(async () => {
 .post-edit-container {
   width: 100%;
   height: 100%;
+}
+
+.translate-btn {
+  min-width: 140px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.translate-btn:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }
 </style>

@@ -57,3 +57,6 @@ export const LucideUserRoundPen = createIconifyIcon('lucide:user-round-pen');
 export const LucideInbox = createIconifyIcon('lucide:inbox');
 
 export const LucideCircleAlert = createIconifyIcon('lucide:circle-alert');
+
+export const LucideSparkles = createIconifyIcon('lucide:sparkles');
+export const LucideWand = createIconifyIcon('lucide:wand');

@@ -27,6 +27,7 @@ const storageKeyMessage = 'post-edit-draft';
  */
 interface PostEditViewState {
   loading: boolean; // 加载状态
+  needTranslate: boolean; // 是否需要翻译
   formData: PostEditProps; // 表单数据
   languageOptions: { label: string; value: string }[]; // 语言选项列表
   isCreateMode: boolean; // 是否为创建模式
@@ -39,6 +40,9 @@ interface PostEditViewState {
 export const usePostEditViewStore = defineStore('post-edit-view', {
   state: (): PostEditViewState => ({
     loading: false,
+    needTranslate: false,
+    isCreateMode: true,
+    postId: null,
     formData: {
       title: '',
       content: '',
@@ -46,8 +50,6 @@ export const usePostEditViewStore = defineStore('post-edit-view', {
       editorType: EditorType.MARKDOWN,
     },
     languageOptions: [],
-    isCreateMode: true,
-    postId: null,
   }),
 
   actions: {
@@ -56,6 +58,7 @@ export const usePostEditViewStore = defineStore('post-edit-view', {
      */
     initEditMode(postId: number, initialLang: string) {
       this.isCreateMode = false;
+      this.needTranslate = false;
       this.postId = postId;
       this.formData.lang = initialLang;
     },
@@ -65,6 +68,7 @@ export const usePostEditViewStore = defineStore('post-edit-view', {
      */
     initCreateMode(initialLang: string) {
       this.isCreateMode = true;
+      this.needTranslate = false;
       this.postId = null;
       this.formData = {
         title: '',
@@ -122,10 +126,16 @@ export const usePostEditViewStore = defineStore('post-edit-view', {
           (t) => t.languageCode === this.formData.lang,
         );
 
+        this.needTranslate = false;
+
         // 如果没找到对应语言，使用第一个翻译
         if (!langItem) {
           langItem = item.translations?.[0];
-          this.formData.lang = langItem?.languageCode || this.formData.lang;
+          this.needTranslate = true;
+          console.log(
+            'No translation found for selected language, using first available translation',
+            this.formData.lang,
+          );
         }
 
         if (!langItem) {
@@ -234,7 +244,11 @@ export const usePostEditViewStore = defineStore('post-edit-view', {
      * 重置状态
      */
     $reset() {
+      console.log('resetting post edit view state');
       this.loading = false;
+      this.needTranslate = false;
+      this.isCreateMode = true;
+      this.postId = null;
       this.formData = {
         title: '',
         content: '',
@@ -242,8 +256,6 @@ export const usePostEditViewStore = defineStore('post-edit-view', {
         editorType: EditorType.MARKDOWN,
       };
       this.languageOptions = [];
-      this.isCreateMode = true;
-      this.postId = null;
     },
   },
 });

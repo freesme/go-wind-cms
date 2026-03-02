@@ -33,7 +33,8 @@ func NewTranslatorService(
 func (s *TranslatorService) Translate(_ context.Context, req *translatorV1.TranslateRequest) (*translatorV1.TranslateResponse, error) {
 	targetContent, err := s.translator.Translate(req.GetContent(), req.GetSourceLanguage(), req.GetTargetLanguage())
 	if err != nil {
-		return nil, adminV1.ErrorInternalServerError("翻译失败: %v", err)
+		s.log.Errorf("translator.Translate err: %+v", err)
+		return nil, adminV1.ErrorInternalServerError("翻译失败")
 	}
 
 	return &translatorV1.TranslateResponse{

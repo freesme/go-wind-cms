@@ -324,11 +324,6 @@ func (r *PostRepo) Update(ctx context.Context, req *contentV1.UpdatePostRequest)
 	}()
 
 	if len(req.Data.Translations) > 0 {
-		if err = r.postTranslationRepo.CleanTranslations(ctx, tx, req.GetId()); err != nil {
-			r.log.Errorf("clean translations failed: %s", err.Error())
-			return nil, contentV1.ErrorInternalServerError("clean translations failed")
-		}
-
 		for i := range req.Data.Translations {
 			req.Data.Translations[i].PostId = trans.Ptr(req.GetId())
 

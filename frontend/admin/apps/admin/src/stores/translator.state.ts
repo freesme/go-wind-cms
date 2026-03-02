@@ -9,8 +9,12 @@ export const useTranslatorStore = defineStore('translator', () => {
   /**
    * 翻译
    */
-  async function translate(id: number) {
-    return await service.Translate({ id });
+  async function translate(targetLanguage: string, content: string) {
+    return await service.Translate({
+      sourceLanguage: 'auto',
+      targetLanguage,
+      content,
+    });
   }
 
   function $reset() {}
