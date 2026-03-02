@@ -457,7 +457,35 @@
     "icon": "分类图标",
     "postCount": "帖子数量",
     "directPostCount": "直接帖子数量",
-    "customFields": "自定义字段"
+    "customFields": "自定义字段",
+    "name": "分类名称",
+    "button": {
+      "create": "创建分类",
+      "saveDraft": "保存草稿",
+      "publish": "发布分类"
+    },
+    "title": {
+      "create": "创建分类",
+      "edit": "编辑分类"
+    },
+    "placeholder": {
+      "name": "请输入分类名称",
+      "slug": "请输入分类别名",
+      "description": "请输入分类描述",
+      "icon": "请输入图标",
+      "hasTranslation": "已有翻译",
+      "noTranslation": "未翻译"
+    },
+    "validation": {
+      "nameRequired": "分类名称不能为空",
+      "slugRequired": "分类别名不能为空",
+      "publishFailed": "发布失败，请稍后再试",
+      "publishSuccess": "发布成功",
+      "saveDraftSuccess": "保存草稿成功",
+      "saveDraftFailed": "保存草稿失败，请稍后再试",
+      "translationNotExists": "翻译内容不存在，请先进行翻译",
+      "loadLanguageFailed": "加载语言列表失败，请稍后再试"
+    }
   },
   "page": {
     "moduleName": "页面管理",

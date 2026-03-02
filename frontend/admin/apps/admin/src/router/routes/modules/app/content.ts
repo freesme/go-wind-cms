@@ -72,6 +72,26 @@ const content: RouteRecordRaw[] = [
         },
         component: () => import('#/views/app/content/category/index.vue'),
       },
+      {
+        path: 'categories/create',
+        name: 'CreateCategory',
+        meta: {
+          hideInMenu: true,
+          title: $t('menu.content.createCategory'),
+          authority: ['sys:platform_admin', 'sys:tenant_manager'],
+        },
+        component: () => import('#/views/app/content/category/edit/index.vue'),
+      },
+      {
+        path: 'categories/edit/:id',
+        name: 'EditCategory',
+        meta: {
+          hideInMenu: true,
+          title: $t('menu.content.editCategory'),
+          authority: ['sys:platform_admin', 'sys:tenant_manager'],
+        },
+        component: () => import('#/views/app/content/category/edit/index.vue'),
+      },
 
       {
         path: 'tags',

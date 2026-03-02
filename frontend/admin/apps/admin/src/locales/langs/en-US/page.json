@@ -457,7 +457,34 @@
     "icon": "Icon",
     "postCount": "Post Count",
     "directPostCount": "Direct Post Count",
-    "customFields": "Custom Fields"
+    "customFields": "Custom Fields",
+    "button": {
+      "create": "Create Category",
+      "saveDraft": "Save Draft",
+      "publish": "Publish Category"
+    },
+    "title": {
+      "create": "Create Category",
+      "edit": "Edit Category"
+    },
+    "placeholder": {
+      "name": "Please enter category name",
+      "slug": "Please enter category slug",
+      "description": "Please enter category description",
+      "icon": "Please enter icon",
+      "hasTranslation": "Translation Available",
+      "noTranslation": "No Translation"
+    },
+    "validation": {
+      "nameRequired": "Category name is required",
+      "slugRequired": "Category slug is required",
+      "publishFailed": "Publish failed, please try again later",
+      "publishSuccess": "Published successfully",
+      "saveDraftSuccess": "Draft saved successfully",
+      "saveDraftFailed": "Failed to save draft, please try again later",
+      "translationNotExists": "Translation does not exist, please translate first",
+      "loadLanguageFailed": "Failed to load language list, please try again later"
+    }
   },
   "page": {
     "moduleName": "Pages",

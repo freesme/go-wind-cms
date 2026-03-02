@@ -59,8 +59,14 @@
     "createPost": "帖子创建",
     "editPost": "帖子编辑",
     "page": "页面管理",
+    "createPage": "页面创建",
+    "editPage": "页面编辑",
     "category": "分类管理",
-    "tag": "标签管理"
+    "createCategory": "分类创建",
+    "editCategory": "分类编辑",
+    "tag": "标签管理",
+    "createTag": "标签创建",
+    "editTag": "标签编辑"
   },
   "media": {
     "moduleName": "媒体中心",
