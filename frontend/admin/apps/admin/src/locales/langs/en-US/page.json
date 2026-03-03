@@ -681,7 +681,11 @@
     "isSpam": "Spam",
     "isSticky": "Sticky",
     "replyToId": "Reply To ID",
-    "parentId": "Parent ID"
+    "parentId": "Parent ID",
+    "help": {
+      "isSpam": "Marked spam comments will be hidden",
+      "isSticky": "Sticky comments will be displayed at the top of the list"
+    }
   },
   "siteSetting": {
     "moduleName": "Site Settings",

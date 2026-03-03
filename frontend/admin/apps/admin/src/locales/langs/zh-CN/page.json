@@ -683,7 +683,11 @@
     "isSpam": "是否垃圾评论",
     "isSticky": "是否置顶",
     "replyToId": "回复的评论ID",
-    "parentId": "父评论ID"
+    "parentId": "父评论ID",
+    "help": {
+      "isSpam": "标记为垃圾评论后，该评论将被隐藏",
+      "isSticky": "置顶后，该评论将显示在列表顶部"
+    }
   },
   "siteSetting": {
     "moduleName": "站点配置",
