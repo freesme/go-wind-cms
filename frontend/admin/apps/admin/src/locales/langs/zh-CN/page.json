@@ -686,7 +686,7 @@
     "parentId": "父评论ID"
   },
   "siteSetting": {
-    "moduleName": "站点设置",
+    "moduleName": "站点配置",
     "siteId": "站点ID",
     "locale": "语言区域",
     "group": "配置分组",
@@ -709,7 +709,16 @@
     "location": "渲染位置标识",
     "isActive": "是否启用",
     "locale": "语言区域",
-    "items": "导航项列表"
+    "items": "导航项列表",
+    "button": {
+      "create": "创建导航"
+    },
+    "placeholder": {
+      "itemsJsonHelp": "请输入导航项 JSON 数组（示例格式）：title首页 url / linkType LINK_TYPE_CUSTOM"
+    },
+    "validation": {
+      "itemsJsonInvalid": "导航项 JSON 格式错误，请输入数组格式"
+    }
   },
   "site": {
     "moduleName": "站点管理",

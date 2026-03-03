@@ -707,7 +707,16 @@
     "location": "Location Key",
     "isActive": "Enabled",
     "locale": "Locale",
-    "items": "Navigation Items"
+    "items": "Navigation Items",
+    "button": {
+      "create": "Create Navigation"
+    },
+    "placeholder": {
+      "itemsJsonHelp": "Enter navigation items JSON array (example format): title Home url / linkType LINK_TYPE_CUSTOM"
+    },
+    "validation": {
+      "itemsJsonInvalid": "Invalid navigation items JSON. Please provide an array format."
+    }
   },
   "site": {
     "moduleName": "Sites",
