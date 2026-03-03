@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
@@ -7,17 +7,34 @@ import { $t } from '@vben/locales';
 import { notification } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
-import { useNavigationStore } from '#/stores';
+import { useLanguageStore, useNavigationStore } from '#/stores';
 
 const navigationStore = useNavigationStore();
+const languageStore = useLanguageStore();
 
 const data = ref<Record<string, any>>();
+const languageOptions = ref<{ label: string; value: string }[]>([]);
 
 const getTitle = computed(() =>
   data.value?.create
     ? $t('ui.modal.create', { moduleName: $t('page.navigation.moduleName') })
     : $t('ui.modal.update', { moduleName: $t('page.navigation.moduleName') }),
 );
+
+onMounted(async () => {
+  try {
+    const resp = await languageStore.listLanguage(undefined, {}, undefined, [
+      'id',
+    ] as any);
+    languageOptions.value =
+      resp.items?.map((lang) => ({
+        label: lang.nativeName || lang.languageCode || '',
+        value: lang.languageCode || '',
+      })) || [];
+  } catch (error) {
+    console.error('Failed to load language list:', error);
+  }
+});
 
 const [BaseForm, baseFormApi] = useVbenForm({
   showDefaultActions: false,
@@ -48,14 +65,16 @@ const [BaseForm, baseFormApi] = useVbenForm({
       rules: 'required',
     },
     {
-      component: 'Input',
+      component: 'Select',
       fieldName: 'locale',
       label: $t('page.navigation.locale'),
+      defaultValue: 'zh-CN',
       componentProps: {
-        placeholder: 'zh-CN',
+        options: languageOptions,
+        placeholder: $t('ui.placeholder.select'),
         allowClear: true,
       },
-      rules: 'required',
+      rules: 'selectRequired',
     },
     {
       component: 'Switch',

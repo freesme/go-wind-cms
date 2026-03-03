@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
@@ -7,24 +7,38 @@ import { $t } from '@vben/locales';
 import { notification } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
-import { siteStatusList, useSiteStore } from '#/stores';
+import { siteStatusList, useLanguageStore, useSiteStore } from '#/stores';
 
 const siteStore = useSiteStore();
+const languageStore = useLanguageStore();
 
 const data = ref();
+const languageOptions = ref<{ label: string; value: string }[]>([]);
 
 const getTitle = computed(() =>
   data.value?.create
     ? $t('ui.modal.create', { moduleName: $t('page.site.moduleName') })
     : $t('ui.modal.update', { moduleName: $t('page.site.moduleName') }),
 );
-// const isCreate = computed(() => data.value?.create);
+
+onMounted(async () => {
+  try {
+    const resp = await languageStore.listLanguage(undefined, {}, undefined, [
+      'id',
+    ] as any);
+    languageOptions.value =
+      resp.items?.map((lang) => ({
+        label: lang.nativeName || lang.languageCode || '',
+        value: lang.languageCode || '',
+      })) || [];
+  } catch (error) {
+    console.error('Failed to load language list:', error);
+  }
+});
 
 const [BaseForm, baseFormApi] = useVbenForm({
   showDefaultActions: false,
-  // 所有表单项共用，可单独在表单内覆盖
   commonConfig: {
-    // 所有表单项
     componentProps: {
       class: 'w-full',
     },
@@ -51,6 +65,15 @@ const [BaseForm, baseFormApi] = useVbenForm({
       rules: 'required',
     },
     {
+      component: 'Input',
+      fieldName: 'domain',
+      label: $t('page.site.domain'),
+      componentProps: {
+        placeholder: $t('ui.placeholder.input'),
+        allowClear: true,
+      },
+    },
+    {
       component: 'Select',
       fieldName: 'status',
       label: $t('page.site.status'),
@@ -66,22 +89,25 @@ const [BaseForm, baseFormApi] = useVbenForm({
       },
     },
     {
-      component: 'Input',
-      fieldName: 'domain',
-      label: $t('page.site.domain'),
+      component: 'Switch',
+      fieldName: 'isDefault',
+      label: $t('page.site.isDefault'),
+      help: $t('page.site.help.isDefault'),
       componentProps: {
-        placeholder: $t('ui.placeholder.input'),
-        allowClear: true,
+        class: 'w-auto',
       },
     },
     {
-      component: 'Input',
+      component: 'Select',
       fieldName: 'defaultLocale',
       label: $t('page.site.defaultLocale'),
+      defaultValue: 'zh-CN',
       componentProps: {
-        placeholder: $t('ui.placeholder.input'),
+        options: languageOptions,
+        placeholder: $t('ui.placeholder.select'),
         allowClear: true,
       },
+      help: $t('page.site.help.defaultLocale'),
     },
     {
       component: 'Input',
@@ -111,49 +137,42 @@ const [Drawer, drawerApi] = useVbenDrawer({
   },
 
   async onConfirm() {
-    console.log('onConfirm');
-
-    // 校验输入的数据
     const validate = await baseFormApi.validate();
     if (!validate.valid) {
       return;
     }
 
     setLoading(true);
-
-    // 获取表单数据
     const values = await baseFormApi.getValues();
+    const isCreate = data.value?.create;
 
-    console.log(getTitle.value, values);
+    (async () => {
+      try {
+        await (isCreate
+          ? siteStore.createSite(values)
+          : siteStore.updateSite(data.value.row.id, values));
 
-    try {
-      await (data.value?.create
-        ? siteStore.createSite(values)
-        : siteStore.updateSite(data.value.row.id, values));
-
-      notification.success({
-        message: data.value?.create
-          ? $t('ui.notification.create_success')
-          : $t('ui.notification.update_success'),
-      });
-    } catch {
-      notification.error({
-        message: data.value?.create
-          ? $t('ui.notification.create_failed')
-          : $t('ui.notification.update_failed'),
-      });
-    } finally {
-      drawerApi.close();
-      setLoading(false);
-    }
+        notification.success({
+          message: isCreate
+            ? $t('ui.notification.create_success')
+            : $t('ui.notification.update_success'),
+        });
+        drawerApi.close();
+      } catch {
+        notification.error({
+          message: isCreate
+            ? $t('ui.notification.create_failed')
+            : $t('ui.notification.update_failed'),
+        });
+      } finally {
+        setLoading(false);
+      }
+    })();
   },
 
   onOpenChange(isOpen) {
     if (isOpen) {
-      // 获取传入的数据
       data.value = drawerApi.getData<Record<string, any>>();
-
-      // 为表单赋值
       baseFormApi.setValues(data.value?.row);
 
       setLoading(false);

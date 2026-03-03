@@ -23,17 +23,23 @@ import SiteDrawer from './site-drawer.vue';
 const siteStore = useSiteStore();
 
 const formOptions: VbenFormProps = {
-  // 默认展开
   collapsed: false,
-  // 控制表单是否显示折叠按钮
   showCollapseButton: false,
-  // 按下回车时是否提交表单
   submitOnEnter: true,
   schema: [
     {
       component: 'Input',
       fieldName: 'name',
       label: $t('page.site.name'),
+      componentProps: {
+        placeholder: $t('ui.placeholder.input'),
+        allowClear: true,
+      },
+    },
+    {
+      component: 'Input',
+      fieldName: 'slug',
+      label: $t('page.site.slug'),
       componentProps: {
         placeholder: $t('ui.placeholder.input'),
         allowClear: true,
@@ -83,8 +89,6 @@ const gridOptions: VxeGridProps<Site> = {
   proxyConfig: {
     ajax: {
       query: async ({ page }, formValues) => {
-        console.log('query:', formValues);
-
         return await siteStore.listSite(
           {
             page: page.currentPage,
@@ -92,7 +96,9 @@ const gridOptions: VxeGridProps<Site> = {
           },
           {
             name: formValues.name,
+            slug: formValues.slug,
             domain: formValues.domain,
+            status: formValues.status,
           },
           null,
           ['-created_at'],
@@ -105,46 +111,60 @@ const gridOptions: VxeGridProps<Site> = {
     {
       title: $t('page.site.name'),
       field: 'name',
+      minWidth: 140,
     },
     {
       title: $t('page.site.slug'),
       field: 'slug',
+      minWidth: 120,
     },
     {
       title: $t('page.site.domain'),
       field: 'domain',
-    },
-    {
-      title: $t('page.site.isDefault'),
-      field: 'isDefault',
-    },
-    {
-      title: $t('page.site.defaultLocale'),
-      field: 'defaultLocale',
-    },
-    {
-      title: $t('page.site.template'),
-      field: 'template',
-    },
-    {
-      title: $t('page.site.theme'),
-      field: 'theme',
+      minWidth: 140,
     },
     {
       title: $t('page.site.status'),
       field: 'status',
       slots: { default: 'status' },
+      width: 110,
+    },
+    {
+      title: $t('page.site.defaultLocale'),
+      field: 'defaultLocale',
+      width: 100,
+    },
+    {
+      title: $t('page.site.template'),
+      field: 'template',
+      minWidth: 120,
+    },
+    {
+      title: $t('page.site.theme'),
+      field: 'theme',
+      minWidth: 120,
+    },
+    {
+      title: $t('page.site.isDefault'),
+      field: 'isDefault',
+      width: 100,
+      formatter: ({ cellValue }) =>
+        cellValue ? $t('ui.text.yes') : $t('ui.text.no'),
     },
     {
       title: $t('page.site.visitCount'),
       field: 'visitCount',
+      width: 90,
+      align: 'right',
+      headerAlign: 'right',
+      sortable: true,
     },
     {
       title: $t('ui.table.action'),
       field: 'action',
       fixed: 'right',
       slots: { default: 'action' },
-      width: 90,
+      width: 100,
     },
   ],
 };
@@ -173,34 +193,25 @@ function openDrawer(create: boolean, row?: any) {
 
 /* 创建 */
 function handleCreate() {
-  console.log('创建');
-
   openDrawer(true);
 }
 
 /* 编辑 */
 function handleEdit(row: any) {
-  console.log('编辑', row);
   openDrawer(false, row);
 }
 
 /* 删除 */
-async function handleDelete(row: any) {
-  console.log('删除', row);
-
-  try {
-    await siteStore.deleteSite(row.id);
-
-    notification.success({
-      message: $t('ui.notification.delete_success'),
-    });
-
-    await gridApi.reload();
-  } catch {
-    notification.error({
-      message: $t('ui.notification.delete_failed'),
-    });
-  }
+function handleDelete(row: any) {
+  (async () => {
+    try {
+      await siteStore.deleteSite(row.id);
+      notification.success({ message: $t('ui.notification.delete_success') });
+      await gridApi.reload();
+    } catch {
+      notification.error({ message: $t('ui.notification.delete_failed') });
+    }
+  })();
 }
 </script>
 

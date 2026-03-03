@@ -732,6 +732,10 @@
     "visitCount": "Visit Count",
     "button": {
       "create": "Create Site"
+    },
+    "help": {
+      "isDefault": "Setting as default site will unset other sites as default",
+      "defaultLocale": "Format: zh-CN, en-US etc. (BCP 47 language tag)"
     }
   }
 }

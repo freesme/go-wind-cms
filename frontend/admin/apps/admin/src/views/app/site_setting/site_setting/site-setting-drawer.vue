@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
@@ -7,18 +7,38 @@ import { $t } from '@vben/locales';
 import { notification } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
-import { siteSettingTypeList, useSiteSettingStore } from '#/stores';
+import {
+  siteSettingTypeList,
+  useLanguageStore,
+  useSiteSettingStore,
+} from '#/stores';
 
 const siteSettingStore = useSiteSettingStore();
+const languageStore = useLanguageStore();
 
 const data = ref();
+const languageOptions = ref<{ label: string; value: string }[]>([]);
 
 const getTitle = computed(() =>
   data.value?.create
     ? $t('ui.modal.create', { moduleName: $t('page.siteSetting.moduleName') })
     : $t('ui.modal.update', { moduleName: $t('page.siteSetting.moduleName') }),
 );
-// const isCreate = computed(() => data.value?.create);
+
+onMounted(async () => {
+  try {
+    const resp = await languageStore.listLanguage(undefined, {}, undefined, [
+      'id',
+    ] as any);
+    languageOptions.value =
+      resp.items?.map((lang) => ({
+        label: lang.nativeName || lang.languageCode || '',
+        value: lang.languageCode || '',
+      })) || [];
+  } catch (error) {
+    console.error('Failed to load language list:', error);
+  }
+});
 
 const [BaseForm, baseFormApi] = useVbenForm({
   showDefaultActions: false,
@@ -94,14 +114,16 @@ const [BaseForm, baseFormApi] = useVbenForm({
       },
     },
     {
-      component: 'Input',
+      component: 'Select',
       fieldName: 'locale',
       label: $t('page.siteSetting.locale'),
+      defaultValue: 'zh-CN',
       componentProps: {
-        placeholder: $t('ui.placeholder.input'),
+        options: languageOptions,
+        placeholder: $t('ui.placeholder.select'),
         allowClear: true,
       },
-      rules: 'required',
+      rules: 'selectRequired',
     },
     {
       component: 'Input',
@@ -130,20 +152,13 @@ const [Drawer, drawerApi] = useVbenDrawer({
   },
 
   async onConfirm() {
-    console.log('onConfirm');
-
-    // 校验输入的数据
     const validate = await baseFormApi.validate();
     if (!validate.valid) {
       return;
     }
 
     setLoading(true);
-
-    // 获取表单数据
     const values = await baseFormApi.getValues();
-
-    console.log(getTitle.value, values);
 
     try {
       await (data.value?.create
@@ -169,10 +184,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
   onOpenChange(isOpen) {
     if (isOpen) {
-      // 获取传入的数据
       data.value = drawerApi.getData<Record<string, any>>();
-
-      // 为表单赋值
       baseFormApi.setValues(data.value?.row);
 
       setLoading(false);

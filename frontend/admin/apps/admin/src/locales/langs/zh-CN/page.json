@@ -734,6 +734,10 @@
     "visitCount": "访问次数",
     "button": {
       "create": "创建站点"
+    },
+    "help": {
+      "isDefault": "设置为默认站点后，其他站点自动取消默认状态",
+      "defaultLocale": "格式: zh-CN、en-US 等 (BCP 47 语言标签)"
     }
   }
 }
