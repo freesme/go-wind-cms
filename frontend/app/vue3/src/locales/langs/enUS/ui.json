@@ -1,0 +1,61 @@
+{
+  "fallback": {
+    "pageNotFound": "Oops! Page Not Found",
+    "pageNotFoundDesc": "Sorry, we couldn't find the page you're looking for.",
+    "forbidden": "Oops! Access Denied",
+    "forbiddenDesc": "Sorry, you don't have permission to access this page.",
+    "internalError": "Oops! Something Went Wrong",
+    "internalErrorDesc": "Sorry, the server encountered an error.",
+    "offline": "Offline Page",
+    "offlineError": "Oops! Network Error",
+    "offlineErrorDesc": "Sorry, unable to connect to the internet. Please check your connection and try again.",
+    "comingSoon": "Coming Soon",
+    "http": {
+      "requestTimeout": "Request timed out. Please try again later.",
+      "networkError": "Network error. Please check your connection and try again.",
+      "badRequest": "Bad request. Please check your input and try again.",
+      "unauthorized": "Authentication expired. Please log in again to continue.",
+      "forbidden": "Access forbidden. You do not have permission to access this resource.",
+      "notFound": "Not found. The requested resource does not exist.",
+      "internalServerError": "Internal server error. Please try again later."
+    }
+  },
+  "button": {
+    "yes": "Yes",
+    "no": "No",
+    "publish": "Publish",
+    "share": "Share",
+    "comment": "Comment",
+    "contact_customer": "Contact Support",
+    "about_us": "About Us",
+    "contact_us": "Contact Us",
+    "non_responsibility": "Disclaimer",
+    "privacy_agreement": "Privacy Policy",
+    "terms_of_service": "Terms of Service",
+    "view_homepage": "View Homepage"
+  },
+  "text": {
+    "rating": "Rating",
+    "recommend": "Recommend",
+    "share_to": "Share to"
+  },
+  "tab": {
+    "overview": "Overview",
+    "news": "News"
+  },
+  "placeholder": {
+    "search": "Search...",
+    "input": "Please enter",
+    "input_contact": "Please enter contact information",
+    "select": "Please select"
+  },
+  "form": {
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "message": "Message",
+    "contact": "Contact",
+    "submit": "Submit"
+  },
+  "copyright": "© 2026 GoWind Team"
+}

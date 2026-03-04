@@ -1,0 +1,403 @@
+import { defineMock } from 'vite-plugin-mock-dev-server'
+
+const navigations = [
+  {
+    id: 1,
+    name: 'Main Navigation',
+    location: 'header',
+    isActive: true,
+    locale: 'zh-CN',
+    items: [
+      {
+        id: 1,
+        navigationId: 1,
+        title: '首页',
+        url: '/',
+        icon: 'home',
+        description: '返回首页',
+        linkType: 'LINK_TYPE_CUSTOM',
+        sortOrder: 1,
+        isOpenNewTab: false,
+        isInvalid: false,
+        cssClass: '',
+        requiredPermission: '',
+        parentId: 0,
+        children: [],
+        createdAt: '2026-01-01T00:00:00Z',
+        updatedAt: '2026-03-01T00:00:00Z',
+      },
+      {
+        id: 2,
+        navigationId: 1,
+        title: '文章',
+        url: '/post',
+        icon: 'document-text',
+        description: '浏览所有文章',
+        linkType: 'LINK_TYPE_CUSTOM',
+        sortOrder: 2,
+        isOpenNewTab: false,
+        isInvalid: false,
+        cssClass: '',
+        requiredPermission: '',
+        parentId: 0,
+        children: [],
+        createdAt: '2026-01-01T00:00:00Z',
+        updatedAt: '2026-03-01T00:00:00Z',
+      },
+      {
+        id: 3,
+        navigationId: 1,
+        title: '分类',
+        url: '/category',
+        icon: 'folder',
+        description: '浏览所有分类',
+        linkType: 'LINK_TYPE_CUSTOM',
+        sortOrder: 3,
+        isOpenNewTab: false,
+        isInvalid: false,
+        cssClass: '',
+        requiredPermission: '',
+        parentId: 0,
+        children: [
+          {
+            id: 4,
+            navigationId: 1,
+            title: '技术分享',
+            url: '/category/tech',
+            icon: 'code',
+            description: '技术文章分类',
+            linkType: 'LINK_TYPE_CATEGORY',
+            objectId: 1,
+            sortOrder: 1,
+            isOpenNewTab: false,
+            isInvalid: false,
+            cssClass: '',
+            requiredPermission: '',
+            parentId: 3,
+            children: [],
+            createdAt: '2026-01-01T00:00:00Z',
+            updatedAt: '2026-03-01T00:00:00Z',
+          },
+          {
+            id: 5,
+            navigationId: 1,
+            title: '生活随笔',
+            url: '/category/life',
+            icon: 'book',
+            description: '生活文章分类',
+            linkType: 'LINK_TYPE_CATEGORY',
+            objectId: 2,
+            sortOrder: 2,
+            isOpenNewTab: false,
+            isInvalid: false,
+            cssClass: '',
+            requiredPermission: '',
+            parentId: 3,
+            children: [],
+            createdAt: '2026-01-02T00:00:00Z',
+            updatedAt: '2026-03-02T00:00:00Z',
+          },
+        ],
+        createdAt: '2026-01-01T00:00:00Z',
+        updatedAt: '2026-03-01T00:00:00Z',
+      },
+      {
+        id: 6,
+        navigationId: 1,
+        title: '关于',
+        url: '/about',
+        icon: 'information-circle',
+        description: '关于我们',
+        linkType: 'LINK_TYPE_PAGE',
+        objectId: 1,
+        sortOrder: 4,
+        isOpenNewTab: false,
+        isInvalid: false,
+        cssClass: '',
+        requiredPermission: '',
+        parentId: 0,
+        children: [],
+        createdAt: '2026-01-01T00:00:00Z',
+        updatedAt: '2026-03-01T00:00:00Z',
+      },
+    ],
+    createdAt: '2026-01-01T00:00:00Z',
+    updatedAt: '2026-03-01T00:00:00Z',
+  },
+  {
+    id: 2,
+    name: 'Footer Navigation',
+    location: 'footer',
+    isActive: true,
+    locale: 'zh-CN',
+    items: [
+      {
+        id: 7,
+        navigationId: 2,
+        title: '联系我们',
+        url: '/contact',
+        icon: 'mail',
+        description: '联系我们',
+        linkType: 'LINK_TYPE_PAGE',
+        objectId: 2,
+        sortOrder: 1,
+        isOpenNewTab: false,
+        isInvalid: false,
+        cssClass: '',
+        requiredPermission: '',
+        parentId: 0,
+        children: [],
+        createdAt: '2026-01-01T00:00:00Z',
+        updatedAt: '2026-03-01T00:00:00Z',
+      },
+      {
+        id: 8,
+        navigationId: 2,
+        title: '隐私政策',
+        url: '/privacy',
+        icon: 'shield-checkmark',
+        description: '隐私政策',
+        linkType: 'LINK_TYPE_PAGE',
+        objectId: 3,
+        sortOrder: 2,
+        isOpenNewTab: false,
+        isInvalid: false,
+        cssClass: '',
+        requiredPermission: '',
+        parentId: 0,
+        children: [],
+        createdAt: '2026-01-01T00:00:00Z',
+        updatedAt: '2026-03-01T00:00:00Z',
+      },
+      {
+        id: 9,
+        navigationId: 2,
+        title: '服务条款',
+        url: '/terms',
+        icon: 'document',
+        description: '服务条款',
+        linkType: 'LINK_TYPE_PAGE',
+        objectId: 4,
+        sortOrder: 3,
+        isOpenNewTab: false,
+        isInvalid: false,
+        cssClass: '',
+        requiredPermission: '',
+        parentId: 0,
+        children: [],
+        createdAt: '2026-01-01T00:00:00Z',
+        updatedAt: '2026-03-01T00:00:00Z',
+      },
+      {
+        id: 10,
+        navigationId: 2,
+        title: 'GitHub',
+        url: 'https://github.com',
+        icon: 'logo-github',
+        description: '访问我们的GitHub',
+        linkType: 'LINK_TYPE_EXTERNAL',
+        sortOrder: 4,
+        isOpenNewTab: true,
+        isInvalid: false,
+        cssClass: '',
+        requiredPermission: '',
+        parentId: 0,
+        children: [],
+        createdAt: '2026-01-01T00:00:00Z',
+        updatedAt: '2026-03-01T00:00:00Z',
+      },
+    ],
+    createdAt: '2026-01-01T00:00:00Z',
+    updatedAt: '2026-03-01T00:00:00Z',
+  },
+  {
+    id: 3,
+    name: 'Sidebar Navigation',
+    location: 'sidebar',
+    isActive: true,
+    locale: 'zh-CN',
+    items: [
+      {
+        id: 11,
+        navigationId: 3,
+        title: '热门标签',
+        url: '/tag',
+        icon: 'pricetag',
+        description: '浏览热门标签',
+        linkType: 'LINK_TYPE_CUSTOM',
+        sortOrder: 1,
+        isOpenNewTab: false,
+        isInvalid: false,
+        cssClass: '',
+        requiredPermission: '',
+        parentId: 0,
+        children: [],
+        createdAt: '2026-01-01T00:00:00Z',
+        updatedAt: '2026-03-01T00:00:00Z',
+      },
+      {
+        id: 12,
+        navigationId: 3,
+        title: '归档',
+        url: '/archive',
+        icon: 'archive',
+        description: '文章归档',
+        linkType: 'LINK_TYPE_CUSTOM',
+        sortOrder: 2,
+        isOpenNewTab: false,
+        isInvalid: false,
+        cssClass: '',
+        requiredPermission: '',
+        parentId: 0,
+        children: [],
+        createdAt: '2026-01-01T00:00:00Z',
+        updatedAt: '2026-03-01T00:00:00Z',
+      },
+    ],
+    createdAt: '2026-01-01T00:00:00Z',
+    updatedAt: '2026-03-01T00:00:00Z',
+  },
+]
+
+export default defineMock([
+  {
+    url: '/app/v1/navigations',
+    method: 'GET',
+    body: ({ query }) => {
+      const page = Number(query.page) || 1
+      const pageSize = Number(query.pageSize) || 10
+      const noPaging = query.noPaging === 'true'
+
+      let items = [...navigations]
+
+      // 根据query参数过滤
+      if (query.query) {
+        const queryStr = query.query.toString().toLowerCase()
+        items = items.filter(nav =>
+          nav.name.toLowerCase().includes(queryStr) ||
+          nav.location.toLowerCase().includes(queryStr)
+        )
+      }
+
+      // 根据location过滤
+      if (query.location) {
+        items = items.filter(nav => nav.location === query.location)
+      }
+
+      // 根据locale过滤
+      if (query.locale) {
+        items = items.filter(nav => nav.locale === query.locale)
+      }
+
+      // 根据isActive过滤
+      if (query.isActive !== undefined) {
+        const isActive = query.isActive === 'true'
+        items = items.filter(nav => nav.isActive === isActive)
+      }
+
+      const total = items.length
+
+      if (noPaging) {
+        return {
+          items,
+          total,
+        }
+      }
+
+      const start = (page - 1) * pageSize
+      const end = start + pageSize
+      const paginatedItems = items.slice(start, end)
+
+      return {
+        items: paginatedItems,
+        total,
+      }
+    },
+  },
+  {
+    url: '/app/v1/navigations/:id',
+    method: 'GET',
+    body: ({ params }) => {
+      const id = Number(params.id)
+      const navigation = navigations.find(nav => nav.id === id)
+
+      if (!navigation) {
+        return {
+          code: 404,
+          message: 'Navigation not found',
+        }
+      }
+
+      return navigation
+    },
+  },
+  {
+    url: '/app/v1/navigations',
+    method: 'POST',
+    body: ({ body }) => {
+      const newId = Math.max(...navigations.map(nav => nav.id)) + 1
+      const now = new Date().toISOString()
+
+      const newNavigation = {
+        id: newId,
+        name: body.data.name || '',
+        location: body.data.location || '',
+        isActive: body.data.isActive !== undefined ? body.data.isActive : true,
+        locale: body.data.locale || 'zh-CN',
+        items: body.data.items || [],
+        createdAt: now,
+        updatedAt: now,
+      }
+
+      navigations.push(newNavigation)
+
+      return newNavigation
+    },
+  },
+  {
+    url: '/app/v1/navigations/:id',
+    method: 'PUT',
+    body: ({ params, body }) => {
+      const id = Number(params.id)
+      const index = navigations.findIndex(nav => nav.id === id)
+
+      if (index === -1) {
+        return {
+          code: 404,
+          message: 'Navigation not found',
+        }
+      }
+
+      const now = new Date().toISOString()
+
+      navigations[index] = {
+        ...navigations[index],
+        ...body.data,
+        id,
+        updatedAt: now,
+      }
+
+      return navigations[index]
+    },
+  },
+  {
+    url: '/app/v1/navigations/:id',
+    method: 'DELETE',
+    body: ({ params }) => {
+      const id = Number(params.id)
+      const index = navigations.findIndex(nav => nav.id === id)
+
+      if (index === -1) {
+        return {
+          code: 404,
+          message: 'Navigation not found',
+        }
+      }
+
+      navigations.splice(index, 1)
+
+      return {}
+    },
+  },
+])
+

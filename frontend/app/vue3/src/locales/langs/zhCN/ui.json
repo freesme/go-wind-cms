@@ -1,0 +1,61 @@
+{
+  "fallback": {
+    "pageNotFound": "哎呀！未找到页面",
+    "pageNotFoundDesc": "抱歉，我们无法找到您要找的页面。",
+    "forbidden": "哎呀！访问被拒绝",
+    "forbiddenDesc": "抱歉，您没有权限访问此页面。",
+    "internalError": "哎呀！出错了",
+    "internalErrorDesc": "抱歉，服务器遇到错误。",
+    "offline": "离线页面",
+    "offlineError": "哎呀！网络错误",
+    "offlineErrorDesc": "抱歉，无法连接到互联网，请检查您的网络连接并重试。",
+    "comingSoon": "即将推出",
+    "http": {
+      "requestTimeout": "请求超时，请稍后再试。",
+      "networkError": "网络异常，请检查您的网络连接后重试。",
+      "badRequest": "请求错误。请检查您的输入并重试。",
+      "unauthorized": "登录认证过期，请重新登录后继续。",
+      "forbidden": "禁止访问, 您没有权限访问此资源。",
+      "notFound": "未找到, 请求的资源不存在。",
+      "internalServerError": "内部服务器错误，请稍后再试。"
+    }
+  },
+  "button": {
+    "yes": "是",
+    "no": "否",
+    "publish": "发布",
+    "share": "分享",
+    "comment": "评论",
+    "contact_customer": "联系客服",
+    "about_us": "关于我们",
+    "contact_us": "联系我们",
+    "non_responsibility": "免责条款",
+    "privacy_agreement": "隐私协议",
+    "terms_of_service": "服务条款",
+    "view_homepage": "查看主页"
+  },
+  "text": {
+    "rating": "评分",
+    "recommend": "推荐",
+    "share_to": "分享到"
+  },
+  "tab": {
+    "overview": "概述",
+    "news": "资讯"
+  },
+  "placeholder": {
+    "search": "搜索...",
+    "input": "请填写",
+    "input_contact": "请填写联系方式",
+    "select": "请选择"
+  },
+  "form": {
+    "name": "姓名",
+    "email": "邮箱",
+    "phone": "电话",
+    "message": "留言",
+    "contact": "联系方式",
+    "submit": "提交"
+  },
+  "copyright": "© 2026 GoWind Team"
+}

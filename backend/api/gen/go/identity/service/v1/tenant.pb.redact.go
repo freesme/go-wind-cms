@@ -228,6 +228,12 @@ func (x *GetTenantRequest) Redact() string {
 		return ""
 	}
 
+	// Safe field: Id
+
+	// Safe field: Code
+
+	// Safe field: Name
+
 	// Safe field: ViewMask
 	return x.String()
 }
@@ -263,6 +269,10 @@ func (x *DeleteTenantRequest) Redact() string {
 	if x == nil {
 		return ""
 	}
+
+	// Safe field: Id
+
+	// Safe field: Code
 	return x.String()
 }
 

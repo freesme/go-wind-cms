@@ -471,6 +471,110 @@ paths:
                 "200":
                     description: OK
                     content: {}
+    /app/v1/me:
+        get:
+            tags:
+                - UserProfileService
+            description: 获取用户资料
+            operationId: UserProfileService_GetUser
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/User'
+        put:
+            tags:
+                - UserProfileService
+            description: 更新用户资料
+            operationId: UserProfileService_UpdateUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateUserRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+    /app/v1/me/avatar:
+        post:
+            tags:
+                - UserProfileService
+            description: 上传头像
+            operationId: UserProfileService_UploadAvatar
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UploadAvatarRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UploadAvatarResponse'
+        delete:
+            tags:
+                - UserProfileService
+            description: 删除头像
+            operationId: UserProfileService_DeleteAvatar
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+    /app/v1/me/contact:
+        post:
+            tags:
+                - UserProfileService
+            description: 绑定手机号码/邮箱
+            operationId: UserProfileService_BindContact
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/BindContactRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+    /app/v1/me/contact/verify:
+        post:
+            tags:
+                - UserProfileService
+            description: 验证手机号码/邮箱
+            operationId: UserProfileService_VerifyContact
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/VerifyContactRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+    /app/v1/me/password:
+        post:
+            tags:
+                - UserProfileService
+            description: 修改用户密码
+            operationId: UserProfileService_ChangePassword
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ChangePasswordRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content: {}
     /app/v1/navigations:
         get:
             tags:
@@ -961,6 +1065,25 @@ paths:
                 "200":
                     description: OK
                     content: {}
+    /app/v1/refresh-token:
+        post:
+            tags:
+                - AuthenticationService
+            description: 刷新认证令牌
+            operationId: AuthenticationService_RefreshToken
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/LoginRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/LoginResponse'
     /app/v1/tags:
         get:
             tags:
@@ -1169,6 +1292,31 @@ components:
                     $ref: '#/components/schemas/GoogleProtobufAny'
                 yaml:
                     type: string
+        BindContactRequest:
+            type: object
+            properties:
+                phone:
+                    $ref: '#/components/schemas/BindPhoneRequest'
+                email:
+                    $ref: '#/components/schemas/BindEmailRequest'
+        BindEmailRequest:
+            type: object
+            properties:
+                email:
+                    type: string
+                    description: 邮箱地址
+                verificationCode:
+                    type: string
+                    description: 邮箱验证码（可选）
+        BindPhoneRequest:
+            type: object
+            properties:
+                phone:
+                    type: string
+                    description: 手机号码
+                code:
+                    type: string
+                    description: 验证码
         Category:
             type: object
             properties:
@@ -1329,6 +1477,16 @@ components:
                     description: 删除时间
                     format: date-time
             description: 类别翻译
+        ChangePasswordRequest:
+            type: object
+            properties:
+                oldPassword:
+                    type: string
+                    description: 旧密码
+                newPassword:
+                    type: string
+                    description: 新密码
+            description: 修改用户密码（需要验证旧密码） - 请求
         Comment:
             type: object
             properties:
@@ -1519,6 +1677,18 @@ components:
                     description: 可选，最后修改时间
                     format: date-time
             description: 文件下载响应
+        EmailVerification:
+            required:
+                - code
+            type: object
+            properties:
+                email:
+                    type: string
+                    description: 邮箱地址
+                code:
+                    type: string
+                    description: 邮箱验证码
+            description: 邮箱验证
         ExternalDocs:
             type: object
             properties:
@@ -2063,6 +2233,18 @@ components:
                     description: 删除时间
                     format: date-time
             description: 页面翻译
+        PhoneVerification:
+            required:
+                - code
+            type: object
+            properties:
+                phone:
+                    type: string
+                    description: 手机号码，带国家码
+                code:
+                    type: string
+                    description: 短信验证码
+            description: 手机验证
         Post:
             type: object
             properties:
@@ -2471,6 +2653,43 @@ components:
                     type: boolean
                     description: 如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。
             description: 请求 - 更新标签
+        UpdateUserRequest:
+            required:
+                - data
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint32
+                data:
+                    $ref: '#/components/schemas/User'
+                password:
+                    readOnly: true
+                    type: string
+                    description: 用户登录密码
+                updateMask:
+                    example: id,realname,username
+                    type: string
+                    description: 要更新的字段列表
+                    format: field-mask
+                allowMissing:
+                    type: boolean
+                    description: 如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。
+            description: 更新用户 - 请求
+        UploadAvatarRequest:
+            type: object
+            properties:
+                imageBase64:
+                    type: string
+                    description: 图片的Base64编码
+                imageUrl:
+                    type: string
+                    description: 图片的URL地址
+        UploadAvatarResponse:
+            type: object
+            properties:
+                url:
+                    type: string
         UploadFileRequest:
             type: object
             properties:
@@ -2508,6 +2727,174 @@ components:
                 presignedUrl:
                     type: string
                     description: 预签名上传链接
+        User:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    description: 用户ID
+                    format: uint32
+                tenantId:
+                    type: integer
+                    description: 租户ID
+                    format: uint32
+                tenantName:
+                    type: string
+                    description: 租户名称
+                orgUnitId:
+                    type: integer
+                    description: 组织ID
+                    format: uint32
+                orgUnitIds:
+                    type: array
+                    items:
+                        type: integer
+                        format: uint32
+                    description: 归属组织ID列表
+                orgUnitName:
+                    type: string
+                    description: 组织名称
+                orgUnitNames:
+                    type: array
+                    items:
+                        type: string
+                    description: 组织名称列表
+                positionId:
+                    type: integer
+                    description: 职位ID
+                    format: uint32
+                positionIds:
+                    type: array
+                    items:
+                        type: integer
+                        format: uint32
+                    description: 职位列表
+                positionName:
+                    type: string
+                    description: 职位名称
+                positionNames:
+                    type: array
+                    items:
+                        type: string
+                    description: 职位名称列表
+                roleId:
+                    type: integer
+                    description: 角色ID
+                    format: uint32
+                roleIds:
+                    type: array
+                    items:
+                        type: integer
+                        format: uint32
+                    description: 角色ID列表
+                roles:
+                    type: array
+                    items:
+                        type: string
+                    description: 角色码列表
+                roleNames:
+                    type: array
+                    items:
+                        type: string
+                    description: 角色名称列表
+                username:
+                    type: string
+                    description: 用户名
+                nickname:
+                    type: string
+                    description: 昵称
+                realname:
+                    type: string
+                    description: 真实姓名
+                avatar:
+                    type: string
+                    description: 头像
+                email:
+                    type: string
+                    description: 邮箱
+                mobile:
+                    type: string
+                    description: 手机号
+                telephone:
+                    type: string
+                    description: 座机号
+                gender:
+                    enum:
+                        - SECRET
+                        - MALE
+                        - FEMALE
+                    type: string
+                    description: 性别
+                    format: enum
+                address:
+                    type: string
+                    description: 住址
+                region:
+                    type: string
+                    description: 国家地区
+                description:
+                    type: string
+                    description: 个人描述
+                remark:
+                    type: string
+                    description: 备注
+                lastLoginAt:
+                    type: string
+                    description: 最后登录时间
+                    format: date-time
+                lastLoginIp:
+                    type: string
+                    description: 最后登录IP
+                status:
+                    enum:
+                        - DISABLED
+                        - NORMAL
+                        - PENDING
+                        - LOCKED
+                        - EXPIRED
+                        - CLOSED
+                    type: string
+                    description: 状态
+                    format: enum
+                lockedUntil:
+                    type: string
+                    description: 锁定截止时间
+                    format: date-time
+                createdBy:
+                    type: integer
+                    description: 创建者用户ID
+                    format: uint32
+                updatedBy:
+                    type: integer
+                    description: 更新者用户ID
+                    format: uint32
+                deletedBy:
+                    type: integer
+                    description: 删除者用户ID
+                    format: uint32
+                createdAt:
+                    type: string
+                    description: 创建时间
+                    format: date-time
+                updatedAt:
+                    type: string
+                    description: 更新时间
+                    format: date-time
+                deletedAt:
+                    type: string
+                    description: 删除时间
+                    format: date-time
+            description: 用户
+        VerifyContactRequest:
+            type: object
+            properties:
+                phone:
+                    $ref: '#/components/schemas/PhoneVerification'
+                email:
+                    $ref: '#/components/schemas/EmailVerification'
+                verificationId:
+                    type: string
+                    description: 服务端生成的验证码会话ID（可选）
     responses:
         default:
             description: default kratos response
@@ -2542,3 +2929,5 @@ tags:
       description: 帖子服务
     - name: TagService
       description: 标签服务
+    - name: UserProfileService
+      description: 用户个人资料服务

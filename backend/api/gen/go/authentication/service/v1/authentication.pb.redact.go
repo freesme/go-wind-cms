@@ -335,6 +335,10 @@ func (x *BlockTokenRequest) Redact() string {
 
 	// Safe field: ClientType
 
+	// Safe field: Token
+
+	// Safe field: Jti
+
 	// Safe field: Reason
 
 	// Safe field: Duration
@@ -350,6 +354,10 @@ func (x *UnblockTokenRequest) Redact() string {
 	// Safe field: UserId
 
 	// Safe field: ClientType
+
+	// Safe field: Token
+
+	// Safe field: Jti
 	return x.String()
 }
 

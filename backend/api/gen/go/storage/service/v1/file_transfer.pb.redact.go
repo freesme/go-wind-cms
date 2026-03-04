@@ -72,6 +72,12 @@ func (x *DownloadFileRequest) Redact() string {
 		return ""
 	}
 
+	// Safe field: FileId
+
+	// Safe field: StorageObject
+
+	// Safe field: DownloadUrl
+
 	// Safe field: RangeStart
 
 	// Safe field: RangeEnd
@@ -91,6 +97,10 @@ func (x *DownloadFileResponse) Redact() string {
 	if x == nil {
 		return ""
 	}
+
+	// Safe field: File
+
+	// Safe field: DownloadUrl
 
 	// Safe field: SourceFileName
 
@@ -113,6 +123,10 @@ func (x *UploadFileRequest) Redact() string {
 	}
 
 	// Safe field: StorageObject
+
+	// Safe field: File
+
+	// Safe field: Presign
 
 	// Safe field: SourceFileName
 

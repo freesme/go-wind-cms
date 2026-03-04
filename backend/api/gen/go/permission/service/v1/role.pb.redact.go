@@ -364,6 +364,12 @@ func (x *GetRoleRequest) Redact() string {
 		return ""
 	}
 
+	// Safe field: Id
+
+	// Safe field: Name
+
+	// Safe field: Code
+
 	// Safe field: ViewMask
 	return x.String()
 }
@@ -399,6 +405,12 @@ func (x *DeleteRoleRequest) Redact() string {
 	if x == nil {
 		return ""
 	}
+
+	// Safe field: Id
+
+	// Safe field: Code
+
+	// Safe field: TenantId
 	return x.String()
 }
 
@@ -522,6 +534,12 @@ func (x *ListPermissionIdsRequest) Redact() string {
 		return ""
 	}
 
+	// Safe field: RoleId
+
+	// Safe field: RoleCode
+
+	// Safe field: UserId
+
 	// Safe field: RoleIds
 
 	// Safe field: RoleCodes
@@ -615,6 +633,10 @@ func (x *ListUserRoleIDsRequest) Redact() string {
 	if x == nil {
 		return ""
 	}
+
+	// Safe field: UserId
+
+	// Safe field: Username
 	return x.String()
 }
 

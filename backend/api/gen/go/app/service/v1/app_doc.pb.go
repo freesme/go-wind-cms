@@ -25,7 +25,7 @@ var File_app_service_v1_app_doc_proto protoreflect.FileDescriptor
 
 const file_app_service_v1_app_doc_proto_rawDesc = "" +
 	"\n" +
-	"\x1capp/service/v1/app_doc.proto\x12\x10admin.service.v1\x1a$gnostic/openapi/v3/annotations.protoB\xac\x06\xbaG\xf2\x04\x12\xba\x01\n" +
+	"\x1capp/service/v1/app_doc.proto\x12\x0eapp.service.v1\x1a$gnostic/openapi/v3/annotations.protoB\xa2\x06\xbaG\xf2\x04\x12\xba\x01\n" +
 	"\x12GoWind CMS App API\x12\x12GoWind CMS App API\"B\n" +
 	"\x05tx7do\x12$https://github.com/tx7do/go-wind-cms\x1a\x13yanglinbo@gmail.com*G\n" +
 	"\vMIT License\x128https://github.com/tx7do/go-wind-cms/blob/master/LICENSE2\x031.0*\x96\x03\n" +
@@ -59,7 +59,7 @@ const file_app_service_v1_app_doc_proto_rawDesc = "" +
 	"\x06oauth2:.\x12,\x12\x0f/admin/v1/login\x1a\x17/admin/v1/refresh-token\"\x002\x1a\n" +
 	"\x18\n" +
 	"\x14OAuth2PasswordBearer\x12\x00\n" +
-	"\x14com.admin.service.v1B\vAppDocProtoP\x01Z/go-wind-cms/api/gen/go/app/service/v1;servicev1\xa2\x02\x03ASX\xaa\x02\x10Admin.Service.V1\xca\x02\x10Admin\\Service\\V1\xe2\x02\x1cAdmin\\Service\\V1\\GPBMetadata\xea\x02\x12Admin::Service::V1b\x06proto3"
+	"\x12com.app.service.v1B\vAppDocProtoP\x01Z/go-wind-cms/api/gen/go/app/service/v1;servicev1\xa2\x02\x03ASX\xaa\x02\x0eApp.Service.V1\xca\x02\x0eApp\\Service\\V1\xe2\x02\x1aApp\\Service\\V1\\GPBMetadata\xea\x02\x10App::Service::V1b\x06proto3"
 
 var file_app_service_v1_app_doc_proto_goTypes = []any{}
 var file_app_service_v1_app_doc_proto_depIdxs = []int32{

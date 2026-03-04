@@ -23,18 +23,22 @@ const _ = http.SupportPackageIsVersion1
 
 const OperationAuthenticationServiceLogin = "/app.service.v1.AuthenticationService/Login"
 const OperationAuthenticationServiceLogout = "/app.service.v1.AuthenticationService/Logout"
+const OperationAuthenticationServiceRefreshToken = "/app.service.v1.AuthenticationService/RefreshToken"
 
 type AuthenticationServiceHTTPServer interface {
 	// Login 登录
 	Login(context.Context, *v1.LoginRequest) (*v1.LoginResponse, error)
 	// Logout 登出
 	Logout(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
+	// RefreshToken 刷新认证令牌
+	RefreshToken(context.Context, *v1.LoginRequest) (*v1.LoginResponse, error)
 }
 
 func RegisterAuthenticationServiceHTTPServer(s *http.Server, srv AuthenticationServiceHTTPServer) {
 	r := s.Route("/")
 	r.POST("/app/v1/login", _AuthenticationService_Login0_HTTP_Handler(srv))
 	r.POST("/app/v1/logout", _AuthenticationService_Logout0_HTTP_Handler(srv))
+	r.POST("/app/v1/refresh-token", _AuthenticationService_RefreshToken0_HTTP_Handler(srv))
 }
 
 func _AuthenticationService_Login0_HTTP_Handler(srv AuthenticationServiceHTTPServer) func(ctx http.Context) error {
@@ -81,11 +85,35 @@ func _AuthenticationService_Logout0_HTTP_Handler(srv AuthenticationServiceHTTPSe
 	}
 }
 
+func _AuthenticationService_RefreshToken0_HTTP_Handler(srv AuthenticationServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in v1.LoginRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationAuthenticationServiceRefreshToken)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.RefreshToken(ctx, req.(*v1.LoginRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*v1.LoginResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
 type AuthenticationServiceHTTPClient interface {
 	// Login 登录
 	Login(ctx context.Context, req *v1.LoginRequest, opts ...http.CallOption) (rsp *v1.LoginResponse, err error)
 	// Logout 登出
 	Logout(ctx context.Context, req *emptypb.Empty, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
+	// RefreshToken 刷新认证令牌
+	RefreshToken(ctx context.Context, req *v1.LoginRequest, opts ...http.CallOption) (rsp *v1.LoginResponse, err error)
 }
 
 type AuthenticationServiceHTTPClientImpl struct {
@@ -116,6 +144,20 @@ func (c *AuthenticationServiceHTTPClientImpl) Logout(ctx context.Context, in *em
 	pattern := "/app/v1/logout"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationAuthenticationServiceLogout))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// RefreshToken 刷新认证令牌
+func (c *AuthenticationServiceHTTPClientImpl) RefreshToken(ctx context.Context, in *v1.LoginRequest, opts ...http.CallOption) (*v1.LoginResponse, error) {
+	var out v1.LoginResponse
+	pattern := "/app/v1/refresh-token"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationAuthenticationServiceRefreshToken))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

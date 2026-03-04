@@ -65,3 +65,14 @@ func (s *redactedAuthenticationServiceServer) Logout(ctx context.Context, in *em
 	}
 	return res, err
 }
+
+// RefreshToken is the redacted wrapper for the actual AuthenticationServiceServer.RefreshToken method
+// Unary RPC
+func (s *redactedAuthenticationServiceServer) RefreshToken(ctx context.Context, in *authenticationpb.LoginRequest) (*authenticationpb.LoginResponse, error) {
+	res, err := s.srv.RefreshToken(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}

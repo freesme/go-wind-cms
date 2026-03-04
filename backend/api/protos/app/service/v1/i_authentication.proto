@@ -30,4 +30,12 @@ service AuthenticationService {
       body: "*"
     };
   }
+
+  // 刷新认证令牌
+  rpc RefreshToken (authentication.service.v1.LoginRequest) returns (authentication.service.v1.LoginResponse) {
+    option (google.api.http) = {
+      post: "/app/v1/refresh-token"
+      body: "*"
+    };
+  }
 }
