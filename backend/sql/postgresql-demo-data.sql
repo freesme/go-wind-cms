@@ -2372,4 +2372,243 @@ v1.9版本QPS仅5万，响应时间200ms，无法满足高并发需求。
 );
 
 
+-- ----------------------------
+-- 插入 tags 表（标签主表）测试数据（ID 1-20，匹配前文文章tag_ids）
+-- ----------------------------
+INSERT INTO public.tags (
+    created_at, updated_at, sort_order, status,
+    color, icon, "group", is_featured, post_count
+) VALUES
+-- 1. Go语言（技术分组、精选、启用）
+(
+    NOW() - INTERVAL '60 days', NOW(),
+    1, 'TAG_STATUS_ACTIVE',
+    '#00ADD8', 'icon-go', 'TECH', true, 15
+),
+-- 2. CMS（产品分组、精选、启用）
+(
+    NOW() - INTERVAL '60 days', NOW(),
+    2, 'TAG_STATUS_ACTIVE',
+    '#4CAF50', 'icon-cms', 'PRODUCT', true, 22
+),
+-- 3. 快速上手（教程分组、启用）
+(
+    NOW() - INTERVAL '55 days', NOW(),
+    3, 'TAG_STATUS_ACTIVE',
+    '#FF9800', 'icon-quickstart', 'TUTORIAL', false, 8
+),
+-- 4. 版本更新（产品分组、启用）
+(
+    NOW() - INTERVAL '50 days', NOW(),
+    4, 'TAG_STATUS_ACTIVE',
+    '#9C27B0', 'icon-update', 'PRODUCT', false, 6
+),
+-- 5. 新功能（产品分组、精选、启用）
+(
+    NOW() - INTERVAL '50 days', NOW(),
+    5, 'TAG_STATUS_ACTIVE',
+    '#E91E63', 'icon-feature', 'PRODUCT', true, 10
+),
+-- 6. 升级指南（教程分组、启用）
+(
+    NOW() - INTERVAL '45 days', NOW(),
+    6, 'TAG_STATUS_ACTIVE',
+    '#607D8B', 'icon-upgrade', 'TUTORIAL', false, 4
+),
+-- 7. Linux（技术分组、启用）
+(
+    NOW() - INTERVAL '45 days', NOW(),
+    7, 'TAG_STATUS_ACTIVE',
+    '#FCC624', 'icon-linux', 'TECH', false, 7
+),
+-- 8. 部署教程（教程分组、启用）
+(
+    NOW() - INTERVAL '40 days', NOW(),
+    8, 'TAG_STATUS_ACTIVE',
+    '#795548', 'icon-deploy', 'TUTORIAL', false, 5
+),
+-- 9. 行业分析（行业分组、精选、启用）
+(
+    NOW() - INTERVAL '40 days', NOW(),
+    9, 'TAG_STATUS_ACTIVE',
+    '#673AB7', 'icon-analysis', 'INDUSTRY', true, 9
+),
+-- 10. 2024趋势（行业分组、启用）
+(
+    NOW() - INTERVAL '35 days', NOW(),
+    10, 'TAG_STATUS_ACTIVE',
+    '#3F51B5', 'icon-trend', 'INDUSTRY', false, 3
+),
+-- 11. 轻量化（行业分组、启用）
+(
+    NOW() - INTERVAL '35 days', NOW(),
+    11, 'TAG_STATUS_ACTIVE',
+    '#009688', 'icon-light', 'INDUSTRY', false, 2
+),
+-- 12. 自定义模板（技术分组、启用）
+(
+    NOW() - INTERVAL '30 days', NOW(),
+    12, 'TAG_STATUS_ACTIVE',
+    '#8BC34A', 'icon-template', 'TECH', false, 4
+),
+-- 13. 开发教程（教程分组、启用）
+(
+    NOW() - INTERVAL '30 days', NOW(),
+    13, 'TAG_STATUS_ACTIVE',
+    '#CDDC39', 'icon-dev', 'TUTORIAL', false, 6
+),
+-- 14. 企业版（产品分组、启用）
+(
+    NOW() - INTERVAL '25 days', NOW(),
+    14, 'TAG_STATUS_ACTIVE',
+    '#FF5722', 'icon-enterprise', 'PRODUCT', false, 3
+),
+-- 15. 付费功能（产品分组、启用）
+(
+    NOW() - INTERVAL '25 days', NOW(),
+    15, 'TAG_STATUS_ACTIVE',
+    '#795548', 'icon-paid', 'PRODUCT', false, 2
+),
+-- 16. FAQ（帮助分组、启用）
+(
+    NOW() - INTERVAL '20 days', NOW(),
+    16, 'TAG_STATUS_ACTIVE',
+    '#9E9E9E', 'icon-faq', 'HELP', false, 5
+),
+-- 17. 问题解答（帮助分组、启用）
+(
+    NOW() - INTERVAL '20 days', NOW(),
+    17, 'TAG_STATUS_ACTIVE',
+    '#607D8B', 'icon-answer', 'HELP', false, 4
+),
+-- 18. 故障排除（帮助分组、启用）
+(
+    NOW() - INTERVAL '15 days', NOW(),
+    18, 'TAG_STATUS_ACTIVE',
+    '#F44336', 'icon-troubleshoot', 'HELP', false, 3
+),
+-- 19. 性能优化（技术分组、精选、启用）
+(
+    NOW() - INTERVAL '15 days', NOW(),
+    19, 'TAG_STATUS_ACTIVE',
+    '#2196F3', 'icon-performance', 'TECH', true, 8
+),
+-- 20. 高并发（技术分组、启用）
+(
+    NOW() - INTERVAL '10 days', NOW(),
+    20, 'TAG_STATUS_ACTIVE',
+    '#4CAF50', 'icon-concurrency', 'TECH', false, 2
+);
+
+-- ----------------------------
+-- 插入 tag_translations 表（标签多语言翻译）测试数据
+-- 覆盖zh-CN/en-US，内容为单行字符串+ \n 换行，可直接拷贝
+-- ----------------------------
+INSERT INTO public.tag_translations (
+    created_at, updated_at, tag_id, language_code,
+    name, slug, description, cover_image,
+    template, full_path, canonical_url,
+    meta_keywords, meta_description, seo_title
+) VALUES
+-- ========== 标签1：Go语言 - 中文 ==========
+(
+    NOW() - INTERVAL '60 days', NOW(), 1, 'zh-CN',
+    'Go语言', 'go',
+    'Go（Golang）是Google开发的开源编程语言，简洁、高效、高并发，GoWind CMS核心开发语言。',
+    '/images/tags/go-zh.jpg',
+    'tag-default', '/tags/go', 'https://gowind.com/tags/go',
+    'Go语言,Golang,GoWind,高并发,编程语言',
+    'Go（Golang）是Google开发的开源编程语言，简洁、高效、高并发，GoWind CMS核心开发语言。',
+    'Go语言 | GoWind 标签'
+),
+-- ========== 标签1：Go语言 - 英文 ==========
+(
+    NOW() - INTERVAL '60 days', NOW(), 1, 'en-US',
+    'Go Language', 'go',
+    'Go (Golang) is an open-source programming language developed by Google, concise, efficient, and high-concurrency, the core development language of GoWind CMS.',
+    '/images/tags/go-en.jpg',
+    'tag-default', '/en/tags/go', 'https://gowind.com/en/tags/go',
+    'Go Language,Golang,GoWind,High Concurrency,Programming Language',
+    'Go (Golang) is an open-source programming language developed by Google, concise, efficient, and high-concurrency, the core development language of GoWind CMS.',
+    'Go Language | GoWind Tags'
+),
+-- ========== 标签2：CMS - 中文 ==========
+(
+    NOW() - INTERVAL '60 days', NOW(), 2, 'zh-CN',
+    'CMS', 'cms',
+    '内容管理系统（CMS）是用于创建和管理数字内容的软件应用，GoWind CMS是轻量级高性能CMS系统。',
+    '/images/tags/cms-zh.jpg',
+    'tag-default', '/tags/cms', 'https://gowind.com/tags/cms',
+    'CMS,内容管理系统,GoWind,轻量级,高性能',
+    '内容管理系统（CMS）是用于创建和管理数字内容的软件应用，GoWind CMS是轻量级高性能CMS系统。',
+    'CMS | GoWind 标签'
+),
+-- ========== 标签2：CMS - 英文 ==========
+(
+    NOW() - INTERVAL '60 days', NOW(), 2, 'en-US',
+    'CMS', 'cms',
+    'Content Management System (CMS) is a software application for creating and managing digital content, GoWind CMS is a lightweight and high-performance CMS system.',
+    '/images/tags/cms-en.jpg',
+    'tag-default', '/en/tags/cms', 'https://gowind.com/en/tags/cms',
+    'CMS,Content Management System,GoWind,Lightweight,High Performance',
+    'Content Management System (CMS) is a software application for creating and managing digital content, GoWind CMS is a lightweight and high-performance CMS system.',
+    'CMS | GoWind Tags'
+),
+-- ========== 标签5：新功能 - 中文 ==========
+(
+    NOW() - INTERVAL '50 days', NOW(), 5, 'zh-CN',
+    '新功能', 'new-features',
+    'GoWind CMS 新增功能模块，包含多租户、AI内容生成、性能优化等核心新特性。',
+    '/images/tags/new-features-zh.jpg',
+    'tag-default', '/tags/new-features', 'https://gowind.com/tags/new-features',
+    '新功能,GoWind,CMS,多租户,AI内容生成',
+    'GoWind CMS 新增功能模块，包含多租户、AI内容生成、性能优化等核心新特性。',
+    '新功能 | GoWind 标签'
+),
+-- ========== 标签9：行业分析 - 中文 ==========
+(
+    NOW() - INTERVAL '40 days', NOW(), 9, 'zh-CN',
+    '行业分析', 'industry-analysis',
+    'CMS行业发展趋势、市场规模、技术方向分析，基于IDC、艾瑞等权威机构数据。',
+    '/images/tags/industry-analysis-zh.jpg',
+    'tag-default', '/tags/industry-analysis', 'https://gowind.com/tags/industry-analysis',
+    '行业分析,CMS,2024趋势,市场规模,技术方向',
+    'CMS行业发展趋势、市场规模、技术方向分析，基于IDC、艾瑞等权威机构数据。',
+    '行业分析 | GoWind 标签'
+),
+-- ========== 标签19：性能优化 - 中文 ==========
+(
+    NOW() - INTERVAL '15 days', NOW(), 19, 'zh-CN',
+    '性能优化', 'performance-optimization',
+    'GoWind CMS 性能优化相关内容，涵盖数据库优化、缓存策略、代码层面优化，提升QPS和响应速度。',
+    '/images/tags/performance-zh.jpg',
+    'tag-default', '/tags/performance-optimization', 'https://gowind.com/tags/performance-optimization',
+    '性能优化,QPS,数据库优化,缓存策略,高并发',
+    'GoWind CMS 性能优化相关内容，涵盖数据库优化、缓存策略、代码层面优化，提升QPS和响应速度。',
+    '性能优化 | GoWind 标签'
+),
+-- ========== 标签16：FAQ - 中文 ==========
+(
+    NOW() - INTERVAL '20 days', NOW(), 16, 'zh-CN',
+    'FAQ', 'faq',
+    'GoWind CMS 常见问题解答，涵盖安装部署、配置使用、性能优化、升级迁移等方向。',
+    '/images/tags/faq-zh.jpg',
+    'tag-default', '/tags/faq', 'https://gowind.com/tags/faq',
+    'FAQ,常见问题,GoWind,CMS,问题解答',
+    'GoWind CMS 常见问题解答，涵盖安装部署、配置使用、性能优化、升级迁移等方向。',
+    'FAQ | GoWind 标签'
+),
+-- ========== 标签14：企业版 - 中文 ==========
+(
+    NOW() - INTERVAL '25 days', NOW(), 14, 'zh-CN',
+    '企业版', 'enterprise',
+    'GoWind CMS 企业版，包含多租户、高级权限、数据备份、专属客服等付费专属功能。',
+    '/images/tags/enterprise-zh.jpg',
+    'tag-default', '/tags/enterprise', 'https://gowind.com/tags/enterprise',
+    '企业版,GoWind,CMS,付费功能,多租户',
+    'GoWind CMS 企业版，包含多租户、高级权限、数据备份、专属客服等付费专属功能。',
+    '企业版 | GoWind 标签'
+);
+
+
 COMMIT;
