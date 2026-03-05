@@ -78,54 +78,81 @@ defineExpose({
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="less">
 .plain-text-editor-container {
   position: relative;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .plain-text-editor-textarea {
   width: 100%;
+  height: 100%;
   min-height: 300px;
-  padding: 12px;
-  font-family: Monaco, Menlo, 'Ubuntu Mono', Consolas, source-code-pro,
-    monospace;
+  padding: 12px 16px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
   font-size: 14px;
   line-height: 1.6;
-  color: var(--text-color, #333);
+  color: var(--editor-text, var(--color-text-primary));
+  background-color: var(--editor-bg, var(--color-surface));
+  border: 1px solid var(--editor-border, var(--color-border));
+  border-radius: var(--radius-sm);
   resize: vertical;
-  background-color: var(--bg-color, #fff);
-  border: 1px solid var(--border-color, #d9d9d9);
-  border-radius: 4px;
-  outline: none;
-  transition: border-color 0.3s;
+  transition: all 0.3s ease;
+
+  &::placeholder {
+    color: var(--editor-placeholder, var(--color-text-secondary));
+  }
+
+  &:hover:not(:disabled) {
+    border-color: var(--editor-focus-border, var(--color-brand));
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--editor-focus-border, var(--color-brand));
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.18);
+  }
+
+  &:disabled {
+    background-color: var(--color-surface);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  // 滚动条美化
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(102, 126, 234, 0.3);
+    border-radius: 4px;
+
+    &:hover {
+      background: rgba(102, 126, 234, 0.6);
+    }
+  }
 }
 
-.plain-text-editor-textarea:focus {
-  border-color: var(--primary-color, #1890ff);
-  box-shadow: 0 0 0 2px rgb(24 144 255 / 10%);
-}
+// 暗色模式
+html.dark {
+  .plain-text-editor-textarea {
+    &::-webkit-scrollbar-thumb {
+      background: rgba(129, 147, 255, 0.3);
 
-.plain-text-editor-textarea:disabled {
-  color: var(--disabled-text-color, #999);
-  cursor: not-allowed;
-  background-color: var(--disabled-bg-color, #f5f5f5);
-}
-
-/* 暗黑模式支持 - 仅作用于当前组件 */
-.plain-text-editor-container.dark .plain-text-editor-textarea {
-  --bg-color: #1e1e1e;
-  --text-color: #d4d4d4;
-  --border-color: #3e3e3e;
-  --disabled-bg-color: #2d2d2d;
-  --disabled-text-color: #6e6e6e;
-}
-
-.plain-text-editor-container.dark .plain-text-editor-textarea:focus {
-  --primary-color: #1890ff;
-
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgb(24 144 255 / 20%);
+      &:hover {
+        background: rgba(129, 147, 255, 0.6);
+      }
+    }
+  }
 }
 </style>
+

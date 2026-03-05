@@ -1831,7 +1831,7 @@ onUnmounted(() => {
   height: 100% !important;
   overflow: hidden !important;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: #fff;
+  background-color: var(--editor-bg, var(--color-surface)) !important;
   border: none !important;
   border-radius: 0 !important;
   transition: all 0.2s ease;
@@ -1839,25 +1839,25 @@ onUnmounted(() => {
 
 /* ============ 暗黑模式变量 ============ */
 .tiptap-editor-dark {
-  --tte-bg-primary: #0f172a !important;
-  --tte-bg-secondary: #1e293b !important;
+  --tte-bg-primary: var(--color-surface) !important;
+  --tte-bg-secondary: #2a3140 !important;
   --tte-bg-tertiary: #334155 !important;
-  --tte-text-primary: #f1f5f9 !important;
-  --tte-text-secondary: #94a3b8 !important;
+  --tte-text-primary: var(--color-text-primary) !important;
+  --tte-text-secondary: var(--color-text-secondary) !important;
   --tte-text-muted: #64748b !important;
-  --tte-border-primary: #334155 !important;
+  --tte-border-primary: var(--color-border) !important;
   --tte-border-secondary: #475569 !important;
-  --tte-code-bg: #1e293b !important;
+  --tte-code-bg: #2a3140 !important;
   --tte-code-text: #e2e8f0 !important;
   --tte-blockquote-border: #475569 !important;
   --tte-blockquote-text: #94a3b8 !important;
-  --tte-link: #60a5fa !important;
+  --tte-link: var(--color-brand) !important;
   --tte-link-hover: #93c5fd !important;
-  --tte-toolbar-bg: #1e293b !important;
+  --tte-toolbar-bg: var(--color-surface) !important;
   --tte-toolbar-btn: #cbd5e1 !important;
-  --tte-toolbar-btn-hover: #334155 !important;
-  --tte-toolbar-btn-active: #60a5fa !important;
-  --tte-statusbar-bg: #1e293b !important;
+  --tte-toolbar-btn-hover: rgba(102, 126, 234, 0.08) !important;
+  --tte-toolbar-btn-active: var(--color-brand) !important;
+  --tte-statusbar-bg: var(--color-surface) !important;
 }
 
 .tiptap-editor-dark {
@@ -1998,7 +1998,7 @@ onUnmounted(() => {
   min-height: 0 !important;
   overflow-y: auto !important;
   overflow-x: hidden !important;
-  background-color: #ffffff !important;
+  background-color: var(--editor-bg, var(--color-surface)) !important;
 }
 
 .tiptap-editor-dark .tiptap-editor-content {
@@ -2013,10 +2013,10 @@ onUnmounted(() => {
   padding: 16px;
   font-size: 14px;
   line-height: 1.6;
-  color: #1f2937;
+  color: var(--editor-text, var(--color-text-primary)) !important;
   word-wrap: break-word;
   white-space: pre-wrap;
-  background-color: transparent;
+  background-color: var(--editor-bg, var(--color-surface)) !important;
   outline: none;
   transition: background-color 0.2s ease,
   color 0.2s ease !important;

@@ -287,36 +287,174 @@ onUnmounted(() => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="less">
 .md-editor-wrapper {
   box-sizing: border-box;
   width: 100%;
-  min-height: 1px;
+  height: 100%;
+  min-height: 300px;
   overflow: hidden;
+  background-color: var(--editor-bg, var(--color-surface));
+  border: 1px solid var(--editor-border, var(--color-border));
+  border-radius: var(--radius-md);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: var(--editor-focus-border, var(--color-brand));
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+  }
+
+  &:focus-within {
+    border-color: var(--editor-focus-border, var(--color-brand));
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.18);
+  }
 }
 
-.md-editor-wrapper :deep(.md-editor-inner) {
-  width: 100% !important;
-  height: 100% !important;
+.md-editor-wrapper {
+  :deep(.md-editor-inner) {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+  }
+
+  :deep(.md-editor),
+  :deep(.md-editor-dark),
+  :deep(.md-editor-preview),
+  :deep(.md-editor-preview-wrapper) {
+    background: var(--editor-bg, var(--color-surface)) !important;
+    color: var(--editor-text, var(--color-text-primary)) !important;
+  }
+
+  :deep(.md-editor .md-editor-content) {
+    height: calc(100% - 40px) !important;
+    background: var(--editor-bg, var(--color-surface)) !important;
+  }
+
+  :deep(.md-editor .md-editor-preview),
+  :deep(.md-editor .md-editor-input-wrapper),
+  :deep(.md-editor .md-editor-input) {
+    width: 100% !important;
+    height: 100% !important;
+    background: var(--editor-bg, var(--color-surface)) !important;
+    color: var(--editor-text, var(--color-text-primary)) !important;
+  }
+
+  :deep(.md-editor .md-editor-toolbar) {
+    background: var(--color-surface) !important;
+    border-color: var(--editor-border, var(--color-border)) !important;
+  }
+
+  :deep(.md-editor .md-editor-toolbar-left button),
+  :deep(.md-editor .md-editor-toolbar-right button),
+  :deep(.md-editor .md-editor-toolbar-item) {
+    color: var(--editor-text, var(--color-text-primary)) !important;
+
+    &:hover {
+      background: rgba(102, 126, 234, 0.08) !important;
+      color: var(--editor-focus-border, var(--color-brand)) !important;
+    }
+  }
+
+  :deep(.md-editor .cm-editor),
+  :deep(.md-editor .cm-scroller),
+  :deep(.md-editor .cm-content) {
+    background: var(--editor-bg, var(--color-surface)) !important;
+    color: var(--editor-text, var(--color-text-primary)) !important;
+  }
+
+  :deep(.md-editor .cm-gutters) {
+    background: var(--color-surface) !important;
+    border-color: var(--editor-border, var(--color-border)) !important;
+  }
+
+  // md-editor-v3 的分隔条
+  :deep(.md-editor-preview-wrapper) {
+    border-left: 1px solid var(--editor-border, var(--color-border)) !important;
+  }
+
+  // 编辑区和预览区之间的分隔条（通用选择器）
+  :deep(.md-editor > div > div) {
+    border-color: var(--editor-border, var(--color-border)) !important;
+  }
+
+  :deep(.md-editor.dark) {
+    height: 100% !important;
+  }
+
+  // 分割条样式优化 - 覆盖所有可能的分割器
+  :deep(.md-editor-splitter),
+  :deep(.md-editor-resize-bar),
+  :deep(.md-editor .divider),
+  :deep([class*='split']),
+  :deep([class*='divider']),
+  :deep([class*='resize']) {
+    background-color: var(--editor-border, var(--color-border)) !important;
+    opacity: 0.5 !important;
+    transition: all 0.3s ease !important;
+
+    &:hover {
+      background-color: var(--color-brand) !important;
+      opacity: 0.8 !important;
+    }
+  }
+
+  // 滚动条美化
+  :deep(.md-editor ::-webkit-scrollbar),
+  :deep(.cm-scroller::-webkit-scrollbar) {
+    width: 8px;
+    height: 8px;
+  }
+
+  :deep(.md-editor ::-webkit-scrollbar-track),
+  :deep(.cm-scroller::-webkit-scrollbar-track) {
+    background: transparent;
+  }
+
+  :deep(.md-editor ::-webkit-scrollbar-thumb),
+  :deep(.cm-scroller::-webkit-scrollbar-thumb) {
+    background: rgba(102, 126, 234, 0.3);
+    border-radius: 4px;
+
+    &:hover {
+      background: rgba(102, 126, 234, 0.6);
+    }
+  }
 }
 
-.md-editor-wrapper :deep(.m-md-editor) {
-  width: 100% !important;
-  height: 100% !important;
-  min-height: unset !important;
-}
+// 暗色模式
+html.dark {
+  .md-editor-wrapper {
+    :deep(.md-editor-preview-wrapper) {
+      border-left-color: var(--color-border) !important;
+    }
 
-.md-editor-wrapper :deep(.m-md-editor .m-md-content) {
-  height: calc(100% - 40px) !important;
-}
+    :deep(.md-editor > div > div) {
+      border-color: var(--color-border) !important;
+    }
 
-.md-editor-wrapper :deep(.m-md-editor .m-md-preview),
-.md-editor-wrapper :deep(.m-md-editor .m-md-edit-area) {
-  width: 100% !important;
-  height: 100% !important;
-}
+    :deep(.md-editor-splitter),
+    :deep(.md-editor-resize-bar),
+    :deep(.md-editor .divider),
+    :deep([class*='split']),
+    :deep([class*='divider']),
+    :deep([class*='resize']) {
+      background-color: var(--color-border) !important;
+      opacity: 0.6 !important;
 
-.md-editor-wrapper :deep(.m-md-editor.dark) {
-  height: 100% !important;
+      &:hover {
+        background-color: var(--color-brand) !important;
+        opacity: 1 !important;
+      }
+    }
+
+    :deep(.md-editor ::-webkit-scrollbar-thumb),
+    :deep(.cm-scroller::-webkit-scrollbar-thumb) {
+      background: rgba(129, 147, 255, 0.3);
+
+      &:hover {
+        background: rgba(129, 147, 255, 0.6);
+      }
+    }
+  }
 }
 </style>

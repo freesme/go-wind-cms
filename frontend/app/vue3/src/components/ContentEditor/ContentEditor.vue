@@ -90,7 +90,7 @@ const currentOptions = computed(() => {
 </script>
 
 <template>
-  <div class="editor-container">
+  <div class="editor-wrapper">
     <component
       :is="currentEditorComponent"
       :model-value="modelValue"
@@ -106,10 +106,42 @@ const currentOptions = computed(() => {
   </div>
 </template>
 
-<style scoped>
-.editor-container {
+<style scoped lang="less">
+.editor-wrapper {
   width: 100%;
   height: 100%;
   min-height: 300px;
+  display: flex;
+  flex-direction: column;
+
+  // 主题变量
+  --editor-bg: var(--color-surface);
+  --editor-text: var(--color-text-primary);
+  --editor-border: var(--color-border);
+  --editor-focus-border: var(--color-brand);
+  --editor-placeholder: var(--color-text-secondary);
+
+  // 子组件继承样式
+  :deep(.editor-container),
+  :deep(.markdown-editor-wrapper),
+  :deep(.code-editor-wrapper),
+  :deep(.json-editor-wrapper),
+  :deep(.plain-text-editor-container) {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+// 暗色模式适配
+html.dark {
+  .editor-wrapper {
+    --editor-bg: var(--color-surface);
+    --editor-text: var(--color-text-primary);
+    --editor-border: var(--color-border);
+    --editor-focus-border: var(--color-brand);
+    --editor-placeholder: var(--color-text-secondary);
+  }
 }
 </style>

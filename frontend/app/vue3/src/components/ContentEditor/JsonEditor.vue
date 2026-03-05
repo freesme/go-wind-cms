@@ -198,6 +198,39 @@ const refreshEditor = () => {
     const container = instance?.proxy?.$el as HTMLElement | undefined;
     if (!container) return;
     container.dataset.theme = isDark.value ? 'dark' : 'light';
+
+    // 强制应用暗色模式样式
+    if (isDark.value) {
+      const jsonEditorEl = container.querySelector('.jsoneditor') as HTMLElement;
+      if (jsonEditorEl) {
+        jsonEditorEl.style.backgroundColor = 'var(--color-surface)';
+        jsonEditorEl.style.color = 'var(--color-text-primary)';
+      }
+
+      const menuEl = container.querySelector('.jsoneditor-menu') as HTMLElement;
+      if (menuEl) {
+        menuEl.style.backgroundColor = '#2a3140';
+        menuEl.style.borderBottomColor = 'var(--color-border)';
+      }
+
+      // ACE 编辑器
+      const aceEditorEl = container.querySelector('.ace-jsoneditor') as HTMLElement;
+      if (aceEditorEl) {
+        aceEditorEl.style.backgroundColor = 'var(--color-surface)';
+      }
+
+      const aceScroller = container.querySelector('.ace_scroller') as HTMLElement;
+      if (aceScroller) {
+        aceScroller.style.backgroundColor = 'var(--color-surface)';
+      }
+
+      // 所有内容区域
+      const allDivs = container.querySelectorAll('.jsoneditor > div, .jsoneditor-outer, .jsoneditor-tree, .jsoneditor-code, .jsoneditor-text');
+      allDivs.forEach((el: Element) => {
+        (el as HTMLElement).style.backgroundColor = 'var(--color-surface)';
+        (el as HTMLElement).style.color = 'var(--color-text-primary)';
+      });
+    }
   });
 };
 
@@ -231,15 +264,19 @@ const handleEditorChange = (value: any) => {
     if (parsed !== null && typeof parsed === 'object') {
       jsonData.value = parsed;
     }
+
+    // 刷新样式
+    setTimeout(() => refreshEditor(), 50);
     return;
   }
 
   if (Array.isArray(value) || (value !== null && typeof value === 'object')) {
+    setTimeout(() => refreshEditor(), 50);
     return;
   }
 
   jsonData.value = { value };
-  refreshEditor();
+  setTimeout(() => refreshEditor(), 50);
 };
 
 // 初始化和销毁逻辑
@@ -276,6 +313,11 @@ onMounted(() => {
         if (isDark.value && hasStyleChange) {
           refreshEditor();
         }
+
+        // 如果是暗色模式，持续强制应用样式
+        if (isDark.value) {
+          setTimeout(() => refreshEditor(), 100);
+        }
       });
 
       observer.observe(editorEl, {
@@ -284,6 +326,20 @@ onMounted(() => {
         attributes: true,
         attributeFilter: ['class', 'style'],
       });
+
+      // 额外的定时器确保样式应用
+      if (isDark.value) {
+        const styleInterval = setInterval(() => {
+          if (isDark.value) {
+            refreshEditor();
+          } else {
+            clearInterval(styleInterval);
+          }
+        }, 500);
+
+        // 10秒后停止定时器
+        setTimeout(() => clearInterval(styleInterval), 10000);
+      }
     }
   });
 });
@@ -320,225 +376,394 @@ onUnmounted(() => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="less">
 .json-editor-container {
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
+  min-height: 300px;
   overflow: hidden;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  background-color: var(--editor-bg, var(--color-surface));
+  border: 1px solid var(--editor-border, var(--color-border));
+  border-radius: var(--radius-md);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: var(--editor-focus-border, var(--color-brand));
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+  }
+
+  &:focus-within {
+    border-color: var(--editor-focus-border, var(--color-brand));
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.18);
+  }
 }
 
 .json-editor-dark {
-  --bg-primary: #0f172a !important;
-  --bg-secondary: #1e293b !important;
-  --text-primary: #fff !important;
-  --text-secondary: #94a3b8 !important;
-  --border-primary: #1e293b !important;
-  --border-secondary: #334155 !important;
-  --error-bg: #2a1a1a !important;
-  --error-text: #f88 !important;
-  --error-border: #4a2222 !important;
+  --bg-primary: var(--color-surface);
+  --bg-secondary: #2a3140;
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --border-primary: var(--color-border);
+  --border-secondary: #3a4a60;
+  --error-bg: rgba(208, 48, 80, 0.1);
+  --error-text: #d03050;
+  --error-border: #d03050;
 
-  background-color: var(--bg-primary) !important;
-  border-color: var(--border-primary) !important;
+  background-color: var(--bg-primary);
+  border-color: var(--border-primary);
 }
 
 .error-message {
   padding: 8px 12px;
   margin: 0;
-  font-size: 12px;
-  line-height: 1.4;
-  color: #c33;
-  background-color: #fee;
-  border-bottom: 1px solid #fcc;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #d03050;
+  background-color: rgba(208, 48, 80, 0.1);
+  border-bottom: 1px solid rgba(208, 48, 80, 0.2);
 }
 
 .json-editor-dark .error-message {
-  color: var(--error-text) !important;
-  background-color: var(--error-bg) !important;
-  border-bottom-color: var(--error-border) !important;
+  color: var(--error-text);
+  background-color: var(--error-bg);
+  border-bottom-color: var(--error-border);
 }
 
-.json-editor-container :deep(.json-editor-core) {
-  flex: 1;
-  width: 100%;
-  overflow: hidden;
+.json-editor-container {
+  :deep(.json-editor-core) {
+    flex: 1;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  // 基础样式
+  :deep(.jsoneditor) {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
+    font-size: 14px !important;
+    color: var(--editor-text, var(--color-text-primary)) !important;
+    background-color: var(--editor-bg, var(--color-surface)) !important;
+    border: none !important;
+  }
+
+  :deep(.jsoneditor > *) {
+    background-color: var(--editor-bg, var(--color-surface)) !important;
+  }
+
+  :deep(.jsoneditor .ace-jsoneditor) {
+    background-color: var(--editor-bg, var(--color-surface)) !important;
+  }
+
+  :deep(.jsoneditor .ace-jsoneditor .ace_gutter) {
+    background-color: var(--color-surface) !important;
+    color: var(--color-text-secondary) !important;
+  }
+
+  :deep(.jsoneditor .ace-jsoneditor .ace_scroller) {
+    background-color: var(--editor-bg, var(--color-surface)) !important;
+  }
+
+  :deep(.jsoneditor .ace-jsoneditor .ace_content) {
+    background-color: var(--editor-bg, var(--color-surface)) !important;
+  }
+
+  // 菜单样式
+  :deep(.jsoneditor-menu) {
+    padding: 4px !important;
+    background-color: var(--color-surface) !important;
+    border-bottom: 1px solid var(--editor-border, var(--color-border)) !important;
+  }
+
+  :deep(.jsoneditor-menu button) {
+    padding: 4px 8px !important;
+    margin: 0 2px !important;
+    color: var(--editor-text, var(--color-text-primary)) !important;
+    border: none !important;
+    border-radius: 4px !important;
+    transition: all 0.2s ease !important;
+
+    &:hover {
+      background-color: rgba(102, 126, 234, 0.08) !important;
+      color: var(--editor-focus-border, var(--color-brand)) !important;
+    }
+  }
+
+  // 树状视图
+  :deep(.jsoneditor-tree) {
+    padding: 8px !important;
+    color: var(--editor-text, var(--color-text-primary)) !important;
+    background-color: var(--editor-bg, var(--color-surface)) !important;
+  }
+
+  :deep(.jsoneditor-tree .jsoneditor-field) {
+    margin-right: 4px !important;
+    font-weight: 500 !important;
+    color: var(--color-brand) !important;
+  }
+
+  :deep(.jsoneditor-tree .jsoneditor-string) {
+    color: #10b981 !important;
+  }
+
+  :deep(.jsoneditor-tree .jsoneditor-number) {
+    color: #f59e0b !important;
+  }
+
+  :deep(.jsoneditor-tree .jsoneditor-boolean) {
+    color: var(--color-brand) !important;
+  }
+
+  :deep(.jsoneditor-tree .jsoneditor-null) {
+    color: var(--color-text-secondary) !important;
+  }
+
+  // 代码/文本模式
+  :deep(.jsoneditor-code) {
+    color: var(--editor-text, var(--color-text-primary)) !important;
+    background-color: var(--editor-bg, var(--color-surface)) !important;
+  }
+
+  :deep(.jsoneditor-code textarea) {
+    padding: 8px !important;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
+    color: var(--editor-text, var(--color-text-primary)) !important;
+    background-color: var(--editor-bg, var(--color-surface)) !important;
+    border: none !important;
+    resize: none !important;
+
+    &:focus {
+      outline: none !important;
+      border: 1px solid var(--editor-focus-border, var(--color-brand)) !important;
+    }
+  }
+
+  // 表单模式
+  :deep(.jsoneditor-form) {
+    color: var(--editor-text, var(--color-text-primary)) !important;
+    background-color: var(--editor-bg, var(--color-surface)) !important;
+  }
+
+  :deep(.jsoneditor-form input),
+  :deep(.jsoneditor-form textarea),
+  :deep(.jsoneditor-form select) {
+    color: var(--editor-text, var(--color-text-primary)) !important;
+    background-color: var(--color-surface) !important;
+    border: 1px solid var(--editor-border, var(--color-border)) !important;
+    border-radius: 4px !important;
+    transition: all 0.2s ease !important;
+
+    &:focus {
+      border-color: var(--editor-focus-border, var(--color-brand)) !important;
+      box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1) !important;
+    }
+  }
+
+  // 搜索框
+  :deep(.jsoneditor-search) {
+    padding: 6px 8px !important;
+    margin: 0 4px !important;
+    color: var(--editor-text, var(--color-text-primary)) !important;
+    background-color: var(--color-surface) !important;
+    border: 1px solid var(--editor-border, var(--color-border)) !important;
+    border-radius: 4px !important;
+    transition: all 0.2s ease !important;
+
+    &::placeholder {
+      color: var(--editor-placeholder, var(--color-text-secondary)) !important;
+      opacity: 1 !important;
+    }
+
+    &:focus {
+      border-color: var(--editor-focus-border, var(--color-brand)) !important;
+      box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1) !important;
+    }
+  }
+
+  // 滚动条
+  :deep(.jsoneditor-tree::-webkit-scrollbar),
+  :deep(.jsoneditor-code::-webkit-scrollbar) {
+    width: 8px;
+    height: 8px;
+  }
+
+  :deep(.jsoneditor-tree::-webkit-scrollbar-track),
+  :deep(.jsoneditor-code::-webkit-scrollbar-track) {
+    background: transparent;
+  }
+
+  :deep(.jsoneditor-tree::-webkit-scrollbar-thumb),
+  :deep(.jsoneditor-code::-webkit-scrollbar-thumb) {
+    background: rgba(102, 126, 234, 0.3);
+    border-radius: 4px;
+
+    &:hover {
+      background: rgba(102, 126, 234, 0.6);
+    }
+  }
 }
 
-/* 暗黑模式 - 基础样式 */
-.json-editor-dark :deep(.jsoneditor) {
-  font-family: Monaco, Consolas, 'Courier New', monospace !important;
-  font-size: 14px !important;
-  color: var(--text-primary) !important;
-  background-color: var(--bg-primary) !important;
-  border: none !important;
+// 暗色模式 - 使用更强的选择器
+html.dark {
+  .json-editor-container {
+    background-color: var(--color-surface) !important;
+    border-color: var(--color-border) !important;
+
+    // 所有 jsoneditor 相关元素
+    :deep(.jsoneditor),
+    :deep(.jsoneditor[class*='jsoneditor']),
+    :deep(div.jsoneditor),
+    :deep(div[class*='jsoneditor']) {
+      background-color: var(--color-surface) !important;
+      color: var(--color-text-primary) !important;
+    }
+
+    :deep(.jsoneditor *),
+    :deep(.jsoneditor > *),
+    :deep(.jsoneditor-outer) {
+      background-color: var(--color-surface) !important;
+    }
+
+    // ACE 编辑器
+    :deep(.ace-jsoneditor),
+    :deep(div.ace-jsoneditor) {
+      background-color: var(--color-surface) !important;
+    }
+
+    :deep(.ace-jsoneditor .ace_gutter),
+    :deep(.ace_gutter) {
+      background-color: #2a3140 !important;
+      color: var(--color-text-secondary) !important;
+    }
+
+    :deep(.ace-jsoneditor .ace_scroller),
+    :deep(.ace_scroller) {
+      background-color: var(--color-surface) !important;
+    }
+
+    :deep(.ace-jsoneditor .ace_content),
+    :deep(.ace_content) {
+      background-color: var(--color-surface) !important;
+    }
+
+    :deep(.ace_editor),
+    :deep(.ace_text-layer) {
+      background-color: var(--color-surface) !important;
+    }
+
+    // 菜单/工具栏 - 使用多个选择器确保覆盖
+    :deep(.jsoneditor-menu),
+    :deep(div.jsoneditor-menu),
+    :deep(.jsoneditor > .jsoneditor-menu) {
+      background-color: #2a3140 !important;
+      border-bottom-color: var(--color-border) !important;
+    }
+
+    :deep(.jsoneditor-menu button),
+    :deep(.jsoneditor-menu > button),
+    :deep(div.jsoneditor-menu button) {
+      color: var(--color-text-primary) !important;
+      background-color: transparent !important;
+
+      &:hover {
+        background-color: rgba(129, 147, 255, 0.12) !important;
+        color: var(--color-brand) !important;
+      }
+
+      &:active,
+      &:focus {
+        background-color: rgba(129, 147, 255, 0.18) !important;
+      }
+    }
+
+    // 树状视图
+    :deep(.jsoneditor-tree),
+    :deep(div.jsoneditor-tree) {
+      background-color: var(--color-surface) !important;
+      color: var(--color-text-primary) !important;
+    }
+
+    // 代码模式
+    :deep(.jsoneditor-code),
+    :deep(div.jsoneditor-code) {
+      background-color: var(--color-surface) !important;
+      color: var(--color-text-primary) !important;
+    }
+
+    :deep(.jsoneditor-code textarea),
+    :deep(.jsoneditor-text),
+    :deep(textarea.jsoneditor-text) {
+      background-color: var(--color-surface) !important;
+      color: var(--color-text-primary) !important;
+      border-color: var(--color-border) !important;
+    }
+
+    // 表单模式
+    :deep(.jsoneditor-form) {
+      background-color: var(--color-surface) !important;
+      color: var(--color-text-primary) !important;
+    }
+
+    :deep(.jsoneditor-form input),
+    :deep(.jsoneditor-form textarea),
+    :deep(.jsoneditor-form select) {
+      background-color: #2a3140 !important;
+      color: var(--color-text-primary) !important;
+      border-color: var(--color-border) !important;
+    }
+
+    // 搜索框
+    :deep(.jsoneditor-search),
+    :deep(input.jsoneditor-search) {
+      background-color: #2a3140 !important;
+      color: var(--color-text-primary) !important;
+      border-color: var(--color-border) !important;
+    }
+
+    // 视图模式
+    :deep(.jsoneditor-view) {
+      background-color: var(--color-surface) !important;
+      color: var(--color-text-primary) !important;
+    }
+
+    // 所有面板和容器
+    :deep(.jsoneditor-panel),
+    :deep(.jsoneditor-statusbar),
+    :deep(.jsoneditor-navigation-bar) {
+      background-color: #2a3140 !important;
+      border-color: var(--color-border) !important;
+    }
+
+    // 滚动条
+    :deep(.jsoneditor-tree::-webkit-scrollbar-thumb),
+    :deep(.jsoneditor-code::-webkit-scrollbar-thumb) {
+      background: rgba(129, 147, 255, 0.3) !important;
+
+      &:hover {
+        background: rgba(129, 147, 255, 0.6) !important;
+      }
+    }
+  }
+
+  // 针对特定 class 的覆盖
+  .json-editor-dark {
+    :deep(.jsoneditor),
+    :deep(.jsoneditor *) {
+      background-color: var(--color-surface) !important;
+    }
+
+    :deep(.jsoneditor-menu) {
+      background-color: #2a3140 !important;
+    }
+  }
 }
 
-.json-editor-dark :deep(.jsoneditor > *) {
-  background-color: var(--bg-primary) !important;
+// 全局样式覆盖（最后保底）
+:deep(.json-editor-dark .jsoneditor) {
+  background-color: var(--color-surface) !important;
 }
 
-/* 暗黑模式 - 菜单样式 */
-.json-editor-dark :deep(.jsoneditor-menu) {
-  padding: 4px !important;
-  background-color: var(--bg-secondary) !important;
-  border-bottom: 1px solid var(--border-primary) !important;
-}
-
-.json-editor-dark :deep(.jsoneditor-menu button) {
-  padding: 4px 8px !important;
-  margin: 0 2px !important;
-  color: var(--text-primary) !important;
-  border: none !important;
-  border-radius: 4px !important;
-  transition: background-color 0.2s ease !important;
-}
-
-.json-editor-dark :deep(.jsoneditor-menu button:hover) {
-  background-color: var(--border-secondary) !important;
-}
-
-/* 暗黑模式 - 树状视图 */
-.json-editor-dark :deep(.jsoneditor-tree) {
-  padding: 8px !important;
-  color: var(--text-primary) !important;
-  background-color: var(--bg-primary) !important;
-}
-
-.json-editor-dark :deep(.jsoneditor-tree .jsoneditor-field) {
-  margin-right: 4px !important;
-  font-weight: 500 !important;
-  color: #93c5fd !important;
-}
-
-.json-editor-dark :deep(.jsoneditor-tree .jsoneditor-string) {
-  color: #a3e635 !important;
-}
-
-.json-editor-dark :deep(.jsoneditor-tree .jsoneditor-number) {
-  color: #f87171 !important;
-}
-
-.json-editor-dark :deep(.jsoneditor-tree .jsoneditor-boolean) {
-  color: #60a5fa !important;
-}
-
-.json-editor-dark :deep(.jsoneditor-tree .jsoneditor-null) {
-  color: #94a3b8 !important;
-}
-
-/* 暗黑模式 - 代码/文本模式 */
-.json-editor-dark :deep(.jsoneditor-code) {
-  color: var(--text-primary) !important;
-  background-color: var(--bg-primary) !important;
-}
-
-.json-editor-dark :deep(.jsoneditor-code textarea) {
-  padding: 8px !important;
-  font-family: Monaco, Consolas, 'Courier New', monospace !important;
-  color: var(--text-primary) !important;
-  resize: none !important;
-  background-color: var(--bg-primary) !important;
-  border: none !important;
-}
-
-.json-editor-dark :deep(.jsoneditor-code textarea:focus) {
-  border: 1px solid #60a5fa !important;
-  border-radius: 2px !important;
-  outline: none !important;
-}
-
-/* 暗黑模式 - 表单模式 */
-.json-editor-dark :deep(.jsoneditor-form) {
-  color: var(--text-primary) !important;
-  background-color: var(--bg-primary) !important;
-}
-
-.json-editor-dark :deep(.jsoneditor-form input),
-.json-editor-dark :deep(.jsoneditor-form textarea),
-.json-editor-dark :deep(.jsoneditor-form select) {
-  color: var(--text-primary) !important;
-  background-color: var(--bg-secondary) !important;
-  border: 1px solid var(--border-secondary) !important;
-  border-radius: 4px !important;
-}
-
-/* 暗黑模式 - 搜索框 */
-.json-editor-dark :deep(.jsoneditor-search) {
-  padding: 4px 8px !important;
-  margin: 0 4px !important;
-  color: var(--text-primary) !important;
-  background-color: var(--bg-secondary) !important;
-  border: 1px solid var(--border-primary) !important;
-  border-radius: 4px !important;
-}
-
-.json-editor-dark :deep(.jsoneditor-search::placeholder) {
-  color: var(--text-secondary) !important;
-  opacity: 1 !important;
-}
-
-/* 暗黑模式 - 输入框 */
-.json-editor-dark :deep(.jsoneditor-text-input) {
-  padding: 2px 4px !important;
-  color: var(--text-primary) !important;
-  background-color: var(--bg-secondary) !important;
-  border: 1px solid var(--border-secondary) !important;
-  border-radius: 2px !important;
-}
-
-.json-editor-dark :deep(.jsoneditor-text-input:focus) {
-  background-color: #1a2436 !important;
-  border-color: #60a5fa !important;
-  outline: none !important;
-}
-
-/* 禁用状态 */
-.json-editor-container :deep(.jsoneditor-disabled) {
-  cursor: not-allowed !important;
-  background-color: #1a2436 !important;
-  opacity: 0.8 !important;
-}
-
-/* 暗黑模式 - 滚动条 */
-.json-editor-dark :deep(.jsoneditor-tree::-webkit-scrollbar),
-.json-editor-dark :deep(.jsoneditor-code::-webkit-scrollbar) {
-  width: 8px !important;
-  height: 8px !important;
-}
-
-.json-editor-dark :deep(.jsoneditor-tree::-webkit-scrollbar-track),
-.json-editor-dark :deep(.jsoneditor-code::-webkit-scrollbar-track) {
-  background: var(--bg-primary) !important;
-}
-
-.json-editor-dark :deep(.jsoneditor-tree::-webkit-scrollbar-thumb),
-.json-editor-dark :deep(.jsoneditor-code::-webkit-scrollbar-thumb) {
-  background: var(--border-secondary) !important;
-  border-radius: 4px !important;
-}
-
-.json-editor-dark :deep(.jsoneditor-tree::-webkit-scrollbar-thumb:hover),
-.json-editor-dark :deep(.jsoneditor-code::-webkit-scrollbar-thumb:hover) {
-  background: #475569 !important;
-}
-
-/* 亮色模式基础样式 */
-.json-editor-container :deep(.jsoneditor) {
-  font-family: Monaco, Consolas, 'Courier New', monospace !important;
-  font-size: 14px !important;
-}
-
-.json-editor-container :deep(.jsoneditor-menu) {
-  padding: 4px !important;
-}
-
-.json-editor-container :deep(.jsoneditor-menu button) {
-  padding: 4px 8px !important;
-  border-radius: 4px !important;
+:deep(.json-editor-dark .jsoneditor-menu) {
+  background-color: #2a3140 !important;
 }
 </style>

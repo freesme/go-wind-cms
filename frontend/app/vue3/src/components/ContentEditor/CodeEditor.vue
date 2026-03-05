@@ -403,47 +403,111 @@ defineExpose({
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="less">
 .code-editor-wrapper {
   position: relative;
   box-sizing: border-box;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .code-editor-container {
   box-sizing: border-box;
   width: 100%;
-  min-height: 200px; /* 最小高度 */
+  height: 100%;
+  min-height: 300px;
   overflow: hidden;
-  border: 1px solid var(--border-color, #d9d9d9);
-  border-radius: 6px; /* 优化圆角 */
-  transition: border-color 0.2s ease;
+  background-color: var(--editor-bg, var(--color-surface));
+  border: 1px solid var(--editor-border, var(--color-border));
+  border-radius: var(--radius-md);
+  transition: all 0.3s ease;
+
+  &:hover:not(.code-editor-disabled) {
+    border-color: var(--editor-focus-border, var(--color-brand));
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+  }
+
+  &:focus-within {
+    border-color: var(--editor-focus-border, var(--color-brand));
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.18);
+  }
 }
 
-/* 禁用状态样式 */
 .code-editor-disabled {
   cursor: not-allowed;
-  opacity: 0.85;
+  opacity: 0.6;
+  background-color: var(--color-surface);
+
+  :deep(.monaco-editor) {
+    pointer-events: none;
+  }
 }
 
-/* Monaco编辑器样式穿透（优化默认样式） */
-.code-editor-container :deep(.monaco-editor) {
-  font-size: 14px !important;
+// Monaco 编辑器样式穿透
+.code-editor-container {
+  :deep(.monaco-editor) {
+    font-size: 14px !important;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
+  }
+
+  :deep(.monaco-editor .monaco-editor-background),
+  :deep(.monaco-editor .view-lines) {
+    background-color: var(--editor-bg, var(--color-surface)) !important;
+  }
+
+  :deep(.monaco-editor .margin),
+  :deep(.monaco-editor .glyph-margin) {
+    background-color: var(--color-surface) !important;
+  }
+
+  :deep(.monaco-editor .line-numbers) {
+    color: var(--color-text-secondary) !important;
+  }
+
+  :deep(.monaco-editor .mtk1),
+  :deep(.monaco-editor .mtk2),
+  :deep(.monaco-editor .mtk3),
+  :deep(.monaco-editor .mtk4),
+  :deep(.monaco-editor .mtk5),
+  :deep(.monaco-editor .mtk6) {
+    color: var(--editor-text, var(--color-text-primary)) !important;
+  }
+
+  :deep(.monaco-editor .monaco-scrollable-element::-webkit-scrollbar) {
+    width: 8px;
+    height: 8px;
+  }
+
+  :deep(.monaco-editor .monaco-scrollable-element::-webkit-scrollbar-track) {
+    background: transparent;
+  }
+
+  :deep(.monaco-editor .monaco-scrollable-element::-webkit-scrollbar-thumb) {
+    background: rgba(102, 126, 234, 0.3);
+    border-radius: 4px;
+
+    &:hover {
+      background: rgba(102, 126, 234, 0.6);
+    }
+  }
+
+  :deep(.monaco-editor .overflow-guard) {
+    background-color: var(--editor-bg, var(--color-surface)) !important;
+  }
 }
 
-.code-editor-container :deep(.monaco-editor .monaco-scrollable-element) {
-  scrollbar-width: thin;
-}
+// 暗色模式
+html.dark {
+  .code-editor-container {
+    :deep(.monaco-editor .monaco-scrollable-element::-webkit-scrollbar-thumb) {
+      background: rgba(129, 147, 255, 0.3);
 
-/* 暗黑模式下滚动条样式 */
-.code-editor-container,
-:deep(.monaco-editor .monaco-scrollable-element::-webkit-scrollbar-thumb) {
-  background-color: #555 !important;
-}
-
-.code-editor-container,
-:deep(.monaco-editor .monaco-scrollable-element::-webkit-scrollbar-track) {
-  background-color: #222 !important;
+      &:hover {
+        background: rgba(129, 147, 255, 0.6);
+      }
+    }
+  }
 }
 </style>
