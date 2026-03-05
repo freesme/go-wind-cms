@@ -421,13 +421,14 @@ onMounted(async () => {
     align-items: flex-start;
     gap: 1.5rem;
     padding: 2rem;
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
 
     &::before {
       content: '';
@@ -442,7 +443,7 @@ onMounted(async () => {
 
     &:hover {
       transform: translateY(-6px);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
       border-color: var(--color-brand);
 
       &::before {
@@ -505,17 +506,17 @@ onMounted(async () => {
   }
 
   .featured-card {
-    background: var(--color-surface);
+    background: #ffffff;
     border-radius: 16px;
     overflow: hidden;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid var(--color-border);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
 
     &:hover {
       transform: translateY(-12px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.08);
       border-color: var(--color-brand);
 
       .featured-image {
@@ -611,19 +612,20 @@ onMounted(async () => {
   }
 
   .post-card {
-    background: var(--color-bg);
+    background: #ffffff;
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid var(--color-border);
+    border: 1px solid #e5e7eb;
     height: 100%;
     display: flex;
     flex-direction: column;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
 
     &:hover {
       transform: translateY(-8px);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
       border-color: var(--color-brand);
 
       .post-image {
@@ -822,6 +824,62 @@ onMounted(async () => {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+// 暗黑模式优化 - 创造层次感和视觉节奏
+html.dark {
+  // 卡片基础样式
+  .category-card,
+  .post-card,
+  .featured-card,
+  .feature-card {
+    background: rgba(42, 49, 64, 0.6) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3) !important;
+    backdrop-filter: blur(10px) !important;
+
+    &:hover {
+      background: rgba(47, 55, 71, 0.8) !important;
+      border-color: var(--color-brand) !important;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4),
+                  0 0 0 1px var(--color-brand) !important;
+    }
+  }
+
+  // Section 背景交替：创造视觉节奏
+  .categories-section {
+    background: #18191c !important; // 深黑
+  }
+
+  .featured-section {
+    background: #1e2024 !important; // 稍浅的灰黑
+  }
+
+  .latest-section {
+    background: #18191c !important; // 深黑（与 categories 保持一致）
+  }
+
+  .features {
+    background: #1e2024 !important; // 稍浅的灰黑（与 featured 保持一致）
+  }
+
+  // 在浅色背景上的卡片需要更明显
+  .featured-section,
+  .features {
+    .featured-card,
+    .feature-card {
+      background: rgba(48, 56, 72, 0.7) !important;
+
+      &:hover {
+        background: rgba(55, 64, 82, 0.9) !important;
+      }
+    }
+  }
+
+  // Section header 文字优化
+  .section-header h2 {
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
 }
 
