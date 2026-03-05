@@ -1,91 +1,96 @@
 <template>
-  <div class="footer-outer">
-    <n-space class="footer-container stick-content" justify="space-between" align="center">
-      <n-space>
-        <n-button text class="footer-link" @click="handleButtonAboutUs">{{ $t('ui.button.about_us') }}</n-button>
-        <n-button text class="footer-link" @click="handleButtonContactUs">{{ $t('ui.button.contact_us') }}</n-button>
-        <n-button text class="footer-link" @click="handleButtonNonResponsibility">{{
-            $t('ui.button.non_responsibility')
-          }}
+  <footer class="footer-outer">
+    <div class="footer-container stick-content">
+      <nav class="footer-links" aria-label="Footer links">
+        <n-button
+          v-for="link in footerLinks"
+          :key="link.key"
+          text
+          class="footer-link"
+          @click="handleFooterLinkClick(link.key)"
+        >
+          {{ $t(link.labelKey) }}
         </n-button>
-        <n-button text class="footer-link" @click="handleButtonPrivacyAgreement">{{
-            $t('ui.button.privacy_agreement')
-          }}
-        </n-button>
-        <n-button text class="footer-link" @click="handleButtonTermsOfService">{{
-            $t('ui.button.terms_of_service')
-          }}
-        </n-button>
-      </n-space>
-      <n-space align="center">
+      </nav>
+
+      <div class="footer-meta">
         <span class="copyright">{{ $t('ui.copyright') }}</span>
-        <n-divider vertical/>
-        <n-space>
-          <n-button text class="social-btn" @click="handleButtonTwitter">
+        <n-divider vertical class="meta-divider"/>
+        <div class="social-list" aria-label="Social links">
+          <n-button
+            v-for="item in socialLinks"
+            :key="item.key"
+            text
+            class="social-btn"
+            :aria-label="item.name"
+            @click="handleSocialClick(item.name)"
+          >
             <template #icon>
-              <TwitterSquare/>
+              <component :is="item.icon"/>
             </template>
           </n-button>
-          <n-button text class="social-btn" @click="handleButtonFacebook">
-            <template #icon>
-              <FacebookSquare/>
-            </template>
-          </n-button>
-          <n-button text class="social-btn" @click="handleButtonInstagram">
-            <template #icon>
-              <InstagramSquare/>
-            </template>
-          </n-button>
-          <n-button text class="social-btn" @click="handleButtonTelegram">
-            <template #icon>
-              <Telegram/>
-            </template>
-          </n-button>
-        </n-space>
-      </n-space>
-    </n-space>
-  </div>
+        </div>
+      </div>
+    </div>
+  </footer>
 </template>
 
 <script setup lang="ts">
-import {FacebookSquare, Telegram, InstagramSquare, TwitterSquare} from '@vicons/fa'
-
+import type {Component} from 'vue'
+import {FacebookSquare, Telegram, InstagramSquare, TwitterSquare, Weixin, Weibo, Qq} from '@vicons/fa'
 import {$t} from '@/locales'
+import {navigateTo} from '@/router'
 
-function handleButtonAboutUs() {
-  console.log('About us')
+type FooterLinkKey =
+  | 'about_us'
+  | 'contact_us'
+  | 'non_responsibility'
+  | 'privacy_agreement'
+  | 'terms_of_service'
+
+interface FooterLinkItem {
+  key: FooterLinkKey
+  labelKey: `ui.button.${FooterLinkKey}`
 }
 
-function handleButtonContactUs() {
-  console.log('Contact us')
+interface SocialItem {
+  key: 'twitter' | 'facebook' | 'instagram' | 'telegram' | 'wechat' | 'weibo' | 'qq'
+  name: 'Twitter' | 'Facebook' | 'Instagram' | 'Telegram' | 'WeChat' | 'Weibo' | 'QQ'
+  icon: Component
 }
 
-function handleButtonNonResponsibility() {
-  console.log('Non responsibility')
+const footerLinks: FooterLinkItem[] = [
+  {key: 'about_us', labelKey: 'ui.button.about_us'},
+  {key: 'contact_us', labelKey: 'ui.button.contact_us'},
+  {key: 'non_responsibility', labelKey: 'ui.button.non_responsibility'},
+  {key: 'privacy_agreement', labelKey: 'ui.button.privacy_agreement'},
+  {key: 'terms_of_service', labelKey: 'ui.button.terms_of_service'},
+]
+
+const footerRouteMap: Record<FooterLinkKey, string> = {
+  about_us: '/about',
+  contact_us: '/contact',
+  non_responsibility: '/disclaimer',
+  privacy_agreement: '/privacy',
+  terms_of_service: '/terms',
 }
 
-function handleButtonPrivacyAgreement() {
-  console.log('Privacy agreement')
+const socialLinks: SocialItem[] = [
+  {key: 'twitter', name: 'Twitter', icon: TwitterSquare},
+  {key: 'facebook', name: 'Facebook', icon: FacebookSquare},
+  {key: 'instagram', name: 'Instagram', icon: InstagramSquare},
+  {key: 'telegram', name: 'Telegram', icon: Telegram},
+  {key: 'wechat', name: 'WeChat', icon: Weixin},
+  {key: 'weibo', name: 'Weibo', icon: Weibo},
+  {key: 'qq', name: 'QQ', icon: Qq},
+]
+
+function handleFooterLinkClick(key: FooterLinkKey) {
+  navigateTo(footerRouteMap[key])
 }
 
-function handleButtonTermsOfService() {
-  console.log('Terms of service')
-}
-
-function handleButtonTwitter() {
-  console.log('Twitter')
-}
-
-function handleButtonFacebook() {
-  console.log('Facebook')
-}
-
-function handleButtonInstagram() {
-  console.log('Instagram')
-}
-
-function handleButtonTelegram() {
-  console.log('Telegram')
+function handleSocialClick(name: SocialItem['name']) {
+  console.log(name)
 }
 </script>
 
@@ -102,71 +107,85 @@ function handleButtonTelegram() {
   padding: var(--space-4) 0;
   color: var(--color-text-secondary);
   border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.footer-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
 }
 
 .footer-link {
   --n-text-color-text: var(--color-text-secondary);
   --n-text-color-text-hover: var(--color-text-primary);
   --n-text-color-text-pressed: var(--color-text-primary);
+  padding: 0 4px;
 }
 
-.footer-link :deep(.n-button__content),
-.footer-link :deep(.n-button__content span) {
+.footer-link:deep(.n-button__content) {
   color: var(--color-text-secondary) !important;
 }
 
-.footer-link:hover :deep(.n-button__content),
-.footer-link:hover :deep(.n-button__content span) {
+.footer-link:hover:deep(.n-button__content) {
   color: var(--color-text-primary) !important;
 }
 
-// 文字按钮样式
-:deep(.n-button.n-button--text-type) {
-  color: var(--color-text-secondary) !important;
-  padding: 4px 8px;
+.social-list {
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }
 
-:deep(.n-button.n-button--text-type:hover) {
-  color: var(--color-text-primary) !important;
-  background: rgba(102, 126, 234, 0.05);
-}
-
-// 确保按钮内容颜色正确
-:deep(.n-button__content) {
-  color: inherit;
-}
-
-// 图标颜色
-:deep(.n-icon) {
-  color: var(--color-text-secondary) !important;
-}
-
-:deep(.n-button:hover .n-icon) {
-  color: var(--color-text-primary) !important;
-}
-
-// 社交媒体按钮
 .social-btn {
-  font-size: 28px;
+  font-size: 24px;
   color: var(--color-text-secondary) !important;
-  transition: all 0.3s;
+  transition: all 0.2s ease;
   --n-text-color-text: var(--color-text-secondary);
   --n-text-color-text-hover: var(--color-brand);
+  --n-text-color-text-pressed: var(--color-brand);
 }
 
-// 版权文字
+.social-btn:hover {
+  transform: translateY(-1px);
+}
+
 .copyright {
-  color: var(--color-text-secondary) !important;
+  color: var(--color-text-secondary);
   font-size: 14px;
+  white-space: nowrap;
 }
 
-// 分割线
-:deep(.n-divider) {
+.meta-divider:deep(.n-divider) {
   background-color: var(--color-border);
 }
 
-// Space 组件
-:deep(.n-space) {
-  color: var(--color-text-secondary);
+@media (max-width: 960px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-4) 0 var(--space-5);
+  }
+
+  .footer-meta {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .meta-divider {
+    display: none;
+  }
 }
 </style>

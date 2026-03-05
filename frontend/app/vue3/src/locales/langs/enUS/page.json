@@ -156,6 +156,32 @@
     "cta_contact": "Contact Us",
     "search_placeholder": "Search content, projects..."
   },
+  "legal": {
+    "contact": {
+      "description": "For support and business inquiries, please contact us via the channels below.",
+      "item_1": "Support Email: support@fengxing-cms.local",
+      "item_2": "Business Email: business@fengxing-cms.local",
+      "item_3": "Hours: Mon-Fri 09:00-18:00 (UTC+8)"
+    },
+    "disclaimer": {
+      "description": "All content on this site is provided \"as is\" for general informational purposes.",
+      "item_1": "We do not guarantee completeness, accuracy, or availability.",
+      "item_2": "You are responsible for independent verification before use.",
+      "item_3": "We are not liable for losses resulting from use of this site."
+    },
+    "privacy": {
+      "description": "This page explains how we collect, use, and protect your personal data.",
+      "item_1": "We only collect data required for core product functionality.",
+      "item_2": "We do not sell personal information to third parties.",
+      "item_3": "You may request data export or deletion through support."
+    },
+    "terms": {
+      "description": "By using this site, you agree to the following terms of service.",
+      "item_1": "Use the product in compliance with applicable laws and regulations.",
+      "item_2": "Do not abuse services, disrupt systems, or violate others' rights.",
+      "item_3": "We may update these terms and publish changes on this page."
+    }
+  },
   "user": {
     "profile": "Profile",
     "basic_info": "Basic Information",
