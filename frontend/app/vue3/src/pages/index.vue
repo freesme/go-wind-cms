@@ -95,22 +95,22 @@ const features = computed(() => {
 
   return [
     {
-      icon: 'carbon:content-management',
+      icon: 'content-management',
       title: $t('page.home.flexible_content_management'),
       description: $t('page.home.content_management_desc'),
     },
     {
-      icon: 'carbon:multi-tenant',
+      icon: 'multi-tenant',
       title: $t('page.home.multi_tenant_architecture'),
       description: $t('page.home.multi_tenant_desc'),
     },
     {
-      icon: 'carbon:security',
+      icon: 'security',
       title: $t('page.home.enterprise_security'),
       description: $t('page.home.security_desc'),
     },
     {
-      icon: 'carbon:chart-area',
+      icon: 'chart-area',
       title: $t('page.home.advanced_analytics'),
       description: $t('page.home.analytics_desc'),
     },
@@ -246,7 +246,7 @@ onMounted(async () => {
       <div class="features-grid">
         <div v-for="feature in features" :key="feature.title" class="feature-card">
           <div class="feature-icon">
-            <div :class="`i-${feature.icon}`" />
+            <div :class="`i-carbon-${feature.icon}`" />
           </div>
           <h3>{{ feature.title }}</h3>
           <p>{{ feature.description }}</p>

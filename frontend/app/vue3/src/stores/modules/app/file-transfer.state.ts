@@ -57,7 +57,12 @@ export const useFileTransferStore = defineStore('file-transfer', () => {
       if (!data) return new Blob([], {type});
       if (data instanceof Blob) return data;
       if (data instanceof ArrayBuffer) return new Blob([data], {type});
-      if (ArrayBuffer.isView(data)) return new Blob([data.buffer], {type});
+      if (ArrayBuffer.isView(data)) {
+        const view = new Uint8Array(data.buffer, data.byteOffset, data.byteLength);
+        const bytes = new Uint8Array(view.byteLength);
+        bytes.set(view);
+        return new Blob([bytes], {type});
+      }
 
       if (typeof data === 'string') {
         // 支持 data URI 或纯 base64（处理 URL-safe base64）

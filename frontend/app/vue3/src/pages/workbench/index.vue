@@ -218,19 +218,15 @@ const handleLogout = () => {
             <h3>{{ $t('page.workbench.recent_activities') }}</h3>
             <n-button text>{{ $t('page.workbench.view_all') }}</n-button>
           </div>
-          <n-list :items="recentActivities">
-            <template #default="{ item }">
-              <n-list-item>
-                <template #header>{{ $t(item.actionKey) }}</template>
-                <template #description>
-                  <div class="activity-meta">
-                    <span>{{ item.user }}</span>
-                    <span class="divider">•</span>
-                    <span>{{ item.timestamp }}</span>
-                  </div>
-                </template>
-              </n-list-item>
-            </template>
+          <n-list>
+            <n-list-item v-for="item in recentActivities" :key="item.id">
+              <div class="activity-title">{{ $t(item.actionKey) }}</div>
+              <div class="activity-meta">
+                <span>{{ item.user }}</span>
+                <span class="divider">•</span>
+                <span>{{ item.timestamp }}</span>
+              </div>
+            </n-list-item>
           </n-list>
         </div>
       </main>

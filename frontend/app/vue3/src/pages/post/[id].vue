@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { usePostStore, useCommentStore } from '@/stores/modules/app'
 import { useMessage } from 'naive-ui'
 import { $t } from '@/locales'
+import { ContentViewer } from '@/components/ContentViewer'
 
 definePage({
   name: 'post-detail',
@@ -168,7 +169,12 @@ onMounted(async () => {
           </div>
 
           <!-- Post Content -->
-          <div class="post-content" v-html="getContent()"></div>
+          <div class="post-content">
+            <ContentViewer
+              :content="getContent()"
+              type="markdown"
+            />
+          </div>
 
           <!-- Post Footer -->
           <footer class="post-footer">
@@ -216,7 +222,12 @@ onMounted(async () => {
                 <strong>{{ comment.authorName }}</strong>
                 <span class="comment-date">{{ formatDate(comment.createdAt) }}</span>
               </div>
-              <div class="comment-content">{{ comment.content }}</div>
+              <div class="comment-content">
+                <ContentViewer
+                  :content="comment.content"
+                  type="text"
+                />
+              </div>
             </div>
 
             <n-empty v-if="comments.length === 0" :description="$t('page.post_detail.no_comments')" />
