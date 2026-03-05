@@ -56,8 +56,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <n-space justify="space-between">
-    <n-space align="center" :size="8">
+  <n-space justify="space-between" align="center" style="width: 100%; padding: 0 var(--space-4)">
+    <n-space align="center" :size="4">
       <!-- 左侧导航菜单 -->
       <n-menu
         v-if="navigationItems.length > 0"
@@ -109,7 +109,7 @@ onMounted(() => {
       </n-tabs>
     </n-space>
 
-    <n-space align="center">
+    <n-space align="center" :size="4">
       <n-tabs
         v-model:value="navbarStore.activeOverlay"
         type="bar"
@@ -159,25 +159,37 @@ onMounted(() => {
 
 // Menu 样式
 :deep(.n-menu) {
-  background: transparent;
+  background: transparent !important;
   color: var(--color-text-primary);
+  border: none !important;
+}
+
+:deep(.n-menu--horizontal) {
+  height: auto;
+  padding: 0 !important;
 }
 
 :deep(.n-menu-item) {
   color: var(--color-text-primary) !important;
-  padding: 8px 16px;
+  padding: 10px 14px !important;
   border-radius: var(--radius-sm);
   transition: all 0.2s;
+  font-size: 15px;
+  height: auto;
+  line-height: 1.4;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
 }
 
 :deep(.n-menu-item:hover) {
   color: var(--color-brand) !important;
-  background: rgba(102, 126, 234, 0.05);
+  background: rgba(102, 126, 234, 0.08) !important;
 }
 
 :deep(.n-menu-item--selected) {
   color: var(--color-brand) !important;
-  background: rgba(102, 126, 234, 0.1);
+  background: rgba(102, 126, 234, 0.12) !important;
 }
 
 :deep(.n-menu-item-content) {
@@ -189,18 +201,55 @@ onMounted(() => {
 :deep(.n-menu-item-content__icon) {
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+:deep(.n-menu-item-content__label) {
+  flex: 1;
+  white-space: nowrap;
 }
 
 // Submenu 样式
 :deep(.n-submenu) {
   color: var(--color-text-primary);
+  padding: 0 !important;
+}
+
+:deep(.n-submenu__children) {
+  background: transparent;
 }
 
 :deep(.n-submenu-children) {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
   border-radius: var(--radius-md);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-top: 4px;
+  padding: 8px 0 !important;
+}
+
+:deep(.n-submenu-children .n-menu-item) {
+  color: var(--color-text-primary) !important;
+  padding: 10px 16px !important;
+  font-size: 14px;
+}
+
+:deep(.n-submenu-children .n-menu-item:hover) {
+  color: var(--color-brand) !important;
+  background: rgba(102, 126, 234, 0.08) !important;
+}
+
+:deep(.n-submenu-children .n-menu-item--selected) {
+  color: var(--color-brand) !important;
+  background: rgba(102, 126, 234, 0.12) !important;
+}
+
+// Submenu 展开箭头样式
+:deep(.n-submenu-title) {
+  padding: 10px 14px !important;
+  font-size: 15px;
+  min-height: 36px;
 }
 
 // Tabs 样式
@@ -208,15 +257,23 @@ onMounted(() => {
   color: var(--color-text-primary);
 }
 
+:deep(.n-tabs--horizontal) {
+  padding: 0 !important;
+}
+
 // Tab 项样式
 :deep(.n-tabs-tab) {
   color: var(--color-text-primary) !important;
-  padding: 8px 16px;
+  padding: 10px 14px !important;
+  font-size: 15px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
 }
 
 :deep(.n-tabs-tab:hover) {
   color: var(--color-brand) !important;
-  background: rgba(102, 126, 234, 0.05);
+  background: rgba(102, 126, 234, 0.08);
 }
 
 // 激活的 Tab
@@ -227,6 +284,7 @@ onMounted(() => {
 // Tab 下划线
 :deep(.n-tabs-bar) {
   background-color: var(--color-brand);
+  height: 2px;
 }
 
 // Tab 内容

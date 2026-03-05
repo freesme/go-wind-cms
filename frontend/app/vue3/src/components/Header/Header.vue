@@ -21,6 +21,9 @@
 }
 
 .header-inner {
-  padding: var(--space-4) 0 var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: var(--space-3) 0;
 }
 </style>

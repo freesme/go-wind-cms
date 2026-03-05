@@ -31,15 +31,49 @@ function handleClickTab(path: string) {
 </script>
 
 <template>
-  <div class="tab-title" style="align-items: center; display: flex;"
-       @click="() => handleClickTab(props.data.path)">
-    <n-icon v-show="props.data.icon != null" class="icon" style="margin-right: 4px;" size="16">
+  <div class="tab-title" @click="() => handleClickTab(props.data.path)">
+    <n-icon v-show="props.data.icon != null" class="tab-icon">
       <component :is="props.data.icon"/>
     </n-icon>
-    <span>{{ $t(props.data.name) }}</span>
+    <span class="tab-label">{{ $t(props.data.name) }}</span>
   </div>
 </template>
 
 <style scoped lang="less">
+.tab-title {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  user-select: none;
 
+  &:hover {
+    color: var(--color-brand);
+    background-color: rgba(102, 126, 234, 0.05);
+  }
+
+  &:active {
+    background-color: rgba(102, 126, 234, 0.1);
+  }
+}
+
+.tab-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.tab-label {
+  white-space: nowrap;
+  line-height: 1.5;
+}
 </style>
