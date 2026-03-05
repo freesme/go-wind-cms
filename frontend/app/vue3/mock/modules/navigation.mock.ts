@@ -31,7 +31,7 @@ const navigations = [
         navigationId: 1,
         title: '文章',
         url: '/post',
-        icon: 'document-text',
+        icon: 'document',
         description: '浏览所有文章',
         linkType: 'LINK_TYPE_CUSTOM',
         sortOrder: 2,
@@ -63,7 +63,7 @@ const navigations = [
             id: 4,
             navigationId: 1,
             title: '技术分享',
-            url: '/category/tech',
+            url: '/category/1',
             icon: 'code',
             description: '技术文章分类',
             linkType: 'LINK_TYPE_CATEGORY',
@@ -82,8 +82,8 @@ const navigations = [
             id: 5,
             navigationId: 1,
             title: '生活随笔',
-            url: '/category/life',
-            icon: 'book',
+            url: '/category/2',
+            icon: 'blog',
             description: '生活文章分类',
             linkType: 'LINK_TYPE_CATEGORY',
             objectId: 2,
@@ -106,7 +106,7 @@ const navigations = [
         navigationId: 1,
         title: '关于',
         url: '/about',
-        icon: 'information-circle',
+        icon: 'information',
         description: '关于我们',
         linkType: 'LINK_TYPE_PAGE',
         objectId: 1,
@@ -136,7 +136,7 @@ const navigations = [
         navigationId: 2,
         title: '联系我们',
         url: '/contact',
-        icon: 'mail',
+        icon: 'email',
         description: '联系我们',
         linkType: 'LINK_TYPE_PAGE',
         objectId: 2,
@@ -270,29 +270,31 @@ export default defineMock([
 
       let items = [...navigations]
 
-      // 根据query参数过滤
+      // 解析 query 参数（可能是 JSON 字符串）
+      let queryParams: any = {}
       if (query.query) {
-        const queryStr = query.query.toString().toLowerCase()
-        items = items.filter(nav =>
-          nav.name.toLowerCase().includes(queryStr) ||
-          nav.location.toLowerCase().includes(queryStr)
-        )
+        try {
+          queryParams = typeof query.query === 'string'
+            ? JSON.parse(query.query)
+            : query.query
+        } catch (e) {
+          console.error('Failed to parse query:', e)
+        }
       }
 
-      // 根据location过滤
-      if (query.location) {
-        items = items.filter(nav => nav.location === query.location)
+      // 根据 location 过滤
+      if (queryParams.location) {
+        items = items.filter(nav => nav.location === queryParams.location)
       }
 
-      // 根据locale过滤
-      if (query.locale) {
-        items = items.filter(nav => nav.locale === query.locale)
+      // 根据 locale 过滤
+      if (queryParams.locale) {
+        items = items.filter(nav => nav.locale === queryParams.locale)
       }
 
-      // 根据isActive过滤
-      if (query.isActive !== undefined) {
-        const isActive = query.isActive === 'true'
-        items = items.filter(nav => nav.isActive === isActive)
+      // 根据 isActive 过滤
+      if (queryParams.isActive !== undefined) {
+        items = items.filter(nav => nav.isActive === queryParams.isActive)
       }
 
       const total = items.length
@@ -307,6 +309,7 @@ export default defineMock([
       const start = (page - 1) * pageSize
       const end = start + pageSize
       const paginatedItems = items.slice(start, end)
+
 
       return {
         items: paginatedItems,
@@ -332,7 +335,7 @@ export default defineMock([
     },
   },
   {
-    url: '/app/v1/navigations',
+    url: '/navigations',
     method: 'POST',
     body: ({ body }) => {
       const newId = Math.max(...navigations.map(nav => nav.id)) + 1
@@ -355,7 +358,7 @@ export default defineMock([
     },
   },
   {
-    url: '/app/v1/navigations/:id',
+    url: '/navigations/:id',
     method: 'PUT',
     body: ({ params, body }) => {
       const id = Number(params.id)
@@ -381,7 +384,7 @@ export default defineMock([
     },
   },
   {
-    url: '/app/v1/navigations/:id',
+    url: '/navigations/:id',
     method: 'DELETE',
     body: ({ params }) => {
       const id = Number(params.id)

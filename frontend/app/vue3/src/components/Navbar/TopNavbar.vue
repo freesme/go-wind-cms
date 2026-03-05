@@ -1,15 +1,18 @@
 <script setup lang="ts">
-import {h} from 'vue';
-
-import {useNavbarStore} from "@/stores";
-
+import {h, ref, onMounted} from 'vue';
+import {useRouter} from 'vue-router';
+import {useNavbarStore, useNavigationStore} from "@/stores";
+import {XIcon} from '@/plugins/xicon';
 import type {TopNavBarTabItem} from "./types";
 import TopNavbarTab from './TopNavbarTab.vue';
 
+const router = useRouter();
 const navbarStore = useNavbarStore();
+const navigationStore = useNavigationStore();
 
 const leftTabList: TopNavBarTabItem[] = []
 const rightTabList: TopNavBarTabItem[] = [];
+const navigationItems = ref<any[]>([]);
 
 /**
  * 隐藏所有的悬浮层
@@ -18,11 +21,74 @@ function hideOverlay() {
   navbarStore.setActiveOverlay(null);
 }
 
+/**
+ * 加载导航数据
+ */
+async function loadNavigation() {
+  try {
+    const res = await navigationStore.listNavigation(
+      {page: 1, pageSize: 10},
+      {location: 'header', isActive: true}
+    );
+    if (res.items && res.items.length > 0) {
+      navigationItems.value = res.items[0].items || [];
+    }
+  } catch (error) {
+    console.error('Load navigation failed:', error);
+  }
+}
+
+/**
+ * 处理导航点击
+ */
+function handleNavigate(item: any) {
+  if (item.isOpenNewTab) {
+    window.open(item.url, '_blank');
+  } else {
+    router.push(item.url);
+  }
+}
+
+
+onMounted(() => {
+  loadNavigation();
+});
 </script>
 
 <template>
   <n-space justify="space-between">
-    <n-space align="center">
+    <n-space align="center" :size="8">
+      <!-- 左侧导航菜单 -->
+      <n-menu
+        v-if="navigationItems.length > 0"
+        mode="horizontal"
+        :options="navigationItems.map(item => ({
+          key: item.id,
+          label: item.title,
+          icon: item.icon ? () => h(XIcon, { name: `carbon:${item.icon}`, size: 18 }) : undefined,
+          children: item.children && item.children.length > 0 ? item.children.map((child: any) => ({
+            key: child.id,
+            label: child.title,
+            icon: child.icon ? () => h(XIcon, { name: `carbon:${child.icon}`, size: 16 }) : undefined,
+          })) : undefined,
+        }))"
+        @update:value="(key: number) => {
+          const findItem = (items: any[]): any => {
+            for (const item of items) {
+              if (item.id === key) return item;
+              if (item.children) {
+                const found = findItem(item.children);
+                if (found) return found;
+              }
+            }
+            return null;
+          };
+          const item = findItem(navigationItems);
+          if (item) handleNavigate(item);
+        }"
+      />
+
+      <!-- 原有的 Tabs -->
       <n-tabs
         v-model:value="navbarStore.activeOverlay"
         type="bar"
@@ -89,6 +155,52 @@ function hideOverlay() {
   backdrop-filter: blur(4px);
   z-index: 9998;
   pointer-events: none;
+}
+
+// Menu 样式
+:deep(.n-menu) {
+  background: transparent;
+  color: var(--color-text-primary);
+}
+
+:deep(.n-menu-item) {
+  color: var(--color-text-primary) !important;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+}
+
+:deep(.n-menu-item:hover) {
+  color: var(--color-brand) !important;
+  background: rgba(102, 126, 234, 0.05);
+}
+
+:deep(.n-menu-item--selected) {
+  color: var(--color-brand) !important;
+  background: rgba(102, 126, 234, 0.1);
+}
+
+:deep(.n-menu-item-content) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+:deep(.n-menu-item-content__icon) {
+  display: flex;
+  align-items: center;
+}
+
+// Submenu 样式
+:deep(.n-submenu) {
+  color: var(--color-text-primary);
+}
+
+:deep(.n-submenu-children) {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 // Tabs 样式
