@@ -150,7 +150,7 @@ onMounted(async () => {
           <n-button type="primary" size="large" @click="router.push('/post')">
             {{ $t('page.home.browse_posts') }}
           </n-button>
-          <n-button size="large" @click="router.push('/about')">
+          <n-button type="default" size="large" class="learn-more-btn" @click="router.push('/about')">
             {{ $t('page.home.learn_more') }}
           </n-button>
         </div>
@@ -310,6 +310,46 @@ onMounted(async () => {
     display: flex;
     gap: 1rem;
     justify-content: center;
+
+    :deep(.n-button) {
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    :deep(.n-button--primary) {
+      background: white !important;
+      color: var(--color-brand) !important;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+
+    :deep(.n-button--default) {
+      background: transparent !important;
+      color: white !important;
+      border: 2px solid white !important;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+      }
+    }
+
+    :deep(.learn-more-btn) {
+      color: white !important;
+      border-color: white !important;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.15) !important;
+        color: white !important;
+      }
+
+      &:active {
+        background: rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+      }
+    }
   }
 }
 

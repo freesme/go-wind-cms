@@ -110,7 +110,10 @@ function handleToggleTheme() {
 
 <template>
   <div class="top-bar">
-    <n-image :src="logoImage" class="logo" alt="Logo" preview-disabled/>
+    <div class="logo-section">
+      <n-image :src="logoImage" class="logo" alt="Logo" preview-disabled/>
+      <span class="site-name">{{ $t('authentication.login.brand_title') }}</span>
+    </div>
     <SearchBar />
     <div class="actions">
       <n-space>
@@ -177,8 +180,36 @@ function handleToggleTheme() {
   color: var(--color-text-primary);
 }
 
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+
+  &:hover {
+    background-color: rgba(102, 126, 234, 0.08);
+
+    .site-name {
+      color: var(--color-brand-accent);
+    }
+  }
+}
+
 .logo {
   height: 40px;
+  flex-shrink: 0;
+}
+
+.site-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-brand);
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+  transition: color 0.2s;
 }
 
 .actions {
