@@ -57,7 +57,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <n-space justify="space-between" align="center" style="width: 100%; padding: 0 var(--space-4); height: 56px; overflow: hidden;">
+  <n-space justify="space-between" align="center" style="width: 100%; padding: 0 var(--space-4); height: 65px; overflow: hidden;">
     <n-space align="center" :size="4" style="height: 100%; overflow: hidden; display: flex; align-items: center;">
       <!-- 左侧导航菜单 -->
       <n-menu

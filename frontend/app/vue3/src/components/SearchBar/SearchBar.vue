@@ -42,6 +42,7 @@ function handleSearch() {
   margin: 0 16px;
   max-width: 600px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 44px;
 
   --n-color: var(--header-control-bg);
   --n-color-focus: var(--header-control-bg);
@@ -58,6 +59,7 @@ function handleSearch() {
     border-radius: 8px !important;
     box-shadow: inset 0 0 0 1px var(--header-control-border) !important;
     transition: all 0.3s;
+    height: 100%;
   }
 
   :deep(.n-input-wrapper:hover) {
@@ -73,6 +75,7 @@ function handleSearch() {
   :deep(.n-input__input-el) {
     color: var(--header-control-text) !important;
     font-weight: 500;
+    height: 100%;
   }
 
   :deep(.n-input__placeholder) {
@@ -94,6 +97,7 @@ function handleSearch() {
   .search-bar {
     margin: 0 12px;
     max-width: 400px;
+    height: 40px;
   }
 }
 
@@ -101,6 +105,7 @@ function handleSearch() {
   .search-bar {
     margin: 0 8px;
     max-width: 300px;
+    height: 38px;
 
     :deep(.n-input__input-el) {
       font-size: 14px;
@@ -112,6 +117,7 @@ function handleSearch() {
   .search-bar {
     margin: 0 4px;
     max-width: 200px;
+    height: 36px;
 
     :deep(.n-input__input-el) {
       font-size: 12px;

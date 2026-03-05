@@ -169,9 +169,9 @@ function handleClickLogout() {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 6px 32px;
+  padding: 10px 32px;
   color: var(--color-text-primary);
-  height: 56px;
+  height: 65px;
   overflow: hidden;
   width: 100%;
 }
@@ -183,7 +183,7 @@ function handleClickLogout() {
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: var(--radius-sm);
-  padding: 6px 10px;
+  padding: 8px 12px;
   flex-shrink: 0;
 
   &:hover {
@@ -196,7 +196,7 @@ function handleClickLogout() {
 }
 
 .logo {
-  height: 40px;
+  height: 45px;
   flex-shrink: 0;
   transition: transform 0.3s;
 
@@ -206,7 +206,7 @@ function handleClickLogout() {
 }
 
 .site-name {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
   color: var(--color-brand);
   white-space: nowrap;
@@ -320,10 +320,15 @@ function handleClickLogout() {
   .top-bar {
     padding: 12px 24px;
     gap: 12px;
+    height: 60px;
+  }
+
+  .logo {
+    height: 42px;
   }
 
   .site-name {
-    font-size: 14px;
+    font-size: 15px;
   }
 }
 
@@ -331,10 +336,11 @@ function handleClickLogout() {
   .top-bar {
     padding: 10px 16px;
     gap: 8px;
+    height: 56px;
   }
 
   .logo {
-    height: 32px;
+    height: 36px;
   }
 
   .site-name {
