@@ -157,9 +157,8 @@ const currentSettings = computed(() => {
                 <div class="platform-icon wechat">
                   <XIcon name="fa:wechat" :size="24" color="white" />
                 </div>
-                <span class="platform-name">
-                  {{ $t('settings.account.wechat_account') }}<br />
-                  (WeChat)
+                <span class="platform-link">
+                  {{ $t('settings.account.bind_wechat') }}<br />
                 </span>
               </div>
               <div class="third-party-item">
@@ -469,13 +468,27 @@ const currentSettings = computed(() => {
     z-index: -1;
   }
 
-  &:hover {
+  &:hover:not(:focus):not(:focus-visible) {
     color: #ffffff;
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 
     &::before {
       width: 300px;
       height: 300px;
+    }
+  }
+
+  /* Keep text readable in light mode while focused */
+  &:focus,
+  &:focus-visible {
+    color: var(--color-brand);
+    background: transparent;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.18);
+
+    &::before {
+      width: 0;
+      height: 0;
     }
   }
 
@@ -1004,6 +1017,7 @@ html.dark {
   .content {
     background: rgba(27, 31, 39, 0.8);
   }
+
 
   .toggle-switch {
     .slider {
