@@ -20,7 +20,11 @@
     "enterprise_security": "企业级安全",
     "security_desc": "基于角色的访问控制和数据加密",
     "advanced_analytics": "高级分析",
-    "analytics_desc": "深入的内容性能分析"
+    "analytics_desc": "深入的内容性能分析",
+    "api_integration": "API 集成",
+    "api_integration_desc": "RESTful API 支持，轻松集成第三方服务",
+    "real_time_collaboration": "实时协作",
+    "real_time_collaboration_desc": "团队成员实时协同编辑和评论"
   },
   "posts": {
     "posts_list": "文章列表",

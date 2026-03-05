@@ -17,6 +17,9 @@ importers:
       '@codemirror/view':
         specifier: ^6.39.16
         version: 6.39.16
+      '@iconify/vue':
+        specifier: ^5.0.0
+        version: 5.0.0(vue@3.5.29(typescript@5.9.3))
       '@tiptap/core':
         specifier: ^3.20.0
         version: 3.20.0(@tiptap/pm@3.20.0)
@@ -1586,6 +1589,11 @@ packages:
 
   '@iconify/utils@3.1.0':
     resolution: {integrity: sha512-Zlzem1ZXhI1iHeeERabLNzBHdOa4VhQbqAcOQaMKuTuyZCpwKbC2R4Dd0Zo3g9EAc+Y4fiarO8HIHRAth7+skw==}
+
+  '@iconify/vue@5.0.0':
+    resolution: {integrity: sha512-C+KuEWIF5nSBrobFJhT//JS87OZ++QDORB6f2q2Wm6fl2mueSTpFBeBsveK0KW9hWiZ4mNiPjsh6Zs4jjdROSg==}
+    peerDependencies:
+      vue: '>=3'
 
   '@intlify/bundle-utils@8.0.0':
     resolution: {integrity: sha512-1B++zykRnMwQ+20SpsZI1JCnV/YJt9Oq7AGlEurzkWJOFtFAVqaGc/oV36PBRYeiKnTbY9VYfjBimr2Vt42wLQ==}
@@ -7713,6 +7721,11 @@ snapshots:
       '@antfu/install-pkg': 1.1.0
       '@iconify/types': 2.0.0
       mlly: 1.8.0
+
+  '@iconify/vue@5.0.0(vue@3.5.29(typescript@5.9.3))':
+    dependencies:
+      '@iconify/types': 2.0.0
+      vue: 3.5.29(typescript@5.9.3)
 
   '@intlify/bundle-utils@8.0.0(vue-i18n@11.2.8(vue@3.5.29(typescript@5.9.3)))':
     dependencies:

@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { ref, onMounted, computed } from 'vue'
 import { usePostStore, useCategoryStore } from '@/stores/modules/app'
 import { $t, i18n } from '@/locales'
+import {XIcon} from "@/plugins/xicon";
 
 definePage({
   name: 'home',
@@ -95,24 +96,34 @@ const features = computed(() => {
 
   return [
     {
-      icon: 'content-management',
+      icon: 'carbon:document',
       title: $t('page.home.flexible_content_management'),
       description: $t('page.home.content_management_desc'),
     },
     {
-      icon: 'multi-tenant',
+      icon: 'carbon:cloud',
       title: $t('page.home.multi_tenant_architecture'),
       description: $t('page.home.multi_tenant_desc'),
     },
     {
-      icon: 'security',
+      icon: 'carbon:security',
       title: $t('page.home.enterprise_security'),
       description: $t('page.home.security_desc'),
     },
     {
-      icon: 'chart-area',
+      icon: 'carbon:analytics',
       title: $t('page.home.advanced_analytics'),
       description: $t('page.home.analytics_desc'),
+    },
+    {
+      icon: 'carbon:api',
+      title: $t('page.home.api_integration'),
+      description: $t('page.home.api_integration_desc'),
+    },
+    {
+      icon: 'carbon:collaborate',
+      title: $t('page.home.real_time_collaboration'),
+      description: $t('page.home.real_time_collaboration_desc'),
     },
   ]
 })
@@ -246,7 +257,7 @@ onMounted(async () => {
       <div class="features-grid">
         <div v-for="feature in features" :key="feature.title" class="feature-card">
           <div class="feature-icon">
-            <div :class="`i-carbon-${feature.icon}`" />
+            <XIcon :name="feature.icon" :size="48" />
           </div>
           <h3>{{ feature.title }}</h3>
           <p>{{ feature.description }}</p>
@@ -268,11 +279,10 @@ onMounted(async () => {
   padding: 4rem 2rem;
   text-align: center;
   max-width: 1200px;
-  margin: 0 auto;
   background: linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-accent) 100%);
   color: white;
   border-radius: var(--radius-lg);
-  margin-top: 2rem;
+  margin: 2rem auto 0;
 
   .hero-content {
     animation: fadeInUp 0.8s ease-out;

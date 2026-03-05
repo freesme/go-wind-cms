@@ -20,7 +20,11 @@
     "enterprise_security": "Enterprise Security",
     "security_desc": "Role-based access control and data encryption",
     "advanced_analytics": "Advanced Analytics",
-    "analytics_desc": "In-depth insights into your content performance"
+    "analytics_desc": "In-depth insights into your content performance",
+    "api_integration": "API Integration",
+    "api_integration_desc": "RESTful API support for seamless third-party integration",
+    "real_time_collaboration": "Real-time Collaboration",
+    "real_time_collaboration_desc": "Team members can edit and comment in real-time"
   },
   "posts": {
     "posts_list": "Posts List",
