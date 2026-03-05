@@ -20,6 +20,14 @@ const categoryStore = useCategoryStore()
 const latestPosts = ref<any[]>([])
 const featuredPosts = ref<any[]>([])
 const categories = ref<any[]>([])
+const popularTags = ref<any[]>([
+  { id: 1, name: 'Go 语言', color: 'hsl(240, 100%, 50%)' },
+  { id: 2, name: 'Vue3', color: 'hsl(120, 100%, 50%)' },
+  { id: 3, name: 'CMS', color: 'hsl(40, 100%, 50%)' },
+  { id: 4, name: '前端开发', color: 'hsl(280, 100%, 50%)' },
+  { id: 5, name: '后端架构', color: 'hsl(0, 100%, 50%)' },
+  { id: 6, name: '性能优化', color: 'hsl(160, 100%, 50%)' },
+])
 const loading = ref(false)
 
 // 加载最新文章
@@ -253,6 +261,21 @@ onMounted(async () => {
           </div>
         </div>
       </n-spin>
+
+      <!-- Popular Tags Section -->
+      <div class="popular-tags-container">
+        <h3 class="tags-title">{{ $t('page.home.popular_tags') }}</h3>
+        <div class="tags-grid">
+          <div
+            v-for="tag in popularTags"
+            :key="tag.id"
+            class="tag-item"
+            :style="{ '--tag-color': tag.color }"
+          >
+            <span class="tag-label">{{ tag.name }}</span>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Featured Posts Section -->
@@ -839,13 +862,22 @@ onMounted(async () => {
   padding: 4rem 0;
   background: var(--color-surface);
 
+  .section-header {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 2rem;
+    margin-bottom: 2rem;
+  }
+
   .categories-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
+    margin-bottom: 3rem;
   }
 
   .category-card {
@@ -989,6 +1021,11 @@ onMounted(async () => {
         letter-spacing: 0.3px;
         transition: color 0.3s;
         word-break: break-word;
+
+        // 浅色模式下优化文字颜色
+        @media (prefers-color-scheme: light) {
+          color: #1f2937 !important;
+        }
       }
 
       .post-count {
@@ -996,6 +1033,11 @@ onMounted(async () => {
         color: var(--color-text-secondary);
         font-weight: 600;
         letter-spacing: 0.2px;
+
+        // 浅色模式下优化文字颜色
+        @media (prefers-color-scheme: light) {
+          color: #6b7280 !important;
+        }
       }
     }
 
@@ -1016,6 +1058,16 @@ onMounted(async () => {
       border-left: 3px solid hsl(var(--card-hue), 70%, 60%);
       color: hsl(var(--card-hue), 70%, 50%);
       font-size: 0.8rem;
+
+      // 浅色模式下优化文字颜色
+      @media (prefers-color-scheme: light) {
+        color: hsl(var(--card-hue), 70%, 45%) !important;
+        background: linear-gradient(
+          135deg,
+          hsla(var(--card-hue), 70%, 60%, 0.15) 0%,
+          hsla(var(--card-hue), 60%, 70%, 0.12) 100%
+        ) !important;
+      }
       font-weight: 600;
       width: fit-content;
       white-space: nowrap;
@@ -1027,6 +1079,68 @@ onMounted(async () => {
       opacity: 1;
       transform: scale(1.05);
       box-shadow: 0 4px 8px hsla(var(--card-hue), 70%, 60%, 0.2);
+    }
+  }
+}
+
+// Popular Tags Section
+.popular-tags-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+
+  .tags-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 1.5rem 0;
+    color: var(--color-text-primary);
+
+    @media (prefers-color-scheme: light) {
+      color: #1f2937 !important;
+    }
+  }
+
+  .tags-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .tag-item {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.8) 0%,
+      rgba(255, 255, 255, 0.6) 100%
+    );
+    border: 1.5px solid;
+    border-color: var(--tag-color);
+    border-radius: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: var(--tag-color);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+      .tag-label {
+        color: white !important;
+      }
+    }
+  }
+
+  .tag-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--tag-color);
+    transition: color 0.3s ease;
+
+    @media (prefers-color-scheme: light) {
+      color: var(--tag-color);
     }
   }
 }
@@ -1680,6 +1794,32 @@ html.dark {
       }
     }
   }
+
+  // 热门标签区域暗黑模式优化
+  .popular-tags-container {
+    .tags-title {
+      color: #f0f1f3 !important;
+    }
+
+    .tag-item {
+      background: linear-gradient(
+        135deg,
+        rgba(75, 90, 120, 0.5) 0%,
+        rgba(55, 70, 100, 0.5) 100%
+      );
+      border-color: var(--tag-color);
+
+      &:hover {
+        background: var(--tag-color);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    .tag-label {
+      color: var(--tag-color);
+      filter: brightness(1.5);
+    }
+  }
 }
 
 // Responsive Design
@@ -1767,6 +1907,19 @@ html.dark {
     grid-template-columns: 1fr;
     gap: 1.5rem;
     padding: 0 1.5rem;
+  }
+
+  .popular-tags-container {
+    padding: 0 1.5rem;
+
+    .tags-grid {
+      gap: 0.75rem;
+    }
+
+    .tag-item {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
+    }
   }
 
   .category-card {
