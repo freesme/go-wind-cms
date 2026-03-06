@@ -227,7 +227,8 @@ onMounted(async () => {
         </n-button>
       </div>
       <n-spin :show="loading">
-        <div class="categories-grid">
+        <!-- Desktop: Grid Layout (4 columns) -->
+        <div class="categories-grid desktop-grid">
           <div
             v-for="category in categories"
             :key="category.id"
@@ -259,6 +260,60 @@ onMounted(async () => {
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- Mobile: Carousel (走马灯) -->
+        <div class="categories-carousel mobile-carousel">
+          <n-carousel
+            :autoplay="true"
+            :interval="5000"
+            :show-arrow="true"
+            :mouse-wheel="true"
+            :touchable="true"
+            :slides-per-view="1.5"
+            :centered-slides="true"
+            :scroll-eventListener="false"
+            class="carousel-container"
+          >
+            <template
+              v-for="category in categories"
+              :key="category.id"
+            >
+              <div
+                class="carousel-item"
+                @click="handleViewCategory(category.id)"
+              >
+                <div
+                  class="category-card carousel-card"
+                  :style="{ '--card-hue': (category.id % 6) * 60 }"
+                >
+                  <!-- Card Background Gradient -->
+                  <div class="category-card-bg"></div>
+
+                  <!-- Content -->
+                  <div class="category-card-content">
+                    <div class="category-card-header">
+                      <div class="category-icon">
+                        <XIcon :name="category.icon?.includes(':') ? category.icon : `carbon:${category.icon || 'folder'}`" :size="48"/>
+                      </div>
+                      <div class="category-info">
+                        <h3>{{ getCategoryName(category) }}</h3>
+                        <span class="post-count">
+                          {{ $t('page.home.article_count', {count: category.postCount || 0}) }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <!-- Updated Badge -->
+                    <div class="category-badge">
+                      <XIcon name="carbon:time" :size="14"/>
+                      <span>{{ getUpdatedDaysAgo(3) }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </n-carousel>
         </div>
       </n-spin>
 
@@ -1052,18 +1107,77 @@ onMounted(async () => {
 
   .categories-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
     max-width: 1200px;
-    margin: 0 auto;
     padding: 0 2rem;
+    margin: 0 auto 3rem;
+  }
+
+  // 走马灯轮播样式
+  .categories-carousel {
+    display: none; // 默认隐藏，手机端显示
     margin-bottom: 3rem;
+
+    :deep(.n-carousel) {
+      .n-carousel__viewport {
+        border-radius: 16px;
+      }
+
+      .n-carousel__arrow {
+        color: var(--color-brand);
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        transition: all 0.3s;
+
+        &:hover {
+          background: var(--color-brand);
+          color: white;
+          transform: scale(1.1);
+        }
+      }
+
+      .n-carousel__dots {
+        bottom: -40px;
+      }
+
+      .n-carousel__dot {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 50%;
+        transition: all 0.3s;
+
+        &.n-carousel__dot--active {
+          background: var(--color-brand);
+        }
+
+        &:hover {
+          background: var(--color-brand);
+        }
+      }
+    }
+
+    .carousel-item {
+      width: calc(100vw - 2rem);
+      padding: 0 0.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .carousel-card {
+      margin: 0;
+      width: 100%;
+    }
+  }
+
+  // 桌面网格显示
+  .desktop-grid {
+    display: grid !important;
   }
 
   .category-card {
     display: flex;
     flex-direction: column;
-    padding: 1.75rem;
+    padding: 1.5rem;
     background: var(--color-card-bg, linear-gradient(135deg, #ffffff 0%, #f9fafb 100%));
     border: 1px solid var(--color-card-border, #e5e7eb);
     border-radius: 16px;
@@ -1074,7 +1188,7 @@ onMounted(async () => {
     box-shadow:
       0 2px 8px var(--color-card-shadow, rgba(0, 0, 0, 0.06)),
       0 1px 3px rgba(0, 0, 0, 0.04);
-    min-height: 240px;
+    min-height: 200px;
     height: 100%;
 
     // 添加轻微的呼吸动画
@@ -2064,7 +2178,12 @@ html.dark {
     padding: 0 1.5rem;
   }
 
-  .categories-grid,
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 0 1.5rem;
+  }
+
   .featured-grid,
   .posts-grid,
   .features-grid {
@@ -2096,6 +2215,19 @@ html.dark {
 }
 
 @media (max-width: 768px) {
+  // 隐藏桌面网格，显示手机走马灯
+  .categories-grid.desktop-grid {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .categories-carousel.mobile-carousel {
+    display: block !important;
+    visibility: visible !important;
+  }
+
   .hero {
     padding: 2rem 1.5rem;
     min-height: 220px;
@@ -2143,7 +2275,12 @@ html.dark {
     }
   }
 
-  .categories-grid,
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 0 1.5rem;
+  }
+
   .featured-grid,
   .posts-grid {
     grid-template-columns: 1fr;
@@ -2224,7 +2361,12 @@ html.dark {
     }
   }
 
-  .categories-grid,
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    padding: 0 1rem;
+  }
+
   .featured-grid,
   .posts-grid,
   .features-grid {
@@ -2233,8 +2375,9 @@ html.dark {
   }
 
   .category-card {
-    padding: 1rem;
-    gap: 1rem;
+    padding: 1.25rem 1rem;
+    gap: 0.75rem;
+    min-height: 160px;
 
     .category-icon {
       width: 45px;
@@ -2244,12 +2387,17 @@ html.dark {
 
     .category-info {
       h3 {
-        font-size: 1rem;
+        font-size: 0.95rem;
       }
 
       .post-count {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
       }
+    }
+
+    .update-badge {
+      padding: 0.25rem 0.6rem;
+      font-size: 0.7rem;
     }
   }
 
