@@ -7,6 +7,7 @@ import {
   PersonCircleOutline,
   MoonOutline,
   SunnyOutline,
+  LanguageOutline,
 } from '@vicons/ionicons5';
 import {UserCircle} from '@vicons/fa';
 
@@ -183,7 +184,12 @@ function handleClickLogo() {
         <n-dropdown trigger="hover" size="huge" :options="languageColumns"
                     @select="handleSelectLanguage">
           <n-button round class="lang-btn" aria-label="Language">
-            {{ languageLabel }}
+            <template #icon>
+              <n-icon>
+                <LanguageOutline/>
+              </n-icon>
+            </template>
+            <span class="lang-text">{{ languageLabel }}</span>
           </n-button>
         </n-dropdown>
         <n-button
@@ -197,7 +203,7 @@ function handleClickLogo() {
               <component :is="isDark ? SunnyOutline : MoonOutline"/>
             </n-icon>
           </template>
-          {{ isDark ? $t('navbar.top.light_mode') : $t('navbar.top.dark_mode') }}
+          <span class="theme-text">{{ isDark ? $t('navbar.top.light_mode') : $t('navbar.top.dark_mode') }}</span>
         </n-button>
       </n-space>
     </div>
@@ -305,26 +311,21 @@ function handleClickLogo() {
 
 .lang-btn,
 .theme-btn {
-  --n-color: var(--header-control-bg);
-  --n-color-hover: rgba(102, 126, 234, 0.08);
-  --n-color-pressed: rgba(102, 126, 234, 0.12);
-  --n-border: 1px solid var(--header-control-border);
-  --n-border-hover: 1px solid var(--color-brand);
-  --n-border-pressed: 1px solid var(--color-brand);
-  --n-text-color: var(--header-control-text);
-  --n-text-color-hover: var(--color-brand);
-  --n-text-color-pressed: var(--color-brand);
   font-weight: 500;
-  font-size: 14px;
   transition: all 0.3s;
-  min-width: 80px;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   height: 40px !important;
+  gap: 4px !important;
+  border: 1px solid var(--color-border);
+  background: var(--header-control-bg);
+  color: var(--header-control-text);
 
   &:hover {
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+    background: var(--header-control-hover-bg);
+    color: var(--color-brand);
+    border-color: var(--color-brand);
   }
 
   :deep(.n-button__content) {
@@ -333,7 +334,6 @@ function handleClickLogo() {
     justify-content: center;
     gap: 4px;
     line-height: 1;
-    color: inherit !important;
   }
 
   :deep(.n-icon) {
@@ -341,6 +341,12 @@ function handleClickLogo() {
     align-items: center;
     justify-content: center;
   }
+}
+
+.lang-text,
+.theme-text {
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .header-login-btn,
@@ -456,52 +462,20 @@ function handleClickLogo() {
 
   .lang-btn,
   .theme-btn {
-    min-width: 36px !important;
-    width: auto !important;
     height: 36px !important;
-    padding: 0 8px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-
-    :deep(.n-button__content) {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      line-height: 1;
-      gap: 4px;
-      font-size: 13px !important;
-      color: inherit !important;
-    }
-
-    :deep(.n-icon) {
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-  }
-
-  .lang-btn {
-    --n-text-color: var(--header-control-text) !important;
-    --n-text-color-hover: var(--color-brand) !important;
-    --n-text-color-pressed: var(--color-brand) !important;
-
-    :deep(.n-button__content) {
-      color: var(--header-control-text) !important;
-    }
+    padding: 0 12px !important;
+    font-size: 13px !important;
   }
 
   .theme-btn {
-    min-width: 36px !important;
-    width: 36px !important;
-    padding: 0 !important;
-
-    :deep(.n-button__content) {
-      font-size: 0 !important;
+    .theme-text {
+      display: none;
     }
+  }
+
+  .lang-text,
+  .theme-text {
+    font-size: 13px;
   }
 
   .header-login-btn,
@@ -573,25 +547,15 @@ function handleClickLogo() {
     width: 32px !important;
     height: 32px !important;
     padding: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-
-    :deep(.n-button__content) {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0 !important;
-      height: 100%;
-      line-height: 1;
-    }
 
     :deep(.n-icon) {
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      font-size: 16px;
     }
+  }
+
+  .lang-text,
+  .theme-text {
+    display: none;
   }
 
   .icon-btn {
