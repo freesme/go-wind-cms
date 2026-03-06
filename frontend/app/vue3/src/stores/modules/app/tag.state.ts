@@ -3,11 +3,35 @@ import {defineStore} from 'pinia';
 import {
   createTagServiceClient,
 } from '@/api/generated/app/service/v1';
-import {requestClientRequestHandler,} from "@/transport/rpc/request";
-import {makeUpdateMask} from "@/transport/rpc";
+import {type Paging, requestClientRequestHandler,} from "@/transport/rpc/request";
+import {makeOrderBy, makeQueryString, makeUpdateMask} from "@/transport/rpc";
+import {useUserStore} from "@/stores";
 
 export const useTagStore = defineStore('tag', () => {
   const service = createTagServiceClient(requestClientRequestHandler);
+  const userStore = useUserStore();
+
+  /**
+   * 查询标签列表
+   */
+  async function listTag(
+    paging?: Paging,
+    formValues?: null | object,
+    fieldMask?: null | string,
+    orderBy?: null | string[],
+  ) {
+    const noPaging =
+      paging?.page === undefined && paging?.pageSize === undefined;
+    // @ts-ignore proto generated code is error.
+    return await service.ListTag({
+      fieldMask,
+      orderBy: makeOrderBy(orderBy),
+      query: makeQueryString(formValues, userStore.isTenantUser()),
+      page: paging?.page,
+      pageSize: paging?.pageSize,
+      noPaging,
+    });
+  }
 
   /**
    * 获取标签
@@ -54,6 +78,7 @@ export const useTagStore = defineStore('tag', () => {
 
   return {
     $reset,
+    listTag,
     getTag,
     createTag,
     updateTag,

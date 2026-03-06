@@ -205,7 +205,9 @@ function handleClickLogo() {
               <component :is="isDark ? SunnyOutline : MoonOutline"/>
             </n-icon>
           </template>
-          <span class="theme-text">{{ isDark ? $t('navbar.top.light_mode') : $t('navbar.top.dark_mode') }}</span>
+          <span class="theme-text">{{
+              isDark ? $t('navbar.top.light_mode') : $t('navbar.top.dark_mode')
+            }}</span>
         </n-button>
       </n-space>
     </div>

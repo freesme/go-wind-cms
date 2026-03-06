@@ -23,7 +23,7 @@ class PreferenceManager {
   private initialPreferences: Preferences = defaultPreferences;
   private isInitialized: boolean = false;
   private readonly savePreferences: (preference: Preferences) => void;
-  private state: Preferences = reactive<Preferences>(defaultPreferences);
+  private readonly state: Preferences = reactive<Preferences>(defaultPreferences);
 
   constructor() {
     this.cache = new StorageManager({prefix: import.meta.env.VITE_APP_NAMESPACE});
