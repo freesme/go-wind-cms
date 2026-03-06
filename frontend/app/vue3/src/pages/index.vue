@@ -390,6 +390,7 @@ onMounted(async () => {
     bottom: 0;
     overflow: hidden;
     z-index: 0;
+    pointer-events: none; // 防止背景元素阻挡按钮点击
 
     .hero-gradient-bg {
       position: absolute;
@@ -552,9 +553,10 @@ onMounted(async () => {
   .hero-content {
     animation: fadeInUp 0.8s ease-out;
     position: relative;
-    z-index: 1;
+    z-index: 100 !important; // 使用最高 z-index
     max-width: 1200px;
     margin: 0 auto;
+    pointer-events: auto !important; // 确保内容区域可交互
   }
 
   .hero-title {
@@ -606,6 +608,22 @@ onMounted(async () => {
     justify-content: center;
     flex-wrap: wrap;
     animation: fadeInUp 0.8s ease-out 0.6s both;
+    position: relative;
+    z-index: 100 !important; // 使用最高 z-index
+    pointer-events: auto !important; // 确保按钮区域可点击
+
+    :deep(.n-button) {
+      position: relative;
+      z-index: 100 !important; // 确保按钮在最上层
+      pointer-events: auto !important; // 确保按钮本身可点击
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      pointer-events: auto !important; // 确保按钮可点击
+      position: relative;
+      z-index: 100 !important;
+    }
 
     .btn-primary {
       :deep(.n-button) {
@@ -633,6 +651,7 @@ onMounted(async () => {
           height: 100%;
           background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
           transition: left 0.5s;
+          pointer-events: none; // 防止伪元素阻挡点击
         }
 
         &:hover {
@@ -681,6 +700,7 @@ onMounted(async () => {
           height: 100%;
           background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
           transition: left 0.5s;
+          pointer-events: none; // 防止伪元素阻挡点击
         }
 
         &:hover {
