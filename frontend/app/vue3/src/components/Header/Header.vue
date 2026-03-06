@@ -13,12 +13,7 @@
 .fixed-top {
   width: 100%;
   z-index: 1000;
-  background: linear-gradient(
-    to bottom,
-    var(--header-bg) 0%,
-    var(--header-bg) 90%,
-    rgba(255, 255, 255, 0)
-  );
+  background: var(--header-bg);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
   color: var(--color-text-primary);

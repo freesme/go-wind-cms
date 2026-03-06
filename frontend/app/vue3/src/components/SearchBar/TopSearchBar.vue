@@ -216,9 +216,9 @@ function handleClickLogo() {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 10px 32px;
+  padding: 12px 32px;
   color: var(--color-text-primary);
-  height: 65px;
+  height: 75px;
   overflow: hidden;
   width: 100%;
 }
@@ -243,7 +243,7 @@ function handleClickLogo() {
 }
 
 .logo {
-  height: 45px;
+  height: 55px;
   flex-shrink: 0;
   transition: transform 0.3s;
 
@@ -253,7 +253,7 @@ function handleClickLogo() {
 }
 
 .site-name {
-  font-size: 17px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--color-brand);
   white-space: nowrap;
@@ -412,34 +412,34 @@ function handleClickLogo() {
   .top-bar {
     padding: 12px 24px;
     gap: 12px;
-    height: 60px;
+    height: 70px;
   }
 
   .logo {
-    height: 42px;
+    height: 50px;
   }
 
   .site-name {
-    font-size: 15px;
+    font-size: 18px;
   }
 }
 
 @media (max-width: 768px) {
   .top-bar {
-    padding: 8px 12px;
-    gap: 6px;
-    height: 50px;
+    padding: 10px 12px;
+    gap: 8px;
+    height: 60px;
   }
 
   .logo {
-    height: 32px;
+    height: 40px;
   }
 
   .site-name {
-    font-size: 12px;
+    font-size: 15px;
     display: block;
     flex-shrink: 0;
-    max-width: 80px;
+    max-width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -505,23 +505,23 @@ function handleClickLogo() {
 
 @media (max-width: 480px) {
   .top-bar {
-    padding: 6px 8px;
-    gap: 4px;
-    height: 48px;
+    padding: 8px 8px;
+    gap: 6px;
+    height: 56px;
   }
 
   .logo {
-    height: 28px;
+    height: 36px;
   }
 
   .logo-section {
     padding: 4px 8px;
-    gap: 6px;
+    gap: 8px;
   }
 
   .site-name {
-    font-size: 11px;
-    max-width: 60px;
+    font-size: 14px;
+    max-width: 80px;
   }
 
   .actions {

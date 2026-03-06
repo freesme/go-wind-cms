@@ -424,7 +424,7 @@ onMounted(async () => {
 
 // Hero Section
 .hero {
-  padding: 3rem 2rem;
+  padding: 4rem 2rem 3rem;
   text-align: center;
   max-width: 100%;
   background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);

@@ -10,7 +10,7 @@
 
 :root {
   --layout-max-width: 1230px;
-  --layout-header-height: 130px;
+  --layout-header-height: 140px;
 
   --space-1: 4px;
   --space-2: 8px;
@@ -118,6 +118,25 @@ body {
   font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   width: 100%;
   overflow-x: hidden;
+}
+
+// 响应式 Header 高度
+@media (max-width: 1024px) {
+  :root {
+    --layout-header-height: 130px; // TopSearchBar 70px + TopNavbar 60px
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --layout-header-height: 110px; // TopSearchBar 60px + TopNavbar 50px
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --layout-header-height: 104px; // TopSearchBar 56px + TopNavbar 48px
+  }
 }
 
 /* legacy less tokens kept for compatibility */

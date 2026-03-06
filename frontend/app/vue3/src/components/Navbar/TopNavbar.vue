@@ -443,21 +443,39 @@ onMounted(() => {
     height: 50px;
     overflow-x: auto;
     overflow-y: hidden;
-    gap: 2px;
+    gap: 4px;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
 
-    // 隐藏滚动条
-    scrollbar-width: none;
+    // 显示细滚动条
+    scrollbar-width: thin;
+    scrollbar-color: rgba(102, 126, 234, 0.2) transparent;
 
     &::-webkit-scrollbar {
-      display: none;
+      height: 3px;
+      display: block;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(102, 126, 234, 0.2);
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: rgba(102, 126, 234, 0.4);
     }
   }
 
   .navbar-left {
-    gap: 2px;
+    gap: 4px;
     flex: 1;
     overflow-x: auto;
     overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
 
     scrollbar-width: none;
 
@@ -467,41 +485,43 @@ onMounted(() => {
   }
 
   .navbar-right {
-    gap: 2px;
+    gap: 4px;
     flex-shrink: 0;
   }
 
   :deep(.n-menu-item),
   :deep(.n-submenu-title),
   :deep(.n-tabs-tab) {
-    padding: 6px 8px !important;
-    font-size: 12px;
-    min-height: 28px;
-    height: 28px;
+    padding: 8px 12px !important;
+    font-size: 13px;
+    min-height: 32px;
+    height: 32px;
     flex-shrink: 0;
+    white-space: nowrap;
   }
 
   :deep(.n-menu-item-content) {
-    gap: 2px;
+    gap: 6px;
   }
 
   :deep(.n-menu-item-content__icon) {
     width: 16px;
     height: 16px;
-    font-size: 14px;
+    font-size: 16px;
     flex-shrink: 0;
   }
 
   :deep(.n-menu-item-content__label) {
     white-space: nowrap;
-    font-size: 12px;
+    font-size: 13px;
     flex-shrink: 0;
+    font-weight: 500;
   }
 
   :deep(.n-submenu-children .n-menu-item) {
-    padding: 6px 10px !important;
-    font-size: 11px;
-    min-height: 28px;
+    padding: 8px 12px !important;
+    font-size: 13px;
+    min-height: 32px;
   }
 
   :deep(.n-tabs-bar) {
@@ -511,22 +531,56 @@ onMounted(() => {
 
 @media (max-width: 480px) {
   .navbar-wrapper {
-    padding: 0 var(--space-1);
-    height: 40px;
-    gap: 0;
+    padding: 0 var(--space-2);
+    height: 48px;
+    gap: 4px;
     overflow-x: auto;
     overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
 
-    scrollbar-width: none;
+    // 显示滚动条，让用户知道可以滚动
+    scrollbar-width: thin;
+    scrollbar-color: rgba(102, 126, 234, 0.3) transparent;
 
     &::-webkit-scrollbar {
-      display: none;
+      height: 3px;
+      display: block;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(102, 126, 234, 0.3);
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: rgba(102, 126, 234, 0.5);
+    }
+
+    // 添加渐变指示器提示可以滚动
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 3px;
+      width: 30px;
+      background: linear-gradient(to left, var(--header-bg) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 1;
     }
   }
 
   .navbar-left {
-    gap: 0;
+    gap: 4px;
     flex-shrink: 0;
+    min-width: min-content;
   }
 
   .navbar-right {
@@ -536,30 +590,43 @@ onMounted(() => {
   :deep(.n-menu-item),
   :deep(.n-submenu-title),
   :deep(.n-tabs-tab) {
-    padding: 4px 6px !important;
-    font-size: 11px;
-    min-height: 24px;
-    height: 24px;
+    padding: 8px 12px !important;
+    font-size: 13px;
+    min-height: 36px;
+    height: 36px;
     flex-shrink: 0;
+    border-radius: 18px !important;
+    white-space: nowrap;
+  }
+
+  :deep(.n-menu-item-content) {
+    gap: 6px;
   }
 
   :deep(.n-menu-item-content__label) {
-    display: none;
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
   }
 
   :deep(.n-menu-item-content__icon) {
-    margin: 0 !important;
-    font-size: 12px;
+    font-size: 16px;
     flex-shrink: 0;
   }
 
   :deep(.n-submenu-children .n-menu-item) {
-    padding: 4px 8px !important;
-    font-size: 10px;
+    padding: 8px 12px !important;
+    font-size: 13px;
+    min-height: 36px;
+  }
+
+  :deep(.n-submenu-children .n-menu-item-content__label) {
+    display: inline-block !important;
   }
 
   :deep(.n-tabs-bar) {
-    height: 1px;
+    height: 2px;
   }
 }
 </style>
