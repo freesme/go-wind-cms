@@ -77,7 +77,14 @@ useLanguageChangeEffect(loadCategories, {
 
     <!-- Content Section -->
     <div class="page-container">
-      <n-spin :show="loading">
+      <!-- Loading Skeleton -->
+      <div v-if="loading" class="categories-grid">
+        <div v-for="i in 8" :key="i" class="category-card">
+          <n-skeleton height="280px" />
+        </div>
+      </div>
+      <!-- Loaded Content -->
+      <div v-else>
         <div v-if="categories.length > 0" class="categories-grid">
           <div
             v-for="category in categories"
@@ -111,7 +118,7 @@ useLanguageChangeEffect(loadCategories, {
             <span class="i-carbon:folder-blank" style="font-size: 64px;" />
           </template>
         </n-empty>
-      </n-spin>
+      </div>
     </div>
   </div>
 </template>

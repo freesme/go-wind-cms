@@ -188,7 +188,14 @@ watch(() => route.query.category, (newVal) => {
 
       <!-- Posts Grid -->
       <main class="main-content">
-        <n-spin :show="loading">
+        <!-- Loading Skeleton -->
+        <div v-if="loading" class="posts-grid">
+          <div v-for="i in 12" :key="i" class="post-card">
+            <n-skeleton height="380px" />
+          </div>
+        </div>
+        <!-- Loaded Content -->
+        <div v-else>
           <!-- Results Count -->
           <div v-if="posts.length > 0" class="results-info">
             <span>{{ $t('page.posts.found') }} <strong>{{
@@ -250,7 +257,7 @@ watch(() => route.query.category, (newVal) => {
               @update:page-size="handlePageSizeChange"
             />
           </div>
-        </n-spin>
+        </div>
       </main>
     </div>
   </div>

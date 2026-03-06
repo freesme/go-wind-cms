@@ -307,8 +307,8 @@ onUnmounted(() => {
       </div>
     </section>
 
-    <!-- Featured Posts Section (推荐阅读) - 上移到Categories之前 -->
-    <section v-if="featuredPosts.length > 0" class="featured-section scroll-reveal">
+    <!-- Featured Posts Section (推荐阅读) - 上移到 Categories 之前 -->
+    <section v-if="featuredPosts.length > 0 || loading" class="featured-section scroll-reveal">
       <div class="section-header">
         <h2>
           <XIcon name="carbon:star-filled" :size="28"
@@ -319,8 +319,23 @@ onUnmounted(() => {
           {{ $t('page.home.view_all') }} →
         </n-button>
       </div>
-      <n-spin :show="loading">
-        <div class="featured-grid">
+      <!-- Loading Skeleton -->
+      <div v-if="loading" class="featured-grid">
+        <div v-for="i in 3" :key="i" class="featured-card">
+          <n-skeleton height="220px" />
+          <div class="featured-content" style="padding: 24px;">
+            <n-skeleton :width="'80%'" size="medium" style="margin-bottom: 12px;" />
+            <n-skeleton :width="'90%'" size="small" style="margin-bottom: 16px;" />
+            <div class="featured-meta" style="display: flex; gap: 12px;">
+              <n-skeleton :width="60" size="small" />
+              <n-skeleton :width="60" size="small" />
+              <n-skeleton :width="60" size="small" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Loaded Content -->
+      <div v-else class="featured-grid">
           <div
             v-for="post in featuredPosts"
             :key="post.id"
@@ -356,7 +371,6 @@ onUnmounted(() => {
             </div>
           </div>
         </div>
-      </n-spin>
 
       <!-- Scroll Indicator -->
       <div class="scroll-indicator">
@@ -377,7 +391,14 @@ onUnmounted(() => {
           {{ $t('page.home.view_all') }} →
         </n-button>
       </div>
-      <n-spin :show="loading">
+      <!-- Loading Skeleton -->
+      <div v-if="loading" class="categories-grid desktop-grid">
+        <div v-for="i in 8" :key="i" class="category-card">
+          <n-skeleton height="140px" />
+        </div>
+      </div>
+      <!-- Loaded Content -->
+      <div v-else>
         <!-- Desktop: Grid Layout (4 columns) -->
         <div class="categories-grid desktop-grid">
           <div
@@ -470,7 +491,7 @@ onUnmounted(() => {
             </template>
           </n-carousel>
         </div>
-      </n-spin>
+      </div>
 
       <!-- Popular Tags Section -->
       <div class="popular-tags-container">
@@ -497,8 +518,23 @@ onUnmounted(() => {
           {{ $t('page.home.view_all') }} →
         </n-button>
       </div>
-      <n-spin :show="loading">
-        <div class="posts-grid">
+      <!-- Loading Skeleton -->
+      <div v-if="loading" class="posts-grid">
+        <div v-for="i in 6" :key="i" class="post-card">
+          <n-skeleton height="220px" />
+          <div style="padding: 24px;">
+            <n-skeleton :width="'80%'" size="medium" style="margin-bottom: 12px;" />
+            <n-skeleton :width="'90%'" size="small" style="margin-bottom: 16px;" />
+            <div style="display: flex; gap: 12px;">
+              <n-skeleton :width="60" size="small" />
+              <n-skeleton :width="60" size="small" />
+              <n-skeleton :width="60" size="small" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Loaded Content -->
+      <div v-else class="posts-grid">
           <div
             v-for="post in latestPosts"
             :key="post.id"
@@ -521,7 +557,6 @@ onUnmounted(() => {
             </div>
           </div>
         </div>
-      </n-spin>
     </section>
 
     <!-- Features Section -->

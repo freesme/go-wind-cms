@@ -301,8 +301,46 @@ watch(() => displayContent.value, () => {
 
 <template>
   <div class="post-detail-page">
-    <n-spin :show="loading">
-      <div v-if="post" class="post-container">
+    <!-- Loading State - Skeleton Screen -->
+    <div v-if="loading" class="post-loading">
+      <div class="back-navigation">
+        <n-skeleton :width="100" size="medium" />
+      </div>
+      <article class="post-article">
+        <div class="post-banner">
+          <n-skeleton height="300px" />
+        </div>
+        <div class="post-wrapper">
+          <aside class="toc-sidebar">
+            <div class="toc-container">
+              <n-skeleton :width="200" size="large" style="margin-bottom: 16px;" />
+              <n-skeleton :width="180" size="medium" style="margin-bottom: 8px;" />
+              <n-skeleton :width="160" size="medium" style="margin-bottom: 8px;" />
+              <n-skeleton :width="140" size="medium" style="margin-bottom: 8px;" />
+              <n-skeleton :width="120" size="medium" />
+            </div>
+          </aside>
+          <div class="article-content">
+            <header class="post-header">
+              <n-skeleton :width="'80%'" size="huge" style="margin-bottom: 16px;" />
+              <n-skeleton :width="'60%'" size="large" style="margin-bottom: 24px;" />
+              <div class="post-meta">
+                <n-skeleton :width="100" size="medium" />
+                <n-skeleton :width="100" size="medium" />
+                <n-skeleton :width="100" size="medium" />
+                <n-skeleton :width="100" size="medium" />
+              </div>
+            </header>
+            <div class="post-content">
+              <n-skeleton text :repeat="8" />
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- Loaded State -->
+    <div v-else-if="post" class="post-container">
         <!-- Back Button -->
         <div class="back-navigation">
           <n-button text @click="handleBack()" aria-label="Back">
@@ -490,7 +528,6 @@ watch(() => displayContent.value, () => {
         </section>
       </div>
       <n-empty v-else :description="$t('page.post_detail.post_not_found')"/>
-    </n-spin>
 
     <!-- Back to Top Button -->
     <transition name="fade">
@@ -516,6 +553,63 @@ watch(() => displayContent.value, () => {
   min-height: 100vh;
   background: var(--color-bg);
   padding-bottom: 80px;
+}
+
+// Loading Skeleton Styles
+.post-loading {
+  .post-article {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+    background: var(--color-surface);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  .post-banner {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+  }
+
+  .post-wrapper {
+    display: flex;
+    gap: 24px;
+    padding: 40px;
+
+    .toc-sidebar {
+      flex: 0 0 200px;
+      padding: 20px;
+      background: var(--color-surface);
+      border-radius: 12px;
+    }
+
+    .article-content {
+      flex: 1;
+      max-width: calc(100% - 224px);
+    }
+  }
+
+  .post-header {
+    margin-bottom: 32px;
+
+    .post-meta {
+      display: flex;
+      gap: 16px;
+      margin-top: 16px;
+    }
+  }
+
+  .post-content {
+    :deep(.n-skeleton) {
+      margin-bottom: 12px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
 }
 
 // Back Navigation

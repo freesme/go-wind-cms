@@ -191,8 +191,27 @@ useLanguageChangeEffect(async () => {
 
 <template>
   <div class="user-profile-page">
-    <n-spin :show="loading">
-      <template v-if="user">
+    <!-- Loading Skeleton -->
+    <div v-if="loading" class="profile-loading">
+      <div class="profile-header">
+        <n-skeleton height="200px" />
+      </div>
+      <div class="profile-main">
+        <aside class="profile-sidebar">
+          <div class="info-card">
+            <n-skeleton text :repeat="8" />
+          </div>
+        </aside>
+        <main class="profile-content-area">
+          <div class="content-card">
+            <n-skeleton text :repeat="10" />
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Loaded Content -->
+    <template v-else>
         <!-- 顶部背景和基本信息 -->
         <div class="profile-header">
           <div class="header-bg"></div>
@@ -322,7 +341,12 @@ useLanguageChangeEffect(async () => {
             <div class="content-card">
               <n-tabs v-model:value="activeTab" type="line" animated @update:value="handleTabChange">
                 <n-tab-pane name="posts" :tab="$t('page.user.tab_posts')">
-                  <n-spin :show="postsLoading">
+                  <!-- Posts Loading Skeleton -->
+                  <div v-if="postsLoading" class="posts-list-loading">
+                    <n-skeleton text :repeat="5" />
+                  </div>
+                  <!-- Posts Loaded -->
+                  <div v-else>
                     <div v-if="posts.length > 0" class="posts-list">
                       <div v-for="post in posts" :key="post.id" class="post-item">
                         <div class="post-content">
@@ -357,7 +381,7 @@ useLanguageChangeEffect(async () => {
                         <span class="i-carbon:document" />
                       </template>
                     </n-empty>
-                  </n-spin>
+                  </div>
                 </n-tab-pane>
                 <n-tab-pane name="activities" :tab="$t('page.user.tab_activities')">
                   <n-empty :description="$t('page.user.no_activities')">
@@ -390,7 +414,6 @@ useLanguageChangeEffect(async () => {
           </n-empty>
         </div>
       </template>
-    </n-spin>
   </div>
 </template>
 
@@ -398,6 +421,54 @@ useLanguageChangeEffect(async () => {
 .user-profile-page {
   min-height: 100vh;
   background: var(--color-bg);
+}
+
+// Loading Skeleton Styles
+.profile-loading {
+  .profile-header {
+    margin-bottom: 40px;
+
+    :deep(.n-skeleton) {
+      border-radius: 16px;
+    }
+  }
+
+  .profile-main {
+    display: flex;
+    gap: 24px;
+    padding: 24px;
+
+    .profile-sidebar {
+      width: 300px;
+      flex-shrink: 0;
+
+      .info-card {
+        :deep(.n-skeleton) {
+          margin-bottom: 12px;
+        }
+      }
+    }
+
+    .profile-content-area {
+      flex: 1;
+
+      .content-card {
+        :deep(.n-skeleton) {
+          margin-bottom: 12px;
+        }
+      }
+    }
+  }
+}
+
+.posts-list-loading {
+  :deep(.n-skeleton) {
+    margin-bottom: 16px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 }
 
 .empty-state {

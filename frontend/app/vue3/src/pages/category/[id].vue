@@ -189,7 +189,14 @@ useLanguageChangeEffect(async () => {
 
     <!-- Posts Section -->
     <div class="page-container">
-      <n-spin :show="loading">
+      <!-- Loading Skeleton -->
+      <div v-if="loading" class="posts-grid">
+        <div v-for="i in 6" :key="i" class="post-card">
+          <n-skeleton height="400px" />
+        </div>
+      </div>
+      <!-- Loaded Content -->
+      <div v-else>
         <!-- Results Count -->
         <div v-if="posts.length > 0" class="results-info">
           <span>{{ $t('page.posts.found') }} <strong>{{
@@ -253,7 +260,7 @@ useLanguageChangeEffect(async () => {
             @update:page-size="handlePageSizeChange"
           />
         </div>
-      </n-spin>
+      </div>
     </div>
   </div>
 </template>
