@@ -25,9 +25,10 @@
   position: sticky;
   top: 0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  height: 100%;
   display: flex;
   justify-content: center;
+  left: 0;
+  right: 0;
 
   html.dark & {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -39,7 +40,6 @@
   flex-direction: column;
   gap: 0;
   padding: 0;
-  height: 100%;
   width: min(var(--layout-max-width), calc(100% - 2 * var(--space-6)));
   max-width: var(--layout-max-width);
 
@@ -49,9 +49,21 @@
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1024px) {
+  .header-inner {
+    width: calc(100% - 2 * var(--space-5));
+  }
+}
+
+@media (max-width: 768px) {
   .header-inner {
     width: calc(100% - 2 * var(--space-4));
+  }
+}
+
+@media (max-width: 480px) {
+  .header-inner {
+    width: calc(100% - 2 * var(--space-3));
   }
 }
 </style>

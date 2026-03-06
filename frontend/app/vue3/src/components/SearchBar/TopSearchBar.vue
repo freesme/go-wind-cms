@@ -146,14 +146,15 @@ function handleClickLogo() {
     <SearchBar/>
     <div class="actions">
       <n-space>
+        <!-- User logged in: show user avatar -->
         <n-dropdown
+          v-if="isLogin"
           trigger="hover"
           size="huge"
           :options="userOptions"
           @select="handleSelectUserItem"
         >
           <n-button
-            v-show="isLogin"
             text
             class="icon-btn"
             :aria-label="$t('menu.my_profile')"
@@ -164,17 +165,21 @@ function handleClickLogo() {
             </n-icon>
           </n-button>
         </n-dropdown>
-        <n-divider :vertical="true"/>
-        <n-button v-show="!isLogin" type="info" class="header-login-btn"
-                  :aria-label="$t('navbar.top.login')"
-                  @click="handleClickLogin">
-          {{ $t('navbar.top.login') }}
-        </n-button>
-        <n-button v-show="!isLogin" type="primary" class="header-register-btn"
-                  :aria-label="$t('navbar.top.register')"
-                  @click="handleClickRegister">
-          {{ $t('navbar.top.register') }}
-        </n-button>
+
+        <!-- User not logged in: show login/register buttons -->
+        <template v-if="!isLogin">
+          <n-divider :vertical="true"/>
+          <n-button type="info" class="header-login-btn"
+                    :aria-label="$t('navbar.top.login')"
+                    @click="handleClickLogin">
+            {{ $t('navbar.top.login') }}
+          </n-button>
+          <n-button type="primary" class="header-register-btn"
+                    :aria-label="$t('navbar.top.register')"
+                    @click="handleClickRegister">
+            {{ $t('navbar.top.register') }}
+          </n-button>
+        </template>
         <n-dropdown trigger="hover" size="huge" :options="languageColumns"
                     @select="handleSelectLanguage">
           <n-button round class="lang-btn" aria-label="Language">
@@ -253,11 +258,20 @@ function handleClickLogo() {
 .actions {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
+  height: 100%;
 
   // 分割线
   :deep(.n-divider) {
     background-color: var(--color-border);
     opacity: 0.5;
+  }
+
+  :deep(.n-space) {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    gap: 8px;
   }
 }
 
@@ -268,9 +282,20 @@ function handleClickLogo() {
   --n-text-color-pressed: var(--color-brand);
   transition: all 0.3s;
   border-radius: 8px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 40px !important;
+  min-width: 40px !important;
 
   &:hover {
     background: rgba(102, 126, 234, 0.08) !important;
+  }
+
+  :deep(.n-icon) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
@@ -290,11 +315,31 @@ function handleClickLogo() {
   --n-text-color-hover: var(--color-brand);
   --n-text-color-pressed: var(--color-brand);
   font-weight: 500;
+  font-size: 14px;
   transition: all 0.3s;
   min-width: 80px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 40px !important;
 
   &:hover {
     box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+  }
+
+  :deep(.n-button__content) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    line-height: 1;
+    color: inherit !important;
+  }
+
+  :deep(.n-icon) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
@@ -304,6 +349,11 @@ function handleClickLogo() {
   font-weight: 600;
   font-size: 14px;
   transition: all 0.3s;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 40px !important;
+  padding: 0 16px !important;
 }
 
 .header-login-btn {
@@ -370,34 +420,186 @@ function handleClickLogo() {
 
 @media (max-width: 768px) {
   .top-bar {
-    padding: 10px 16px;
-    gap: 8px;
-    height: 56px;
+    padding: 8px 12px;
+    gap: 6px;
+    height: 50px;
   }
 
   .logo {
-    height: 36px;
+    height: 32px;
   }
 
   .site-name {
-    font-size: 13px;
-    display: none;
+    font-size: 12px;
+    display: block;
+    flex-shrink: 0;
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // 搜索框已在SearchBar组件中隐藏
+  .actions {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    :deep(.n-space) {
+      gap: 4px !important;
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
   }
 
   .lang-btn,
   .theme-btn {
-    min-width: auto;
+    min-width: 36px !important;
+    width: auto !important;
+    height: 36px !important;
     padding: 0 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 
     :deep(.n-button__content) {
-      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      line-height: 1;
+      gap: 4px;
+      font-size: 13px !important;
+      color: inherit !important;
+    }
+
+    :deep(.n-icon) {
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+  }
+
+  .lang-btn {
+    --n-text-color: var(--header-control-text) !important;
+    --n-text-color-hover: var(--color-brand) !important;
+    --n-text-color-pressed: var(--color-brand) !important;
+
+    :deep(.n-button__content) {
+      color: var(--header-control-text) !important;
+    }
+  }
+
+  .theme-btn {
+    min-width: 36px !important;
+    width: 36px !important;
+    padding: 0 !important;
+
+    :deep(.n-button__content) {
+      font-size: 0 !important;
     }
   }
 
   .header-login-btn,
   .header-register-btn {
     font-size: 12px;
-    padding: 0 12px !important;
+    padding: 4px 10px !important;
+    min-width: 60px;
+    flex-shrink: 0;
+  }
+
+  .icon-btn {
+    font-size: 18px;
+    padding: 0 8px !important;
+    min-width: 36px !important;
+    width: 36px !important;
+    height: 36px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  :deep(.n-divider) {
+    height: 20px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-bar {
+    padding: 6px 8px;
+    gap: 4px;
+    height: 48px;
+  }
+
+  .logo {
+    height: 28px;
+  }
+
+  .logo-section {
+    padding: 4px 8px;
+    gap: 6px;
+  }
+
+  .site-name {
+    font-size: 11px;
+    max-width: 60px;
+  }
+
+  .actions {
+    gap: 2px !important;
+
+    :deep(.n-space) {
+      gap: 2px !important;
+    }
+  }
+
+  :deep(.n-divider) {
+    display: none;
+  }
+
+  .header-login-btn,
+  .header-register-btn {
+    display: none;
+  }
+
+  .lang-btn,
+  .theme-btn {
+    min-width: 32px !important;
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    :deep(.n-button__content) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0 !important;
+      height: 100%;
+      line-height: 1;
+    }
+
+    :deep(.n-icon) {
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .icon-btn {
+    padding: 0 4px !important;
+    font-size: 16px;
+    min-width: 32px !important;
+    width: 32px !important;
+    height: 32px !important;
   }
 }
 </style>

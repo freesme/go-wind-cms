@@ -103,29 +103,13 @@ function handleSearch() {
 
 @media (max-width: 768px) {
   .search-bar {
-    margin: 0 8px;
-    max-width: 300px;
-    height: 38px;
-
-    :deep(.n-input__input-el) {
-      font-size: 14px;
-    }
+    display: none;
   }
 }
 
 @media (max-width: 480px) {
   .search-bar {
-    margin: 0 4px;
-    max-width: 200px;
-    height: 36px;
-
-    :deep(.n-input__input-el) {
-      font-size: 12px;
-    }
-
-    :deep(.n-input__prefix .n-icon) {
-      font-size: 14px !important;
-    }
+    display: none;
   }
 }
 </style>

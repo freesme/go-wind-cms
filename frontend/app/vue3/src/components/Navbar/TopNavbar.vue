@@ -57,8 +57,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <n-space justify="space-between" align="center" style="width: 100%; padding: 0 var(--space-4); height: 65px; overflow: hidden;">
-    <n-space align="center" :size="4" style="height: 100%; overflow: hidden; display: flex; align-items: center;">
+  <div class="navbar-wrapper">
+    <div class="navbar-left">
       <!-- 左侧导航菜单 -->
       <n-menu
         v-if="navigationItems.length > 0"
@@ -108,9 +108,9 @@ onMounted(() => {
           </div>
         </n-tab-pane>
       </n-tabs>
-    </n-space>
+    </div>
 
-    <n-space align="center" :size="4" style="height: 100%; overflow: hidden; display: flex; align-items: center;">
+    <div class="navbar-right">
       <n-tabs
         v-model:value="navbarStore.activeOverlay"
         type="bar"
@@ -131,12 +131,50 @@ onMounted(() => {
           </div>
         </n-tab-pane>
       </n-tabs>
-    </n-space>
-  </n-space>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="less">
 @import '@/styles/app.less';
+
+.navbar-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 var(--space-4);
+  height: 65px;
+  overflow: hidden;
+  gap: 4px;
+}
+
+.navbar-left,
+.navbar-right {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  min-width: 0;
+}
+
+.navbar-left {
+  flex: 1;
+  gap: 4px;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  // 隐藏滚动条
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.navbar-right {
+  flex-shrink: 0;
+  gap: 4px;
+}
 
 .overlay {
   background-color: var(--color-surface);
@@ -165,17 +203,19 @@ onMounted(() => {
   border: none !important;
   padding: 0 !important;
   height: 100%;
-  overflow: hidden;
-  display: flex;
+  overflow: visible !important;
+  display: flex !important;
   align-items: center;
+  gap: 0 !important;
 }
 
 :deep(.n-menu--horizontal) {
   height: 100%;
   padding: 0 !important;
-  overflow: hidden;
-  display: flex;
+  overflow: visible !important;
+  display: flex !important;
   align-items: center;
+  gap: 0 !important;
 }
 
 :deep(.n-menu-item) {
@@ -189,6 +229,8 @@ onMounted(() => {
   line-height: 1.2;
   display: flex;
   align-items: center;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 :deep(.n-menu-item:hover) {
@@ -286,17 +328,19 @@ onMounted(() => {
   color: var(--color-text-primary);
   padding: 0 !important;
   height: 100%;
-  overflow: hidden;
-  display: flex;
+  overflow: visible !important;
+  display: flex !important;
   align-items: center;
+  flex-shrink: 0;
 }
 
 :deep(.n-tabs--horizontal) {
   padding: 0 !important;
   height: 100%;
-  overflow: hidden;
-  display: flex;
+  overflow: visible !important;
+  display: flex !important;
   align-items: center;
+  flex-shrink: 0;
 }
 
 // Tab 项样式
@@ -310,6 +354,8 @@ onMounted(() => {
   align-items: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 :deep(.n-tabs-tab:hover) {
@@ -334,11 +380,6 @@ onMounted(() => {
 :deep(.n-tabs-tab__label) {
   color: inherit;
   transition: all 0.3s;
-}
-
-// Space 组件
-:deep(.n-space) {
-  color: var(--color-text-primary);
 }
 
 // 动画
@@ -367,14 +408,19 @@ onMounted(() => {
   opacity: 0;
 }
 
-// Responsive
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+  .navbar-wrapper {
+    padding: 0 var(--space-3);
+    height: 60px;
+  }
+
   :deep(.n-menu-item),
   :deep(.n-submenu-title),
   :deep(.n-tabs-tab) {
     padding: 8px 10px !important;
     font-size: 13px;
     min-height: 32px;
+    flex-shrink: 0;
   }
 
   :deep(.n-submenu-children .n-menu-item) {
@@ -388,6 +434,132 @@ onMounted(() => {
 
   :deep(.n-tabs-bar) {
     height: 2px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-wrapper {
+    padding: 0 var(--space-2);
+    height: 50px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 2px;
+
+    // 隐藏滚动条
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .navbar-left {
+    gap: 2px;
+    flex: 1;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .navbar-right {
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  :deep(.n-menu-item),
+  :deep(.n-submenu-title),
+  :deep(.n-tabs-tab) {
+    padding: 6px 8px !important;
+    font-size: 12px;
+    min-height: 28px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+
+  :deep(.n-menu-item-content) {
+    gap: 2px;
+  }
+
+  :deep(.n-menu-item-content__icon) {
+    width: 16px;
+    height: 16px;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  :deep(.n-menu-item-content__label) {
+    white-space: nowrap;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  :deep(.n-submenu-children .n-menu-item) {
+    padding: 6px 10px !important;
+    font-size: 11px;
+    min-height: 28px;
+  }
+
+  :deep(.n-tabs-bar) {
+    height: 2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-wrapper {
+    padding: 0 var(--space-1);
+    height: 40px;
+    gap: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .navbar-left {
+    gap: 0;
+    flex-shrink: 0;
+  }
+
+  .navbar-right {
+    display: none;
+  }
+
+  :deep(.n-menu-item),
+  :deep(.n-submenu-title),
+  :deep(.n-tabs-tab) {
+    padding: 4px 6px !important;
+    font-size: 11px;
+    min-height: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  :deep(.n-menu-item-content__label) {
+    display: none;
+  }
+
+  :deep(.n-menu-item-content__icon) {
+    margin: 0 !important;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  :deep(.n-submenu-children .n-menu-item) {
+    padding: 4px 8px !important;
+    font-size: 10px;
+  }
+
+  :deep(.n-tabs-bar) {
+    height: 1px;
   }
 }
 </style>
