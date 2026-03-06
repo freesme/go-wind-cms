@@ -12,9 +12,16 @@ definePage({
 
 <template>
   <div class="info-page">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">{{ $t('ui.button.contact_us') }}</h1>
+        <p class="hero-subtitle">{{ $t('page.legal.contact.description') }}</p>
+      </div>
+    </section>
+
+    <!-- Content Section -->
     <div class="info-card stick-content section-shell">
-      <h1 class="title">{{ $t('ui.button.contact_us') }}</h1>
-      <p class="desc">{{ $t('page.legal.contact.description') }}</p>
       <ul class="list">
         <li>{{ $t('page.legal.contact.item_1') }}</li>
         <li>{{ $t('page.legal.contact.item_2') }}</li>
@@ -26,23 +33,15 @@ definePage({
 
 <style scoped lang="less">
 .info-page {
-  min-height: calc(100vh - var(--layout-header-height));
+  min-height: 100vh;
   background: var(--color-bg);
-  padding: 24px 0;
 }
 
+// Content Section
 .info-card {
-  padding: 28px;
-}
-
-.title {
-  margin: 0 0 12px;
-  color: var(--color-text-primary);
-}
-
-.desc {
-  margin: 0 0 12px;
-  color: var(--color-text-secondary);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 32px;
 }
 
 .list {
@@ -50,5 +49,46 @@ definePage({
   padding-left: 18px;
   color: var(--color-text-primary);
   line-height: 1.8;
+  font-size: 16px;
+
+  li {
+    margin-bottom: 12px;
+  }
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .info-card {
+    padding: 32px 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .info-card {
+    padding: 24px 20px;
+  }
+
+  .list {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-card {
+    padding: 20px 16px;
+  }
+
+  .list {
+    font-size: 14px;
+    padding-left: 16px;
+  }
 }
 </style>
+
+<style lang="less">
+// Hero Section - 非 scoped 样式，使用全局 hero.less 中的定义
+.info-page .hero {
+  margin-bottom: 40px;
+}
+</style>
+

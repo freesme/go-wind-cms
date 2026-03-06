@@ -373,7 +373,7 @@ onMounted(async () => {
 // Posts Grid
 .posts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 32px;
   margin-bottom: 48px;
 }
@@ -515,73 +515,25 @@ onMounted(async () => {
 }
 
 // Responsive Design
+// Hero 区的响应式样式已在 hero.less 中定义
 @media (max-width: 1024px) {
-  .hero-section {
-    padding: 2.5rem 1.5rem;
-    min-height: 320px;
-
-    .hero-content {
-      h1 {
-        font-size: 3.5rem;
-        letter-spacing: -1.5px;
-      }
-
-      .category-description {
-        font-size: 1.4rem;
-      }
-
-      .category-stats {
-        gap: 24px;
-
-        .stat-item {
-          font-size: 15px;
-        }
-      }
-    }
-  }
-
   .page-container {
     padding: 0 24px 60px;
   }
 
   .posts-grid {
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
     gap: 24px;
   }
 }
 
 @media (max-width: 768px) {
-  .hero-section {
-    padding: 2rem 1.5rem;
-    min-height: 220px;
-
-    .hero-content {
-      h1 {
-        font-size: 2.8rem;
-        margin-bottom: 0.75rem;
-        letter-spacing: -1px;
-      }
-
-      .category-description {
-        font-size: 1.15rem;
-        margin-bottom: 0.75rem;
-      }
-
-      .category-stats {
-        gap: 16px;
-
-        .stat-item {
-          font-size: 14px;
-        }
-      }
-    }
-  }
-
   .page-container {
     padding: 0 20px 40px;
   }
 
   .posts-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
   }
 
@@ -605,30 +557,6 @@ onMounted(async () => {
 }
 
 @media (max-width: 480px) {
-  .hero-section {
-    padding: 1.5rem 1rem;
-    min-height: 200px;
-
-    .hero-content {
-      h1 {
-        font-size: 1.75rem;
-      }
-
-      .category-description {
-        font-size: 0.95rem;
-        margin-bottom: 1rem;
-      }
-
-      .category-stats {
-        flex-direction: column;
-        gap: 12px;
-
-        .stat-item {
-          font-size: 13px;
-        }
-      }
-    }
-  }
 
   .page-container {
     padding: 0 16px 40px;
@@ -676,116 +604,12 @@ onMounted(async () => {
   }
 }
 
-// 动画关键帧定义
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes gradientShift {
-  0%, 100% {
-    background:
-      radial-gradient(ellipse at 20% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
-      linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
-  }
-  50% {
-    background:
-      radial-gradient(ellipse at 80% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 20% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
-      linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #6366f1 100%);
-  }
-}
-
-@keyframes gridMove {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(50px, 50px);
-  }
-}
-
-@keyframes glowPulseTitle {
-  0%, 100% {
-    filter:
-      drop-shadow(0 0 25px rgba(var(--color-primary-purple-rgb), 0.5))
-      drop-shadow(0 0 50px rgba(99, 102, 241, 0.3))
-      drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
-  }
-  50% {
-    filter:
-      drop-shadow(0 0 40px rgba(var(--color-primary-purple-rgb), 0.8))
-      drop-shadow(0 0 80px rgba(99, 102, 241, 0.6))
-      drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
-  }
-}
-
-@keyframes gradientShine {
-  0% {
-    background-position: 0 center;
-  }
-  100% {
-    background-position: 200% center;
-  }
-}
+// ...existing code...
+// Hero 相关的动画关键帧已在 hero.less 中定义
 
 // Dark Mode Enhancements
+// Hero 的暗黑模式样式已在 hero.less 中定义
 html.dark {
-  .hero-section {
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
-    box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
-
-    &::before {
-      opacity: 1;
-    }
-
-    .hero-content {
-      h1 {
-        background: linear-gradient(
-          135deg,
-          #ffffff 0%,
-          #f5f5ff 25%,
-          #ebebff 50%,
-          #f5f5ff 75%,
-          #ffffff 100%
-        );
-        background-size: 200% auto;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-
-        text-shadow:
-          0 0 50px rgba(255, 255, 255, 1),
-          0 0 100px rgba(var(--color-primary-purple-rgb), 0.8),
-          0 0 150px rgba(99, 102, 241, 0.6),
-          0 8px 30px rgba(0, 0, 0, 0.6),
-          0 4px 15px rgba(0, 0, 0, 0.4);
-
-        filter:
-          drop-shadow(0 0 35px rgba(var(--color-primary-purple-rgb), 0.7))
-          drop-shadow(0 0 70px rgba(99, 102, 241, 0.5))
-          drop-shadow(0 6px 20px rgba(0, 0, 0, 0.4));
-      }
-    }
-  }
 
   .post-card {
     &:hover {
