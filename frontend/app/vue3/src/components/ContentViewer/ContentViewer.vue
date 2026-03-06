@@ -69,11 +69,11 @@ renderer.code = (code) => {
   return `<pre class="code-block" data-lang="${lang}"><code class="hljs language-${lang}">${highlighted}</code></pre>`
 }
 
-// Override heading rendering
+// Override heading rendering - 不添加 id，让父组件处理
 renderer.heading = (heading) => {
   const inlineHtml = marked.parseInline(heading.text)
-  const id = heading.text.toLowerCase().replace(/\s+/g, '-')
-  return `<h${heading.depth} id="${id}" class="heading-anchor">${inlineHtml}</h${heading.depth}>`
+  // 不添加 id，由父组件的 generateTableOfContents 函数动态添加
+  return `<h${heading.depth} class="heading-anchor">${inlineHtml}</h${heading.depth}>`
 }
 
 // Override link rendering

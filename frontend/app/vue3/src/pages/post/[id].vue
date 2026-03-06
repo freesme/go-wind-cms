@@ -186,7 +186,8 @@ function scrollToTop() {
 // --- 目录与滚动 ---
 function generateTableOfContents() {
   nextTick(() => {
-    const contentEl = document.querySelector('.post-content')
+    // 在 .content-viewer 中查找所有标题 (ContentViewer 的根元素)
+    const contentEl = document.querySelector('.content-viewer')
     if (!contentEl) return
 
     const headings = contentEl.querySelectorAll('h2, h3')
@@ -205,6 +206,9 @@ function generateTableOfContents() {
       })
     })
     tableOfContents.value = toc
+    
+    // 调试输出
+    console.log('Table of contents generated:', toc.length, 'items')
   })
 }
 
@@ -253,6 +257,7 @@ onMounted(async () => {
   await loadPost()
 
   // 等待内容完全加载后生成目录
+  // 增加延迟确保 ContentViewer 已经渲染完成
   setTimeout(() => {
     generateTableOfContents()
     // 页面加载时检查 URL hash，自动滚动到对应位置
@@ -262,7 +267,7 @@ onMounted(async () => {
         scrollToHeading(id)
       }, 300)
     }
-  }, 100)
+  }, 500)
 
   // 加载相关文章 (确保 post 已加载)
   await loadRelatedPosts()
@@ -624,10 +629,16 @@ watch(() => displayContent.value, () => {
     inset 0 0 0 1px rgba(168, 85, 247, 0.12); // 增强边框和阴影，提升层次感
   max-height: calc(100vh - 120px);
   position: sticky;
-  top: 60px;
+  top: 60px; // 距离顶部 60px 开始固定
   overflow-y: auto;
   transition: all 0.3s ease;
   border-radius: 0 12px 12px 0;
+  align-self: flex-start; // 确保从顶部开始
+
+  // 如果内容较短，目录框高度根据内容自适应
+  &:not(:has(.toc-list:only-child)) {
+    min-height: auto;
+  }
 
   .toc-container {
     .toc-header {
@@ -1102,6 +1113,29 @@ watch(() => displayContent.value, () => {
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 32px rgba(168, 85, 247, 0.4);
+  }
+}
+
+// Post Actions
+.post-actions {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: center;
+
+  :deep(.n-space) {
+    display: flex;
+    justify-content: center;
+  }
+
+  :deep(.n-button) {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
   }
 }
 

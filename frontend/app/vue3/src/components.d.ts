@@ -10,6 +10,7 @@ declare module 'vue' {
     ApplicationProvider: typeof import('./components/ApplicationProvider/ApplicationProvider.vue')['default']
     CodeEditor: typeof import('./components/ContentEditor/CodeEditor.vue')['default']
     CommentSection: typeof import('./components/CommentSection/CommentSection.vue')['default']
+    CommentTree: typeof import('./components/CommentSection/CommentTree.vue')['default']
     ContentEditor: typeof import('./components/ContentEditor/ContentEditor.vue')['default']
     ContentViewer: typeof import('./components/ContentViewer/ContentViewer.vue')['default']
     Footer: typeof import('./components/Footer/Footer.vue')['default']

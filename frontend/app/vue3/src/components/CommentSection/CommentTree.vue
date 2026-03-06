@@ -1,0 +1,408 @@
+<script setup lang="ts">
+import {ContentViewer} from '@/components/ContentViewer'
+import type {commentservicev1_Comment} from "@/api/generated/app/service/v1"
+
+// --- Props ---
+defineProps<{
+  comments: commentservicev1_Comment[]
+}>()
+
+// --- 计算属性 ---
+function formatDate(dateString: string) {
+  if (!dateString) return ''
+  return new Date(dateString).toLocaleString()
+}
+
+function hasChildren(comment: commentservicev1_Comment): boolean {
+  return !!comment.children && comment.children.length > 0
+}
+
+function isOwnerReply(comment: commentservicev1_Comment): boolean {
+  // 博主回复：authorType 为 ADMIN 且有 replyToId (回复他人)
+  return comment.authorType === 'AUTHOR_TYPE_ADMIN' && !!comment.replyToId
+}
+</script>
+
+<template>
+  <div class="comment-tree">
+    <div v-for="comment in comments" :key="comment.id" class="comment-node">
+      <!-- 评论主体 -->
+      <div class="comment-item">
+        <div class="comment-avatar">
+          <n-avatar :size="48" round>
+            {{ comment.authorName?.charAt(0) || 'U' }}
+          </n-avatar>
+        </div>
+        <div class="comment-body">
+          <div class="comment-header">
+            <div class="author-info">
+              <strong class="comment-author">
+                <span v-if="isOwnerReply(comment)" class="owner-badge">
+                  <span class="i-carbon:badge"/>
+                  博主回复
+                </span>
+                {{ comment.authorName }}
+              </strong>
+              <span v-if="comment.location && !isOwnerReply(comment)"
+                    class="comment-location">{{ comment.location }}</span>
+            </div>
+            <span class="comment-date">{{ formatDate(comment.createdAt) }}</span>
+          </div>
+          <div class="comment-content">
+            <ContentViewer :content="comment.content" type="text"/>
+          </div>
+          <div class="comment-actions">
+            <span class="action-item">
+              <span class="i-carbon:thumbs-up"/>
+              {{ comment.likeCount || 0 }}
+            </span>
+            <span class="action-item">
+              <span class="i-carbon:chat"/>
+              回复
+            </span>
+            <span class="action-item">
+              <span class="i-carbon:share"/>
+              分享
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 递归渲染子评论 -->
+      <div v-if="hasChildren(comment)" class="comment-children">
+        <CommentTree :comments="comment.children!"/>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="less">
+.comment-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.comment-node {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-item {
+  display: flex;
+  gap: 20px;
+  padding: 28px;
+  background: linear-gradient(135deg,
+    var(--color-bg) 0%,
+    rgba(168, 85, 247, 0.02) 100%);
+  border-radius: 16px;
+  border: 1px solid rgba(168, 85, 247, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg,
+      var(--color-brand) 0%,
+      #764ba2 100%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  &:hover {
+    border-color: var(--color-brand);
+    box-shadow:
+      0 8px 24px rgba(168, 85, 247, 0.12),
+      0 4px 12px rgba(0, 0, 0, 0.04);
+    transform: translateX(4px) translateY(-2px);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  .comment-avatar {
+    flex-shrink: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: calc(100% + 6px);
+      height: calc(100% + 6px);
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: linear-gradient(135deg,
+        var(--color-brand) 0%,
+        #764ba2 100%);
+      opacity: 0.15;
+      filter: blur(6px);
+      z-index: 0;
+    }
+
+    :deep(.n-avatar) {
+      position: relative;
+      z-index: 1;
+      background: linear-gradient(135deg,
+        var(--color-brand) 0%,
+        #764ba2 100%);
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(168, 85, 247, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  .comment-body {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(168, 85, 247, 0.08);
+
+      .author-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+
+        .comment-author {
+          font-size: 17px;
+          font-weight: 600;
+          color: var(--color-text-primary);
+          letter-spacing: -0.2px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .owner-badge {
+            background: linear-gradient(135deg,
+              var(--color-brand) 0%,
+              #764ba2 100%);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 8px;
+            letter-spacing: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 8px rgba(168, 85, 247, 0.3);
+
+            span[class^="i-"] {
+              font-size: 13px;
+            }
+          }
+        }
+
+        .comment-location {
+          font-size: 12px;
+          color: var(--color-text-secondary);
+          display: flex;
+          align-items: center;
+          gap: 4px;
+
+          &::before {
+            content: '📍';
+            font-size: 11px;
+          }
+        }
+      }
+
+      .comment-date {
+        font-size: 13px;
+        color: var(--color-text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        &::before {
+          content: '📅';
+          font-size: 12px;
+        }
+      }
+    }
+
+    .comment-content {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--color-text-primary);
+      padding-left: 4px;
+      margin-bottom: 16px;
+    }
+
+    .comment-actions {
+      display: flex;
+      gap: 20px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(168, 85, 247, 0.05);
+
+      .action-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        transition: all 0.2s;
+
+        span[class^="i-"] {
+          font-size: 16px;
+        }
+
+        &:hover {
+          color: var(--color-brand);
+          transform: translateY(-1px);
+        }
+      }
+    }
+  }
+}
+
+// 子评论嵌套样式
+.comment-children {
+  margin-top: 20px;
+  padding-left: 64px;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 32px;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg,
+      rgba(168, 85, 247, 0.2) 0%,
+      rgba(168, 85, 247, 0.05) 100%);
+  }
+
+  .comment-node {
+    margin-bottom: 20px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// 响应式
+@media (max-width: 768px) {
+  .comment-item {
+    padding: 24px;
+    gap: 16px;
+
+    .comment-avatar {
+      :deep(.n-avatar) {
+        --n-size: 44px !important;
+      }
+    }
+
+    .comment-body {
+      .comment-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 12px;
+        padding-bottom: 10px;
+
+        .author-info {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 6px;
+        }
+
+        .comment-author {
+          font-size: 16px;
+        }
+
+        .comment-date {
+          font-size: 12px;
+        }
+      }
+
+      .comment-content {
+        font-size: 14px;
+        line-height: 1.7;
+      }
+
+      .comment-actions {
+        gap: 16px;
+
+        .action-item {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+
+  .comment-children {
+    padding-left: 48px;
+    margin-top: 16px;
+
+    &::before {
+      left: 24px;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .comment-item {
+    padding: 18px;
+    gap: 12px;
+
+    .comment-avatar {
+      :deep(.n-avatar) {
+        --n-size: 40px !important;
+      }
+    }
+
+    .comment-body {
+      .comment-header {
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+
+        .comment-author {
+          font-size: 15px;
+        }
+
+        .comment-date {
+          font-size: 11px;
+        }
+      }
+
+      .comment-content {
+        font-size: 13px;
+        line-height: 1.65;
+      }
+    }
+  }
+
+  .comment-children {
+    padding-left: 36px;
+    margin-top: 12px;
+
+    &::before {
+      left: 18px;
+    }
+  }
+}
+</style>

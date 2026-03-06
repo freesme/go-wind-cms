@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from 'vue'
 import {useMessage} from 'naive-ui'
+
 import {$t} from '@/locales'
 import {useCommentStore} from '@/stores/modules/app'
-import {ContentViewer} from '@/components/ContentViewer'
 import type {
   commentservicev1_Comment,
   commentservicev1_Comment_ContentType
 } from "@/api/generated/app/service/v1"
-import {formatDate} from "@/utils/date";
 
 // --- 类型定义 ---
 interface CommentForm {
@@ -171,22 +170,7 @@ onMounted(() => {
 
     <!-- Comments List -->
     <div v-if="hasComments" class="comments-list">
-      <div v-for="comment in displayComments" :key="comment.id" class="comment-item">
-        <div class="comment-avatar">
-          <n-avatar :size="48" round>
-            {{ comment.authorName?.charAt(0) || 'U' }}
-          </n-avatar>
-        </div>
-        <div class="comment-body">
-          <div class="comment-header">
-            <strong class="comment-author">{{ comment.authorName }}</strong>
-            <span class="comment-date">{{ formatDate(comment.createdAt) }}</span>
-          </div>
-          <div class="comment-content">
-            <ContentViewer :content="comment.content" type="text"/>
-          </div>
-        </div>
-      </div>
+      <CommentTree :comments="displayComments"/>
     </div>
     <n-empty v-else :description="$t('page.post_detail.no_comments')"
              style="margin-top: 40px;"/>
@@ -224,7 +208,7 @@ onMounted(() => {
   background: var(--color-surface);
   border-radius: 20px;
   padding: 56px 72px;
-  box-shadow: 
+  box-shadow:
     0 4px 24px rgba(0, 0, 0, 0.06),
     0 8px 48px rgba(0, 0, 0, 0.04),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
