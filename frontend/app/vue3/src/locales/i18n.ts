@@ -11,11 +11,12 @@ import {createI18n} from 'vue-i18n'
 
 import type {App} from "vue";
 import {unref} from "vue";
+import {preferences} from "@/preferences";
 
-const i18n = createI18n({
-  globalInjection: true,
+const i18n = createI18n<false>({
   legacy: false,
-  locale: '',
+  globalInjection: true,
+  locale: 'zhCN',
   messages: {},
 })
 
@@ -25,7 +26,7 @@ const localesMap = loadLocalesMapFromDir(
   /\.\/langs\/([^/]+)\/(.*)\.json$/,
   modules,
 );
-let loadMessages: LoadMessageFn;
+let loadMessages: LoadMessageFn = async () => ({});
 
 /**
  * Load locale modules
@@ -98,7 +99,18 @@ function setI18nLanguage(locale: Locale) {
 }
 
 async function setupI18n(app: App, options: LocaleSetupOptions = {}) {
-  const {defaultLocale = 'zhCN'} = options;
+  let {defaultLocale = 'zhCN'} = options;
+
+  // Try to load saved locale from cache
+  try {
+    const savedLocale = preferences.app.locale;
+
+    if (savedLocale && (savedLocale === 'zhCN' || savedLocale === 'enUS')) {
+      defaultLocale = savedLocale as SupportedLanguagesType;
+    }
+  } catch (error) {
+    console.warn('[i18n] Failed to load saved locale from cache:', error);
+  }
 
   // app可以自行扩展一些第三方库和组件库的国际化
   loadMessages = options.loadMessages || (async () => ({}));
@@ -107,14 +119,10 @@ async function setupI18n(app: App, options: LocaleSetupOptions = {}) {
 
   await loadLocaleMessages(defaultLocale);
 
-  // 在控制台打印警告
-  i18n.global.setMissingHandler((locale, key) => {
-    if (options.missingWarn && key.includes('.')) {
-      console.warn(
-        `[intlify] Not found '${key}' key in '${locale}' locale messages.`,
-      );
-    }
-  });
+  // Missing key warnings are handled by vue-i18n's built-in missingWarn option
+  if (options.missingWarn) {
+    console.log('[i18n] Missing key warnings are enabled');
+  }
 }
 
 /**
@@ -122,7 +130,12 @@ async function setupI18n(app: App, options: LocaleSetupOptions = {}) {
  * @param lang
  */
 async function loadLocaleMessages(lang: SupportedLanguagesType) {
-  if (unref(i18n.global.locale) === lang) {
+  // Check if messages are already loaded
+  const existingMessages = i18n.global.getLocaleMessage(lang);
+  const hasMessages = existingMessages && Object.keys(existingMessages).length > 0;
+
+  // If already loaded and locale matches, just set the language
+  if (hasMessages && unref(i18n.global.locale) === lang) {
     return setI18nLanguage(lang);
   }
 

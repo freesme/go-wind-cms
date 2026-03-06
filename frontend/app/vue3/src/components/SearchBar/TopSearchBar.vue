@@ -78,6 +78,8 @@ async function handleSelectLanguage(key: string | number) {
     return;
   }
 
+  console.log('handleSelectLanguage', key);
+
   updatePreferences({
     app: {
       locale,

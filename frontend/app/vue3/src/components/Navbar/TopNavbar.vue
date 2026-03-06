@@ -4,6 +4,9 @@ import {useRouter} from 'vue-router';
 
 import {useNavbarStore, useNavigationStore} from "@/stores";
 import {XIcon} from '@/plugins/xicon';
+import {
+  currentLocaleLanguageCode
+} from '@/locales';
 
 import type {TopNavBarTabItem} from "./types";
 import TopNavbarTab from './TopNavbarTab.vue';
@@ -28,9 +31,10 @@ function hideOverlay() {
  */
 async function loadNavigation() {
   try {
+    const locale = currentLocaleLanguageCode();
     const res = await navigationStore.listNavigation(
       {page: 1, pageSize: 10},
-      {location: 'header', isActive: true}
+      {location: 'header', isActive: true, locale}
     );
     if (res.items && res.items.length > 0) {
       navigationItems.value = res.items[0].items || [];

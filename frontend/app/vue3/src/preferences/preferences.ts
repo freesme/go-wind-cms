@@ -1,10 +1,4 @@
-
-import type { InitialOptions, Preferences } from './types';
-
-import { markRaw, reactive, readonly, watch } from 'vue';
-
-import { StorageManager } from '@/caches';
-import { isMacOs, merge } from '@/utils';
+import {markRaw, reactive, readonly, watch} from 'vue';
 
 import {
   breakpointsTailwind,
@@ -12,9 +6,13 @@ import {
   useDebounceFn,
 } from '@vueuse/core';
 
-import { defaultPreferences } from './config';
-import { updateCSSVariables } from './update-css-variables';
+import {StorageManager} from '@/caches';
+import {isMacOs, merge} from '@/utils';
 import type {DeepPartial} from "@/typings/helper";
+
+import type {InitialOptions, Preferences} from './types';
+import {defaultPreferences} from './config';
+import {updateCSSVariables} from './update-css-variables';
 
 const STORAGE_KEY = 'preferences';
 const STORAGE_KEY_LOCALE = `${STORAGE_KEY}-locale`;
@@ -25,11 +23,11 @@ class PreferenceManager {
   private initialPreferences: Preferences = defaultPreferences;
   private isInitialized: boolean = false;
   private readonly savePreferences: (preference: Preferences) => void;
-  private state: Preferences = reactive<Preferences>({
-    ...this.loadPreferences(),
-  });
+  private state: Preferences = reactive<Preferences>(defaultPreferences);
+
   constructor() {
-    this.cache = new StorageManager();
+    this.cache = new StorageManager({prefix: import.meta.env.VITE_APP_NAMESPACE});
+    this.state = this.loadPreferences();
 
     // 避免频繁的操作缓存
     this.savePreferences = useDebounceFn(
@@ -85,7 +83,7 @@ class PreferenceManager {
    * @returns {Preferences} 加载的偏好设置
    */
   private loadPreferences(): Preferences {
-    return this.loadCachedPreferences() || { ...defaultPreferences };
+    return this.loadCachedPreferences() || {...defaultPreferences};
   }
 
   /**
@@ -103,18 +101,18 @@ class PreferenceManager {
       () => isMobile.value,
       (val) => {
         this.updatePreferences({
-          app: { isMobile: val },
+          app: {isMobile: val},
         });
       },
-      { immediate: true },
+      {immediate: true},
     );
 
     // 监听系统主题偏好设置变化
     window
       .matchMedia('(prefers-color-scheme: dark)')
-      .addEventListener('change', ({ matches: isDark }) => {
+      .addEventListener('change', ({matches: isDark}) => {
         this.updatePreferences({
-          theme: { mode: isDark ? 'dark' : 'light' },
+          theme: {mode: isDark ? 'dark' : 'light'},
         });
       });
   }
@@ -125,7 +123,7 @@ class PreferenceManager {
    */
   private updateColorMode(preference: Preferences) {
     if (preference.app) {
-      const { colorGrayMode, colorWeakMode } = preference.app;
+      const {colorGrayMode, colorWeakMode} = preference.app;
       const dom = document.documentElement;
       const COLOR_WEAK = 'invert-mode';
       const COLOR_GRAY = 'grayscale-mode';
@@ -157,13 +155,13 @@ class PreferenceManager {
    * overrides  要覆盖的偏好设置
    * namespace  命名空间
    */
-  public async initPreferences({ namespace, overrides }: InitialOptions) {
+  public async initPreferences({namespace, overrides}: InitialOptions) {
     // 是否初始化过
     if (this.isInitialized) {
       return;
     }
     // 初始化存储管理器
-    this.cache = new StorageManager({ prefix: namespace });
+    this.cache = new StorageManager({prefix: namespace});
     // 合并初始偏好设置
     this.initialPreferences = merge({}, overrides, defaultPreferences);
 
@@ -224,4 +222,4 @@ class PreferenceManager {
 }
 
 const preferencesManager = new PreferenceManager();
-export { PreferenceManager, preferencesManager };
+export {PreferenceManager, preferencesManager};
