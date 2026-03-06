@@ -32,7 +32,8 @@
     "api_integration": "API 集成",
     "api_integration_desc": "RESTful API 支持，轻松集成第三方服务",
     "real_time_collaboration": "实时协作",
-    "real_time_collaboration_desc": "团队成员实时协同编辑和评论"
+    "real_time_collaboration_desc": "团队成员实时协同编辑和评论",
+    "explore_more_categories": "继续探索更多分类"
   },
   "posts": {
     "posts_list": "文章列表",

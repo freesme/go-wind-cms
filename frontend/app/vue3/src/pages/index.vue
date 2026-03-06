@@ -143,6 +143,17 @@ function getUpdatedDaysAgo(days: number = 3) {
   return $t('page.home.updated_days_ago', { days })
 }
 
+// Smooth scroll to categories section
+function scrollToCategories() {
+  const categoriesSection = document.querySelector('.categories-section')
+  if (categoriesSection) {
+    categoriesSection.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    })
+  }
+}
+
 const features = computed(() => {
   // Track locale so this list recomputes immediately on language switch.
   void i18n.global.locale.value
@@ -312,6 +323,16 @@ onUnmounted(() => {
           </div>
         </div>
       </n-spin>
+
+      <!-- Scroll Indicator -->
+      <div class="scroll-indicator">
+        <div class="scroll-indicator-content">
+          <span class="scroll-indicator-text">{{ $t('page.home.explore_more_categories') }}</span>
+          <div class="scroll-arrow" @click="scrollToCategories">
+            <XIcon name="carbon:arrow-down" :size="24" class="arrow-icon"/>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Categories Section -->
@@ -1187,6 +1208,28 @@ onUnmounted(() => {
   }
 }
 
+// Bounce Down Animation for Scroll Indicator
+@keyframes bounceDown {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+
+// Fade In Scale Animation
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 // Section Common Styles
 .section-header {
   display: flex;
@@ -1738,6 +1781,104 @@ onUnmounted(() => {
             opacity: 0.7;
           }
         }
+      }
+    }
+  }
+
+  // Scroll Indicator
+  .scroll-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 0 2rem 0;
+    margin: 0 auto;
+    max-width: 1200px;
+
+    .scroll-indicator-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      animation: fadeInScale 0.8s ease-out;
+    }
+
+    .scroll-indicator-text {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      text-align: center;
+      letter-spacing: 0.5px;
+      transition: color 0.3s ease;
+    }
+
+    .scroll-arrow {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg,
+        hsla(var(--color-primary-purple-hue), 85%, 65%, 0.15) 0%,
+        hsla(var(--color-primary-purple-hue), 85%, 65%, 0.08) 100%);
+      border: 2px solid hsla(var(--color-primary-purple-hue), 85%, 65%, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: bounceDown 2s ease-in-out infinite;
+
+      .arrow-icon {
+        color: var(--color-brand);
+        transition: transform 0.3s ease;
+      }
+
+      &:hover {
+        background: linear-gradient(135deg,
+          hsla(var(--color-primary-purple-hue), 85%, 65%, 0.25) 0%,
+          hsla(var(--color-primary-purple-hue), 85%, 65%, 0.15) 100%);
+        border-color: var(--color-brand);
+        transform: translateY(4px) scale(1.05);
+        box-shadow: 0 8px 20px hsla(var(--color-primary-purple-hue), 85%, 65%, 0.3);
+
+        .arrow-icon {
+          transform: translateY(3px);
+        }
+      }
+
+      &:active {
+        transform: translateY(6px) scale(0.98);
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .scroll-indicator-text {
+        color: var(--color-text-secondary);
+      }
+
+      .scroll-arrow {
+        background: linear-gradient(135deg,
+          hsla(var(--color-primary-purple-hue), 85%, 65%, 0.2) 0%,
+          hsla(var(--color-primary-purple-hue), 85%, 65%, 0.1) 100%);
+        border-color: hsla(var(--color-primary-purple-hue), 85%, 65%, 0.4);
+
+        &:hover {
+          background: linear-gradient(135deg,
+            hsla(var(--color-primary-purple-hue), 85%, 65%, 0.3) 0%,
+            hsla(var(--color-primary-purple-hue), 85%, 65%, 0.18) 100%);
+          box-shadow: 0 8px 20px hsla(var(--color-primary-purple-hue), 85%, 65%, 0.4);
+        }
+      }
+    }
+
+    @media (max-width: 768px) {
+      padding: 2rem 0 1.5rem 0;
+
+      .scroll-indicator-text {
+        font-size: 1rem;
+      }
+
+      .scroll-arrow {
+        width: 42px;
+        height: 42px;
       }
     }
   }

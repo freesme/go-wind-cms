@@ -32,7 +32,8 @@
     "api_integration": "API Integration",
     "api_integration_desc": "RESTful API support for seamless third-party integration",
     "real_time_collaboration": "Real-time Collaboration",
-    "real_time_collaboration_desc": "Team members can edit and comment in real-time"
+    "real_time_collaboration_desc": "Team members can edit and comment in real-time",
+    "explore_more_categories": "Continue Exploring Categories"
   },
   "posts": {
     "posts_list": "Posts List",
