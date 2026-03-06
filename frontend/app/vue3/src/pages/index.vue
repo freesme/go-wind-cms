@@ -964,6 +964,39 @@ onMounted(async () => {
   }
 }
 
+// 图标弹跳动画
+@keyframes iconBounce {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  30% {
+    transform: scale(1.25) rotate(15deg);
+  }
+  50% {
+    transform: scale(1.15) rotate(10deg);
+  }
+  70% {
+    transform: scale(1.22) rotate(13deg);
+  }
+  100% {
+    transform: scale(1.2) rotate(12deg);
+  }
+}
+
+// 卡片轻微呼吸动画
+@keyframes cardBreath {
+  0%, 100% {
+    box-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.06),
+      0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+  50% {
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.08),
+      0 2px 5px rgba(0, 0, 0, 0.05);
+  }
+}
+
 // Section Common Styles
 .section-header {
   display: flex;
@@ -1017,9 +1050,14 @@ onMounted(async () => {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: visible;
-    box-shadow: 0 2px 8px var(--color-card-shadow, rgba(0, 0, 0, 0.06)), 0 1px 3px rgba(0, 0, 0, 0.04);
+    box-shadow:
+      0 2px 8px var(--color-card-shadow, rgba(0, 0, 0, 0.06)),
+      0 1px 3px rgba(0, 0, 0, 0.04);
     min-height: 240px;
     height: 100%;
+
+    // 添加轻微的呼吸动画
+    animation: cardBreath 4s ease-in-out infinite;
 
     &::before {
       content: '';
@@ -1054,12 +1092,22 @@ onMounted(async () => {
     }
 
     &:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+      transform: translateY(-12px) scale(1.02);
+      box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.15),
+        0 8px 16px rgba(0, 0, 0, 0.1),
+        0 0 0 1px hsl(var(--card-hue), 70%, 60%);
       border-color: hsl(var(--card-hue), 70%, 60%);
 
+      // 背景加深效果
+      background: linear-gradient(
+        135deg,
+        rgba(250, 250, 255, 1) 0%,
+        rgba(248, 248, 253, 1) 100%
+      );
+
       &::before {
-        opacity: 0.15;
+        opacity: 0.2;
       }
 
       &::after {
@@ -1067,18 +1115,36 @@ onMounted(async () => {
       }
 
       .category-icon {
-        transform: scale(1.15) rotate(8deg);
+        transform: scale(1.2) rotate(12deg);
         color: white;
         background: linear-gradient(
           135deg,
           hsl(var(--card-hue), 70%, 60%) 0%,
           hsl(var(--card-hue), 60%, 70%) 100%
         );
-        box-shadow: 0 8px 16px hsl(var(--card-hue), 70%, 60%, 0.3);
+        box-shadow:
+          0 10px 20px hsl(var(--card-hue), 70%, 60%, 0.4),
+          0 0 30px hsl(var(--card-hue), 70%, 60%, 0.3);
+        animation: iconBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
       }
 
       .category-info h3 {
-        color: hsl(var(--card-hue), 70%, 50%);
+        color: hsl(var(--card-hue), 70%, 45%);
+        transform: translateX(3px);
+      }
+
+      .post-count {
+        color: hsl(var(--card-hue), 60%, 50%);
+      }
+
+      .category-badge {
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px hsla(var(--card-hue), 70%, 60%, 0.3);
+        background: linear-gradient(
+          135deg,
+          hsla(var(--card-hue), 70%, 60%, 0.2) 0%,
+          hsla(var(--card-hue), 60%, 70%, 0.15) 100%
+        );
       }
     }
 
@@ -1145,12 +1211,13 @@ onMounted(async () => {
         margin: 0 0 0.5rem 0;
         color: var(--color-text-primary);
         letter-spacing: 0.3px;
-        transition: color 0.3s;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         word-break: break-word;
 
-        // 浅色模式下优化文字颜色
+        // 浅色模式下优化文字颜色，提高对比度
         @media (prefers-color-scheme: light) {
-          color: #1f2937 !important;
+          color: #111827 !important;
+          font-weight: 800;
         }
       }
 
@@ -1159,10 +1226,12 @@ onMounted(async () => {
         color: var(--color-text-secondary);
         font-weight: 600;
         letter-spacing: 0.2px;
+        transition: all 0.3s ease;
 
         // 浅色模式下优化文字颜色
         @media (prefers-color-scheme: light) {
-          color: #6b7280 !important;
+          color: #4b5563 !important;
+          font-weight: 700;
         }
       }
     }
@@ -1185,26 +1254,26 @@ onMounted(async () => {
       color: hsl(var(--card-hue), 70%, 50%);
       font-size: 0.8rem;
 
-      // 浅色模式下优化文字颜色
+      // 浅色模式下优化文字颜色和背景
       @media (prefers-color-scheme: light) {
-        color: hsl(var(--card-hue), 70%, 45%) !important;
+        color: hsl(var(--card-hue), 70%, 40%) !important;
+        font-weight: 700;
         background: linear-gradient(
           135deg,
-          hsla(var(--card-hue), 70%, 60%, 0.15) 0%,
-          hsla(var(--card-hue), 60%, 70%, 0.12) 100%
+          hsla(var(--card-hue), 70%, 60%, 0.18) 0%,
+          hsla(var(--card-hue), 60%, 70%, 0.14) 100%
         ) !important;
+        border-left-width: 4px;
       }
       font-weight: 600;
       width: fit-content;
       white-space: nowrap;
-      transition: all 0.3s ease;
-      opacity: 0.85;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0.9;
     }
 
     &:hover .category-badge {
       opacity: 1;
-      transform: scale(1.05);
-      box-shadow: 0 4px 8px hsla(var(--card-hue), 70%, 60%, 0.2);
     }
   }
 }
