@@ -1,5 +1,11 @@
 import {defineMock} from 'vite-plugin-mock-dev-server'
 
+// 生成随机的 RFC 3339 格式时间戳
+function generateRandomTimestamp(daysAgo: number = 0): string {
+  const date = new Date(Date.now() - daysAgo * 86400000)
+  return date.toISOString()
+}
+
 const categories = [
   {
     id: 1,
@@ -19,15 +25,17 @@ const categories = [
         description: '分享最新的技术文章和教程',
         thumbnail: 'https://picsum.photos/400/300?random=1',
         coverImage: 'https://picsum.photos/1200/400?random=1',
+        createdAt: generateRandomTimestamp(30),
+        updatedAt: generateRandomTimestamp(15),
       },
     ],
     availableLanguages: ['zh-CN'],
-    customFields: {},
+    createdBy: 1,
     children: [],
     depth: 0,
     path: '/tech',
-    createdAt: '2026-01-01T00:00:00Z',
-    updatedAt: '2026-03-01T00:00:00Z',
+    createdAt: generateRandomTimestamp(30),
+    updatedAt: generateRandomTimestamp(15),
   },
   {
     id: 2,
@@ -47,15 +55,17 @@ const categories = [
         description: '记录生活中的点点滴滴',
         thumbnail: 'https://picsum.photos/400/300?random=2',
         coverImage: 'https://picsum.photos/1200/400?random=2',
+        createdAt: generateRandomTimestamp(25),
+        updatedAt: generateRandomTimestamp(12),
       },
     ],
     availableLanguages: ['zh-CN'],
-    customFields: {},
+    createdBy: 1,
     children: [],
     depth: 0,
     path: '/life',
-    createdAt: '2026-01-02T00:00:00Z',
-    updatedAt: '2026-03-02T00:00:00Z',
+    createdAt: generateRandomTimestamp(25),
+    updatedAt: generateRandomTimestamp(12),
   },
   {
     id: 3,
@@ -75,15 +85,17 @@ const categories = [
         description: '产品设计理念与实践',
         thumbnail: 'https://picsum.photos/400/300?random=3',
         coverImage: 'https://picsum.photos/1200/400?random=3',
+        createdAt: generateRandomTimestamp(20),
+        updatedAt: generateRandomTimestamp(10),
       },
     ],
     availableLanguages: ['zh-CN'],
-    customFields: {},
+    createdBy: 1,
     children: [],
     depth: 0,
     path: '/design',
-    createdAt: '2026-01-03T00:00:00Z',
-    updatedAt: '2026-03-03T00:00:00Z',
+    createdAt: generateRandomTimestamp(20),
+    updatedAt: generateRandomTimestamp(10),
   },
   {
     id: 4,
@@ -103,17 +115,68 @@ const categories = [
         description: '创业路上的思考与总结',
         thumbnail: 'https://picsum.photos/400/300?random=4',
         coverImage: 'https://picsum.photos/1200/400?random=4',
+        createdAt: generateRandomTimestamp(15),
+        updatedAt: generateRandomTimestamp(8),
       },
     ],
     availableLanguages: ['zh-CN'],
-    customFields: {},
+    createdBy: 1,
     children: [],
     depth: 0,
     path: '/startup',
-    createdAt: '2026-01-04T00:00:00Z',
-    updatedAt: '2026-03-04T00:00:00Z',
+    createdAt: generateRandomTimestamp(15),
+    updatedAt: generateRandomTimestamp(8),
   },
 ]
+
+const categoryEnMap: Record<string, {
+  name: string
+  description: string
+}> = {
+  tech: {
+    name: 'Tech Sharing',
+    description: 'Share the latest technical articles and tutorials',
+  },
+  life: {
+    name: 'Life Notes',
+    description: 'Record moments and thoughts from daily life',
+  },
+  design: {
+    name: 'Product Design',
+    description: 'Product design concepts and practices',
+  },
+  startup: {
+    name: 'Startup Insights',
+    description: 'Reflections and summaries from startup journey',
+  },
+}
+
+categories.forEach((category) => {
+  const zh = category.translations.find(t => t.languageCode === 'zh-CN')
+  if (!zh || category.translations.some(t => t.languageCode === 'en-US')) {
+    return
+  }
+
+  const mapped = categoryEnMap[zh.slug] || {
+    name: zh.name,
+    description: zh.description,
+  }
+
+  category.translations.push({
+    id: zh.id + 100,
+    categoryId: category.id,
+    languageCode: 'en-US',
+    name: mapped.name,
+    slug: zh.slug,
+    description: mapped.description,
+    thumbnail: zh.thumbnail,
+    coverImage: zh.coverImage,
+    createdAt: zh.createdAt,
+    updatedAt: zh.updatedAt,
+  })
+
+  category.availableLanguages = ['zh-CN', 'en-US']
+})
 
 export default defineMock([
   {
@@ -141,4 +204,3 @@ export default defineMock([
     },
   },
 ])
-

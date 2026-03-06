@@ -1,5 +1,11 @@
 import { defineMock } from 'vite-plugin-mock-dev-server'
 
+// 生成随机的 RFC 3339 格式时间戳
+function generateRandomTimestamp(daysAgo: number = 0, hoursOffset: number = 0): string {
+  const date = new Date(Date.now() - daysAgo * 86400000 - hoursOffset * 3600000)
+  return date.toISOString()
+}
+
 const navigations = [
   {
     id: 1,
@@ -23,8 +29,9 @@ const navigations = [
         requiredPermission: '',
         parentId: 0,
         children: [],
-        createdAt: '2026-01-01T00:00:00Z',
-        updatedAt: '2026-03-01T00:00:00Z',
+        createdBy: 1,
+        createdAt: generateRandomTimestamp(30),
+        updatedAt: generateRandomTimestamp(15),
       },
       {
         id: 2,
@@ -41,8 +48,9 @@ const navigations = [
         requiredPermission: '',
         parentId: 0,
         children: [],
-        createdAt: '2026-01-01T00:00:00Z',
-        updatedAt: '2026-03-01T00:00:00Z',
+        createdBy: 1,
+        createdAt: generateRandomTimestamp(30),
+        updatedAt: generateRandomTimestamp(14),
       },
       {
         id: 3,
@@ -75,8 +83,9 @@ const navigations = [
             requiredPermission: '',
             parentId: 3,
             children: [],
-            createdAt: '2026-01-01T00:00:00Z',
-            updatedAt: '2026-03-01T00:00:00Z',
+            createdBy: 1,
+            createdAt: generateRandomTimestamp(29),
+            updatedAt: generateRandomTimestamp(13),
           },
           {
             id: 5,
@@ -94,12 +103,14 @@ const navigations = [
             requiredPermission: '',
             parentId: 3,
             children: [],
-            createdAt: '2026-01-02T00:00:00Z',
-            updatedAt: '2026-03-02T00:00:00Z',
+            createdBy: 1,
+            createdAt: generateRandomTimestamp(28),
+            updatedAt: generateRandomTimestamp(12),
           },
         ],
-        createdAt: '2026-01-01T00:00:00Z',
-        updatedAt: '2026-03-01T00:00:00Z',
+        createdBy: 1,
+        createdAt: generateRandomTimestamp(30),
+        updatedAt: generateRandomTimestamp(13),
       },
       {
         id: 6,
@@ -117,12 +128,14 @@ const navigations = [
         requiredPermission: '',
         parentId: 0,
         children: [],
-        createdAt: '2026-01-01T00:00:00Z',
-        updatedAt: '2026-03-01T00:00:00Z',
+        createdBy: 1,
+        createdAt: generateRandomTimestamp(27),
+        updatedAt: generateRandomTimestamp(11),
       },
     ],
-    createdAt: '2026-01-01T00:00:00Z',
-    updatedAt: '2026-03-01T00:00:00Z',
+    createdBy: 1,
+    createdAt: generateRandomTimestamp(30),
+    updatedAt: generateRandomTimestamp(12),
   },
   {
     id: 2,
@@ -147,8 +160,9 @@ const navigations = [
         requiredPermission: '',
         parentId: 0,
         children: [],
-        createdAt: '2026-01-01T00:00:00Z',
-        updatedAt: '2026-03-01T00:00:00Z',
+        createdBy: 1,
+        createdAt: generateRandomTimestamp(25),
+        updatedAt: generateRandomTimestamp(10),
       },
       {
         id: 8,
@@ -166,8 +180,9 @@ const navigations = [
         requiredPermission: '',
         parentId: 0,
         children: [],
-        createdAt: '2026-01-01T00:00:00Z',
-        updatedAt: '2026-03-01T00:00:00Z',
+        createdBy: 1,
+        createdAt: generateRandomTimestamp(24),
+        updatedAt: generateRandomTimestamp(9),
       },
       {
         id: 9,
@@ -185,8 +200,9 @@ const navigations = [
         requiredPermission: '',
         parentId: 0,
         children: [],
-        createdAt: '2026-01-01T00:00:00Z',
-        updatedAt: '2026-03-01T00:00:00Z',
+        createdBy: 1,
+        createdAt: generateRandomTimestamp(23),
+        updatedAt: generateRandomTimestamp(8),
       },
       {
         id: 10,
@@ -203,12 +219,14 @@ const navigations = [
         requiredPermission: '',
         parentId: 0,
         children: [],
-        createdAt: '2026-01-01T00:00:00Z',
-        updatedAt: '2026-03-01T00:00:00Z',
+        createdBy: 1,
+        createdAt: generateRandomTimestamp(22),
+        updatedAt: generateRandomTimestamp(7),
       },
     ],
-    createdAt: '2026-01-01T00:00:00Z',
-    updatedAt: '2026-03-01T00:00:00Z',
+    createdBy: 1,
+    createdAt: generateRandomTimestamp(25),
+    updatedAt: generateRandomTimestamp(8),
   },
   {
     id: 3,
@@ -232,8 +250,9 @@ const navigations = [
         requiredPermission: '',
         parentId: 0,
         children: [],
-        createdAt: '2026-01-01T00:00:00Z',
-        updatedAt: '2026-03-01T00:00:00Z',
+        createdBy: 1,
+        createdAt: generateRandomTimestamp(20),
+        updatedAt: generateRandomTimestamp(6),
       },
       {
         id: 12,
@@ -250,12 +269,14 @@ const navigations = [
         requiredPermission: '',
         parentId: 0,
         children: [],
-        createdAt: '2026-01-01T00:00:00Z',
-        updatedAt: '2026-03-01T00:00:00Z',
+        createdBy: 1,
+        createdAt: generateRandomTimestamp(19),
+        updatedAt: generateRandomTimestamp(5),
       },
     ],
-    createdAt: '2026-01-01T00:00:00Z',
-    updatedAt: '2026-03-01T00:00:00Z',
+    createdBy: 1,
+    createdAt: generateRandomTimestamp(20),
+    updatedAt: generateRandomTimestamp(4),
   },
 ]
 
@@ -339,7 +360,7 @@ export default defineMock([
     method: 'POST',
     body: ({ body }) => {
       const newId = Math.max(...navigations.map(nav => nav.id)) + 1
-      const now = new Date().toISOString()
+      const now = generateRandomTimestamp(0, 0)
 
       const newNavigation = {
         id: newId,
@@ -348,6 +369,7 @@ export default defineMock([
         isActive: body.data.isActive !== undefined ? body.data.isActive : true,
         locale: body.data.locale || 'zh-CN',
         items: body.data.items || [],
+        createdBy: body.data.createdBy || 1,
         createdAt: now,
         updatedAt: now,
       }
@@ -371,7 +393,7 @@ export default defineMock([
         }
       }
 
-      const now = new Date().toISOString()
+      const now = generateRandomTimestamp(0, 0)
 
       navigations[index] = {
         ...navigations[index],

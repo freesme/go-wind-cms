@@ -1,59 +1,125 @@
 import { defineMock } from 'vite-plugin-mock-dev-server'
 
+// 生成随机的 RFC 3339 格式时间戳
+function generateRandomTimestamp(daysAgo: number = 0, hoursOffset: number = 0): string {
+  const date = new Date(Date.now() - daysAgo * 86400000 - hoursOffset * 3600000)
+  return date.toISOString()
+}
+
 const comments = [
   {
     id: 1,
-    postId: 1,
+    contentType: 'CONTENT_TYPE_POST',
+    objectId: 1,
     content: '非常好的文章，学到了很多！',
+    authorId: 0,
     authorName: '王五',
-    email: 'wangwu@example.com',
-    status: 'COMMENT_STATUS_APPROVED',
-    createdAt: '2026-03-01T12:00:00Z',
+    authorEmail: 'wangwu@example.com',
+    authorUrl: '',
+    authorType: 'AUTHOR_TYPE_GUEST',
+    status: 'STATUS_APPROVED',
+    likeCount: 5,
+    dislikeCount: 0,
+    replyCount: 0,
+    ipAddress: '192.168.1.1',
+    location: '北京',
+    createdAt: generateRandomTimestamp(2, 4),
+    updatedAt: generateRandomTimestamp(2, 4),
   },
   {
     id: 2,
-    postId: 1,
+    contentType: 'CONTENT_TYPE_POST',
+    objectId: 1,
     content: 'Composition API 确实很强大，感谢分享！',
+    authorId: 0,
     authorName: '赵六',
-    email: 'zhaoliu@example.com',
-    status: 'COMMENT_STATUS_APPROVED',
-    createdAt: '2026-03-01T14:30:00Z',
+    authorEmail: 'zhaoliu@example.com',
+    authorUrl: '',
+    authorType: 'AUTHOR_TYPE_GUEST',
+    status: 'STATUS_APPROVED',
+    likeCount: 3,
+    dislikeCount: 0,
+    replyCount: 0,
+    ipAddress: '192.168.1.2',
+    location: '上海',
+    createdAt: generateRandomTimestamp(2, 2),
+    updatedAt: generateRandomTimestamp(2, 2),
   },
   {
     id: 3,
-    postId: 1,
+    contentType: 'CONTENT_TYPE_POST',
+    objectId: 1,
     content: '期待更多关于 Vue 3 的文章',
+    authorId: 0,
     authorName: '孙七',
-    email: 'sunqi@example.com',
-    status: 'COMMENT_STATUS_APPROVED',
-    createdAt: '2026-03-02T09:15:00Z',
+    authorEmail: 'sunqi@example.com',
+    authorUrl: '',
+    authorType: 'AUTHOR_TYPE_GUEST',
+    status: 'STATUS_APPROVED',
+    likeCount: 2,
+    dislikeCount: 0,
+    replyCount: 0,
+    ipAddress: '192.168.1.3',
+    location: '深圳',
+    createdAt: generateRandomTimestamp(1, 12),
+    updatedAt: generateRandomTimestamp(1, 12),
   },
   {
     id: 4,
-    postId: 2,
+    contentType: 'CONTENT_TYPE_POST',
+    objectId: 2,
     content: 'TypeScript 的类型系统真的很强大',
+    authorId: 0,
     authorName: '周八',
-    email: 'zhouba@example.com',
-    status: 'COMMENT_STATUS_APPROVED',
-    createdAt: '2026-02-26T10:00:00Z',
+    authorEmail: 'zhouba@example.com',
+    authorUrl: '',
+    authorType: 'AUTHOR_TYPE_GUEST',
+    status: 'STATUS_APPROVED',
+    likeCount: 8,
+    dislikeCount: 0,
+    replyCount: 0,
+    ipAddress: '192.168.1.4',
+    location: '杭州',
+    createdAt: generateRandomTimestamp(5, 6),
+    updatedAt: generateRandomTimestamp(5, 6),
   },
   {
     id: 5,
-    postId: 2,
+    contentType: 'CONTENT_TYPE_POST',
+    objectId: 2,
     content: '条件类型的部分能再详细讲讲吗？',
+    authorId: 0,
     authorName: '吴九',
-    email: 'wujiu@example.com',
-    status: 'COMMENT_STATUS_APPROVED',
-    createdAt: '2026-02-27T15:20:00Z',
+    authorEmail: 'wujiu@example.com',
+    authorUrl: '',
+    authorType: 'AUTHOR_TYPE_GUEST',
+    status: 'STATUS_APPROVED',
+    likeCount: 1,
+    dislikeCount: 0,
+    replyCount: 0,
+    ipAddress: '192.168.1.5',
+    location: '成都',
+    createdAt: generateRandomTimestamp(4, 8),
+    updatedAt: generateRandomTimestamp(4, 8),
   },
   {
     id: 6,
-    postId: 3,
+    contentType: 'CONTENT_TYPE_POST',
+    objectId: 3,
     content: 'Headless CMS 是未来的趋势',
+    authorId: 0,
     authorName: '郑十',
-    email: 'zhengshi@example.com',
-    status: 'COMMENT_STATUS_APPROVED',
-    createdAt: '2026-02-21T11:00:00Z',
+    authorEmail: 'zhengshi@example.com',
+    authorUrl: '',
+    authorType: 'AUTHOR_TYPE_GUEST',
+    status: 'STATUS_APPROVED',
+    likeCount: 6,
+    dislikeCount: 0,
+    replyCount: 0,
+    ipAddress: '192.168.1.6',
+    location: '西安',
+    createdAt: generateRandomTimestamp(7, 3),
+    updatedAt: generateRandomTimestamp(7, 3),
   },
 ]
 
@@ -67,12 +133,15 @@ export default defineMock([
 
       let filteredComments = [...comments]
 
-      // 按文章 ID 筛选
+      // 按对象 ID 和内容类型筛选
       if (query.query) {
         try {
           const queryObj = JSON.parse(query.query)
-          if (queryObj.postId) {
-            filteredComments = filteredComments.filter(c => c.postId === queryObj.postId)
+          if (queryObj.objectId) {
+            filteredComments = filteredComments.filter(c => c.objectId === queryObj.objectId)
+          }
+          if (queryObj.contentType) {
+            filteredComments = filteredComments.filter(c => c.contentType === queryObj.contentType)
           }
           if (queryObj.status) {
             filteredComments = filteredComments.filter(c => c.status === queryObj.status)
@@ -98,7 +167,8 @@ export default defineMock([
       const newComment = {
         id: comments.length + 1,
         ...body.data,
-        createdAt: new Date().toISOString(),
+        createdAt: generateRandomTimestamp(0, 0),
+        updatedAt: generateRandomTimestamp(0, 0),
       }
       comments.push(newComment)
       return newComment

@@ -1,5 +1,11 @@
 import { defineMock } from 'vite-plugin-mock-dev-server'
 
+// 生成随机的 RFC 3339 格式时间戳
+function generateRandomTimestamp(daysAgo: number = 0): string {
+  const date = new Date(Date.now() - daysAgo * 86400000)
+  return date.toISOString()
+}
+
 const pages = [
   {
     id: 1,
@@ -7,9 +13,12 @@ const pages = [
     type: 'PAGE_TYPE_DEFAULT',
     editorType: 'EDITOR_TYPE_MARKDOWN',
     slug: 'about',
+    authorId: 1,
+    authorName: '张三',
     showInNavigation: true,
     sortOrder: 1,
     visits: 456,
+    customFields: {},
     translations: [
       {
         id: 1,
@@ -56,14 +65,87 @@ GoWind CMS 是一个强大的多租户 Headless CMS 平台，为现代团队提�
       },
     ],
     availableLanguages: ['zh-CN'],
-    customFields: {},
+    createdBy: 1,
     children: [],
     depth: 0,
     path: '/about',
-    createdAt: '2026-01-01T00:00:00Z',
-    updatedAt: '2026-03-01T00:00:00Z',
+    createdAt: generateRandomTimestamp(30),
+    updatedAt: generateRandomTimestamp(10),
   },
 ]
+
+const pageEnMap: Record<string, {
+  title: string
+  summary: string
+  content: string
+  seoTitle?: string
+  metaDescription?: string
+}> = {
+  about: {
+    title: 'About Us',
+    summary: 'Learn about our team and mission',
+    content: `# About GoWind CMS
+
+GoWind CMS is a powerful multi-tenant headless CMS platform that provides flexible content management for modern teams.
+
+## Our Mission
+
+Make content management simpler, more efficient, and more flexible.
+
+## Core Features
+
+### Multi-tenant Architecture
+Complete tenant isolation with shared infrastructure, supporting unlimited independent projects.
+
+### Flexible Content Management
+Powerful tools to manage all content types, including multilingual support, custom fields, and version control.
+
+### Enterprise-grade Security
+- Role-based access control
+- Data encryption
+- Audit logs
+- Regular security reviews
+
+### Advanced Analytics
+Gain insights into content performance, including traffic statistics and user behavior analysis.
+
+## Contact Us
+
+If you have any questions or suggestions, feel free to contact us:
+
+- Email: support@gowindcms.com
+- Phone: +86 123 4567 8900
+- Address: Chaoyang District, Beijing, China`,
+  },
+}
+
+pages.forEach((page) => {
+  const zh = page.translations.find(t => t.languageCode === 'zh-CN')
+  if (!zh || page.translations.some(t => t.languageCode === 'en-US')) {
+    return
+  }
+
+  const mapped = pageEnMap[zh.slug] || {
+    title: zh.title,
+    summary: zh.summary,
+    content: zh.content,
+  }
+
+  page.translations.push({
+    id: zh.id + 100,
+    pageId: page.id,
+    languageCode: 'en-US',
+    title: mapped.title,
+    slug: zh.slug,
+    summary: mapped.summary,
+    content: mapped.content,
+    thumbnail: zh.thumbnail,
+    fullPath: zh.fullPath,
+    wordCount: zh.wordCount,
+  })
+
+  page.availableLanguages = ['zh-CN', 'en-US']
+})
 
 export default defineMock([
   {
@@ -111,4 +193,3 @@ export default defineMock([
     },
   },
 ])
-
