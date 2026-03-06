@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { definePage } from 'unplugin-vue-router/runtime'
-import { ref, onMounted, watch } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import { usePostStore, useCategoryStore } from '@/stores/modules/app'
-import { $t } from '@/locales'
+import {definePage} from 'unplugin-vue-router/runtime'
+import {ref, onMounted, watch} from 'vue'
+import {useRouter, useRoute} from 'vue-router'
+
+import {usePostStore, useCategoryStore} from '@/stores/modules/app'
+import {$t} from '@/locales'
+import {formatDate} from "@/utils/date";
 
 definePage({
   name: 'post-list',
@@ -32,7 +34,7 @@ const selectedCategory = ref<number | null>(null)
 async function loadPosts() {
   loading.value = true
   try {
-    const filters: any = { status: 'POST_STATUS_PUBLISHED' }
+    const filters: any = {status: 'POST_STATUS_PUBLISHED'}
 
     if (selectedCategory.value) {
       filters.categoryIds = [selectedCategory.value]
@@ -53,7 +55,7 @@ async function loadCategories() {
   try {
     const res = await categoryStore.listCategory(
       undefined,
-      { status: 'CATEGORY_STATUS_ACTIVE' }
+      {status: 'CATEGORY_STATUS_ACTIVE'}
     )
     categories.value = res.items || []
   } catch (error) {
@@ -75,11 +77,6 @@ function getPostThumbnail(post: any) {
 
 function getCategoryName(category: any) {
   return category.translations?.[0]?.name || $t('page.home.category_default')
-}
-
-function formatDate(dateString: string) {
-  if (!dateString) return ''
-  return new Date(dateString).toLocaleDateString()
 }
 
 function handleViewPost(postId: number) {
@@ -106,7 +103,7 @@ function handleCategoryChange(categoryId: number | null) {
 function handlePageChange(page: number) {
   pagination.value.page = page
   loadPosts()
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+  window.scrollTo({top: 0, behavior: 'smooth'})
 }
 
 function handlePageSizeChange(pageSize: number) {
@@ -157,7 +154,7 @@ watch(() => route.query.category, (newVal) => {
             @click="handleCategoryChange(null)"
           >
             <template #icon>
-              <span class="i-carbon:grid" />
+              <span class="i-carbon:grid"/>
             </template>
             {{ $t('page.posts.all_categories') }}
           </n-button>
@@ -170,7 +167,7 @@ watch(() => route.query.category, (newVal) => {
             @click="handleCategoryChange(cat.id)"
           >
             <template #icon>
-              <span class="i-carbon:folder" />
+              <span class="i-carbon:folder"/>
             </template>
             {{ getCategoryName(cat) }}
           </n-button>
@@ -182,7 +179,9 @@ watch(() => route.query.category, (newVal) => {
         <n-spin :show="loading">
           <!-- Results Count -->
           <div v-if="posts.length > 0" class="results-info">
-            <span>{{ $t('page.posts.found') }} <strong>{{ total }}</strong> {{ $t('page.posts.articles') }}</span>
+            <span>{{ $t('page.posts.found') }} <strong>{{
+                total
+              }}</strong> {{ $t('page.posts.articles') }}</span>
           </div>
 
           <div v-if="posts.length > 0" class="posts-grid">
@@ -193,27 +192,27 @@ watch(() => route.query.category, (newVal) => {
               @click="handleViewPost(post.id)"
             >
               <div class="post-image">
-                <img :src="getPostThumbnail(post)" :alt="getPostTitle(post)" />
-                <div class="image-overlay" />
+                <img :src="getPostThumbnail(post)" :alt="getPostTitle(post)"/>
+                <div class="image-overlay"/>
               </div>
               <div class="post-content">
                 <h3 class="post-title">{{ getPostTitle(post) }}</h3>
                 <p class="post-summary">{{ getPostSummary(post) }}</p>
                 <div class="post-meta">
                   <div class="meta-item">
-                    <span class="i-carbon:user" />
+                    <span class="i-carbon:user"/>
                     <span>{{ post.authorName }}</span>
                   </div>
                   <div class="meta-item">
-                    <span class="i-carbon:calendar" />
+                    <span class="i-carbon:calendar"/>
                     <span>{{ formatDate(post.createdAt) }}</span>
                   </div>
                   <div class="meta-item">
-                    <span class="i-carbon:view" />
+                    <span class="i-carbon:view"/>
                     <span>{{ post.visits || 0 }}</span>
                   </div>
                   <div class="meta-item">
-                    <span class="i-carbon:thumbs-up" />
+                    <span class="i-carbon:thumbs-up"/>
                     <span>{{ post.likes || 0 }}</span>
                   </div>
                 </div>
@@ -223,7 +222,7 @@ watch(() => route.query.category, (newVal) => {
 
           <n-empty v-else :description="$t('page.posts.no_results')" style="margin: 80px 0;">
             <template #icon>
-              <span class="i-carbon:document-blank" style="font-size: 64px;" />
+              <span class="i-carbon:document-blank" style="font-size: 64px;"/>
             </template>
           </n-empty>
 
@@ -274,10 +273,9 @@ watch(() => route.query.category, (newVal) => {
     left: 0;
     right: 0;
     bottom: 0;
-    background:
-      radial-gradient(ellipse at 20% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
-      linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+    background: radial-gradient(ellipse at 20% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
+    linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
     animation: gradientShift 15s ease-in-out infinite;
     z-index: 0;
   }
@@ -290,9 +288,8 @@ watch(() => route.query.category, (newVal) => {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
     background-size: 50px 50px;
     animation: gridMove 20s linear infinite;
     opacity: 0.6;
@@ -316,30 +313,24 @@ watch(() => route.query.category, (newVal) => {
       line-height: 1.1;
 
       // 添加发光效果
-      background: linear-gradient(
-        135deg,
-        #ffffff 0%,
-        #f0f0ff 25%,
-        #e0e0ff 50%,
-        #f0f0ff 75%,
-        #ffffff 100%
-      );
+      background: linear-gradient(135deg,
+      #ffffff 0%,
+      #f0f0ff 25%,
+      #e0e0ff 50%,
+      #f0f0ff 75%,
+      #ffffff 100%);
       background-size: 200% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
 
-      text-shadow:
-        0 0 40px rgba(255, 255, 255, 0.9),
-        0 0 80px rgba(var(--color-primary-purple-rgb), 0.7),
-        0 0 120px rgba(99, 102, 241, 0.5),
-        0 6px 24px rgba(0, 0, 0, 0.5),
-        0 3px 12px rgba(0, 0, 0, 0.4);
+      text-shadow: 0 0 40px rgba(255, 255, 255, 0.9),
+      0 0 80px rgba(var(--color-primary-purple-rgb), 0.7),
+      0 0 120px rgba(99, 102, 241, 0.5),
+      0 6px 24px rgba(0, 0, 0, 0.5),
+      0 3px 12px rgba(0, 0, 0, 0.4);
 
-      filter:
-        drop-shadow(0 0 30px rgba(var(--color-primary-purple-rgb), 0.6))
-        drop-shadow(0 0 60px rgba(99, 102, 241, 0.4))
-        drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+      filter: drop-shadow(0 0 30px rgba(var(--color-primary-purple-rgb), 0.6)) drop-shadow(0 0 60px rgba(99, 102, 241, 0.4)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
 
       animation-name: slideDown, glowPulseTitle, gradientShine;
       animation-duration: 0.8s, 3s, 6s;
@@ -1010,16 +1001,14 @@ watch(() => route.query.category, (newVal) => {
 
 @keyframes gradientShift {
   0%, 100% {
-    background:
-      radial-gradient(ellipse at 20% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
-      linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+    background: radial-gradient(ellipse at 20% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
+    linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
   }
   50% {
-    background:
-      radial-gradient(ellipse at 80% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 20% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
-      linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #6366f1 100%);
+    background: radial-gradient(ellipse at 80% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
+    linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #6366f1 100%);
   }
 }
 
@@ -1034,16 +1023,10 @@ watch(() => route.query.category, (newVal) => {
 
 @keyframes glowPulseTitle {
   0%, 100% {
-    filter:
-      drop-shadow(0 0 25px rgba(var(--color-primary-purple-rgb), 0.5))
-      drop-shadow(0 0 50px rgba(99, 102, 241, 0.3))
-      drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(0 0 25px rgba(var(--color-primary-purple-rgb), 0.5)) drop-shadow(0 0 50px rgba(99, 102, 241, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
   }
   50% {
-    filter:
-      drop-shadow(0 0 40px rgba(var(--color-primary-purple-rgb), 0.8))
-      drop-shadow(0 0 80px rgba(99, 102, 241, 0.6))
-      drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
+    filter: drop-shadow(0 0 40px rgba(var(--color-primary-purple-rgb), 0.8)) drop-shadow(0 0 80px rgba(99, 102, 241, 0.6)) drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
   }
 }
 
@@ -1068,30 +1051,24 @@ html.dark {
 
     .hero-content {
       h1 {
-        background: linear-gradient(
-          135deg,
-          #ffffff 0%,
-          #f5f5ff 25%,
-          #ebebff 50%,
-          #f5f5ff 75%,
-          #ffffff 100%
-        );
+        background: linear-gradient(135deg,
+        #ffffff 0%,
+        #f5f5ff 25%,
+        #ebebff 50%,
+        #f5f5ff 75%,
+        #ffffff 100%);
         background-size: 200% auto;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
 
-        text-shadow:
-          0 0 50px rgba(255, 255, 255, 1),
-          0 0 100px rgba(var(--color-primary-purple-rgb), 0.8),
-          0 0 150px rgba(99, 102, 241, 0.6),
-          0 8px 30px rgba(0, 0, 0, 0.6),
-          0 4px 15px rgba(0, 0, 0, 0.4);
+        text-shadow: 0 0 50px rgba(255, 255, 255, 1),
+        0 0 100px rgba(var(--color-primary-purple-rgb), 0.8),
+        0 0 150px rgba(99, 102, 241, 0.6),
+        0 8px 30px rgba(0, 0, 0, 0.6),
+        0 4px 15px rgba(0, 0, 0, 0.4);
 
-        filter:
-          drop-shadow(0 0 35px rgba(var(--color-primary-purple-rgb), 0.7))
-          drop-shadow(0 0 70px rgba(99, 102, 241, 0.5))
-          drop-shadow(0 6px 20px rgba(0, 0, 0, 0.4));
+        filter: drop-shadow(0 0 35px rgba(var(--color-primary-purple-rgb), 0.7)) drop-shadow(0 0 70px rgba(99, 102, 241, 0.5)) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.4));
       }
     }
   }

@@ -11,6 +11,7 @@ import {ContentViewer} from '@/components/ContentViewer'
 import CommentSection from '@/components/CommentSection'
 
 import type {contentservicev1_Post} from "@/api/generated/app/service/v1"
+import {formatDate} from "@/utils/date";
 
 // --- 常量定义 ---
 const SCROLL_THRESHOLD = 500
@@ -80,11 +81,6 @@ function throttle(fn: Function, delay: number) {
       }, delay)
     }
   }
-}
-
-function formatDate(dateString: string) {
-  if (!dateString) return ''
-  return new Date(dateString).toLocaleString()
 }
 
 // --- 数据加载 ---

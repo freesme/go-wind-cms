@@ -2,9 +2,11 @@
 import {definePage} from 'unplugin-vue-router/runtime'
 import {useRouter} from 'vue-router'
 import {ref, onMounted, computed, onUnmounted} from 'vue'
+
 import {usePostStore, useCategoryStore, useTagStore} from '@/stores/modules/app'
 import {$t, i18n} from '@/locales'
 import {XIcon} from "@/plugins/xicon";
+import {formatDate} from "@/utils/date";
 
 definePage({
   name: 'home',
@@ -132,11 +134,6 @@ function getPostThumbnail(post: any) {
 
 function getCategoryName(category: any) {
   return category.translations?.[0]?.name || $t('page.home.category_default')
-}
-
-function formatDate(dateString: string) {
-  if (!dateString) return ''
-  return new Date(dateString).toLocaleDateString()
 }
 
 function handleViewPost(id: number) {

@@ -6,6 +6,7 @@ import {usePostStore, useCategoryStore} from '@/stores/modules/app'
 import {useMessage} from 'naive-ui'
 import {$t, currentLocaleLanguageCode} from '@/locales'
 import type {contentservicev1_Post} from "@/api/generated/app/service/v1";
+import {formatDate} from "@/utils/date";
 
 definePage({
   name: 'category-detail',
@@ -129,11 +130,6 @@ function getPostThumbnail(post: contentservicev1_Post) {
   return '/placeholder.jpg'
 }
 
-function formatDate(dateString: string) {
-  if (!dateString) return ''
-  return new Date(dateString).toLocaleDateString()
-}
-
 function handleViewPost(id: number) {
   router.push({
     path: `/post/${id}`,
@@ -184,7 +180,9 @@ onMounted(async () => {
       <n-spin :show="loading">
         <!-- Results Count -->
         <div v-if="posts.length > 0" class="results-info">
-          <span>{{ $t('page.posts.found') }} <strong>{{ pagination.itemCount }}</strong> {{ $t('page.posts.articles') }}</span>
+          <span>{{ $t('page.posts.found') }} <strong>{{
+              pagination.itemCount
+            }}</strong> {{ $t('page.posts.articles') }}</span>
         </div>
 
         <!-- Posts Grid -->
