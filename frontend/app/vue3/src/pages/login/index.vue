@@ -8,7 +8,7 @@ import AccountLoginPage from './components/AccountLoginPage.vue'
 import EmailLoginPage from './components/EmailLoginPage.vue'
 import PhoneLoginPage from './components/PhoneLoginPage.vue'
 import OtherLoginPage from './components/OtherLoginPage.vue'
-import { MoonOutline, SunnyOutline } from '@vicons/ionicons5'
+import { MoonOutline, SunnyOutline, LanguageOutline } from '@vicons/ionicons5'
 import { isDark, toggleDark } from '@/composables/dark'
 import { languageColumns, languageShorts, i18n, loadLocaleMessages, type SupportedLanguagesType } from '@/locales'
 import { updatePreferences } from "@/preferences";
@@ -102,7 +102,12 @@ const handlePrivacyClick = () => {
     <div class="login-controls">
       <n-dropdown trigger="hover" size="huge" :options="languageColumns" @select="handleSelectLanguage">
         <n-button round class="control-btn" :aria-label="$t('navbar.top.language')">
-          {{ getLanguageLabel() }}
+          <template #icon>
+            <n-icon>
+              <LanguageOutline/>
+            </n-icon>
+          </template>
+          <span class="lang-text">{{ getLanguageLabel() }}</span>
         </n-button>
       </n-dropdown>
       <n-button round class="control-btn" :aria-label="isDark ? $t('navbar.top.light_mode') : $t('navbar.top.dark_mode')" @click="handleToggleTheme">
@@ -380,44 +385,86 @@ html.dark {
   }
 
   .control-btn {
-    --n-color: transparent;
-    --n-color-hover: rgba(102, 126, 234, 0.08);
-    --n-color-pressed: rgba(102, 126, 234, 0.12);
-    --n-border: 1px solid transparent;
-    --n-border-hover: 1px solid rgba(102, 126, 234, 0.2);
-    --n-text-color: var(--color-text-secondary);
+    --n-color: rgba(255, 255, 255, 0.5);
+    --n-color-hover: rgba(102, 126, 234, 0.15);
+    --n-color-pressed: rgba(102, 126, 234, 0.2);
+    --n-border: 1px solid rgba(102, 126, 234, 0.15);
+    --n-border-hover: 1px solid rgba(102, 126, 234, 0.3);
+    --n-text-color: #4a5568;
     --n-text-color-hover: var(--color-brand);
     min-width: auto;
     padding: 6px 12px;
     font-size: 13px;
     font-weight: 500;
     transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 
     &:hover {
       transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
     }
 
     :deep(.n-icon) {
-      font-size: 16px;
+      font-size: 18px;
+      color: #4a5568;
+    }
+
+    &:hover :deep(.n-icon) {
+      color: var(--color-brand);
+    }
+
+    .lang-text {
+      font-size: 13px;
+      white-space: nowrap;
+      color: #4a5568;
+    }
+
+    &:hover .lang-text {
+      color: var(--color-brand);
     }
   }
 }
 
 html.dark {
   .login-controls {
-    background: rgba(27, 31, 39, 0.9);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    background: rgba(27, 31, 39, 0.95);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 
     &:hover {
-      background: rgba(27, 31, 39, 0.95);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      background: rgba(27, 31, 39, 0.98);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
     }
 
     .control-btn {
-      --n-text-color: var(--color-text-secondary);
-      --n-text-color-hover: var(--color-brand);
-      --n-color-hover: rgba(102, 126, 234, 0.12);
-      --n-color-pressed: rgba(102, 126, 234, 0.18);
+      --n-color: rgba(42, 49, 64, 0.5);
+      --n-color-hover: rgba(102, 126, 234, 0.2);
+      --n-color-pressed: rgba(102, 126, 234, 0.25);
+      --n-border: 1px solid rgba(102, 126, 234, 0.2);
+      --n-border-hover: 1px solid rgba(102, 126, 234, 0.4);
+      --n-text-color: #aab3c2;
+      --n-text-color-hover: #b8c5ff;
+
+      :deep(.n-icon) {
+        color: #aab3c2;
+      }
+
+      &:hover :deep(.n-icon) {
+        color: #b8c5ff;
+      }
+
+      .lang-text {
+        color: #aab3c2;
+      }
+
+      &:hover .lang-text {
+        color: #b8c5ff;
+      }
+
+      &:hover {
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.25);
+      }
     }
   }
 }
@@ -453,6 +500,31 @@ html.dark {
 
       .login-card {
         max-width: 100%;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .login-controls {
+    top: 8px;
+    right: 8px;
+    padding: 4px;
+    gap: 4px;
+    border-radius: 8px;
+
+    .control-btn {
+      padding: 4px 8px;
+      font-size: 11px;
+      min-width: 32px;
+      height: 32px;
+
+      :deep(.n-icon) {
+        font-size: 14px;
+      }
+
+      .lang-text {
+        display: none;
       }
     }
   }

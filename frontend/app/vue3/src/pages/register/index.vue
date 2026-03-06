@@ -8,7 +8,7 @@ import AccountRegisterPage from "./components/AccountRegisterPage.vue";
 import EmailRegisterPage from "./components/EmailRegisterPage.vue";
 import PhoneRegisterPage from "./components/PhoneRegisterPage.vue";
 import OtherRegisterPage from "./components/OtherRegisterPage.vue";
-import { MoonOutline, SunnyOutline } from '@vicons/ionicons5'
+import { MoonOutline, SunnyOutline, LanguageOutline } from '@vicons/ionicons5'
 import { isDark, toggleDark } from '@/composables/dark'
 import { languageColumns, languageShorts, i18n, loadLocaleMessages, type SupportedLanguagesType } from '@/locales'
 import { updatePreferences } from "@/preferences";
@@ -75,7 +75,12 @@ const handlePrivacyClick = () => {
     <div class="register-controls">
       <n-dropdown trigger="hover" size="huge" :options="languageColumns" @select="handleSelectLanguage">
         <n-button round class="control-btn" :aria-label="$t('navbar.top.language')">
-          {{ getLanguageLabel() }}
+          <template #icon>
+            <n-icon>
+              <LanguageOutline/>
+            </n-icon>
+          </template>
+          <span class="lang-text">{{ getLanguageLabel() }}</span>
         </n-button>
       </n-dropdown>
       <n-button round class="control-btn" :aria-label="isDark ? $t('navbar.top.light_mode') : $t('navbar.top.dark_mode')" @click="handleToggleTheme">
@@ -304,25 +309,44 @@ const handlePrivacyClick = () => {
   }
 
   .control-btn {
-    --n-color: transparent;
-    --n-color-hover: rgba(102, 126, 234, 0.08);
-    --n-color-pressed: rgba(102, 126, 234, 0.12);
-    --n-border: 1px solid transparent;
-    --n-border-hover: 1px solid rgba(102, 126, 234, 0.2);
-    --n-text-color: var(--color-text-secondary);
+    --n-color: rgba(255, 255, 255, 0.5);
+    --n-color-hover: rgba(102, 126, 234, 0.15);
+    --n-color-pressed: rgba(102, 126, 234, 0.2);
+    --n-border: 1px solid rgba(102, 126, 234, 0.15);
+    --n-border-hover: 1px solid rgba(102, 126, 234, 0.3);
+    --n-text-color: #4a5568;
     --n-text-color-hover: var(--color-brand);
     min-width: auto;
     padding: 6px 12px;
     font-size: 13px;
     font-weight: 500;
     transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 
     &:hover {
       transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
     }
 
     :deep(.n-icon) {
-      font-size: 16px;
+      font-size: 18px;
+      color: #4a5568;
+    }
+
+    &:hover :deep(.n-icon) {
+      color: var(--color-brand);
+    }
+
+    .lang-text {
+      font-size: 13px;
+      white-space: nowrap;
+      color: #4a5568;
+    }
+
+    &:hover .lang-text {
+      color: var(--color-brand);
     }
   }
 }
@@ -390,19 +414,42 @@ const handlePrivacyClick = () => {
 
 html.dark {
   .register-controls {
-    background: rgba(27, 31, 39, 0.9);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    background: rgba(27, 31, 39, 0.95);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 
     &:hover {
-      background: rgba(27, 31, 39, 0.95);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      background: rgba(27, 31, 39, 0.98);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
     }
 
     .control-btn {
-      --n-text-color: var(--color-text-secondary);
-      --n-text-color-hover: var(--color-brand);
-      --n-color-hover: rgba(102, 126, 234, 0.12);
-      --n-color-pressed: rgba(102, 126, 234, 0.18);
+      --n-color: rgba(42, 49, 64, 0.5);
+      --n-color-hover: rgba(102, 126, 234, 0.2);
+      --n-color-pressed: rgba(102, 126, 234, 0.25);
+      --n-border: 1px solid rgba(102, 126, 234, 0.2);
+      --n-border-hover: 1px solid rgba(102, 126, 234, 0.4);
+      --n-text-color: #aab3c2;
+      --n-text-color-hover: #b8c5ff;
+
+      :deep(.n-icon) {
+        color: #aab3c2;
+      }
+
+      &:hover :deep(.n-icon) {
+        color: #b8c5ff;
+      }
+
+      .lang-text {
+        color: #aab3c2;
+      }
+
+      &:hover .lang-text {
+        color: #b8c5ff;
+      }
+
+      &:hover {
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.25);
+      }
     }
   }
 
@@ -425,14 +472,39 @@ html.dark {
     flex-direction: column;
 
     .register-left {
-      padding: 2rem;
-      min-height: 200px;
-      justify-content: flex-start;
+      padding: 3rem 2rem;
+      min-height: auto;
+
+      .brand {
+        margin-bottom: 2rem;
+
+        .brand-logo {
+          width: 60px;
+          height: 60px;
+        }
+
+        .brand-title {
+          font-size: 2rem;
+        }
+
+        .brand-subtitle {
+          font-size: 1rem;
+        }
+      }
+
+      .benefits-list {
+        gap: 0.75rem;
+
+        .benefit-item {
+          padding: 0.75rem 0;
+          font-size: 1rem;
+        }
+      }
     }
 
     .register-right {
       flex: 1;
-      background: var(--auth-right-bg);
+      padding: 1.5rem;
 
       .register-card {
         max-width: 100%;
@@ -441,17 +513,242 @@ html.dark {
   }
 
   .register-controls {
-    top: 12px;
-    right: 12px;
+    top: 16px;
+    right: 16px;
     padding: 6px;
     gap: 6px;
 
     .control-btn {
-      padding: 4px 8px;
+      padding: 6px 10px;
       font-size: 12px;
 
       :deep(.n-icon) {
         font-size: 14px;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .register-page {
+    .register-left {
+      padding: 2rem 1.5rem;
+      min-height: auto;
+
+      .brand {
+        margin-bottom: 1.5rem;
+
+        .brand-logo {
+          width: 50px;
+          height: 50px;
+          margin-bottom: 0.75rem;
+        }
+
+        .brand-title {
+          font-size: 1.75rem;
+          margin-bottom: 0.4rem;
+        }
+
+        .brand-subtitle {
+          font-size: 0.95rem;
+        }
+      }
+
+      .benefits-list {
+        gap: 0.5rem;
+
+        .benefit-item {
+          padding: 0.5rem 0;
+          font-size: 0.95rem;
+          gap: 0.75rem;
+        }
+      }
+    }
+
+    .register-right {
+      padding: 1rem;
+
+      .register-card {
+        border: none;
+        box-shadow: none;
+
+        .card-header {
+          margin-bottom: 1.25rem;
+
+          h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.4rem;
+          }
+
+          p {
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
+  }
+
+  .register-tabs {
+    margin-bottom: 1.25rem;
+
+    :deep(.n-tabs-nav) {
+      font-size: 13px;
+    }
+
+    :deep(.n-tabs-tab) {
+      padding: 8px 12px !important;
+    }
+  }
+
+  .register-controls {
+    top: 12px;
+    right: 12px;
+    padding: 6px;
+    gap: 4px;
+
+    .control-btn {
+      padding: 6px 10px;
+      font-size: 12px;
+
+      :deep(.n-icon) {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .register-page {
+    .register-left {
+      padding: 1.5rem 1rem;
+      min-height: auto;
+
+      .brand {
+        margin-bottom: 1rem;
+
+        .brand-logo {
+          width: 40px;
+          height: 40px;
+          margin-bottom: 0.5rem;
+        }
+
+        .brand-title {
+          font-size: 1.5rem;
+          margin-bottom: 0.3rem;
+        }
+
+        .brand-subtitle {
+          font-size: 0.85rem;
+        }
+      }
+
+      .benefits-list {
+        gap: 0.4rem;
+
+        .benefit-item {
+          padding: 0.4rem 0;
+          font-size: 0.85rem;
+          gap: 0.5rem;
+
+          span:first-child {
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+
+    .register-right {
+      padding: 0.75rem;
+
+      .register-card {
+        padding: 0;
+
+        :deep(.n-card__content) {
+          padding: 1rem;
+        }
+
+        .card-header {
+          margin-bottom: 1rem;
+
+          h2 {
+            font-size: 1.3rem;
+            margin-bottom: 0.3rem;
+          }
+
+          p {
+            font-size: 0.85rem;
+          }
+        }
+      }
+    }
+  }
+
+  .register-tabs {
+    margin-bottom: 1rem;
+
+    :deep(.n-tabs-nav) {
+      font-size: 12px;
+    }
+
+    :deep(.n-tabs-tab) {
+      padding: 6px 8px !important;
+      font-size: 11px;
+    }
+  }
+
+  .login-section {
+    padding: 1rem 0;
+
+    p {
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    :deep(.n-button) {
+      font-size: 0.85rem;
+    }
+  }
+
+  .back-home {
+    padding: 0.75rem 0;
+
+    :deep(.n-button) {
+      font-size: 0.85rem;
+    }
+  }
+
+  .terms {
+    margin-top: 0.75rem;
+
+    small {
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+
+    :deep(.n-button) {
+      font-size: 0.75rem;
+    }
+  }
+
+  .register-controls {
+    top: 8px;
+    right: 8px;
+    padding: 4px;
+    gap: 4px;
+    border-radius: 8px;
+
+    .control-btn {
+      padding: 4px 8px;
+      font-size: 11px;
+      min-width: 32px;
+      height: 32px;
+
+      :deep(.n-icon) {
+        font-size: 14px;
+      }
+
+      .lang-text {
+        display: none;
       }
     }
   }
