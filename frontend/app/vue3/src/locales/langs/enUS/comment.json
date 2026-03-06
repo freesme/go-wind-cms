@@ -50,6 +50,8 @@
   "duplicate_comment": "Duplicate comment",
   "comment_under_review": "Comment under review",
   "comment_rejected": "Comment rejected",
+  "link_copied": "Link copied to clipboard",
+  "copy_failed": "Copy failed, please copy manually",
   "guest": "Guest",
   "anonymous": "Anonymous",
   "owner_reply": "Author Reply",

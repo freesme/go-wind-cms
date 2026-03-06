@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {$t} from '@/locales'
+import {useMessage} from 'naive-ui'
 import {ContentViewer} from '@/components/ContentViewer'
 import type {commentservicev1_Comment} from "@/api/generated/app/service/v1"
 
@@ -7,6 +8,14 @@ import type {commentservicev1_Comment} from "@/api/generated/app/service/v1"
 defineProps<{
   comments: commentservicev1_Comment[]
 }>()
+
+// --- Emits ---
+const emit = defineEmits<{
+  (e: 'reply', comment: commentservicev1_Comment): void
+}>()
+
+// --- 状态 ---
+const message = useMessage()
 
 // --- 计算属性 ---
 function formatDate(dateString: string) {
@@ -21,6 +30,23 @@ function hasChildren(comment: commentservicev1_Comment): boolean {
 function isOwnerReply(comment: commentservicev1_Comment): boolean {
   // 博主回复：authorType 为 ADMIN 且有 replyToId (回复他人)
   return comment.authorType === 'AUTHOR_TYPE_ADMIN' && !!comment.replyToId
+}
+
+// --- 方法 ---
+function handleReply(comment: commentservicev1_Comment) {
+  emit('reply', comment)
+}
+
+function handleShare(comment: commentservicev1_Comment) {
+  // 复制链接到剪贴板
+  const url = window.location.href.split('#')[0]
+  const commentUrl = `${url}#comment-${comment.id}`
+  
+  navigator.clipboard.writeText(commentUrl).then(() => {
+    message.success($t('comment.link_copied'))
+  }).catch(() => {
+    message.error($t('comment.copy_failed'))
+  })
 }
 </script>
 
@@ -57,11 +83,11 @@ function isOwnerReply(comment: commentservicev1_Comment): boolean {
               <span class="i-carbon:thumbs-up"/>
               {{ comment.likeCount || 0 }}
             </span>
-            <span class="action-item">
+            <span class="action-item" @click="handleReply(comment)">
               <span class="i-carbon:chat"/>
               {{ $t('comment.reply') }}
             </span>
-            <span class="action-item">
+            <span class="action-item" @click="handleShare(comment)">
               <span class="i-carbon:share"/>
               {{ $t('comment.share') }}
             </span>
