@@ -279,8 +279,10 @@ function scrollToHeading(id: string) {
     })
     activeHeading.value = id
 
+    // 保留现有的 history state，只更新 hash
     if (history.pushState) {
-      history.pushState(null, '', `#${id}`)
+      const currentState = history.state || {}
+      history.pushState(currentState, '', `#${id}`)
     } else {
       window.location.hash = `#${id}`
     }
@@ -742,13 +744,20 @@ watch(() => displayContent.value, () => {
   flex: 0 0 200px;
   width: 200px;
   padding: 40px 16px;
-  background: var(--color-surface);
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.02);
+  background: 
+    var(--color-surface),
+    linear-gradient(135deg, rgba(168, 85, 247, 0.06), rgba(102, 126, 234, 0.04)); // 渐变紫色调，增强层次
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    2px 0 16px rgba(0, 0, 0, 0.1), 
+    -2px 0 12px rgba(0, 0, 0, 0.06),
+    inset 0 0 0 1px rgba(168, 85, 247, 0.12); // 增强边框和阴影，提升层次感
   max-height: calc(100vh - 120px);
   position: sticky;
   top: 60px;
   overflow-y: auto;
   transition: all 0.3s ease;
+  border-radius: 0 12px 12px 0;
 
   .toc-container {
     .toc-header {
@@ -756,6 +765,8 @@ watch(() => displayContent.value, () => {
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(168, 85, 247, 0.15);
 
       .toc-title {
         display: flex;
@@ -790,40 +801,44 @@ watch(() => displayContent.value, () => {
       gap: 6px;
 
       .toc-item {
-        padding: 8px 10px;
-        border-radius: 6px;
+        padding: 10px 12px;
+        border-radius: 8px;
         color: var(--color-text-secondary);
         font-size: 13px;
         text-decoration: none;
-        transition: all 0.3s;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         border-left: 2px solid transparent;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         display: block;
+        position: relative;
 
         &.level-2 {
-          padding-left: 10px;
+          padding-left: 12px;
           font-weight: 500;
         }
 
         &.level-3 {
-          padding-left: 24px;
+          padding-left: 26px;
           font-size: 12px;
           color: var(--color-text-secondary);
         }
 
         &:hover {
-          background: rgba(168, 85, 247, 0.08);
-          color: var(--color-text-primary);
+          background: rgba(168, 85, 247, 0.12); // 强化 hover 背景色
+          color: var(--color-brand);
           border-left-color: var(--color-brand);
+          transform: translateX(3px); // 添加位移效果
+          box-shadow: 0 2px 8px rgba(168, 85, 247, 0.15); // 添加阴影效果
         }
 
         &.active {
-          background: rgba(168, 85, 247, 0.12);
+          background: linear-gradient(90deg, rgba(168, 85, 247, 0.15), rgba(168, 85, 247, 0.08)); // 渐变背景
           color: var(--color-brand);
           border-left-color: var(--color-brand);
           font-weight: 600;
+          box-shadow: 0 2px 8px rgba(168, 85, 247, 0.2); // 激活状态也有阴影
         }
       }
     }
@@ -854,7 +869,9 @@ watch(() => displayContent.value, () => {
   width: 100%;
   padding-top: 56.25%; // 16:9 比例（优化过的）
   overflow: hidden;
-  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+  background: linear-gradient(135deg, 
+    var(--color-bg) 0%, 
+    var(--color-surface) 100%); // 使用 CSS 变量支持明暗主题
 
   img {
     position: absolute;
@@ -904,9 +921,9 @@ watch(() => displayContent.value, () => {
     right: 0;
     height: 12px;
     background: linear-gradient(to bottom,
-    rgba(0, 0, 0, 0.06),
-    rgba(0, 0, 0, 0.03) 50%,
-    transparent);
+      rgba(0, 0, 0, 0.08),
+      rgba(0, 0, 0, 0.04) 50%,
+      transparent);
     pointer-events: none;
   }
 }
@@ -948,60 +965,64 @@ watch(() => displayContent.value, () => {
 // Post Content
 .post-content {
   font-size: 17px;
-  line-height: 2;
-  letter-spacing: 0.3px;
+  line-height: 2.0; // 优化行高，提升长文阅读舒适度
+  letter-spacing: 0.25px;
   color: var(--color-text-primary);
   margin-bottom: 40px;
   text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
   :deep(h2) {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 700;
-    margin: 56px 0 28px;
-    padding-bottom: 12px;
+    margin: 52px 0 26px; // 增加标题间距
+    padding-bottom: 10px;
     border-bottom: 2px solid var(--color-brand);
     color: var(--color-text-primary);
     position: relative;
-    line-height: 1.4;
-    letter-spacing: -0.2px;
+    line-height: 1.35;
+    letter-spacing: -0.3px;
 
     &::after {
       content: '';
       position: absolute;
       bottom: -2px;
       left: 0;
-      width: 50px;
+      width: 45px;
       height: 2px;
       background: linear-gradient(90deg, #a855f7, transparent);
     }
   }
 
   :deep(h3) {
-    font-size: 22px;
+    font-size: 21px;
     font-weight: 600;
-    margin: 40px 0 24px;
+    margin: 40px 0 22px; // 优化三级标题间距
     color: var(--color-text-primary);
-    padding-left: 12px;
+    padding-left: 10px;
     border-left: 3px solid var(--color-brand);
     line-height: 1.4;
   }
 
   :deep(p) {
-    margin: 24px 0;
+    margin: 24px 0; // 增加段间距，提升阅读舒适度
     text-align: justify;
-    line-height: 2.1;
-    letter-spacing: 0.3px;
-    word-spacing: 0.1em;
+    line-height: 2.1; // 优化行高
+    letter-spacing: 0.28px; // 微调字间距
+    word-spacing: 0.06em; // 微调词间距
 
     & + p {
-      margin-top: 20px;
+      margin-top: 22px; // 相邻段落间距稍小
     }
 
     &:first-of-type::first-letter {
-      font-size: 1.8em;
-      font-weight: 700;
+      font-size: 1.6em;
+      font-weight: 600;
       color: var(--color-brand);
-      margin-right: 4px;
+      margin-right: 6px;
+      float: left;
+      line-height: 1;
     }
   }
 
@@ -1009,85 +1030,121 @@ watch(() => displayContent.value, () => {
     max-width: 100%;
     border-radius: 10px;
     margin: 32px 0;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
     transition: all 0.3s;
     cursor: zoom-in;
     display: block;
 
     &:hover {
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
-      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      transform: translateY(-2px);
     }
   }
 
   :deep(code) {
-    background: var(--color-bg);
+    background: rgba(150, 150, 150, 0.15); // 加深背景
     padding: 4px 10px;
     border-radius: 6px;
     font-family: 'Fira Code', 'Courier New', monospace;
-    font-size: 0.9em;
+    font-size: 0.88em;
     color: var(--color-brand);
-    border: 1px solid rgba(168, 85, 247, 0.15);
+    border: 1px solid rgba(168, 85, 247, 0.2); // 加强边框
     letter-spacing: 0.1px;
+
+    // 行内代码不换行，但代码块中的代码可以换行
+    &:not(pre code) {
+      white-space: nowrap;
+    }
   }
 
   :deep(pre) {
-    background: var(--color-bg);
-    padding: 20px;
-    border-radius: 10px;
+    background: #282c34; // One Dark 主题色
+    padding: 22px;
+    border-radius: 12px;
     overflow-x: auto;
-    border: 1px solid var(--color-border);
-    margin: 28px 0;
-    line-height: 1.65;
-    letter-spacing: 0.2px;
-    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.12); // 加强边框
+    margin: 36px 0; // 增加间距
+    line-height: 1.6;
+    letter-spacing: 0.15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.08); // 增强阴影
+    position: relative;
+    white-space: pre;
+    word-wrap: normal;
+    overflow-wrap: normal;
+
+    &::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.45);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
 
     code {
       background: none;
       padding: 0;
-      color: var(--color-text-primary);
+      color: inherit;
       border: none;
-      font-size: 0.92em;
+      font-size: 13.5px;
+      font-family: inherit;
+      line-height: inherit;
+      white-space: inherit;
+      word-wrap: inherit;
+      overflow-wrap: inherit;
     }
   }
 
   :deep(blockquote) {
-    border-left: 4px solid var(--color-brand);
-    padding: 18px 20px;
-    margin: 28px 0;
-    background: rgba(168, 85, 247, 0.04);
-    border-radius: 0 6px 6px 0;
+    border-left: 5px solid var(--color-brand); // 加粗左边框
+    padding: 24px 28px; // 增加内边距
+    margin: 36px 0; // 增加外边距
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(168, 85, 247, 0.05)); // 渐变背景
+    border-radius: 0 10px 10px 0;
     color: var(--color-text-secondary);
     font-style: italic;
     position: relative;
     letter-spacing: 0.2px;
     line-height: 1.9;
+    box-shadow: 0 2px 8px rgba(168, 85, 247, 0.1); // 添加阴影
 
     &::before {
       content: '"';
       position: absolute;
       top: -8px;
-      left: 8px;
-      font-size: 48px;
+      left: 14px;
+      font-size: 64px; // 更大的引号
       color: var(--color-brand);
-      opacity: 0.25;
+      opacity: 0.18;
       font-family: Georgia, serif;
+      line-height: 1;
     }
 
     p {
-      margin: 12px 0;
+      margin: 16px 0;
       text-indent: 0;
+      text-align: left;
+      position: relative;
+      z-index: 1;
+    }
+
+    &:last-child {
+      margin-bottom: 36px;
     }
   }
 
   :deep(ul), :deep(ol) {
-    padding-left: 36px;
-    margin: 24px 0;
+    padding-left: 32px;
+    margin: 28px 0;
 
     li {
-      margin: 14px 0;
-      line-height: 2.05;
-      letter-spacing: 0.25px;
+      margin: 12px 0;
+      line-height: 1.95;
+      letter-spacing: 0.2px;
+      position: relative;
 
       &::marker {
         color: var(--color-brand);
@@ -1099,24 +1156,24 @@ watch(() => displayContent.value, () => {
   :deep(a) {
     color: var(--color-brand);
     text-decoration: none;
-    border-bottom: 1.5px solid rgba(168, 85, 247, 0.25);
+    border-bottom: 1.5px solid rgba(168, 85, 247, 0.3);
     transition: all 0.25s;
     font-weight: 500;
-    letter-spacing: 0.15px;
+    letter-spacing: 0.1px;
 
     &:hover {
       border-bottom-color: var(--color-brand);
-      background: rgba(168, 85, 247, 0.06);
-      padding: 1px 3px;
-      margin: -1px -3px;
-      border-radius: 3px;
+      background: rgba(168, 85, 247, 0.08);
+      padding: 2px 4px;
+      margin: -2px -4px;
+      border-radius: 4px;
     }
   }
 
   :deep(strong) {
     color: var(--color-brand);
     font-weight: 700;
-    letter-spacing: 0.25px;
+    letter-spacing: 0.2px;
   }
 
   :deep(em) {
@@ -1127,38 +1184,39 @@ watch(() => displayContent.value, () => {
 
   :deep(hr) {
     border: none;
-    height: 1.5px;
+    height: 2px;
     background: linear-gradient(to right, transparent, var(--color-brand), transparent);
-    margin: 40px 0;
+    margin: 48px 0;
   }
 
   :deep(table) {
     width: 100%;
     border-collapse: collapse;
-    margin: 28px 0;
-    border-radius: 6px;
+    margin: 32px 0;
+    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
-    font-size: 14px;
-    letter-spacing: 0.2px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    font-size: 15px;
+    letter-spacing: 0.15px;
 
     th {
       background: var(--color-brand);
       color: white;
-      padding: 14px;
+      padding: 14px 16px;
       text-align: left;
       font-weight: 600;
-      line-height: 1.55;
+      line-height: 1.5;
+      letter-spacing: 0.3px;
     }
 
     td {
-      padding: 12px 14px;
+      padding: 12px 16px;
       border-bottom: 1px solid var(--color-border);
-      line-height: 1.75;
+      line-height: 1.7;
     }
 
     tr:hover {
-      background: rgba(168, 85, 247, 0.04);
+      background: rgba(168, 85, 247, 0.05);
     }
   }
 }

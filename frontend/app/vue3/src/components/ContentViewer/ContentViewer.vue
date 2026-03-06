@@ -258,15 +258,17 @@ onMounted(() => {
 <style scoped lang="less">
 .content-viewer {
   color: var(--color-text-primary);
-  line-height: 1.8;
+  line-height: 1.9;
   word-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
   // Typography - Headings
   :deep(h1), :deep(h2), :deep(h3), :deep(h4), :deep(h5), :deep(h6) {
     margin-top: 1.5em;
     margin-bottom: 0.75em;
     font-weight: 600;
-    line-height: 1.4;
+    line-height: 1.35;
     color: var(--color-text-primary);
 
     &:first-child {
@@ -281,17 +283,19 @@ onMounted(() => {
   }
 
   :deep(h2) {
-    font-size: 1.5rem;
-    border-bottom: 1px solid var(--color-border);
+    font-size: 1.625rem;
+    border-bottom: 2px solid var(--color-border);
     padding-bottom: 0.5rem;
+    margin: 48px 0 24px;
   }
 
   :deep(h3) {
-    font-size: 1.25rem;
+    font-size: 1.375rem;
+    margin: 36px 0 20px;
   }
 
   :deep(h4) {
-    font-size: 1.1rem;
+    font-size: 1.125rem;
   }
 
   :deep(h5), :deep(h6) {
@@ -300,8 +304,11 @@ onMounted(() => {
 
   // Paragraphs
   :deep(p) {
-    margin: 1em 0;
-    line-height: 1.8;
+    margin: 22px 0;
+    line-height: 2.0;
+    letter-spacing: 0.25px;
+    word-spacing: 0.05em;
+    text-align: justify;
 
     &:first-child {
       margin-top: 0;
@@ -310,72 +317,96 @@ onMounted(() => {
     &:last-child {
       margin-bottom: 0;
     }
+
+    & + p {
+      margin-top: 20px;
+    }
   }
 
   // Links
   :deep(a.markdown-link) {
     color: var(--color-brand);
     text-decoration: none;
-    transition: all 0.3s ease;
+    border-bottom: 1.5px solid rgba(168, 85, 247, 0.3);
+    transition: all 0.25s ease;
+    font-weight: 500;
 
     &:hover {
-      text-decoration: underline;
-      opacity: 0.8;
+      text-decoration: none;
+      border-bottom-color: var(--color-brand);
+      background: rgba(168, 85, 247, 0.08);
+      padding: 2px 4px;
+      margin: -2px -4px;
+      border-radius: 4px;
     }
   }
 
   // Strong and emphasis
   :deep(strong), :deep(b) {
-    font-weight: 600;
-    color: var(--color-text-primary);
+    font-weight: 700;
+    color: var(--color-brand);
+    letter-spacing: 0.2px;
   }
 
   :deep(em), :deep(i) {
     font-style: italic;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.15px;
   }
 
   // Inline code
   :deep(code.inline-code) {
-    background: rgba(150, 150, 150, 0.1);
-    padding: 0.2em 0.4em;
-    border-radius: 4px;
+    background: rgba(150, 150, 150, 0.12);
+    padding: 3px 8px;
+    border-radius: 5px;
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
-    font-size: 0.9em;
-    color: var(--color-text-primary);
+    font-size: 0.88em;
+    color: var(--color-brand);
+    border: 1px solid rgba(168, 85, 247, 0.18);
+    letter-spacing: 0.1px;
+    white-space: nowrap;
   }
 
   // Code blocks with syntax highlighting
   :deep(pre.code-block) {
     background: #282c34;
     color: #abb2bf;
-    padding: 1rem;
-    border-radius: 8px;
+    padding: 20px;
+    border-radius: 10px;
     overflow-x: auto;
-    margin: 1.5em 0;
-    border: 1px solid #3e4451;
+    margin: 32px 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+    line-height: 1.65;
+    letter-spacing: 0.15px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    white-space: pre;
+    word-wrap: normal;
+    overflow-wrap: normal;
 
     &::before {
       content: attr(data-lang);
       position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-      font-size: 0.75rem;
-      color: #7a818e;
+      top: 8px;
+      right: 12px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
       text-transform: uppercase;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
+      letter-spacing: 0.5px;
     }
 
     code {
       background: none;
       padding: 0;
       border-radius: 0;
-      font-size: 0.875rem;
-      line-height: 1.6;
-      color: #abb2bf;
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: inherit;
+      font-family: inherit;
+      white-space: inherit;
+      word-wrap: inherit;
+      overflow-wrap: inherit;
 
       // Syntax highlighting colors (One Dark theme)
       .hljs-attr {
@@ -553,14 +584,32 @@ onMounted(() => {
   // Blockquotes
   :deep(blockquote) {
     border-left: 4px solid var(--color-brand);
-    padding: 0.5em 1em;
-    margin: 1.5em 0;
-    background: rgba(150, 150, 150, 0.05);
+    padding: 20px 24px;
+    margin: 32px 0;
+    background: rgba(168, 85, 247, 0.06);
     color: var(--color-text-secondary);
-    border-radius: 4px;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    position: relative;
+    letter-spacing: 0.2px;
+    line-height: 1.85;
+
+    &::before {
+      content: '"';
+      position: absolute;
+      top: -10px;
+      left: 12px;
+      font-size: 56px;
+      color: var(--color-brand);
+      opacity: 0.2;
+      font-family: Georgia, serif;
+      line-height: 1;
+    }
 
     p {
-      margin: 0.5em 0;
+      margin: 14px 0;
+      text-indent: 0;
+      text-align: left;
 
       &:first-child {
         margin-top: 0;
@@ -575,20 +624,27 @@ onMounted(() => {
   // Lists
   :deep(ul), :deep(ol) {
     padding-left: 2em;
-    margin: 1em 0;
+    margin: 28px 0;
 
     li {
-      margin: 0.5em 0;
-      line-height: 1.8;
+      margin: 12px 0;
+      line-height: 1.95;
+      letter-spacing: 0.2px;
+      position: relative;
 
       p {
-        margin: 0.5em 0;
+        margin: 10px 0;
       }
     }
   }
 
   :deep(ul) {
     list-style-type: disc;
+
+    li::marker {
+      color: var(--color-brand);
+      font-weight: 600;
+    }
 
     ul {
       list-style-type: circle;
@@ -601,6 +657,11 @@ onMounted(() => {
 
   :deep(ol) {
     list-style-type: decimal;
+
+    li::marker {
+      color: var(--color-brand);
+      font-weight: 600;
+    }
   }
 
   // Images
@@ -627,26 +688,35 @@ onMounted(() => {
   // Tables
   :deep(.table-wrapper) {
     overflow-x: auto;
-    margin: 1.5em 0;
+    margin: 32px 0;
     border-radius: 8px;
     border: 1px solid var(--color-border);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   }
 
   :deep(table.markdown-table) {
     width: 100%;
     border-collapse: collapse;
     background: var(--color-surface);
+    font-size: 15px;
+    letter-spacing: 0.15px;
 
     th, td {
-      padding: 0.75em 1em;
+      padding: 14px 16px;
       border: 1px solid var(--color-border);
       text-align: left;
     }
 
     th {
-      background: rgba(150, 150, 150, 0.1);
+      background: var(--color-brand);
+      color: white;
       font-weight: 600;
-      color: var(--color-text-primary);
+      line-height: 1.5;
+      letter-spacing: 0.3px;
+    }
+
+    td {
+      line-height: 1.7;
     }
 
     tr:nth-child(even) {
@@ -654,7 +724,7 @@ onMounted(() => {
     }
 
     tr:hover {
-      background: rgba(150, 150, 150, 0.08);
+      background: rgba(168, 85, 247, 0.06);
     }
   }
 
@@ -662,7 +732,7 @@ onMounted(() => {
   :deep(hr) {
     border: none;
     border-top: 2px solid var(--color-border);
-    margin: 2em 0;
+    margin: 48px 0;
   }
 
   // Video

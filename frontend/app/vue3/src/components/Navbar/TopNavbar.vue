@@ -50,7 +50,12 @@ function handleNavigate(item: any) {
   if (item.isOpenNewTab) {
     window.open(item.url, '_blank');
   } else {
-    router.push(item.url);
+    // 使用 router.push 时保留 history state
+    router.push({
+      path: item.url,
+      // 保留必要的 state 信息
+      state: { ...history.state, from: 'navbar' }
+    });
   }
 }
 
