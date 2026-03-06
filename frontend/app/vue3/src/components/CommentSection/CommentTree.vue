@@ -537,9 +537,19 @@ async function toggleExpand(comment: commentservicev1_Comment) {
 
       .comment-actions {
         gap: 16px;
+        flex-wrap: wrap;
 
         .action-item {
           font-size: 12px;
+
+          span[class^="i-"] {
+            font-size: 14px;
+          }
+        }
+
+        &.view-replies {
+          font-size: 13px;
+          font-weight: 500;
         }
       }
     }
@@ -552,6 +562,33 @@ async function toggleExpand(comment: commentservicev1_Comment) {
     &::before {
       left: 24px;
     }
+  }
+
+  // 回复表单适配
+  .reply-form {
+    margin-top: 12px;
+    padding-top: 12px;
+
+    :deep(.n-input) {
+      font-size: 14px;
+    }
+
+    .reply-form-actions {
+      flex-direction: column;
+      gap: 8px;
+
+      :deep(.n-button) {
+        min-width: 100%;
+        height: 42px;
+        font-size: 14px;
+      }
+    }
+  }
+
+  // 加载中提示
+  .loading-children {
+    padding: 16px;
+    font-size: 13px;
   }
 }
 
@@ -571,11 +608,25 @@ async function toggleExpand(comment: commentservicev1_Comment) {
         margin-bottom: 10px;
         padding-bottom: 8px;
 
+        .author-info {
+          gap: 4px;
+        }
+
         .comment-author {
           font-size: 15px;
+          flex-wrap: wrap;
+
+          .owner-badge {
+            font-size: 10px;
+            padding: 2px 6px;
+          }
         }
 
         .comment-date {
+          font-size: 11px;
+        }
+
+        .comment-location {
           font-size: 11px;
         }
       }
@@ -583,6 +634,18 @@ async function toggleExpand(comment: commentservicev1_Comment) {
       .comment-content {
         font-size: 13px;
         line-height: 1.65;
+      }
+
+      .comment-actions {
+        gap: 12px;
+
+        .action-item {
+          font-size: 11px;
+
+          span[class^="i-"] {
+            font-size: 13px;
+          }
+        }
       }
     }
   }
@@ -594,6 +657,158 @@ async function toggleExpand(comment: commentservicev1_Comment) {
     &::before {
       left: 18px;
     }
+
+    .comment-node {
+      margin-bottom: 16px;
+    }
+  }
+
+  // 回复表单适配
+  .reply-form {
+    margin-top: 10px;
+    padding-top: 10px;
+
+    :deep(.n-input) {
+      font-size: 13px;
+
+      &.n-input--textarea {
+        .n-input__textarea-el {
+          min-height: 80px !important;
+        }
+      }
+    }
+
+    .reply-form-actions {
+      gap: 6px;
+
+      :deep(.n-button) {
+        height: 40px;
+        font-size: 13px;
+      }
+    }
+  }
+
+  // 加载中提示
+  .loading-children {
+    padding: 14px;
+    font-size: 12px;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .comment-item {
+    padding: 16px;
+    gap: 10px;
+
+    .comment-avatar {
+      :deep(.n-avatar) {
+        --n-size: 36px !important;
+      }
+    }
+
+    .comment-body {
+      .comment-header {
+        margin-bottom: 8px;
+        padding-bottom: 6px;
+        gap: 6px;
+
+        .author-info {
+          gap: 3px;
+        }
+
+        .comment-author {
+          font-size: 14px;
+
+          .owner-badge {
+            font-size: 9px;
+            padding: 2px 5px;
+          }
+        }
+
+        .comment-date {
+          font-size: 10px;
+        }
+
+        .comment-location {
+          font-size: 10px;
+        }
+      }
+
+      .comment-content {
+        font-size: 12px;
+        line-height: 1.6;
+      }
+
+      .comment-actions {
+        gap: 10px;
+        flex-wrap: wrap;
+
+        .action-item {
+          font-size: 10px;
+
+          span[class^="i-"] {
+            font-size: 12px;
+          }
+        }
+
+        &.view-replies {
+          order: -1; // 查看回复按钮排在前面
+          width: 100%;
+          justify-content: flex-start;
+          margin-bottom: 4px;
+          padding-bottom: 8px;
+          border-bottom: 1px solid rgba(168, 85, 247, 0.05);
+        }
+      }
+    }
+  }
+
+  .comment-children {
+    padding-left: 28px;
+    margin-top: 10px;
+
+    &::before {
+      left: 14px;
+      width: 1.5px;
+    }
+
+    .comment-node {
+      margin-bottom: 12px;
+    }
+  }
+
+  // 回复表单适配
+  .reply-form {
+    margin-top: 8px;
+    padding-top: 8px;
+
+    :deep(.n-input) {
+      font-size: 12px;
+
+      &.n-input--textarea {
+        .n-input__textarea-el {
+          min-height: 70px !important;
+          font-size: 12px;
+        }
+      }
+    }
+
+    .reply-form-actions {
+      gap: 4px;
+
+      :deep(.n-button) {
+        height: 38px;
+        font-size: 12px;
+      }
+    }
+  }
+
+  // 加载中提示
+  .loading-children {
+    padding: 12px;
+    font-size: 11px;
+    gap: 6px;
   }
 }
 </style>

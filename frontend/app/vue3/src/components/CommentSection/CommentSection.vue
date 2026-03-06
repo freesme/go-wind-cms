@@ -215,49 +215,73 @@ onMounted(() => {
 
     <!-- Comment Form -->
     <div class="comment-form">
-      <h3>{{ $t('comment.write_comment') }}</h3>
+      <div class="form-header">
+        <div class="form-icon">
+          <span class="i-carbon:edit"/>
+        </div>
+        <h3>{{ $t('comment.write_comment') }}</h3>
+      </div>
       <n-form>
-        <n-grid :cols="2" :x-gap="16">
-          <n-form-item-gi :label="$t('comment.nickname')">
+        <n-grid :cols="2" :x-gap="24">
+          <n-form-item-gi>
             <n-input
               v-model:value="newComment.authorName"
-              :placeholder="$t('comment.enter_nickname')"
+              :placeholder="$t('comment.nickname') + ' *'"
               size="large"
               :disabled="submitting"
-            />
+              clearable
+            >
+              <template #prefix>
+                <span class="i-carbon:user"/>
+              </template>
+            </n-input>
           </n-form-item-gi>
-          <n-form-item-gi :label="$t('comment.email')">
+          <n-form-item-gi>
             <n-input
               v-model:value="newComment.authorEmail"
-              :placeholder="$t('comment.enter_email')"
-              type="text"
+              :placeholder="$t('comment.email') + ' *'"
+              type="email"
               size="large"
               :disabled="submitting"
-            />
+              clearable
+            >
+              <template #prefix>
+                <span class="i-carbon:email"/>
+              </template>
+            </n-input>
           </n-form-item-gi>
         </n-grid>
-        <n-form-item :label="$t('comment.comment_content')">
+        <n-form-item>
           <n-input
             v-model:value="newComment.content"
             type="textarea"
-            :rows="5"
+            :rows="6"
             :placeholder="$t('comment.write_comment')"
             size="large"
             :disabled="submitting"
+            show-count
+            maxlength="1000"
           />
         </n-form-item>
         <n-form-item>
-          <n-button
-            type="primary"
-            size="large"
-            @click="handleSubmitComment"
-            :loading="submitting"
-          >
-            <template #icon>
-              <span class="i-carbon:send-alt"/>
-            </template>
-            {{ $t('comment.submit_comment') }}
-          </n-button>
+          <div class="form-actions">
+            <n-button
+              type="primary"
+              size="large"
+              @click="handleSubmitComment"
+              :loading="submitting"
+              round
+            >
+              <template #icon>
+                <span class="i-carbon:send-alt"/>
+              </template>
+              {{ $t('comment.submit_comment') }}
+            </n-button>
+            <span class="form-tip">
+              <span class="i-carbon:information"/>
+              {{ $t('comment.fill_form_info') }}
+            </span>
+          </div>
         </n-form-item>
       </n-form>
     </div>
@@ -292,6 +316,18 @@ onMounted(() => {
 </template>
 
 <style scoped lang="less">
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 // Section Header
 .section-header {
   margin-bottom: 40px;
@@ -332,16 +368,19 @@ onMounted(() => {
 // Comment Form
 .comment-form {
   background: linear-gradient(135deg,
-  var(--color-bg) 0%,
-  rgba(168, 85, 247, 0.03) 100%);
-  border-radius: 16px;
-  padding: 40px;
+    var(--color-surface) 0%,
+    rgba(168, 85, 247, 0.02) 100%);
+  border-radius: 20px;
+  padding: 48px;
   margin-bottom: 48px;
-  border: 1px solid rgba(168, 85, 247, 0.15);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04),
-  inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.12);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.08),
+    0 2px 16px rgba(168, 85, 247, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   position: relative;
   overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
   &::before {
     content: '';
@@ -349,60 +388,399 @@ onMounted(() => {
     top: 0;
     left: 0;
     right: 0;
-    height: 3px;
+    height: 4px;
     background: linear-gradient(90deg,
-    var(--color-brand) 0%,
-    #764ba2 50%,
-    var(--color-brand) 100%);
-    opacity: 0.8;
+      var(--color-brand) 0%,
+      #a855f7 25%,
+      #764ba2 50%,
+      #a855f7 75%,
+      var(--color-brand) 100%);
+    background-size: 200% 100%;
+    opacity: 0.9;
+    animation: gradient-shift 3s ease infinite;
   }
 
-  h3 {
-    font-size: 21px;
-    font-weight: 600;
-    margin: 0 0 28px 0;
-    color: var(--color-text-primary);
-    letter-spacing: -0.2px;
+  &:hover {
+    border-color: var(--color-brand);
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.1),
+      0 4px 20px rgba(168, 85, 247, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+  }
+
+  .form-header {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid rgba(168, 85, 247, 0.08);
 
-    &::after {
-      content: '';
+    .form-icon {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg,
+        var(--color-brand) 0%,
+        #a855f7 100%);
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3);
+      color: #fff;
+
+      span[class^="i-"] {
+        font-size: 24px;
+      }
+    }
+
+    h3 {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0;
+      color: var(--color-text-primary);
+      letter-spacing: -0.3px;
       flex: 1;
-      height: 1px;
-      background: linear-gradient(90deg,
-      var(--color-border) 0%,
-      transparent 100%);
+    }
+  }
+
+  :deep(.n-input) {
+    border-radius: 12px;
+    background: var(--color-bg);
+    border: 2px solid rgba(168, 85, 247, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    .n-input__border {
+      border: none;
+    }
+
+    &:hover {
+      border-color: rgba(168, 85, 247, 0.2);
+      transform: translateY(-1px);
+    }
+
+    &:focus-within {
+      border-color: var(--color-brand);
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.08);
+      transform: translateY(0);
+    }
+
+    .n-input__prefix {
+      color: var(--color-brand);
+      font-size: 18px;
+      margin-right: 8px;
+    }
+
+    .n-input__count-suffix {
+      color: var(--color-text-secondary);
+      font-size: 12px;
+      background: rgba(168, 85, 247, 0.05);
+      padding: 2px 8px;
+      border-radius: 6px;
     }
   }
 
   :deep(.n-form-item) {
-    margin-bottom: 28px;
+    margin-bottom: 24px;
     transition: all 0.3s;
 
     &:hover {
-      transform: translateX(2px);
+      transform: translateX(3px);
     }
   }
 
-  :deep(.n-button) {
-    padding: 0 36px;
-    height: 48px;
+  .form-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+
+    :deep(.n-button) {
+      min-width: 180px;
+      height: 50px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 25px;
+      background: linear-gradient(135deg,
+        var(--color-brand) 0%,
+        #a855f7 100%);
+      border: none;
+      box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(168, 85, 247, 0.4);
+      }
+
+      &:active {
+        transform: translateY(-1px);
+      }
+
+      &[disabled] {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+
+    .form-tip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      padding: 8px 14px;
+      background: rgba(168, 85, 247, 0.05);
+      border-radius: 10px;
+      border: 1px solid rgba(168, 85, 247, 0.08);
+
+      span[class^="i-"] {
+        font-size: 16px;
+        color: var(--color-brand);
+      }
+    }
+  }
+}
+
+// 移动端适配
+@media (max-width: 768px) {
+  .comments-section {
+    padding: 40px 24px !important;
+    border-radius: 16px !important;
+  }
+
+  .section-header {
+    margin-bottom: 32px;
+
+    h2 {
+      font-size: 24px;
+
+      span[class^="i-"] {
+        font-size: 28px;
+      }
+    }
+  }
+
+  .comment-form {
+    padding: 32px 24px !important;
+    margin-bottom: 36px !important;
+    border-radius: 16px !important;
+
+    .form-header {
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+
+      .form-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+
+        span[class^="i-"] {
+          font-size: 20px;
+        }
+      }
+
+      h3 {
+        font-size: 20px;
+      }
+    }
+  }
+
+  :deep(.n-input) {
     font-size: 15px;
-    font-weight: 600;
-    border-radius: 12px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2);
+  }
 
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3);
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+
+    :deep(.n-button) {
+      min-width: 100%;
+      height: 48px;
+      font-size: 15px;
     }
 
-    &:active {
-      transform: translateY(0);
+    .form-tip {
+      justify-content: center;
+      font-size: 12px;
+      padding: 6px 12px;
     }
+  }
+}
+
+@media (max-width: 640px) {
+  .comments-section {
+    padding: 32px 20px !important;
+    border-radius: 14px !important;
+  }
+
+  .section-header {
+    margin-bottom: 28px;
+
+    h2 {
+      font-size: 22px;
+      gap: 10px;
+
+      span[class^="i-"] {
+        font-size: 26px;
+      }
+    }
+  }
+
+  .comment-form {
+    padding: 28px 20px !important;
+    margin-bottom: 32px !important;
+    border-radius: 14px !important;
+
+    .form-header {
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+
+      .form-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+
+        span[class^="i-"] {
+          font-size: 18px;
+        }
+      }
+
+      h3 {
+        font-size: 18px;
+      }
+    }
+  }
+
+  :deep(.n-grid) {
+    gap: 16px !important;
+  }
+
+  :deep(.n-input) {
+    font-size: 14px;
+
+    &.n-input--textarea {
+      .n-input__textarea-el {
+        min-height: 100px !important;
+        font-size: 14px;
+      }
+    }
+  }
+
+  .form-actions {
+    :deep(.n-button) {
+      height: 46px;
+      font-size: 15px;
+    }
+
+    .form-tip {
+      font-size: 11px;
+      padding: 6px 10px;
+    }
+  }
+
+  .load-more-container {
+    margin-top: 28px;
+    padding-top: 20px;
+
+    :deep(.n-button) {
+      min-width: 140px;
+      height: 42px;
+      font-size: 14px;
+    }
+  }
+
+  .no-more-text {
+    padding: 16px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .comments-section {
+    padding: 28px 16px !important;
+    border-radius: 12px !important;
+  }
+
+  .section-header {
+    margin-bottom: 24px;
+
+    h2 {
+      font-size: 20px;
+
+      span[class^="i-"] {
+        font-size: 24px;
+      }
+    }
+  }
+
+  .comment-form {
+    padding: 24px 16px !important;
+    margin-bottom: 28px !important;
+
+    .form-header {
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+
+      .form-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+
+        span[class^="i-"] {
+          font-size: 16px;
+        }
+      }
+
+      h3 {
+        font-size: 17px;
+      }
+    }
+  }
+
+  :deep(.n-form-item) {
+    margin-bottom: 20px;
+  }
+
+  :deep(.n-input) {
+    font-size: 13px;
+
+    &.n-input--textarea {
+      .n-input__textarea-el {
+        min-height: 90px !important;
+        font-size: 13px;
+      }
+    }
+  }
+
+  .form-actions {
+    :deep(.n-button) {
+      height: 44px;
+      font-size: 14px;
+    }
+
+    .form-tip {
+      font-size: 11px;
+      padding: 5px 8px;
+    }
+  }
+
+  .load-more-container {
+    margin-top: 24px;
+    padding-top: 16px;
+
+    :deep(.n-button) {
+      min-width: 120px;
+      height: 40px;
+      font-size: 13px;
+    }
+  }
+
+  .no-more-text {
+    padding: 14px;
+    font-size: 12px;
   }
 }
 
