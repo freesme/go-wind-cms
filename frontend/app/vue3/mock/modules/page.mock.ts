@@ -169,6 +169,27 @@ export default defineMock([
           if (queryObj.type) {
             filteredPages = filteredPages.filter(p => p.type === queryObj.type)
           }
+
+          // 根据 locale 过滤翻译数据
+          if (queryObj.locale) {
+            filteredPages = filteredPages.map(page => {
+              const filteredTranslations = page.translations.filter(
+                t => t.languageCode === queryObj.locale
+              )
+
+              if (filteredTranslations.length > 0) {
+                return {
+                  ...page,
+                  translations: filteredTranslations
+                }
+              }
+
+              return {
+                ...page,
+                translations: [page.translations[0]]
+              }
+            })
+          }
         } catch (e) {
           console.error('Parse query error:', e)
         }

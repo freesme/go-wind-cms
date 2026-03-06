@@ -530,6 +530,27 @@ export default defineMock([
               post.translations[0].title.toLowerCase().includes(keyword)
             )
           }
+
+          // 根据 locale 过滤翻译数据
+          if (queryObj.locale) {
+            filteredPosts = filteredPosts.map(post => {
+              const filteredTranslations = post.translations.filter(
+                t => t.languageCode === queryObj.locale
+              )
+
+              if (filteredTranslations.length > 0) {
+                return {
+                  ...post,
+                  translations: filteredTranslations
+                }
+              }
+
+              return {
+                ...post,
+                translations: [post.translations[0]]
+              }
+            })
+          }
         } catch (e) {
           console.error('Parse query error:', e)
         }

@@ -6,6 +6,7 @@ import {
 import {type Paging, requestClientRequestHandler} from "@/transport/rpc/request";
 import {useUserStore} from "@/stores";
 import {makeOrderBy, makeQueryString, makeUpdateMask} from "@/transport/rpc";
+import {currentLocaleLanguageCode} from "@/locales";
 
 export const usePageStore = defineStore('page', () => {
   const service = createPageServiceClient(requestClientRequestHandler);
@@ -20,6 +21,12 @@ export const usePageStore = defineStore('page', () => {
     fieldMask?: null | string,
     orderBy?: null | string[],
   ) {
+    const locale = currentLocaleLanguageCode();
+    formValues = {
+      ...formValues,
+      locale,
+    };
+
     const noPaging =
       paging?.page === undefined && paging?.pageSize === undefined;
     // @ts-ignore proto generated code is error.

@@ -31,10 +31,9 @@ function hideOverlay() {
  */
 async function loadNavigation() {
   try {
-    const locale = currentLocaleLanguageCode();
     const res = await navigationStore.listNavigation(
       {page: 1, pageSize: 10},
-      {location: 'header', isActive: true, locale}
+      {location: 'header', isActive: true}
     );
     if (res.items && res.items.length > 0) {
       navigationItems.value = res.items[0].items || [];

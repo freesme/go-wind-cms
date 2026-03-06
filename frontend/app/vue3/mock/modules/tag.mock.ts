@@ -426,12 +426,50 @@ export default defineMock([
     body: ({ query }: any) => {
       const page = parseInt(query.page || '1')
       const pageSize = parseInt(query.pageSize || '10')
+
+      // 解析 query 参数（可能是 JSON 字符串）
+      let queryParams: any = {}
+      if (query.query) {
+        try {
+          queryParams = typeof query.query === 'string'
+            ? JSON.parse(query.query)
+            : query.query
+        } catch (e) {
+          console.error('Failed to parse query:', e)
+        }
+      }
+
+      // 根据 locale 过滤标签数据
+      let filteredTags = tags
+      if (queryParams.locale) {
+        filteredTags = tags.map(tag => {
+          // 过滤 translations，只保留匹配 locale 的翻译
+          const filteredTranslations = tag.translations.filter(
+            t => t.languageCode === queryParams.locale
+          )
+
+          // 如果有匹配的翻译，返回带有过滤后翻译的标签
+          if (filteredTranslations.length > 0) {
+            return {
+              ...tag,
+              translations: filteredTranslations
+            }
+          }
+
+          // 如果没有匹配的翻译，返回第一个翻译（回退）
+          return {
+            ...tag,
+            translations: [tag.translations[0]]
+          }
+        })
+      }
+
       const start = (page - 1) * pageSize
       const end = start + pageSize
 
       return {
-        items: tags.slice(start, end),
-        total: tags.length,
+        items: filteredTags.slice(start, end),
+        total: filteredTags.length,
       }
     },
   },

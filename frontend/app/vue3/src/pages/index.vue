@@ -2,7 +2,7 @@
 import {definePage} from 'unplugin-vue-router/runtime'
 import {useRouter} from 'vue-router'
 import {ref, onMounted, computed, onUnmounted} from 'vue'
-import {usePostStore, useCategoryStore} from '@/stores/modules/app'
+import {usePostStore, useCategoryStore, useTagStore} from '@/stores/modules/app'
 import {$t, i18n} from '@/locales'
 import {XIcon} from "@/plugins/xicon";
 
@@ -16,18 +16,12 @@ definePage({
 const router = useRouter()
 const postStore = usePostStore()
 const categoryStore = useCategoryStore()
+const tagStore = useTagStore()
 
 const latestPosts = ref<any[]>([])
 const featuredPosts = ref<any[]>([])
 const categories = ref<any[]>([])
-const popularTags = ref<any[]>([
-  { id: 1, name: 'Go 语言', color: 'hsl(240, 100%, 50%)' },
-  { id: 2, name: 'Vue3', color: 'hsl(120, 100%, 50%)' },
-  { id: 3, name: 'CMS', color: 'hsl(40, 100%, 50%)' },
-  { id: 4, name: '前端开发', color: 'hsl(280, 100%, 50%)' },
-  { id: 5, name: '后端架构', color: 'hsl(0, 100%, 50%)' },
-  { id: 6, name: '性能优化', color: 'hsl(160, 100%, 50%)' },
-])
+const popularTags = ref<any[]>([])
 const loading = ref(false)
 
 // 滚动动画相关
@@ -105,6 +99,25 @@ async function loadCategories() {
   }
 }
 
+// 加载热门标签
+async function loadPopularTags() {
+  try {
+    const res = await tagStore.listTag(
+      {page: 1, pageSize: 6},
+      {status: 'TAG_STATUS_ACTIVE', isFeatured: true}
+    )
+    // 将标签数据转换为显示格式
+    popularTags.value = res.items?.map((tag: any, index: number) => ({
+      id: tag.id,
+      name: tag.translations?.[0]?.name || tag.name || $t('page.home.tag_default'),
+      color: tag.color || `hsl(${index * 60}, 100%, 50%)`,
+      slug: tag.slug,
+    })) || []
+  } catch (error) {
+    console.error('Load popular tags failed:', error)
+  }
+}
+
 function getPostTitle(post: any) {
   return post.translations?.[0]?.title || $t('page.home.untitled')
 }
@@ -140,7 +153,7 @@ function handleViewCategory(id: number) {
 }
 
 function getUpdatedDaysAgo(days: number = 3) {
-  return $t('page.home.updated_days_ago', { days })
+  return $t('page.home.updated_days_ago', {days})
 }
 
 // Smooth scroll to categories section
@@ -198,6 +211,7 @@ onMounted(async () => {
     loadLatestPosts(),
     loadFeaturedPosts(),
     loadCategories(),
+    loadPopularTags(),
   ])
   loading.value = false
 
@@ -233,23 +247,28 @@ onUnmounted(() => {
         <!-- Code Snippet Decorations -->
         <div class="hero-code-snippets">
           <div class="code-snippet snippet-1">
-            <div class="code-line"><span class="code-keyword">func</span> <span class="code-function">GetPost</span>() {</div>
-            <div class="code-line">  <span class="code-keyword">return</span> post</div>
+            <div class="code-line"><span class="code-keyword">func</span> <span
+              class="code-function">GetPost</span>() {
+            </div>
+            <div class="code-line"><span class="code-keyword">return</span> post</div>
             <div class="code-line">}</div>
           </div>
           <div class="code-snippet snippet-2">
             <div class="code-line"><span class="code-tag">&lt;template&gt;</span></div>
-            <div class="code-line">  <span class="code-tag">&lt;div</span> <span class="code-attr">class</span>=<span class="code-string">"cms"</span><span class="code-tag">&gt;</span></div>
-            <div class="code-line">  <span class="code-tag">&lt;/div&gt;</span></div>
+            <div class="code-line"><span class="code-tag">&lt;div</span> <span class="code-attr">class</span>=<span
+              class="code-string">"cms"</span><span class="code-tag">&gt;</span></div>
+            <div class="code-line"><span class="code-tag">&lt;/div&gt;</span></div>
           </div>
           <div class="code-snippet snippet-3">
             <div class="code-line"><span class="code-comment">// CMS API</span></div>
-            <div class="code-line"><span class="code-keyword">const</span> api = <span class="code-string">'v1'</span></div>
+            <div class="code-line"><span class="code-keyword">const</span> api = <span
+              class="code-string">'v1'</span></div>
           </div>
         </div>
 
         <svg class="hero-waves" viewBox="0 0 1440 320" preserveAspectRatio="none">
-          <path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,138.7C960,139,1056,117,1152,101.3C1248,85,1344,75,1392,69.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+          <path fill="rgba(255,255,255,0.1)"
+                d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,138.7C960,139,1056,117,1152,101.3C1248,85,1344,75,1392,69.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
         </svg>
       </div>
 
@@ -264,7 +283,8 @@ onUnmounted(() => {
             </template>
             {{ $t('page.home.browse_posts') }}
           </n-button>
-          <n-button type="default" size="large" class="btn-secondary" @click="router.push('/about')">
+          <n-button type="default" size="large" class="btn-secondary"
+                    @click="router.push('/about')">
             <template #icon>
               <XIcon name="carbon:information" :size="20"/>
             </template>
@@ -278,7 +298,8 @@ onUnmounted(() => {
     <section v-if="featuredPosts.length > 0" class="featured-section scroll-reveal">
       <div class="section-header">
         <h2>
-          <XIcon name="carbon:star-filled" :size="28" style="color: var(--color-brand); margin-right: 8px;"/>
+          <XIcon name="carbon:star-filled" :size="28"
+                 style="color: var(--color-brand); margin-right: 8px;"/>
           {{ $t('page.home.featured_posts') }}
         </h2>
         <n-button text type="primary" @click="router.push('/post')">
@@ -360,7 +381,9 @@ onUnmounted(() => {
             <div class="category-card-content">
               <div class="category-card-header">
                 <div class="category-icon">
-                  <XIcon :name="category.icon?.includes(':') ? category.icon : `carbon:${category.icon || 'folder'}`" :size="48"/>
+                  <XIcon
+                    :name="category.icon?.includes(':') ? category.icon : `carbon:${category.icon || 'folder'}`"
+                    :size="48"/>
                 </div>
                 <div class="category-info">
                   <h3>{{ getCategoryName(category) }}</h3>
@@ -411,7 +434,9 @@ onUnmounted(() => {
                   <div class="category-card-content">
                     <div class="category-card-header">
                       <div class="category-icon">
-                        <XIcon :name="category.icon?.includes(':') ? category.icon : `carbon:${category.icon || 'folder'}`" :size="48"/>
+                        <XIcon
+                          :name="category.icon?.includes(':') ? category.icon : `carbon:${category.icon || 'folder'}`"
+                          :size="48"/>
                       </div>
                       <div class="category-info">
                         <h3>{{ getCategoryName(category) }}</h3>
@@ -516,7 +541,7 @@ onUnmounted(() => {
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
   &.is-visible {
     opacity: 1;
@@ -524,18 +549,53 @@ onUnmounted(() => {
   }
 
   // 为每个卡片添加延迟，创造波浪效果
-  &:nth-child(1) { transition-delay: 0.08s; }
-  &:nth-child(2) { transition-delay: 0.16s; }
-  &:nth-child(3) { transition-delay: 0.24s; }
-  &:nth-child(4) { transition-delay: 0.32s; }
-  &:nth-child(5) { transition-delay: 0.4s; }
-  &:nth-child(6) { transition-delay: 0.48s; }
-  &:nth-child(7) { transition-delay: 0.56s; }
-  &:nth-child(8) { transition-delay: 0.64s; }
-  &:nth-child(9) { transition-delay: 0.72s; }
-  &:nth-child(10) { transition-delay: 0.8s; }
-  &:nth-child(11) { transition-delay: 0.88s; }
-  &:nth-child(12) { transition-delay: 0.96s; }
+  &:nth-child(1) {
+    transition-delay: 0.08s;
+  }
+
+  &:nth-child(2) {
+    transition-delay: 0.16s;
+  }
+
+  &:nth-child(3) {
+    transition-delay: 0.24s;
+  }
+
+  &:nth-child(4) {
+    transition-delay: 0.32s;
+  }
+
+  &:nth-child(5) {
+    transition-delay: 0.4s;
+  }
+
+  &:nth-child(6) {
+    transition-delay: 0.48s;
+  }
+
+  &:nth-child(7) {
+    transition-delay: 0.56s;
+  }
+
+  &:nth-child(8) {
+    transition-delay: 0.64s;
+  }
+
+  &:nth-child(9) {
+    transition-delay: 0.72s;
+  }
+
+  &:nth-child(10) {
+    transition-delay: 0.8s;
+  }
+
+  &:nth-child(11) {
+    transition-delay: 0.88s;
+  }
+
+  &:nth-child(12) {
+    transition-delay: 0.96s;
+  }
 }
 
 .scroll-reveal {
@@ -588,10 +648,9 @@ onUnmounted(() => {
       left: 0;
       right: 0;
       bottom: 0;
-      background:
-        radial-gradient(ellipse at 20% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
-        linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+      background: radial-gradient(ellipse at 20% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
+      linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
       animation: gradientShift 15s ease-in-out infinite;
     }
 
@@ -601,9 +660,8 @@ onUnmounted(() => {
       left: 0;
       right: 0;
       bottom: 0;
-      background-image:
-        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
       background-size: 50px 50px;
       animation: gridMove 20s linear infinite;
       opacity: 0.6;
@@ -627,10 +685,9 @@ onUnmounted(() => {
         font-family: 'Fira Code', 'Consolas', monospace;
         font-size: 13px;
         line-height: 1.6;
-        box-shadow:
-          0 10px 40px rgba(0, 0, 0, 0.4),
-          0 0 20px rgba(var(--color-primary-purple-rgb), 0.2),
-          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4),
+        0 0 20px rgba(var(--color-primary-purple-rgb), 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
         opacity: 0.9;
         transform-style: preserve-3d;
         transition: all 0.3s ease;
@@ -671,21 +728,21 @@ onUnmounted(() => {
           top: 15%;
           right: 8%;
           animation: floatRotate3D 8s ease-in-out infinite,
-                    glowPulseSnippet 4s ease-in-out infinite;
+          glowPulseSnippet 4s ease-in-out infinite;
         }
 
         &.snippet-2 {
           top: 55%;
           left: 5%;
           animation: floatRotate3D 10s ease-in-out infinite reverse,
-                    glowPulseSnippet 5s ease-in-out infinite 1s;
+          glowPulseSnippet 5s ease-in-out infinite 1s;
         }
 
         &.snippet-3 {
           bottom: 20%;
           right: 12%;
           animation: floatRotate3D 12s ease-in-out infinite,
-                    glowPulseSnippet 6s ease-in-out infinite 2s;
+          glowPulseSnippet 6s ease-in-out infinite 2s;
         }
       }
     }
@@ -756,7 +813,7 @@ onUnmounted(() => {
     line-height: 1.1;
     letter-spacing: -2px;
     text-shadow: 0 4px 16px rgba(0, 0, 0, 0.3),
-                 0 2px 8px rgba(0, 0, 0, 0.2);
+    0 2px 8px rgba(0, 0, 0, 0.2);
     animation: slideDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
     background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.95) 100%);
     -webkit-background-clip: text;
@@ -825,8 +882,8 @@ onUnmounted(() => {
         border-radius: 12px !important;
         border: none !important;
         box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35),
-                    0 4px 12px rgba(16, 185, 129, 0.2),
-                    0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+        0 4px 12px rgba(16, 185, 129, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.15) inset;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         position: relative;
@@ -847,8 +904,8 @@ onUnmounted(() => {
         &:hover {
           transform: translateY(-2px) scale(1.02);
           box-shadow: 0 12px 32px rgba(16, 185, 129, 0.45),
-                      0 6px 16px rgba(16, 185, 129, 0.25),
-                      0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+          0 6px 16px rgba(16, 185, 129, 0.25),
+          0 0 0 1px rgba(255, 255, 255, 0.2) inset;
           background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
 
           &::before {
@@ -859,7 +916,7 @@ onUnmounted(() => {
         &:active {
           transform: translateY(0) scale(0.98);
           box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4),
-                      0 2px 8px rgba(16, 185, 129, 0.2);
+          0 2px 8px rgba(16, 185, 129, 0.2);
         }
       }
     }
@@ -875,7 +932,7 @@ onUnmounted(() => {
         border: 2px solid rgba(255, 255, 255, 0.3) !important;
         backdrop-filter: blur(12px);
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15),
-                    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         position: relative;
@@ -898,7 +955,7 @@ onUnmounted(() => {
           border-color: rgba(255, 255, 255, 0.5) !important;
           transform: translateY(-2px) scale(1.02);
           box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2),
-                      0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+          0 0 0 1px rgba(255, 255, 255, 0.15) inset;
 
           &::before {
             left: 100%;
@@ -931,32 +988,26 @@ onUnmounted(() => {
     position: relative;
 
     // 使用渐变文字效果
-    background: linear-gradient(
-      135deg,
-      #ffffff 0%,
-      #f0f0ff 25%,
-      #e0e0ff 50%,
-      #f0f0ff 75%,
-      #ffffff 100%
-    );
+    background: linear-gradient(135deg,
+    #ffffff 0%,
+    #f0f0ff 25%,
+    #e0e0ff 50%,
+    #f0f0ff 75%,
+    #ffffff 100%);
     background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 
     // 多层外发光和阴影，创造强烈的视觉冲击
-    text-shadow:
-      0 0 40px rgba(255, 255, 255, 0.9),
-      0 0 80px rgba(var(--color-primary-purple-rgb), 0.7),
-      0 0 120px rgba(99, 102, 241, 0.5),
-      0 6px 24px rgba(0, 0, 0, 0.5),
-      0 3px 12px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 0 40px rgba(255, 255, 255, 0.9),
+    0 0 80px rgba(var(--color-primary-purple-rgb), 0.7),
+    0 0 120px rgba(99, 102, 241, 0.5),
+    0 6px 24px rgba(0, 0, 0, 0.5),
+    0 3px 12px rgba(0, 0, 0, 0.4);
 
     // 添加多层滤镜外发光
-    filter:
-      drop-shadow(0 0 30px rgba(var(--color-primary-purple-rgb), 0.6))
-      drop-shadow(0 0 60px rgba(99, 102, 241, 0.4))
-      drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(0 0 30px rgba(var(--color-primary-purple-rgb), 0.6)) drop-shadow(0 0 60px rgba(99, 102, 241, 0.4)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
 
     // 添加渐变动画和发光脉冲动画
     animation-name: slideDown, glowPulseTitle, gradientShine;
@@ -974,12 +1025,438 @@ onUnmounted(() => {
       transform: translateX(-50%);
       width: 80%;
       height: 40px;
-      background: radial-gradient(
-        ellipse at center,
-        rgba(var(--color-primary-purple-rgb), 0.3) 0%,
-        rgba(99, 102, 241, 0.2) 50%,
-        transparent 100%
-      );
+      background: radial-gradient(ellipse at center,
+      rgba(var(--color-primary-purple-rgb), 0.3) 0%,
+      rgba(99, 102, 241, 0.2) 50%,
+      transparent 100%);
+      filter: blur(20px);
+      opacity: 0.8;
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+  }
+
+  .hero-subtitle {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0.95;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+    line-height: 1.4;
+  }
+
+  .hero-description {
+    font-size: 1.15rem;
+    margin-bottom: 2.5rem;
+    max-width: 750px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0.85;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeInUp 0.8s ease-out 0.6s both;
+    position: relative;
+    z-index: 100 !important; // 使用最高 z-index
+    pointer-events: auto !important; // 确保按钮区域可点击
+
+    :deep(.n-button) {
+      position: relative;
+      z-index: 100 !important; // 确保按钮在最上层
+      pointer-events: auto !important; // 确保按钮本身可点击
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      pointer-events: auto !important; // 确保按钮可点击
+      position: relative;
+      z-index: 100 !important;
+    }
+
+    .btn-primary {
+      :deep(.n-button) {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+        color: white !important;
+        font-size: 1.05rem;
+        font-weight: 700;
+        padding: 16px 40px !important;
+        border-radius: 12px !important;
+        border: none !important;
+        box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35),
+        0 4px 12px rgba(16, 185, 129, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+          transition: left 0.5s;
+          pointer-events: none; // 防止伪元素阻挡点击
+        }
+
+        &:hover {
+          transform: translateY(-2px) scale(1.02);
+          box-shadow: 0 12px 32px rgba(16, 185, 129, 0.45),
+          0 6px 16px rgba(16, 185, 129, 0.25),
+          0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+          background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+
+          &::before {
+            left: 100%;
+          }
+        }
+
+        &:active {
+          transform: translateY(0) scale(0.98);
+          box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4),
+          0 2px 8px rgba(16, 185, 129, 0.2);
+        }
+      }
+    }
+
+    .btn-secondary {
+      :deep(.n-button) {
+        background: rgba(255, 255, 255, 0.12) !important;
+        color: white !important;
+        font-size: 1.05rem;
+        font-weight: 600;
+        padding: 16px 40px !important;
+        border-radius: 12px !important;
+        border: 2px solid rgba(255, 255, 255, 0.3) !important;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+          transition: left 0.5s;
+          pointer-events: none; // 防止伪元素阻挡点击
+        }
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.2) !important;
+          border-color: rgba(255, 255, 255, 0.5) !important;
+          transform: translateY(-2px) scale(1.02);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2),
+          0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+
+          &::before {
+            left: 100%;
+          }
+        }
+
+        &:active {
+          transform: translateY(0) scale(0.98);
+          background: rgba(255, 255, 255, 0.15) !important;
+          box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+        }
+      }
+    }
+  }
+
+  .hero-content {
+    animation: fadeInUp 0.8s ease-out;
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .hero-title {
+    font-size: 4.5rem;
+    font-weight: 900;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+    letter-spacing: -2px;
+    position: relative;
+
+    // 使用渐变文字效果
+    background: linear-gradient(135deg,
+    #ffffff 0%,
+    #f0f0ff 25%,
+    #e0e0ff 50%,
+    #f0f0ff 75%,
+    #ffffff 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    // 多层外发光和阴影，创造强烈的视觉冲击
+    text-shadow: 0 0 40px rgba(255, 255, 255, 0.9),
+    0 0 80px rgba(var(--color-primary-purple-rgb), 0.7),
+    0 0 120px rgba(99, 102, 241, 0.5),
+    0 6px 24px rgba(0, 0, 0, 0.5),
+    0 3px 12px rgba(0, 0, 0, 0.4);
+
+    // 添加多层滤镜外发光
+    filter: drop-shadow(0 0 30px rgba(var(--color-primary-purple-rgb), 0.6)) drop-shadow(0 0 60px rgba(99, 102, 241, 0.4)) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.4));
+
+    // 添加渐变动画和发光脉冲动画
+    animation-name: slideDown, glowPulseTitle, gradientShine;
+    animation-duration: 0.8s, 3s, 6s;
+    animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1), ease-in-out, linear;
+    animation-iteration-count: 1, infinite, infinite;
+    animation-delay: 0s, 0.5s, 0s;
+
+    // 在标题下方添加光晕效果
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 40px;
+      background: radial-gradient(ellipse at center,
+      rgba(var(--color-primary-purple-rgb), 0.3) 0%,
+      rgba(99, 102, 241, 0.2) 50%,
+      transparent 100%);
+      filter: blur(20px);
+      opacity: 0.8;
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+  }
+
+  .hero-subtitle {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0.95;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+    line-height: 1.4;
+  }
+
+  .hero-description {
+    font-size: 1.15rem;
+    margin-bottom: 2.5rem;
+    max-width: 750px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0.85;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeInUp 0.8s ease-out 0.6s both;
+    position: relative;
+    z-index: 100 !important; // 使用最高 z-index
+    pointer-events: auto !important; // 确保按钮区域可点击
+
+    :deep(.n-button) {
+      position: relative;
+      z-index: 100 !important; // 确保按钮在最上层
+      pointer-events: auto !important; // 确保按钮本身可点击
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      pointer-events: auto !important; // 确保按钮可点击
+      position: relative;
+      z-index: 100 !important;
+    }
+
+    .btn-primary {
+      :deep(.n-button) {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+        color: white !important;
+        font-size: 1.05rem;
+        font-weight: 700;
+        padding: 16px 40px !important;
+        border-radius: 12px !important;
+        border: none !important;
+        box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35),
+        0 4px 12px rgba(16, 185, 129, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+          transition: left 0.5s;
+          pointer-events: none; // 防止伪元素阻挡点击
+        }
+
+        &:hover {
+          transform: translateY(-2px) scale(1.02);
+          box-shadow: 0 12px 32px rgba(16, 185, 129, 0.45),
+          0 6px 16px rgba(16, 185, 129, 0.25),
+          0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+          background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+
+          &::before {
+            left: 100%;
+          }
+        }
+
+        &:active {
+          transform: translateY(0) scale(0.98);
+          box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4),
+          0 2px 8px rgba(16, 185, 129, 0.2);
+        }
+      }
+    }
+
+    .btn-secondary {
+      :deep(.n-button) {
+        background: rgba(255, 255, 255, 0.12) !important;
+        color: white !important;
+        font-size: 1.05rem;
+        font-weight: 600;
+        padding: 16px 40px !important;
+        border-radius: 12px !important;
+        border: 2px solid rgba(255, 255, 255, 0.3) !important;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+          transition: left 0.5s;
+          pointer-events: none; // 防止伪元素阻挡点击
+        }
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.2) !important;
+          border-color: rgba(255, 255, 255, 0.5) !important;
+          transform: translateY(-2px) scale(1.02);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2),
+          0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+
+          &::before {
+            left: 100%;
+          }
+        }
+
+        &:active {
+          transform: translateY(0) scale(0.98);
+          background: rgba(255, 255, 255, 0.15) !important;
+          box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+        }
+      }
+    }
+  }
+
+  .hero-content {
+    animation: fadeInUp 0.8s ease-out;
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .hero-title {
+    font-size: 4.5rem;
+    font-weight: 900;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+    letter-spacing: -2px;
+    position: relative;
+
+    // 使用渐变文字效果
+    background: linear-gradient(135deg,
+    #ffffff 0%,
+    #f0f0ff 25%,
+    #e0e0ff 50%,
+    #f0f0ff 75%,
+    #ffffff 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    // 多层外发光和阴影，创造强烈的视觉冲击
+    text-shadow: 0 0 40px rgba(255, 255, 255, 0.9),
+    0 0 80px rgba(var(--color-primary-purple-rgb), 0.7),
+    0 0 120px rgba(99, 102, 241, 0.5),
+    0 6px 24px rgba(0, 0, 0, 0.5),
+    0 3px 12px rgba(0, 0, 0, 0.4);
+
+    // 添加多层滤镜外发光
+    filter: drop-shadow(0 0 30px rgba(var(--color-primary-purple-rgb), 0.6)) drop-shadow(0 0 60px rgba(99, 102, 241, 0.4)) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.4));
+
+    // 添加渐变动画和发光脉冲动画
+    animation-name: slideDown, glowPulseTitle, gradientShine;
+    animation-duration: 0.8s, 3s, 6s;
+    animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1), ease-in-out, linear;
+    animation-iteration-count: 1, infinite, infinite;
+    animation-delay: 0s, 0.5s, 0s;
+
+    // 在标题下方添加光晕效果
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 40px;
+      background: radial-gradient(ellipse at center,
+      rgba(var(--color-primary-purple-rgb), 0.3) 0%,
+      rgba(99, 102, 241, 0.2) 50%,
+      transparent 100%);
       filter: blur(20px);
       opacity: 0.8;
       animation: pulseGlow 3s ease-in-out infinite;
@@ -1017,16 +1494,14 @@ onUnmounted(() => {
 
 @keyframes gradientShift {
   0%, 100% {
-    background:
-      radial-gradient(ellipse at 20% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
-      linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+    background: radial-gradient(ellipse at 20% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
+    linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
   }
   50% {
-    background:
-      radial-gradient(ellipse at 80% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 20% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
-      linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #6366f1 100%);
+    background: radial-gradient(ellipse at 80% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
+    linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #6366f1 100%);
   }
 }
 
@@ -1086,19 +1561,17 @@ onUnmounted(() => {
 @keyframes glowPulse {
   0%, 100% {
     filter: drop-shadow(0 0 10px rgba(var(--color-primary-purple-rgb), 0.3));
-    text-shadow:
-      0 0 20px rgba(255, 255, 255, 0.6),
-      0 0 40px rgba(var(--color-primary-purple-rgb), 0.4),
-      0 4px 15px rgba(0, 0, 0, 0.3),
-      0 2px 5px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.6),
+    0 0 40px rgba(var(--color-primary-purple-rgb), 0.4),
+    0 4px 15px rgba(0, 0, 0, 0.3),
+    0 2px 5px rgba(0, 0, 0, 0.2);
   }
   50% {
     filter: drop-shadow(0 0 30px rgba(var(--color-primary-purple-rgb), 0.7));
-    text-shadow:
-      0 0 40px rgba(255, 255, 255, 0.9),
-      0 0 70px rgba(var(--color-primary-purple-rgb), 0.8),
-      0 4px 20px rgba(0, 0, 0, 0.4),
-      0 2px 8px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 0 40px rgba(255, 255, 255, 0.9),
+    0 0 70px rgba(var(--color-primary-purple-rgb), 0.8),
+    0 4px 20px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -1121,18 +1594,16 @@ onUnmounted(() => {
 // 代码卡片发光脉冲动画
 @keyframes glowPulseSnippet {
   0%, 100% {
-    box-shadow:
-      0 10px 40px rgba(0, 0, 0, 0.3),
-      0 0 15px rgba(var(--color-primary-purple-rgb), 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(var(--color-primary-purple-rgb), 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
     opacity: 0.85;
   }
   50% {
-    box-shadow:
-      0 15px 50px rgba(0, 0, 0, 0.4),
-      0 0 30px rgba(var(--color-primary-purple-rgb), 0.4),
-      0 0 60px rgba(99, 102, 241, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(var(--color-primary-purple-rgb), 0.4),
+    0 0 60px rgba(99, 102, 241, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
     opacity: 1;
   }
 }
@@ -1140,16 +1611,10 @@ onUnmounted(() => {
 // 标题增强发光脉冲动画
 @keyframes glowPulseTitle {
   0%, 100% {
-    filter:
-      drop-shadow(0 0 25px rgba(var(--color-primary-purple-rgb), 0.5))
-      drop-shadow(0 0 50px rgba(99, 102, 241, 0.3))
-      drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(0 0 25px rgba(var(--color-primary-purple-rgb), 0.5)) drop-shadow(0 0 50px rgba(99, 102, 241, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
   }
   50% {
-    filter:
-      drop-shadow(0 0 40px rgba(var(--color-primary-purple-rgb), 0.8))
-      drop-shadow(0 0 80px rgba(99, 102, 241, 0.6))
-      drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
+    filter: drop-shadow(0 0 40px rgba(var(--color-primary-purple-rgb), 0.8)) drop-shadow(0 0 80px rgba(99, 102, 241, 0.6)) drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
   }
 }
 
@@ -1197,14 +1662,12 @@ onUnmounted(() => {
 // 卡片轻微呼吸动画
 @keyframes cardBreath {
   0%, 100% {
-    box-shadow:
-      0 2px 8px rgba(0, 0, 0, 0.06),
-      0 1px 3px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06),
+    0 1px 3px rgba(0, 0, 0, 0.04);
   }
   50% {
-    box-shadow:
-      0 4px 12px rgba(0, 0, 0, 0.08),
-      0 2px 5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+    0 2px 5px rgba(0, 0, 0, 0.05);
   }
 }
 
@@ -1342,9 +1805,8 @@ onUnmounted(() => {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: visible;
-    box-shadow:
-      0 2px 8px var(--color-card-shadow, rgba(0, 0, 0, 0.06)),
-      0 1px 3px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 8px var(--color-card-shadow, rgba(0, 0, 0, 0.06)),
+    0 1px 3px rgba(0, 0, 0, 0.04);
     min-height: 200px;
     height: 100%;
 
@@ -1358,11 +1820,9 @@ onUnmounted(() => {
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(
-        135deg,
-        hsl(var(--card-hue), 70%, 60%) 0%,
-        hsl(var(--card-hue), 60%, 70%) 100%
-      );
+      background: linear-gradient(135deg,
+      hsl(var(--card-hue), 70%, 60%) 0%,
+      hsl(var(--card-hue), 60%, 70%) 100%);
       opacity: 0;
       transition: opacity 0.4s ease;
       z-index: 0;
@@ -1385,18 +1845,15 @@ onUnmounted(() => {
 
     &:hover {
       transform: translateY(-12px) scale(1.02);
-      box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.15),
-        0 8px 16px rgba(0, 0, 0, 0.1),
-        0 0 0 1px hsl(var(--card-hue), 70%, 60%);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15),
+      0 8px 16px rgba(0, 0, 0, 0.1),
+      0 0 0 1px hsl(var(--card-hue), 70%, 60%);
       border-color: hsl(var(--card-hue), 70%, 60%);
 
       // 背景加深效果
-      background: linear-gradient(
-        135deg,
-        rgba(250, 250, 255, 1) 0%,
-        rgba(248, 248, 253, 1) 100%
-      );
+      background: linear-gradient(135deg,
+      rgba(250, 250, 255, 1) 0%,
+      rgba(248, 248, 253, 1) 100%);
 
       &::before {
         opacity: 0.2;
@@ -1409,14 +1866,11 @@ onUnmounted(() => {
       .category-icon {
         transform: scale(1.2) rotate(12deg);
         color: white;
-        background: linear-gradient(
-          135deg,
-          hsl(var(--card-hue), 70%, 60%) 0%,
-          hsl(var(--card-hue), 60%, 70%) 100%
-        );
-        box-shadow:
-          0 10px 20px hsl(var(--card-hue), 70%, 60%, 0.4),
-          0 0 30px hsl(var(--card-hue), 70%, 60%, 0.3);
+        background: linear-gradient(135deg,
+        hsl(var(--card-hue), 70%, 60%) 0%,
+        hsl(var(--card-hue), 60%, 70%) 100%);
+        box-shadow: 0 10px 20px hsl(var(--card-hue), 70%, 60%, 0.4),
+        0 0 30px hsl(var(--card-hue), 70%, 60%, 0.3);
         animation: iconBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
       }
 
@@ -1432,11 +1886,9 @@ onUnmounted(() => {
       .category-badge {
         transform: scale(1.05);
         box-shadow: 0 6px 12px hsla(var(--card-hue), 70%, 60%, 0.3);
-        background: linear-gradient(
-          135deg,
-          hsla(var(--card-hue), 70%, 60%, 0.2) 0%,
-          hsla(var(--card-hue), 60%, 70%, 0.15) 100%
-        );
+        background: linear-gradient(135deg,
+        hsla(var(--card-hue), 70%, 60%, 0.2) 0%,
+        hsla(var(--card-hue), 60%, 70%, 0.15) 100%);
       }
     }
 
@@ -1446,11 +1898,9 @@ onUnmounted(() => {
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(
-        135deg,
-        hsla(var(--card-hue), 70%, 60%, 0.05) 0%,
-        hsla(var(--card-hue), 60%, 70%, 0.05) 100%
-      );
+      background: linear-gradient(135deg,
+      hsla(var(--card-hue), 70%, 60%, 0.05) 0%,
+      hsla(var(--card-hue), 60%, 70%, 0.05) 100%);
       z-index: 0;
       pointer-events: none;
       border-radius: 16px;
@@ -1481,11 +1931,9 @@ onUnmounted(() => {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(
-        135deg,
-        hsla(var(--card-hue), 70%, 60%, 0.15) 0%,
-        hsla(var(--card-hue), 60%, 70%, 0.1) 100%
-      );
+      background: linear-gradient(135deg,
+      hsla(var(--card-hue), 70%, 60%, 0.15) 0%,
+      hsla(var(--card-hue), 60%, 70%, 0.1) 100%);
       border-radius: 14px;
       color: hsl(var(--card-hue), 70%, 60%);
       flex-shrink: 0;
@@ -1536,11 +1984,9 @@ onUnmounted(() => {
       gap: 0.5rem;
       margin-top: auto;
       padding: 0.5rem 0.875rem;
-      background: linear-gradient(
-        135deg,
-        hsla(var(--card-hue), 70%, 60%, 0.1) 0%,
-        hsla(var(--card-hue), 60%, 70%, 0.08) 100%
-      );
+      background: linear-gradient(135deg,
+      hsla(var(--card-hue), 70%, 60%, 0.1) 0%,
+      hsla(var(--card-hue), 60%, 70%, 0.08) 100%);
       border-radius: 8px;
       border-left: 3px solid hsl(var(--card-hue), 70%, 60%);
       color: hsl(var(--card-hue), 70%, 50%);
@@ -1550,11 +1996,9 @@ onUnmounted(() => {
       @media (prefers-color-scheme: light) {
         color: hsl(var(--card-hue), 70%, 40%) !important;
         font-weight: 700;
-        background: linear-gradient(
-          135deg,
-          hsla(var(--card-hue), 70%, 60%, 0.18) 0%,
-          hsla(var(--card-hue), 60%, 70%, 0.14) 100%
-        ) !important;
+        background: linear-gradient(135deg,
+        hsla(var(--card-hue), 70%, 60%, 0.18) 0%,
+        hsla(var(--card-hue), 60%, 70%, 0.14) 100%) !important;
         border-left-width: 4px;
       }
       font-weight: 600;
@@ -1597,11 +2041,9 @@ onUnmounted(() => {
     display: inline-flex;
     align-items: center;
     padding: 0.5rem 1rem;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.8) 0%,
-      rgba(255, 255, 255, 0.6) 100%
-    );
+    background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(255, 255, 255, 0.6) 100%);
     border: 1.5px solid;
     border-color: var(--tag-color);
     border-radius: 24px;
@@ -1698,11 +2140,9 @@ onUnmounted(() => {
         left: 0;
         right: 0;
         bottom: 0;
-        background: linear-gradient(
-          180deg,
-          rgba(0, 0, 0, 0) 0%,
-          rgba(0, 0, 0, 0.3) 100%
-        );
+        background: linear-gradient(180deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.3) 100%);
         opacity: 0;
         transition: opacity 0.3s ease;
         display: flex;
@@ -1816,8 +2256,8 @@ onUnmounted(() => {
       height: 48px;
       border-radius: 50%;
       background: linear-gradient(135deg,
-        hsla(var(--color-primary-purple-hue), 85%, 65%, 0.15) 0%,
-        hsla(var(--color-primary-purple-hue), 85%, 65%, 0.08) 100%);
+      hsla(var(--color-primary-purple-hue), 85%, 65%, 0.15) 0%,
+      hsla(var(--color-primary-purple-hue), 85%, 65%, 0.08) 100%);
       border: 2px solid hsla(var(--color-primary-purple-hue), 85%, 65%, 0.3);
       display: flex;
       align-items: center;
@@ -1833,8 +2273,8 @@ onUnmounted(() => {
 
       &:hover {
         background: linear-gradient(135deg,
-          hsla(var(--color-primary-purple-hue), 85%, 65%, 0.25) 0%,
-          hsla(var(--color-primary-purple-hue), 85%, 65%, 0.15) 100%);
+        hsla(var(--color-primary-purple-hue), 85%, 65%, 0.25) 0%,
+        hsla(var(--color-primary-purple-hue), 85%, 65%, 0.15) 100%);
         border-color: var(--color-brand);
         transform: translateY(4px) scale(1.05);
         box-shadow: 0 8px 20px hsla(var(--color-primary-purple-hue), 85%, 65%, 0.3);
@@ -1856,14 +2296,14 @@ onUnmounted(() => {
 
       .scroll-arrow {
         background: linear-gradient(135deg,
-          hsla(var(--color-primary-purple-hue), 85%, 65%, 0.2) 0%,
-          hsla(var(--color-primary-purple-hue), 85%, 65%, 0.1) 100%);
+        hsla(var(--color-primary-purple-hue), 85%, 65%, 0.2) 0%,
+        hsla(var(--color-primary-purple-hue), 85%, 65%, 0.1) 100%);
         border-color: hsla(var(--color-primary-purple-hue), 85%, 65%, 0.4);
 
         &:hover {
           background: linear-gradient(135deg,
-            hsla(var(--color-primary-purple-hue), 85%, 65%, 0.3) 0%,
-            hsla(var(--color-primary-purple-hue), 85%, 65%, 0.18) 100%);
+          hsla(var(--color-primary-purple-hue), 85%, 65%, 0.3) 0%,
+          hsla(var(--color-primary-purple-hue), 85%, 65%, 0.18) 100%);
           box-shadow: 0 8px 20px hsla(var(--color-primary-purple-hue), 85%, 65%, 0.4);
         }
       }
@@ -2153,240 +2593,220 @@ html.dark {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image:
-      radial-gradient(ellipse at 20% 30%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 70%, rgba(var(--color-primary-purple-rgb), 0.08) 0%, transparent 50%);
+    background-image: radial-gradient(ellipse at 20% 30%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(var(--color-primary-purple-rgb), 0.08) 0%, transparent 50%);
     pointer-events: none;
     z-index: -1;
   }
 
-  // ...existing code...
-  --color-card-bg: linear-gradient(135deg, rgba(75, 90, 120, 0.9) 0%, rgba(55, 70, 100, 0.9) 100%);
-  --color-card-border: rgba(150, 180, 255, 0.2);
-  --color-card-shadow: rgba(0, 0, 0, 0.4);
-  --color-hover-shadow: rgba(100, 150, 255, 0.3);
+  // 页面主要内容区域
+  .home-page {
+    background: transparent; // 取消默认背景
 
-  // Hero 区域暗黑模式优化
-  .hero {
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
-    box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
+    // Hero 区域暗黑模式优化
+    .hero {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+      box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
 
-    .hero-grid-bg {
-      background-image:
-        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      .hero-grid-bg {
+        background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-      opacity: 0.5;
-    }
+        opacity: 0.5;
+      }
 
-    .hero-code-snippets .code-snippet {
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow:
-        0 12px 48px rgba(0, 0, 0, 0.6),
+      .hero-code-snippets .code-snippet {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6),
         0 0 30px rgba(var(--color-primary-purple-rgb), 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    }
+      }
 
-    .hero-title {
-      background: linear-gradient(
-        135deg,
+      .hero-title {
+        background: linear-gradient(135deg,
         #ffffff 0%,
         #f5f5ff 25%,
         #ebebff 50%,
         #f5f5ff 75%,
-        #ffffff 100%
-      );
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+        #ffffff 100%);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
 
-      text-shadow:
-        0 0 50px rgba(255, 255, 255, 1),
+        text-shadow: 0 0 50px rgba(255, 255, 255, 1),
         0 0 100px rgba(var(--color-primary-purple-rgb), 0.8),
         0 0 150px rgba(99, 102, 241, 0.6),
         0 8px 30px rgba(0, 0, 0, 0.6),
         0 4px 15px rgba(0, 0, 0, 0.4);
 
-      filter:
-        drop-shadow(0 0 35px rgba(var(--color-primary-purple-rgb), 0.7))
-        drop-shadow(0 0 70px rgba(99, 102, 241, 0.5))
-        drop-shadow(0 6px 20px rgba(0, 0, 0, 0.4));
+        filter: drop-shadow(0 0 35px rgba(var(--color-primary-purple-rgb), 0.7)) drop-shadow(0 0 70px rgba(99, 102, 241, 0.5)) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.4));
+      }
+
+      .hero-subtitle {
+        color: rgba(255, 255, 255, 0.95);
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+      }
+
+      .hero-description {
+        color: rgba(255, 255, 255, 0.85);
+        text-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
+      }
     }
 
-    .hero-subtitle {
-      color: rgba(255, 255, 255, 0.95);
-      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
-    }
+    // 卡片基础样式
+    .category-card {
+      backdrop-filter: blur(10px);
 
-    .hero-description {
-      color: rgba(255, 255, 255, 0.85);
-      text-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
-    }
-  }
-
-  // 卡片基础样式
-  .category-card {
-    backdrop-filter: blur(10px);
-
-    // 增强背景遮罩在暗黑模式下的可见度
-    .category-card-bg {
-      background: linear-gradient(
-        135deg,
-        hsla(var(--card-hue), 70%, 55%, 0.12) 0%,
-        hsla(var(--card-hue), 60%, 65%, 0.08) 100%
-      ) !important;
-      opacity: 1;
-    }
-
-    &:hover {
-      background: linear-gradient(135deg, rgba(80, 95, 120, 0.95) 0%, rgba(65, 75, 95, 0.95) 100%);
-      border-color: hsl(var(--card-hue), 70%, 60%);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px hsl(var(--card-hue), 70%, 60%);
-
+      // 增强背景遮罩在暗黑模式下的可见度
       .category-card-bg {
-        background: linear-gradient(
-          135deg,
+        background: linear-gradient(135deg,
+        hsla(var(--card-hue), 70%, 55%, 0.12) 0%,
+        hsla(var(--card-hue), 60%, 65%, 0.08) 100%) !important;
+        opacity: 1;
+      }
+
+      &:hover {
+        background: linear-gradient(135deg, rgba(80, 95, 120, 0.95) 0%, rgba(65, 75, 95, 0.95) 100%);
+        border-color: hsl(var(--card-hue), 70%, 60%);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px hsl(var(--card-hue), 70%, 60%);
+
+        .category-card-bg {
+          background: linear-gradient(135deg,
           hsla(var(--card-hue), 70%, 60%, 0.18) 0%,
-          hsla(var(--card-hue), 60%, 70%, 0.12) 100%
-        ) !important;
-      }
-    }
-  }
-
-  .post-card {
-    background: linear-gradient(135deg, rgba(75, 90, 120, 0.9) 0%, rgba(55, 70, 100, 0.9) 100%);
-    border-color: rgba(150, 180, 255, 0.2);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(10px);
-
-    &:hover {
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%),
-                  linear-gradient(135deg, rgba(100, 120, 160, 0.95) 0%, rgba(80, 100, 140, 0.95) 100%);
-      border-color: rgba(var(--color-primary-purple-rgb), 0.6) !important;
-      box-shadow: 0 12px 32px rgba(99, 102, 241, 0.3),
-                  0 0 0 1px rgba(var(--color-primary-purple-rgb), 0.5),
-                  0 0 20px rgba(var(--color-primary-purple-rgb), 0.15);
-    }
-  }
-
-  .featured-card {
-    background: linear-gradient(135deg, rgba(75, 90, 120, 0.9) 0%, rgba(55, 70, 100, 0.9) 100%);
-    border-color: rgba(150, 180, 255, 0.2);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(10px);
-
-    &:hover {
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%),
-                  linear-gradient(135deg, rgba(100, 120, 160, 0.95) 0%, rgba(80, 100, 140, 0.95) 100%);
-      border-color: rgba(var(--color-primary-purple-rgb), 0.6) !important;
-      box-shadow: 0 12px 32px rgba(99, 102, 241, 0.3),
-                  0 0 0 1px rgba(var(--color-primary-purple-rgb), 0.5),
-                  0 0 20px rgba(var(--color-primary-purple-rgb), 0.15);
-    }
-  }
-
-  // Section 背景交替：创造视觉节奏 - 优化配色更生动
-  .categories-section {
-    background: linear-gradient(180deg, #1a1d26 0%, #222836 100%);
-  }
-
-  .featured-section {
-    background: linear-gradient(180deg, #252b38 0%, #1f2633 100%);
-  }
-
-  .latest-section {
-    background: linear-gradient(180deg, #1a1d26 0%, #222836 100%);
-  }
-
-  .features {
-    background: linear-gradient(180deg, #252b38 0%, #1f2633 100%);
-  }
-
-  // Section header 文字优化
-  .section-header h2 {
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    color: #f0f1f3 !important;
-    font-weight: 700;
-  }
-
-  // 卡片内部元素优化
-  .category-card {
-    .category-icon {
-      background: linear-gradient(
-        135deg,
-        hsla(var(--card-hue), 70%, 60%, 0.25) 0%,
-        hsla(var(--card-hue), 60%, 70%, 0.15) 100%
-      );
-      box-shadow: 0 2px 12px hsla(var(--card-hue), 70%, 60%, 0.2);
-      color: hsl(var(--card-hue), 75%, 70%) !important;
-    }
-
-    .category-info {
-      h3 {
-        color: #f3f4f6 !important;
-        font-weight: 600;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6),
-                     0 1px 2px rgba(0, 0, 0, 0.4);
-      }
-
-      .post-count {
-        color: #e5e7eb !important;
-        font-weight: 600;
-        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5),
-                     0 1px 2px rgba(0, 0, 0, 0.3);
+          hsla(var(--card-hue), 60%, 70%, 0.12) 100%) !important;
+        }
       }
     }
 
-    .category-badge {
-      background: linear-gradient(
-        135deg,
-        hsla(var(--card-hue), 70%, 50%, 0.4) 0%,
-        hsla(var(--card-hue), 60%, 55%, 0.3) 100%
-      ) !important;
-      border-left: 3px solid hsla(var(--card-hue), 75%, 70%, 0.9) !important;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 2px 8px hsla(var(--card-hue), 70%, 50%, 0.3),
-                  inset 0 1px 0 hsla(var(--card-hue), 80%, 80%, 0.15);
-      opacity: 1 !important;
+    .post-card {
+      background: linear-gradient(135deg, rgba(75, 90, 120, 0.9) 0%, rgba(55, 70, 100, 0.9) 100%);
+      border-color: rgba(150, 180, 255, 0.2);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
 
-      // 图标和文字使用纯白色
-      svg,
-      span {
-        color: #ffffff !important;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+      &:hover {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%),
+        linear-gradient(135deg, rgba(100, 120, 160, 0.95) 0%, rgba(80, 100, 140, 0.95) 100%);
+        border-color: rgba(var(--color-primary-purple-rgb), 0.6) !important;
+        box-shadow: 0 12px 32px rgba(99, 102, 241, 0.3),
+        0 0 0 1px rgba(var(--color-primary-purple-rgb), 0.5),
+        0 0 20px rgba(var(--color-primary-purple-rgb), 0.15);
       }
     }
 
-    &:hover {
+    .featured-card {
+      background: linear-gradient(135deg, rgba(75, 90, 120, 0.9) 0%, rgba(55, 70, 100, 0.9) 100%);
+      border-color: rgba(150, 180, 255, 0.2);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+
+      &:hover {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%),
+        linear-gradient(135deg, rgba(100, 120, 160, 0.95) 0%, rgba(80, 100, 140, 0.95) 100%);
+        border-color: rgba(var(--color-primary-purple-rgb), 0.6) !important;
+        box-shadow: 0 12px 32px rgba(99, 102, 241, 0.3),
+        0 0 0 1px rgba(var(--color-primary-purple-rgb), 0.5),
+        0 0 20px rgba(var(--color-primary-purple-rgb), 0.15);
+      }
+    }
+
+    // Section 背景交替：创造视觉节奏 - 优化配色更生动
+    .categories-section {
+      background: linear-gradient(180deg, #1a1d26 0%, #222836 100%);
+    }
+
+    .featured-section {
+      background: linear-gradient(180deg, #252b38 0%, #1f2633 100%);
+    }
+
+    .latest-section {
+      background: linear-gradient(180deg, #1a1d26 0%, #222836 100%);
+    }
+
+    .features {
+      background: linear-gradient(180deg, #252b38 0%, #1f2633 100%);
+    }
+
+    // Section header 文字优化
+    .section-header h2 {
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      color: #f0f1f3 !important;
+      font-weight: 700;
+    }
+
+    // 卡片内部元素优化
+    .category-card {
       .category-icon {
-        color: hsl(var(--card-hue), 80%, 75%) !important;
+        background: linear-gradient(135deg,
+        hsla(var(--card-hue), 70%, 60%, 0.25) 0%,
+        hsla(var(--card-hue), 60%, 70%, 0.15) 100%);
+        box-shadow: 0 2px 12px hsla(var(--card-hue), 70%, 60%, 0.2);
+        color: hsl(var(--card-hue), 75%, 70%) !important;
       }
 
       .category-info {
         h3 {
-          color: #ffffff !important;
-          text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7),
-                       0 1px 3px rgba(0, 0, 0, 0.5);
+          color: #f3f4f6 !important;
+          font-weight: 600;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6),
+          0 1px 2px rgba(0, 0, 0, 0.4);
         }
 
         .post-count {
-          color: #f3f4f6 !important;
-          text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6),
-                       0 1px 2px rgba(0, 0, 0, 0.4);
+          color: #e5e7eb !important;
+          font-weight: 600;
+          text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5),
+          0 1px 2px rgba(0, 0, 0, 0.3);
         }
       }
 
       .category-badge {
-        background: linear-gradient(
-          135deg,
+        background: linear-gradient(135deg,
+        hsla(var(--card-hue), 70%, 50%, 0.4) 0%,
+        hsla(var(--card-hue), 60%, 55%, 0.3) 100%) !important;
+        border-left: 3px solid hsla(var(--card-hue), 75%, 70%, 0.9) !important;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 2px 8px hsla(var(--card-hue), 70%, 50%, 0.3),
+        inset 0 1px 0 hsla(var(--card-hue), 80%, 80%, 0.15);
+        opacity: 1 !important;
+
+        // 图标和文字使用纯白色
+        svg,
+        span {
+          color: #ffffff !important;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+      }
+
+      &:hover {
+        .category-icon {
+          color: hsl(var(--card-hue), 80%, 75%) !important;
+        }
+
+        .category-info {
+          h3 {
+            color: #ffffff !important;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7),
+            0 1px 3px rgba(0, 0, 0, 0.5);
+          }
+
+          .post-count {
+            color: #f3f4f6 !important;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6),
+            0 1px 2px rgba(0, 0, 0, 0.4);
+          }
+        }
+
+        .category-badge {
+          background: linear-gradient(135deg,
           hsla(var(--card-hue), 75%, 55%, 0.5) 0%,
-          hsla(var(--card-hue), 65%, 60%, 0.4) 100%
-        ) !important;
-        border-left-color: hsla(var(--card-hue), 80%, 75%, 1) !important;
-        box-shadow: 0 4px 12px hsla(var(--card-hue), 70%, 55%, 0.4),
-                    inset 0 1px 0 hsla(var(--card-hue), 85%, 85%, 0.2);
-        transform: scale(1.05);
+          hsla(var(--card-hue), 65%, 60%, 0.4) 100%) !important;
+          border-left-color: hsla(var(--card-hue), 80%, 75%, 1) !important;
+          box-shadow: 0 4px 12px hsla(var(--card-hue), 70%, 55%, 0.4),
+          inset 0 1px 0 hsla(var(--card-hue), 85%, 85%, 0.2);
+          transform: scale(1.05);
+        }
       }
     }
   }
@@ -2408,11 +2828,11 @@ html.dark {
 
     &:hover {
       background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%),
-                  linear-gradient(135deg, rgba(100, 120, 160, 0.95) 0%, rgba(80, 100, 140, 0.95) 100%);
+      linear-gradient(135deg, rgba(100, 120, 160, 0.95) 0%, rgba(80, 100, 140, 0.95) 100%);
       border-color: rgba(var(--color-primary-purple-rgb), 0.6) !important;
       box-shadow: 0 12px 32px rgba(99, 102, 241, 0.3),
-                  0 0 0 1px rgba(var(--color-primary-purple-rgb), 0.5),
-                  0 0 20px rgba(var(--color-primary-purple-rgb), 0.15);
+      0 0 0 1px rgba(var(--color-primary-purple-rgb), 0.5),
+      0 0 20px rgba(var(--color-primary-purple-rgb), 0.15);
 
       h3 {
         color: #f9fafb !important;
@@ -2454,11 +2874,9 @@ html.dark {
     }
 
     .tag-item {
-      background: linear-gradient(
-        135deg,
-        rgba(75, 90, 120, 0.5) 0%,
-        rgba(55, 70, 100, 0.5) 100%
-      );
+      background: linear-gradient(135deg,
+      rgba(75, 90, 120, 0.5) 0%,
+      rgba(55, 70, 100, 0.5) 100%);
       border-color: var(--tag-color);
 
       &:hover {
@@ -2745,247 +3163,6 @@ html.dark {
   .post-card {
     .featured-image,
     .post-image {
-      height: 200px;
-    }
-
-    .featured-content,
-    .post-content {
-      padding: 1.25rem;
-
-      h3 {
-        font-size: 1.125rem;
-      }
-
-      p {
-        font-size: 0.9rem;
-      }
-
-      .category-badge {
-        font-size: 0.75rem;
-        padding: 0.3rem 0.75rem;
-      }
-    }
-  }
-
-  .features-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    padding: 0 1.5rem;
-  }
-
-  .feature-card {
-    padding: 2rem 1.5rem;
-
-    .feature-icon {
-      width: 70px;
-      height: 70px;
-      font-size: 2.5rem;
-      margin-bottom: 1.25rem;
-    }
-
-    h3 {
-      font-size: 1.1rem;
-      margin-bottom: 0.75rem;
-    }
-
-    p {
-      font-size: 0.9rem;
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .hero {
-    padding: 2rem 1rem 1.5rem;
-    min-height: 240px;
-
-    .hero-content {
-      padding: 0;
-    }
-
-    .hero-title {
-      font-size: 1.75rem;
-      margin-bottom: 0.75rem;
-      letter-spacing: -0.5px;
-    }
-
-    .hero-subtitle {
-      font-size: 1rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .hero-description {
-      font-size: 0.875rem;
-      margin-bottom: 1.5rem;
-      line-height: 1.5;
-    }
-
-    .hero-actions {
-      gap: 0.75rem;
-      max-width: 100%;
-
-      :deep(.n-button) {
-        width: 100%;
-        padding: 11px 20px;
-        font-size: 14px;
-        border-radius: 10px;
-      }
-    }
-  }
-
-  .section-header {
-    padding: 0 1rem;
-    margin-bottom: 1.5rem;
-
-    h2 {
-      font-size: 1.5rem;
-    }
-
-    :deep(.n-button) {
-      font-size: 13px;
-      padding: 6px 12px;
-    }
-  }
-
-  .categories-section,
-  .featured-section,
-  .latest-section,
-  .features {
-    padding: 2.5rem 0;
-  }
-
-
-  .categories-carousel.mobile-carousel {
-    padding: 0 0.5rem;
-    margin-bottom: 2rem;
-
-    .carousel-item {
-      width: calc(100vw - 1rem);
-      padding: 0 0.25rem;
-    }
-
-    :deep(.n-carousel__arrow) {
-      width: 32px;
-      height: 32px;
-      font-size: 18px;
-    }
-
-    :deep(.n-carousel__dots) {
-      bottom: -32px;
-
-      .n-carousel__dot {
-        width: 8px;
-        height: 8px;
-      }
-    }
-  }
-
-  .categories-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-    padding: 0 1rem;
-  }
-
-  .featured-grid,
-  .posts-grid,
-  .features-grid {
-    gap: 1rem;
-    padding: 0 1rem;
-  }
-
-  .featured-card {
-    border-radius: 12px;
-
-    &:hover {
-      transform: translateY(-6px);
-    }
-
-    .featured-image {
-      height: 180px;
-    }
-
-    .featured-content {
-      padding: 16px;
-
-      h3 {
-        font-size: 16px;
-        margin-bottom: 8px;
-        line-height: 1.4;
-        -webkit-line-clamp: 2;
-      }
-
-      p {
-        font-size: 13px;
-        line-height: 1.6;
-        -webkit-line-clamp: 2;
-        margin-bottom: 10px;
-      }
-
-      .featured-meta {
-        gap: 12px;
-        padding-top: 10px;
-        font-size: 11px;
-        flex-wrap: wrap;
-
-        span {
-          gap: 3px;
-
-          :deep(svg) {
-            width: 13px;
-            height: 13px;
-          }
-        }
-      }
-    }
-
-    .featured-badge {
-      padding: 4px 10px;
-      font-size: 11px;
-      gap: 3px;
-
-      :deep(svg) {
-        width: 12px;
-        height: 12px;
-      }
-    }
-  }
-
-  .category-card {
-    padding: 1.25rem 1rem;
-    gap: 0.75rem;
-    min-height: 160px;
-
-    &:hover {
-      transform: translateY(-4px);
-    }
-
-    .category-icon {
-      width: 44px;
-      height: 44px;
-      font-size: 1.5rem;
-    }
-
-    .category-info {
-      h3 {
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
-      }
-
-      .post-count {
-        font-size: 0.75rem;
-      }
-    }
-
-    .update-badge {
-      padding: 0.25rem 0.6rem;
-      font-size: 0.65rem;
-    }
-  }
-
-  .featured-card,
-  .post-card {
-    .featured-image,
-    .post-image {
       height: 160px;
     }
 
@@ -3018,23 +3195,6 @@ html.dark {
     }
   }
 
-  .popular-tags-container {
-    padding: 0 1rem;
-
-    .tags-title {
-      font-size: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .tags-grid {
-      gap: 0.625rem;
-    }
-
-    .tag-item {
-      padding: 0.375rem 0.75rem;
-      font-size: 0.8rem;
-    }
-  }
 
   .features-grid {
     grid-template-columns: 1fr;

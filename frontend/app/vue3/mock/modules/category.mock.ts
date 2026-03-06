@@ -185,12 +185,47 @@ export default defineMock([
     body: ({query}: any) => {
       const page = parseInt(query.page || '1')
       const pageSize = parseInt(query.pageSize || '10')
+
+      // 解析 query 参数
+      let queryParams: any = {}
+      if (query.query) {
+        try {
+          queryParams = typeof query.query === 'string'
+            ? JSON.parse(query.query)
+            : query.query
+        } catch (e) {
+          console.error('Failed to parse query:', e)
+        }
+      }
+
+      // 根据 locale 过滤分类数据
+      let filteredCategories = categories
+      if (queryParams.locale) {
+        filteredCategories = categories.map(category => {
+          const filteredTranslations = category.translations.filter(
+            t => t.languageCode === queryParams.locale
+          )
+
+          if (filteredTranslations.length > 0) {
+            return {
+              ...category,
+              translations: filteredTranslations
+            }
+          }
+
+          return {
+            ...category,
+            translations: [category.translations[0]]
+          }
+        })
+      }
+
       const start = (page - 1) * pageSize
       const end = start + pageSize
 
       return {
-        items: categories.slice(start, end),
-        total: categories.length,
+        items: filteredCategories.slice(start, end),
+        total: filteredCategories.length,
       }
     },
   },
