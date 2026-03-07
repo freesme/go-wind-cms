@@ -3940,14 +3940,15 @@ type CategoryMutation struct {
 	addsort_order        *int32
 	_path                *string
 	status               *category.Status
-	depth                *int32
-	adddepth             *int32
 	is_nav               *bool
 	icon                 *string
+	code                 *string
 	post_count           *uint32
 	addpost_count        *int32
 	direct_post_count    *uint32
 	adddirect_post_count *int32
+	depth                *int32
+	adddepth             *int32
 	custom_fields        **map[string]string
 	clearedFields        map[string]struct{}
 	parent               *uint32
@@ -4638,76 +4639,6 @@ func (m *CategoryMutation) ResetStatus() {
 	delete(m.clearedFields, category.FieldStatus)
 }
 
-// SetDepth sets the "depth" field.
-func (m *CategoryMutation) SetDepth(i int32) {
-	m.depth = &i
-	m.adddepth = nil
-}
-
-// Depth returns the value of the "depth" field in the mutation.
-func (m *CategoryMutation) Depth() (r int32, exists bool) {
-	v := m.depth
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDepth returns the old "depth" field's value of the Category entity.
-// If the Category object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CategoryMutation) OldDepth(ctx context.Context) (v *int32, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDepth is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDepth requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDepth: %w", err)
-	}
-	return oldValue.Depth, nil
-}
-
-// AddDepth adds i to the "depth" field.
-func (m *CategoryMutation) AddDepth(i int32) {
-	if m.adddepth != nil {
-		*m.adddepth += i
-	} else {
-		m.adddepth = &i
-	}
-}
-
-// AddedDepth returns the value that was added to the "depth" field in this mutation.
-func (m *CategoryMutation) AddedDepth() (r int32, exists bool) {
-	v := m.adddepth
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearDepth clears the value of the "depth" field.
-func (m *CategoryMutation) ClearDepth() {
-	m.depth = nil
-	m.adddepth = nil
-	m.clearedFields[category.FieldDepth] = struct{}{}
-}
-
-// DepthCleared returns if the "depth" field was cleared in this mutation.
-func (m *CategoryMutation) DepthCleared() bool {
-	_, ok := m.clearedFields[category.FieldDepth]
-	return ok
-}
-
-// ResetDepth resets all changes to the "depth" field.
-func (m *CategoryMutation) ResetDepth() {
-	m.depth = nil
-	m.adddepth = nil
-	delete(m.clearedFields, category.FieldDepth)
-}
-
 // SetIsNav sets the "is_nav" field.
 func (m *CategoryMutation) SetIsNav(b bool) {
 	m.is_nav = &b
@@ -4804,6 +4735,55 @@ func (m *CategoryMutation) IconCleared() bool {
 func (m *CategoryMutation) ResetIcon() {
 	m.icon = nil
 	delete(m.clearedFields, category.FieldIcon)
+}
+
+// SetCode sets the "code" field.
+func (m *CategoryMutation) SetCode(s string) {
+	m.code = &s
+}
+
+// Code returns the value of the "code" field in the mutation.
+func (m *CategoryMutation) Code() (r string, exists bool) {
+	v := m.code
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCode returns the old "code" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldCode(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCode is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCode requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCode: %w", err)
+	}
+	return oldValue.Code, nil
+}
+
+// ClearCode clears the value of the "code" field.
+func (m *CategoryMutation) ClearCode() {
+	m.code = nil
+	m.clearedFields[category.FieldCode] = struct{}{}
+}
+
+// CodeCleared returns if the "code" field was cleared in this mutation.
+func (m *CategoryMutation) CodeCleared() bool {
+	_, ok := m.clearedFields[category.FieldCode]
+	return ok
+}
+
+// ResetCode resets all changes to the "code" field.
+func (m *CategoryMutation) ResetCode() {
+	m.code = nil
+	delete(m.clearedFields, category.FieldCode)
 }
 
 // SetPostCount sets the "post_count" field.
@@ -4944,6 +4924,76 @@ func (m *CategoryMutation) ResetDirectPostCount() {
 	m.direct_post_count = nil
 	m.adddirect_post_count = nil
 	delete(m.clearedFields, category.FieldDirectPostCount)
+}
+
+// SetDepth sets the "depth" field.
+func (m *CategoryMutation) SetDepth(i int32) {
+	m.depth = &i
+	m.adddepth = nil
+}
+
+// Depth returns the value of the "depth" field in the mutation.
+func (m *CategoryMutation) Depth() (r int32, exists bool) {
+	v := m.depth
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDepth returns the old "depth" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldDepth(ctx context.Context) (v *int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDepth is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDepth requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDepth: %w", err)
+	}
+	return oldValue.Depth, nil
+}
+
+// AddDepth adds i to the "depth" field.
+func (m *CategoryMutation) AddDepth(i int32) {
+	if m.adddepth != nil {
+		*m.adddepth += i
+	} else {
+		m.adddepth = &i
+	}
+}
+
+// AddedDepth returns the value that was added to the "depth" field in this mutation.
+func (m *CategoryMutation) AddedDepth() (r int32, exists bool) {
+	v := m.adddepth
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDepth clears the value of the "depth" field.
+func (m *CategoryMutation) ClearDepth() {
+	m.depth = nil
+	m.adddepth = nil
+	m.clearedFields[category.FieldDepth] = struct{}{}
+}
+
+// DepthCleared returns if the "depth" field was cleared in this mutation.
+func (m *CategoryMutation) DepthCleared() bool {
+	_, ok := m.clearedFields[category.FieldDepth]
+	return ok
+}
+
+// ResetDepth resets all changes to the "depth" field.
+func (m *CategoryMutation) ResetDepth() {
+	m.depth = nil
+	m.adddepth = nil
+	delete(m.clearedFields, category.FieldDepth)
 }
 
 // SetCustomFields sets the "custom_fields" field.
@@ -5110,7 +5160,7 @@ func (m *CategoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CategoryMutation) Fields() []string {
-	fields := make([]string, 0, 16)
+	fields := make([]string, 0, 17)
 	if m.created_at != nil {
 		fields = append(fields, category.FieldCreatedAt)
 	}
@@ -5141,20 +5191,23 @@ func (m *CategoryMutation) Fields() []string {
 	if m.status != nil {
 		fields = append(fields, category.FieldStatus)
 	}
-	if m.depth != nil {
-		fields = append(fields, category.FieldDepth)
-	}
 	if m.is_nav != nil {
 		fields = append(fields, category.FieldIsNav)
 	}
 	if m.icon != nil {
 		fields = append(fields, category.FieldIcon)
 	}
+	if m.code != nil {
+		fields = append(fields, category.FieldCode)
+	}
 	if m.post_count != nil {
 		fields = append(fields, category.FieldPostCount)
 	}
 	if m.direct_post_count != nil {
 		fields = append(fields, category.FieldDirectPostCount)
+	}
+	if m.depth != nil {
+		fields = append(fields, category.FieldDepth)
 	}
 	if m.custom_fields != nil {
 		fields = append(fields, category.FieldCustomFields)
@@ -5187,16 +5240,18 @@ func (m *CategoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ParentID()
 	case category.FieldStatus:
 		return m.Status()
-	case category.FieldDepth:
-		return m.Depth()
 	case category.FieldIsNav:
 		return m.IsNav()
 	case category.FieldIcon:
 		return m.Icon()
+	case category.FieldCode:
+		return m.Code()
 	case category.FieldPostCount:
 		return m.PostCount()
 	case category.FieldDirectPostCount:
 		return m.DirectPostCount()
+	case category.FieldDepth:
+		return m.Depth()
 	case category.FieldCustomFields:
 		return m.CustomFields()
 	}
@@ -5228,16 +5283,18 @@ func (m *CategoryMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldParentID(ctx)
 	case category.FieldStatus:
 		return m.OldStatus(ctx)
-	case category.FieldDepth:
-		return m.OldDepth(ctx)
 	case category.FieldIsNav:
 		return m.OldIsNav(ctx)
 	case category.FieldIcon:
 		return m.OldIcon(ctx)
+	case category.FieldCode:
+		return m.OldCode(ctx)
 	case category.FieldPostCount:
 		return m.OldPostCount(ctx)
 	case category.FieldDirectPostCount:
 		return m.OldDirectPostCount(ctx)
+	case category.FieldDepth:
+		return m.OldDepth(ctx)
 	case category.FieldCustomFields:
 		return m.OldCustomFields(ctx)
 	}
@@ -5319,13 +5376,6 @@ func (m *CategoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStatus(v)
 		return nil
-	case category.FieldDepth:
-		v, ok := value.(int32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDepth(v)
-		return nil
 	case category.FieldIsNav:
 		v, ok := value.(bool)
 		if !ok {
@@ -5340,6 +5390,13 @@ func (m *CategoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetIcon(v)
 		return nil
+	case category.FieldCode:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCode(v)
+		return nil
 	case category.FieldPostCount:
 		v, ok := value.(uint32)
 		if !ok {
@@ -5353,6 +5410,13 @@ func (m *CategoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDirectPostCount(v)
+		return nil
+	case category.FieldDepth:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDepth(v)
 		return nil
 	case category.FieldCustomFields:
 		v, ok := value.(*map[string]string)
@@ -5381,14 +5445,14 @@ func (m *CategoryMutation) AddedFields() []string {
 	if m.addsort_order != nil {
 		fields = append(fields, category.FieldSortOrder)
 	}
-	if m.adddepth != nil {
-		fields = append(fields, category.FieldDepth)
-	}
 	if m.addpost_count != nil {
 		fields = append(fields, category.FieldPostCount)
 	}
 	if m.adddirect_post_count != nil {
 		fields = append(fields, category.FieldDirectPostCount)
+	}
+	if m.adddepth != nil {
+		fields = append(fields, category.FieldDepth)
 	}
 	return fields
 }
@@ -5406,12 +5470,12 @@ func (m *CategoryMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedDeletedBy()
 	case category.FieldSortOrder:
 		return m.AddedSortOrder()
-	case category.FieldDepth:
-		return m.AddedDepth()
 	case category.FieldPostCount:
 		return m.AddedPostCount()
 	case category.FieldDirectPostCount:
 		return m.AddedDirectPostCount()
+	case category.FieldDepth:
+		return m.AddedDepth()
 	}
 	return nil, false
 }
@@ -5449,13 +5513,6 @@ func (m *CategoryMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddSortOrder(v)
 		return nil
-	case category.FieldDepth:
-		v, ok := value.(int32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddDepth(v)
-		return nil
 	case category.FieldPostCount:
 		v, ok := value.(int32)
 		if !ok {
@@ -5469,6 +5526,13 @@ func (m *CategoryMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddDirectPostCount(v)
+		return nil
+	case category.FieldDepth:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDepth(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Category numeric field %s", name)
@@ -5508,20 +5572,23 @@ func (m *CategoryMutation) ClearedFields() []string {
 	if m.FieldCleared(category.FieldStatus) {
 		fields = append(fields, category.FieldStatus)
 	}
-	if m.FieldCleared(category.FieldDepth) {
-		fields = append(fields, category.FieldDepth)
-	}
 	if m.FieldCleared(category.FieldIsNav) {
 		fields = append(fields, category.FieldIsNav)
 	}
 	if m.FieldCleared(category.FieldIcon) {
 		fields = append(fields, category.FieldIcon)
 	}
+	if m.FieldCleared(category.FieldCode) {
+		fields = append(fields, category.FieldCode)
+	}
 	if m.FieldCleared(category.FieldPostCount) {
 		fields = append(fields, category.FieldPostCount)
 	}
 	if m.FieldCleared(category.FieldDirectPostCount) {
 		fields = append(fields, category.FieldDirectPostCount)
+	}
+	if m.FieldCleared(category.FieldDepth) {
+		fields = append(fields, category.FieldDepth)
 	}
 	if m.FieldCleared(category.FieldCustomFields) {
 		fields = append(fields, category.FieldCustomFields)
@@ -5570,20 +5637,23 @@ func (m *CategoryMutation) ClearField(name string) error {
 	case category.FieldStatus:
 		m.ClearStatus()
 		return nil
-	case category.FieldDepth:
-		m.ClearDepth()
-		return nil
 	case category.FieldIsNav:
 		m.ClearIsNav()
 		return nil
 	case category.FieldIcon:
 		m.ClearIcon()
 		return nil
+	case category.FieldCode:
+		m.ClearCode()
+		return nil
 	case category.FieldPostCount:
 		m.ClearPostCount()
 		return nil
 	case category.FieldDirectPostCount:
 		m.ClearDirectPostCount()
+		return nil
+	case category.FieldDepth:
+		m.ClearDepth()
 		return nil
 	case category.FieldCustomFields:
 		m.ClearCustomFields()
@@ -5626,20 +5696,23 @@ func (m *CategoryMutation) ResetField(name string) error {
 	case category.FieldStatus:
 		m.ResetStatus()
 		return nil
-	case category.FieldDepth:
-		m.ResetDepth()
-		return nil
 	case category.FieldIsNav:
 		m.ResetIsNav()
 		return nil
 	case category.FieldIcon:
 		m.ResetIcon()
 		return nil
+	case category.FieldCode:
+		m.ResetCode()
+		return nil
 	case category.FieldPostCount:
 		m.ResetPostCount()
 		return nil
 	case category.FieldDirectPostCount:
 		m.ResetDirectPostCount()
+		return nil
+	case category.FieldDepth:
+		m.ResetDepth()
 		return nil
 	case category.FieldCustomFields:
 		m.ResetCustomFields()
@@ -63077,7 +63150,7 @@ type PostMutation struct {
 	addsort_order    *int32
 	editor_type      *post.EditorType
 	status           *post.Status
-	slug             *string
+	code             *string
 	disallow_comment *bool
 	in_progress      *bool
 	auto_summary     *bool
@@ -63095,6 +63168,7 @@ type PostMutation struct {
 	custom_fields    **map[string]string
 	category_ids     **[]uint32
 	tag_ids          **[]uint32
+	publish_time     *time.Time
 	clearedFields    map[string]struct{}
 	done             bool
 	oldValue         func(context.Context) (*Post, error)
@@ -63730,53 +63804,53 @@ func (m *PostMutation) ResetStatus() {
 	delete(m.clearedFields, post.FieldStatus)
 }
 
-// SetSlug sets the "slug" field.
-func (m *PostMutation) SetSlug(s string) {
-	m.slug = &s
+// SetCode sets the "code" field.
+func (m *PostMutation) SetCode(s string) {
+	m.code = &s
 }
 
-// Slug returns the value of the "slug" field in the mutation.
-func (m *PostMutation) Slug() (r string, exists bool) {
-	v := m.slug
+// Code returns the value of the "code" field in the mutation.
+func (m *PostMutation) Code() (r string, exists bool) {
+	v := m.code
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldSlug returns the old "slug" field's value of the Post entity.
+// OldCode returns the old "code" field's value of the Post entity.
 // If the Post object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PostMutation) OldSlug(ctx context.Context) (v *string, err error) {
+func (m *PostMutation) OldCode(ctx context.Context) (v *string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldSlug is only allowed on UpdateOne operations")
+		return v, errors.New("OldCode is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldSlug requires an ID field in the mutation")
+		return v, errors.New("OldCode requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldSlug: %w", err)
+		return v, fmt.Errorf("querying old value for OldCode: %w", err)
 	}
-	return oldValue.Slug, nil
+	return oldValue.Code, nil
 }
 
-// ClearSlug clears the value of the "slug" field.
-func (m *PostMutation) ClearSlug() {
-	m.slug = nil
-	m.clearedFields[post.FieldSlug] = struct{}{}
+// ClearCode clears the value of the "code" field.
+func (m *PostMutation) ClearCode() {
+	m.code = nil
+	m.clearedFields[post.FieldCode] = struct{}{}
 }
 
-// SlugCleared returns if the "slug" field was cleared in this mutation.
-func (m *PostMutation) SlugCleared() bool {
-	_, ok := m.clearedFields[post.FieldSlug]
+// CodeCleared returns if the "code" field was cleared in this mutation.
+func (m *PostMutation) CodeCleared() bool {
+	_, ok := m.clearedFields[post.FieldCode]
 	return ok
 }
 
-// ResetSlug resets all changes to the "slug" field.
-func (m *PostMutation) ResetSlug() {
-	m.slug = nil
-	delete(m.clearedFields, post.FieldSlug)
+// ResetCode resets all changes to the "code" field.
+func (m *PostMutation) ResetCode() {
+	m.code = nil
+	delete(m.clearedFields, post.FieldCode)
 }
 
 // SetDisallowComment sets the "disallow_comment" field.
@@ -64500,6 +64574,55 @@ func (m *PostMutation) ResetTagIds() {
 	delete(m.clearedFields, post.FieldTagIds)
 }
 
+// SetPublishTime sets the "publish_time" field.
+func (m *PostMutation) SetPublishTime(t time.Time) {
+	m.publish_time = &t
+}
+
+// PublishTime returns the value of the "publish_time" field in the mutation.
+func (m *PostMutation) PublishTime() (r time.Time, exists bool) {
+	v := m.publish_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPublishTime returns the old "publish_time" field's value of the Post entity.
+// If the Post object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PostMutation) OldPublishTime(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPublishTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPublishTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPublishTime: %w", err)
+	}
+	return oldValue.PublishTime, nil
+}
+
+// ClearPublishTime clears the value of the "publish_time" field.
+func (m *PostMutation) ClearPublishTime() {
+	m.publish_time = nil
+	m.clearedFields[post.FieldPublishTime] = struct{}{}
+}
+
+// PublishTimeCleared returns if the "publish_time" field was cleared in this mutation.
+func (m *PostMutation) PublishTimeCleared() bool {
+	_, ok := m.clearedFields[post.FieldPublishTime]
+	return ok
+}
+
+// ResetPublishTime resets all changes to the "publish_time" field.
+func (m *PostMutation) ResetPublishTime() {
+	m.publish_time = nil
+	delete(m.clearedFields, post.FieldPublishTime)
+}
+
 // Where appends a list predicates to the PostMutation builder.
 func (m *PostMutation) Where(ps ...predicate.Post) {
 	m.predicates = append(m.predicates, ps...)
@@ -64534,7 +64657,7 @@ func (m *PostMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PostMutation) Fields() []string {
-	fields := make([]string, 0, 23)
+	fields := make([]string, 0, 24)
 	if m.created_at != nil {
 		fields = append(fields, post.FieldCreatedAt)
 	}
@@ -64562,8 +64685,8 @@ func (m *PostMutation) Fields() []string {
 	if m.status != nil {
 		fields = append(fields, post.FieldStatus)
 	}
-	if m.slug != nil {
-		fields = append(fields, post.FieldSlug)
+	if m.code != nil {
+		fields = append(fields, post.FieldCode)
 	}
 	if m.disallow_comment != nil {
 		fields = append(fields, post.FieldDisallowComment)
@@ -64604,6 +64727,9 @@ func (m *PostMutation) Fields() []string {
 	if m.tag_ids != nil {
 		fields = append(fields, post.FieldTagIds)
 	}
+	if m.publish_time != nil {
+		fields = append(fields, post.FieldPublishTime)
+	}
 	return fields
 }
 
@@ -64630,8 +64756,8 @@ func (m *PostMutation) Field(name string) (ent.Value, bool) {
 		return m.EditorType()
 	case post.FieldStatus:
 		return m.Status()
-	case post.FieldSlug:
-		return m.Slug()
+	case post.FieldCode:
+		return m.Code()
 	case post.FieldDisallowComment:
 		return m.DisallowComment()
 	case post.FieldInProgress:
@@ -64658,6 +64784,8 @@ func (m *PostMutation) Field(name string) (ent.Value, bool) {
 		return m.CategoryIds()
 	case post.FieldTagIds:
 		return m.TagIds()
+	case post.FieldPublishTime:
+		return m.PublishTime()
 	}
 	return nil, false
 }
@@ -64685,8 +64813,8 @@ func (m *PostMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldEditorType(ctx)
 	case post.FieldStatus:
 		return m.OldStatus(ctx)
-	case post.FieldSlug:
-		return m.OldSlug(ctx)
+	case post.FieldCode:
+		return m.OldCode(ctx)
 	case post.FieldDisallowComment:
 		return m.OldDisallowComment(ctx)
 	case post.FieldInProgress:
@@ -64713,6 +64841,8 @@ func (m *PostMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldCategoryIds(ctx)
 	case post.FieldTagIds:
 		return m.OldTagIds(ctx)
+	case post.FieldPublishTime:
+		return m.OldPublishTime(ctx)
 	}
 	return nil, fmt.Errorf("unknown Post field %s", name)
 }
@@ -64785,12 +64915,12 @@ func (m *PostMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStatus(v)
 		return nil
-	case post.FieldSlug:
+	case post.FieldCode:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetSlug(v)
+		m.SetCode(v)
 		return nil
 	case post.FieldDisallowComment:
 		v, ok := value.(bool)
@@ -64882,6 +65012,13 @@ func (m *PostMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTagIds(v)
+		return nil
+	case post.FieldPublishTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPublishTime(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Post field %s", name)
@@ -65039,8 +65176,8 @@ func (m *PostMutation) ClearedFields() []string {
 	if m.FieldCleared(post.FieldStatus) {
 		fields = append(fields, post.FieldStatus)
 	}
-	if m.FieldCleared(post.FieldSlug) {
-		fields = append(fields, post.FieldSlug)
+	if m.FieldCleared(post.FieldCode) {
+		fields = append(fields, post.FieldCode)
 	}
 	if m.FieldCleared(post.FieldDisallowComment) {
 		fields = append(fields, post.FieldDisallowComment)
@@ -65080,6 +65217,9 @@ func (m *PostMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(post.FieldTagIds) {
 		fields = append(fields, post.FieldTagIds)
+	}
+	if m.FieldCleared(post.FieldPublishTime) {
+		fields = append(fields, post.FieldPublishTime)
 	}
 	return fields
 }
@@ -65122,8 +65262,8 @@ func (m *PostMutation) ClearField(name string) error {
 	case post.FieldStatus:
 		m.ClearStatus()
 		return nil
-	case post.FieldSlug:
-		m.ClearSlug()
+	case post.FieldCode:
+		m.ClearCode()
 		return nil
 	case post.FieldDisallowComment:
 		m.ClearDisallowComment()
@@ -65164,6 +65304,9 @@ func (m *PostMutation) ClearField(name string) error {
 	case post.FieldTagIds:
 		m.ClearTagIds()
 		return nil
+	case post.FieldPublishTime:
+		m.ClearPublishTime()
+		return nil
 	}
 	return fmt.Errorf("unknown Post nullable field %s", name)
 }
@@ -65199,8 +65342,8 @@ func (m *PostMutation) ResetField(name string) error {
 	case post.FieldStatus:
 		m.ResetStatus()
 		return nil
-	case post.FieldSlug:
-		m.ResetSlug()
+	case post.FieldCode:
+		m.ResetCode()
 		return nil
 	case post.FieldDisallowComment:
 		m.ResetDisallowComment()
@@ -65240,6 +65383,9 @@ func (m *PostMutation) ResetField(name string) error {
 		return nil
 	case post.FieldTagIds:
 		m.ResetTagIds()
+		return nil
+	case post.FieldPublishTime:
+		m.ResetPublishTime()
 		return nil
 	}
 	return fmt.Errorf("unknown Post field %s", name)
@@ -76238,6 +76384,7 @@ type TagMutation struct {
 	color         *string
 	icon          *string
 	group         *string
+	code          *string
 	is_featured   *bool
 	post_count    *uint32
 	addpost_count *int32
@@ -76974,6 +77121,55 @@ func (m *TagMutation) ResetGroup() {
 	delete(m.clearedFields, tag.FieldGroup)
 }
 
+// SetCode sets the "code" field.
+func (m *TagMutation) SetCode(s string) {
+	m.code = &s
+}
+
+// Code returns the value of the "code" field in the mutation.
+func (m *TagMutation) Code() (r string, exists bool) {
+	v := m.code
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCode returns the old "code" field's value of the Tag entity.
+// If the Tag object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TagMutation) OldCode(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCode is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCode requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCode: %w", err)
+	}
+	return oldValue.Code, nil
+}
+
+// ClearCode clears the value of the "code" field.
+func (m *TagMutation) ClearCode() {
+	m.code = nil
+	m.clearedFields[tag.FieldCode] = struct{}{}
+}
+
+// CodeCleared returns if the "code" field was cleared in this mutation.
+func (m *TagMutation) CodeCleared() bool {
+	_, ok := m.clearedFields[tag.FieldCode]
+	return ok
+}
+
+// ResetCode resets all changes to the "code" field.
+func (m *TagMutation) ResetCode() {
+	m.code = nil
+	delete(m.clearedFields, tag.FieldCode)
+}
+
 // SetIsFeatured sets the "is_featured" field.
 func (m *TagMutation) SetIsFeatured(b bool) {
 	m.is_featured = &b
@@ -77127,7 +77323,7 @@ func (m *TagMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TagMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 14)
 	if m.created_at != nil {
 		fields = append(fields, tag.FieldCreatedAt)
 	}
@@ -77160,6 +77356,9 @@ func (m *TagMutation) Fields() []string {
 	}
 	if m.group != nil {
 		fields = append(fields, tag.FieldGroup)
+	}
+	if m.code != nil {
+		fields = append(fields, tag.FieldCode)
 	}
 	if m.is_featured != nil {
 		fields = append(fields, tag.FieldIsFeatured)
@@ -77197,6 +77396,8 @@ func (m *TagMutation) Field(name string) (ent.Value, bool) {
 		return m.Icon()
 	case tag.FieldGroup:
 		return m.Group()
+	case tag.FieldCode:
+		return m.Code()
 	case tag.FieldIsFeatured:
 		return m.IsFeatured()
 	case tag.FieldPostCount:
@@ -77232,6 +77433,8 @@ func (m *TagMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldIcon(ctx)
 	case tag.FieldGroup:
 		return m.OldGroup(ctx)
+	case tag.FieldCode:
+		return m.OldCode(ctx)
 	case tag.FieldIsFeatured:
 		return m.OldIsFeatured(ctx)
 	case tag.FieldPostCount:
@@ -77321,6 +77524,13 @@ func (m *TagMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetGroup(v)
+		return nil
+	case tag.FieldCode:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCode(v)
 		return nil
 	case tag.FieldIsFeatured:
 		v, ok := value.(bool)
@@ -77462,6 +77672,9 @@ func (m *TagMutation) ClearedFields() []string {
 	if m.FieldCleared(tag.FieldGroup) {
 		fields = append(fields, tag.FieldGroup)
 	}
+	if m.FieldCleared(tag.FieldCode) {
+		fields = append(fields, tag.FieldCode)
+	}
 	if m.FieldCleared(tag.FieldIsFeatured) {
 		fields = append(fields, tag.FieldIsFeatured)
 	}
@@ -77515,6 +77728,9 @@ func (m *TagMutation) ClearField(name string) error {
 	case tag.FieldGroup:
 		m.ClearGroup()
 		return nil
+	case tag.FieldCode:
+		m.ClearCode()
+		return nil
 	case tag.FieldIsFeatured:
 		m.ClearIsFeatured()
 		return nil
@@ -77561,6 +77777,9 @@ func (m *TagMutation) ResetField(name string) error {
 		return nil
 	case tag.FieldGroup:
 		m.ResetGroup()
+		return nil
+	case tag.FieldCode:
+		m.ResetCode()
 		return nil
 	case tag.FieldIsFeatured:
 		m.ResetIsFeatured()

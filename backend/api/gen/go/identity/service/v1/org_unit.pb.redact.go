@@ -229,8 +229,6 @@ func (x *GetOrgUnitRequest) Redact() string {
 		return ""
 	}
 
-	// Safe field: Id
-
 	// Safe field: ViewMask
 	return x.String()
 }
@@ -266,8 +264,6 @@ func (x *DeleteOrgUnitRequest) Redact() string {
 	if x == nil {
 		return ""
 	}
-
-	// Safe field: Id
 	return x.String()
 }
 

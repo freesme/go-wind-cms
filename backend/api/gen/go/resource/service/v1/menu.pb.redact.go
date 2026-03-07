@@ -250,8 +250,6 @@ func (x *GetMenuRequest) Redact() string {
 		return ""
 	}
 
-	// Safe field: Id
-
 	// Safe field: ViewMask
 	return x.String()
 }
@@ -289,8 +287,6 @@ func (x *DeleteMenuRequest) Redact() string {
 	}
 
 	// Safe field: OperatorId
-
-	// Safe field: Id
 	return x.String()
 }
 

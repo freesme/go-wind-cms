@@ -165,7 +165,12 @@ message UpdateInternalMessageRecipientRequest {
 
 // 删除站内信消息收件箱 - 请求
 message DeleteInternalMessageRecipientRequest {
-  uint32 id = 1;
+  oneof query_by {
+    uint32 id = 1 [
+      (gnostic.openapi.v3.property) = {description: "ID", read_only: true},
+      json_name = "id"
+    ]; // ID
+  }
 }
 
 // 根据IDs批量获取站内信消息收件箱列表 - 请求

@@ -428,8 +428,11 @@ func (x *UpdateLanguageRequest) GetAllowMissing() bool {
 
 // 删除语言 - 请求
 type DeleteLanguageRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to QueryBy:
+	//
+	//	*DeleteLanguageRequest_Id
+	QueryBy       isDeleteLanguageRequest_QueryBy `protobuf_oneof:"query_by"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -464,12 +467,31 @@ func (*DeleteLanguageRequest) Descriptor() ([]byte, []int) {
 	return file_dict_service_v1_language_proto_rawDescGZIP(), []int{5}
 }
 
+func (x *DeleteLanguageRequest) GetQueryBy() isDeleteLanguageRequest_QueryBy {
+	if x != nil {
+		return x.QueryBy
+	}
+	return nil
+}
+
 func (x *DeleteLanguageRequest) GetId() uint32 {
 	if x != nil {
-		return x.Id
+		if x, ok := x.QueryBy.(*DeleteLanguageRequest_Id); ok {
+			return x.Id
+		}
 	}
 	return 0
 }
+
+type isDeleteLanguageRequest_QueryBy interface {
+	isDeleteLanguageRequest_QueryBy()
+}
+
+type DeleteLanguageRequest_Id struct {
+	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // ID
+}
+
+func (*DeleteLanguageRequest_Id) isDeleteLanguageRequest_QueryBy() {}
 
 type BatchCreateLanguagesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -666,9 +688,12 @@ const file_dict_service_v1_language_proto_rawDesc = "" +
 	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
 	"updateMask\x12\xb4\x01\n" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
-	"\x0e_allow_missing\"'\n" +
-	"\x15DeleteLanguageRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"N\n" +
+	"\x0e_allow_missing\"A\n" +
+	"\x15DeleteLanguageRequest\x12\x1c\n" +
+	"\x02id\x18\x01 \x01(\rB\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02idB\n" +
+	"\n" +
+	"\bquery_by\"N\n" +
 	"\x1bBatchCreateLanguagesRequest\x12/\n" +
 	"\x05items\x18\x01 \x03(\v2\x19.dict.service.v1.LanguageR\x05items\"d\n" +
 	"\x1cBatchCreateLanguagesResponse\x12D\n" +
@@ -756,6 +781,9 @@ func file_dict_service_v1_language_proto_init() {
 		(*GetLanguageRequest_Code)(nil),
 	}
 	file_dict_service_v1_language_proto_msgTypes[4].OneofWrappers = []any{}
+	file_dict_service_v1_language_proto_msgTypes[5].OneofWrappers = []any{
+		(*DeleteLanguageRequest_Id)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

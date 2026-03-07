@@ -689,11 +689,11 @@ func (x *UpdateTenantRequest) GetAllowMissing() bool {
 // 删除租户 - 请求
 type DeleteTenantRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Types that are valid to be assigned to DeleteBy:
+	// Types that are valid to be assigned to QueryBy:
 	//
 	//	*DeleteTenantRequest_Id
 	//	*DeleteTenantRequest_Code
-	DeleteBy      isDeleteTenantRequest_DeleteBy `protobuf_oneof:"delete_by"`
+	QueryBy       isDeleteTenantRequest_QueryBy `protobuf_oneof:"query_by"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -728,16 +728,16 @@ func (*DeleteTenantRequest) Descriptor() ([]byte, []int) {
 	return file_identity_service_v1_tenant_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *DeleteTenantRequest) GetDeleteBy() isDeleteTenantRequest_DeleteBy {
+func (x *DeleteTenantRequest) GetQueryBy() isDeleteTenantRequest_QueryBy {
 	if x != nil {
-		return x.DeleteBy
+		return x.QueryBy
 	}
 	return nil
 }
 
 func (x *DeleteTenantRequest) GetId() uint32 {
 	if x != nil {
-		if x, ok := x.DeleteBy.(*DeleteTenantRequest_Id); ok {
+		if x, ok := x.QueryBy.(*DeleteTenantRequest_Id); ok {
 			return x.Id
 		}
 	}
@@ -746,15 +746,15 @@ func (x *DeleteTenantRequest) GetId() uint32 {
 
 func (x *DeleteTenantRequest) GetCode() string {
 	if x != nil {
-		if x, ok := x.DeleteBy.(*DeleteTenantRequest_Code); ok {
+		if x, ok := x.QueryBy.(*DeleteTenantRequest_Code); ok {
 			return x.Code
 		}
 	}
 	return ""
 }
 
-type isDeleteTenantRequest_DeleteBy interface {
-	isDeleteTenantRequest_DeleteBy()
+type isDeleteTenantRequest_QueryBy interface {
+	isDeleteTenantRequest_QueryBy()
 }
 
 type DeleteTenantRequest_Id struct {
@@ -765,9 +765,9 @@ type DeleteTenantRequest_Code struct {
 	Code string `protobuf:"bytes,2,opt,name=code,proto3,oneof"` // 编码
 }
 
-func (*DeleteTenantRequest_Id) isDeleteTenantRequest_DeleteBy() {}
+func (*DeleteTenantRequest_Id) isDeleteTenantRequest_QueryBy() {}
 
-func (*DeleteTenantRequest_Code) isDeleteTenantRequest_DeleteBy() {}
+func (*DeleteTenantRequest_Code) isDeleteTenantRequest_QueryBy() {}
 
 type BatchCreateTenantsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1221,12 +1221,13 @@ const file_identity_service_v1_tenant_proto_rawDesc = "" +
 	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
 	"updateMask\x12\xb4\x01\n" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
-	"\x0e_allow_missing\"f\n" +
+	"\x0e_allow_missing\"e\n" +
 	"\x13DeleteTenantRequest\x12\x1c\n" +
 	"\x02id\x18\x01 \x01(\rB\n" +
 	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02id\x12$\n" +
-	"\x04code\x18\x02 \x01(\tB\x0e\xbaG\v\x18\x01\x92\x02\x06编码H\x00R\x04codeB\v\n" +
-	"\tdelete_by\"N\n" +
+	"\x04code\x18\x02 \x01(\tB\x0e\xbaG\v\x18\x01\x92\x02\x06编码H\x00R\x04codeB\n" +
+	"\n" +
+	"\bquery_by\"N\n" +
 	"\x19BatchCreateTenantsRequest\x121\n" +
 	"\x05items\x18\x01 \x03(\v2\x1b.identity.service.v1.TenantR\x05items\"b\n" +
 	"\x1aBatchCreateTenantsResponse\x12D\n" +

@@ -922,12 +922,12 @@ func (x *UpdateRoleRequest) GetAllowMissing() bool {
 // 删除角色 - 请求
 type DeleteRoleRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Types that are valid to be assigned to DeleteBy:
+	// Types that are valid to be assigned to QueryBy:
 	//
 	//	*DeleteRoleRequest_Id
 	//	*DeleteRoleRequest_Code
 	//	*DeleteRoleRequest_TenantId
-	DeleteBy      isDeleteRoleRequest_DeleteBy `protobuf_oneof:"delete_by"`
+	QueryBy       isDeleteRoleRequest_QueryBy `protobuf_oneof:"query_by"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -962,16 +962,16 @@ func (*DeleteRoleRequest) Descriptor() ([]byte, []int) {
 	return file_permission_service_v1_role_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *DeleteRoleRequest) GetDeleteBy() isDeleteRoleRequest_DeleteBy {
+func (x *DeleteRoleRequest) GetQueryBy() isDeleteRoleRequest_QueryBy {
 	if x != nil {
-		return x.DeleteBy
+		return x.QueryBy
 	}
 	return nil
 }
 
 func (x *DeleteRoleRequest) GetId() uint32 {
 	if x != nil {
-		if x, ok := x.DeleteBy.(*DeleteRoleRequest_Id); ok {
+		if x, ok := x.QueryBy.(*DeleteRoleRequest_Id); ok {
 			return x.Id
 		}
 	}
@@ -980,7 +980,7 @@ func (x *DeleteRoleRequest) GetId() uint32 {
 
 func (x *DeleteRoleRequest) GetCode() string {
 	if x != nil {
-		if x, ok := x.DeleteBy.(*DeleteRoleRequest_Code); ok {
+		if x, ok := x.QueryBy.(*DeleteRoleRequest_Code); ok {
 			return x.Code
 		}
 	}
@@ -989,15 +989,15 @@ func (x *DeleteRoleRequest) GetCode() string {
 
 func (x *DeleteRoleRequest) GetTenantId() uint32 {
 	if x != nil {
-		if x, ok := x.DeleteBy.(*DeleteRoleRequest_TenantId); ok {
+		if x, ok := x.QueryBy.(*DeleteRoleRequest_TenantId); ok {
 			return x.TenantId
 		}
 	}
 	return 0
 }
 
-type isDeleteRoleRequest_DeleteBy interface {
-	isDeleteRoleRequest_DeleteBy()
+type isDeleteRoleRequest_QueryBy interface {
+	isDeleteRoleRequest_QueryBy()
 }
 
 type DeleteRoleRequest_Id struct {
@@ -1012,11 +1012,11 @@ type DeleteRoleRequest_TenantId struct {
 	TenantId uint32 `protobuf:"varint,3,opt,name=tenant_id,json=tenantId,proto3,oneof"` // 租户ID
 }
 
-func (*DeleteRoleRequest_Id) isDeleteRoleRequest_DeleteBy() {}
+func (*DeleteRoleRequest_Id) isDeleteRoleRequest_QueryBy() {}
 
-func (*DeleteRoleRequest_Code) isDeleteRoleRequest_DeleteBy() {}
+func (*DeleteRoleRequest_Code) isDeleteRoleRequest_QueryBy() {}
 
-func (*DeleteRoleRequest_TenantId) isDeleteRoleRequest_DeleteBy() {}
+func (*DeleteRoleRequest_TenantId) isDeleteRoleRequest_QueryBy() {}
 
 type BatchCreateRolesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -2756,12 +2756,13 @@ const file_permission_service_v1_role_proto_rawDesc = "" +
 	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
 	"updateMask\x12\xb4\x01\n" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
-	"\x0e_allow_missing\"\x9b\x01\n" +
+	"\x0e_allow_missing\"\x9a\x01\n" +
 	"\x11DeleteRoleRequest\x12\"\n" +
 	"\x02id\x18\x01 \x01(\rB\x10\xbaG\r\x18\x01\x92\x02\b角色IDH\x00R\x02id\x12$\n" +
 	"\x04code\x18\x02 \x01(\tB\x0e\xbaG\v\x18\x01\x92\x02\x06编码H\x00R\x04code\x12/\n" +
-	"\ttenant_id\x18\x03 \x01(\rB\x10\xbaG\r\x18\x01\x92\x02\b租户IDH\x00R\btenantIdB\v\n" +
-	"\tdelete_by\"L\n" +
+	"\ttenant_id\x18\x03 \x01(\rB\x10\xbaG\r\x18\x01\x92\x02\b租户IDH\x00R\btenantIdB\n" +
+	"\n" +
+	"\bquery_by\"L\n" +
 	"\x17BatchCreateRolesRequest\x121\n" +
 	"\x05items\x18\x01 \x03(\v2\x1b.permission.service.v1.RoleR\x05items\"`\n" +
 	"\x18BatchCreateRolesResponse\x12D\n" +

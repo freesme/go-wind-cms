@@ -902,7 +902,22 @@ func (m *DeleteInternalMessageCategoryRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	switch v := m.QueryBy.(type) {
+	case *DeleteInternalMessageCategoryRequest_Id:
+		if v == nil {
+			err := DeleteInternalMessageCategoryRequestValidationError{
+				field:  "QueryBy",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		// no validation rules for Id
+	default:
+		_ = v // ensures v is used
+	}
 
 	if len(errors) > 0 {
 		return DeleteInternalMessageCategoryRequestMultiError(errors)

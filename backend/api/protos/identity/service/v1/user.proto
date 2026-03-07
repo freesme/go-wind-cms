@@ -313,7 +313,7 @@ message UpdateUserRequest {
 
 // 删除用户 - 请求
 message DeleteUserRequest {
-  oneof delete_by {
+  oneof query_by {
     uint32 id = 1 [
       (gnostic.openapi.v3.property) = {description: "用户ID", read_only: true},
       json_name = "id"

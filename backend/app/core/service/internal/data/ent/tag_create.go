@@ -176,6 +176,20 @@ func (_c *TagCreate) SetNillableGroup(v *string) *TagCreate {
 	return _c
 }
 
+// SetCode sets the "code" field.
+func (_c *TagCreate) SetCode(v string) *TagCreate {
+	_c.mutation.SetCode(v)
+	return _c
+}
+
+// SetNillableCode sets the "code" field if the given value is not nil.
+func (_c *TagCreate) SetNillableCode(v *string) *TagCreate {
+	if v != nil {
+		_c.SetCode(*v)
+	}
+	return _c
+}
+
 // SetIsFeatured sets the "is_featured" field.
 func (_c *TagCreate) SetIsFeatured(v bool) *TagCreate {
 	_c.mutation.SetIsFeatured(v)
@@ -351,6 +365,10 @@ func (_c *TagCreate) createSpec() (*Tag, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Group(); ok {
 		_spec.SetField(tag.FieldGroup, field.TypeString, value)
 		_node.Group = &value
+	}
+	if value, ok := _c.mutation.Code(); ok {
+		_spec.SetField(tag.FieldCode, field.TypeString, value)
+		_node.Code = &value
 	}
 	if value, ok := _c.mutation.IsFeatured(); ok {
 		_spec.SetField(tag.FieldIsFeatured, field.TypeBool, value)
@@ -613,6 +631,24 @@ func (u *TagUpsert) UpdateGroup() *TagUpsert {
 // ClearGroup clears the value of the "group" field.
 func (u *TagUpsert) ClearGroup() *TagUpsert {
 	u.SetNull(tag.FieldGroup)
+	return u
+}
+
+// SetCode sets the "code" field.
+func (u *TagUpsert) SetCode(v string) *TagUpsert {
+	u.Set(tag.FieldCode, v)
+	return u
+}
+
+// UpdateCode sets the "code" field to the value that was provided on create.
+func (u *TagUpsert) UpdateCode() *TagUpsert {
+	u.SetExcluded(tag.FieldCode)
+	return u
+}
+
+// ClearCode clears the value of the "code" field.
+func (u *TagUpsert) ClearCode() *TagUpsert {
+	u.SetNull(tag.FieldCode)
 	return u
 }
 
@@ -944,6 +980,27 @@ func (u *TagUpsertOne) UpdateGroup() *TagUpsertOne {
 func (u *TagUpsertOne) ClearGroup() *TagUpsertOne {
 	return u.Update(func(s *TagUpsert) {
 		s.ClearGroup()
+	})
+}
+
+// SetCode sets the "code" field.
+func (u *TagUpsertOne) SetCode(v string) *TagUpsertOne {
+	return u.Update(func(s *TagUpsert) {
+		s.SetCode(v)
+	})
+}
+
+// UpdateCode sets the "code" field to the value that was provided on create.
+func (u *TagUpsertOne) UpdateCode() *TagUpsertOne {
+	return u.Update(func(s *TagUpsert) {
+		s.UpdateCode()
+	})
+}
+
+// ClearCode clears the value of the "code" field.
+func (u *TagUpsertOne) ClearCode() *TagUpsertOne {
+	return u.Update(func(s *TagUpsert) {
+		s.ClearCode()
 	})
 }
 
@@ -1448,6 +1505,27 @@ func (u *TagUpsertBulk) UpdateGroup() *TagUpsertBulk {
 func (u *TagUpsertBulk) ClearGroup() *TagUpsertBulk {
 	return u.Update(func(s *TagUpsert) {
 		s.ClearGroup()
+	})
+}
+
+// SetCode sets the "code" field.
+func (u *TagUpsertBulk) SetCode(v string) *TagUpsertBulk {
+	return u.Update(func(s *TagUpsert) {
+		s.SetCode(v)
+	})
+}
+
+// UpdateCode sets the "code" field to the value that was provided on create.
+func (u *TagUpsertBulk) UpdateCode() *TagUpsertBulk {
+	return u.Update(func(s *TagUpsert) {
+		s.UpdateCode()
+	})
+}
+
+// ClearCode clears the value of the "code" field.
+func (u *TagUpsertBulk) ClearCode() *TagUpsertBulk {
+	return u.Update(func(s *TagUpsert) {
+		s.ClearCode()
 	})
 }
 

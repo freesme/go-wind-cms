@@ -34,16 +34,18 @@ const (
 	FieldParentID = "parent_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// FieldDepth holds the string denoting the depth field in the database.
-	FieldDepth = "depth"
 	// FieldIsNav holds the string denoting the is_nav field in the database.
 	FieldIsNav = "is_nav"
 	// FieldIcon holds the string denoting the icon field in the database.
 	FieldIcon = "icon"
+	// FieldCode holds the string denoting the code field in the database.
+	FieldCode = "code"
 	// FieldPostCount holds the string denoting the post_count field in the database.
 	FieldPostCount = "post_count"
 	// FieldDirectPostCount holds the string denoting the direct_post_count field in the database.
 	FieldDirectPostCount = "direct_post_count"
+	// FieldDepth holds the string denoting the depth field in the database.
+	FieldDepth = "depth"
 	// FieldCustomFields holds the string denoting the custom_fields field in the database.
 	FieldCustomFields = "custom_fields"
 	// EdgeParent holds the string denoting the parent edge name in mutations.
@@ -75,11 +77,12 @@ var Columns = []string{
 	FieldPath,
 	FieldParentID,
 	FieldStatus,
-	FieldDepth,
 	FieldIsNav,
 	FieldIcon,
+	FieldCode,
 	FieldPostCount,
 	FieldDirectPostCount,
+	FieldDepth,
 	FieldCustomFields,
 }
 
@@ -98,14 +101,14 @@ var (
 	DefaultSortOrder uint32
 	// PathValidator is a validator for the "path" field. It is called by the builders before save.
 	PathValidator func(string) error
-	// DefaultDepth holds the default value on creation for the "depth" field.
-	DefaultDepth int32
 	// DefaultIsNav holds the default value on creation for the "is_nav" field.
 	DefaultIsNav bool
 	// DefaultPostCount holds the default value on creation for the "post_count" field.
 	DefaultPostCount uint32
 	// DefaultDirectPostCount holds the default value on creation for the "direct_post_count" field.
 	DefaultDirectPostCount uint32
+	// DefaultDepth holds the default value on creation for the "depth" field.
+	DefaultDepth int32
 	// IDValidator is a validator for the "id" field. It is called by the builders before save.
 	IDValidator func(uint32) error
 )
@@ -192,11 +195,6 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
-// ByDepth orders the results by the depth field.
-func ByDepth(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDepth, opts...).ToFunc()
-}
-
 // ByIsNav orders the results by the is_nav field.
 func ByIsNav(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsNav, opts...).ToFunc()
@@ -207,6 +205,11 @@ func ByIcon(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIcon, opts...).ToFunc()
 }
 
+// ByCode orders the results by the code field.
+func ByCode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCode, opts...).ToFunc()
+}
+
 // ByPostCount orders the results by the post_count field.
 func ByPostCount(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPostCount, opts...).ToFunc()
@@ -215,6 +218,11 @@ func ByPostCount(opts ...sql.OrderTermOption) OrderOption {
 // ByDirectPostCount orders the results by the direct_post_count field.
 func ByDirectPostCount(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDirectPostCount, opts...).ToFunc()
+}
+
+// ByDepth orders the results by the depth field.
+func ByDepth(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDepth, opts...).ToFunc()
 }
 
 // ByParentField orders the results by parent field.

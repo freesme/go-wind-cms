@@ -720,7 +720,7 @@ func (r *userRepo) Update(ctx context.Context, req *identityV1.UpdateUserRequest
 func (r *userRepo) Delete(ctx context.Context, req *identityV1.DeleteUserRequest) (err error) {
 	var existResp *identityV1.UserExistsResponse
 	existReq := &identityV1.UserExistsRequest{}
-	switch req.DeleteBy.(type) {
+	switch req.QueryBy.(type) {
 	default:
 	case *identityV1.DeleteUserRequest_Id:
 		existReq.QueryBy = &identityV1.UserExistsRequest_Id{Id: req.GetId()}
@@ -756,7 +756,7 @@ func (r *userRepo) Delete(ctx context.Context, req *identityV1.DeleteUserRequest
 
 	builder := tx.User.Delete()
 
-	switch req.DeleteBy.(type) {
+	switch req.QueryBy.(type) {
 	case *identityV1.DeleteUserRequest_Id:
 		builder.Where(user.IDEQ(req.GetId()))
 	case *identityV1.DeleteUserRequest_Username:

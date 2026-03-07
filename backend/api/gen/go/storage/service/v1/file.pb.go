@@ -539,8 +539,11 @@ func (x *UpdateFileRequest) GetAllowMissing() bool {
 
 // 删除 - 请求
 type DeleteFileRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to QueryBy:
+	//
+	//	*DeleteFileRequest_Id
+	QueryBy       isDeleteFileRequest_QueryBy `protobuf_oneof:"query_by"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -575,12 +578,31 @@ func (*DeleteFileRequest) Descriptor() ([]byte, []int) {
 	return file_storage_service_v1_file_proto_rawDescGZIP(), []int{5}
 }
 
+func (x *DeleteFileRequest) GetQueryBy() isDeleteFileRequest_QueryBy {
+	if x != nil {
+		return x.QueryBy
+	}
+	return nil
+}
+
 func (x *DeleteFileRequest) GetId() uint32 {
 	if x != nil {
-		return x.Id
+		if x, ok := x.QueryBy.(*DeleteFileRequest_Id); ok {
+			return x.Id
+		}
 	}
 	return 0
 }
+
+type isDeleteFileRequest_QueryBy interface {
+	isDeleteFileRequest_QueryBy()
+}
+
+type DeleteFileRequest_Id struct {
+	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // ID
+}
+
+func (*DeleteFileRequest_Id) isDeleteFileRequest_QueryBy() {}
 
 type CountFileResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -707,9 +729,12 @@ const file_storage_service_v1_file_proto_rawDesc = "" +
 	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
 	"updateMask\x12\xb4\x01\n" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
-	"\x0e_allow_missing\"#\n" +
-	"\x11DeleteFileRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\")\n" +
+	"\x0e_allow_missing\"=\n" +
+	"\x11DeleteFileRequest\x12\x1c\n" +
+	"\x02id\x18\x01 \x01(\rB\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02idB\n" +
+	"\n" +
+	"\bquery_by\")\n" +
 	"\x11CountFileResponse\x12\x14\n" +
 	"\x05count\x18\x01 \x01(\x04R\x05count*~\n" +
 	"\vOSSProvider\x12\t\n" +
@@ -803,6 +828,9 @@ func file_storage_service_v1_file_proto_init() {
 		(*GetFileRequest_Id)(nil),
 	}
 	file_storage_service_v1_file_proto_msgTypes[4].OneofWrappers = []any{}
+	file_storage_service_v1_file_proto_msgTypes[5].OneofWrappers = []any{
+		(*DeleteFileRequest_Id)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

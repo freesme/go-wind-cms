@@ -123,12 +123,8 @@ func init() {
 	categoryDescPath := categoryMixinFields4[0].Descriptor()
 	// category.PathValidator is a validator for the "path" field. It is called by the builders before save.
 	category.PathValidator = categoryDescPath.Validators[0].(func(string) error)
-	// categoryDescDepth is the schema descriptor for depth field.
-	categoryDescDepth := categoryFields[1].Descriptor()
-	// category.DefaultDepth holds the default value on creation for the depth field.
-	category.DefaultDepth = categoryDescDepth.Default.(int32)
 	// categoryDescIsNav is the schema descriptor for is_nav field.
-	categoryDescIsNav := categoryFields[2].Descriptor()
+	categoryDescIsNav := categoryFields[1].Descriptor()
 	// category.DefaultIsNav holds the default value on creation for the is_nav field.
 	category.DefaultIsNav = categoryDescIsNav.Default.(bool)
 	// categoryDescPostCount is the schema descriptor for post_count field.
@@ -139,6 +135,10 @@ func init() {
 	categoryDescDirectPostCount := categoryFields[5].Descriptor()
 	// category.DefaultDirectPostCount holds the default value on creation for the direct_post_count field.
 	category.DefaultDirectPostCount = categoryDescDirectPostCount.Default.(uint32)
+	// categoryDescDepth is the schema descriptor for depth field.
+	categoryDescDepth := categoryFields[6].Descriptor()
+	// category.DefaultDepth holds the default value on creation for the depth field.
+	category.DefaultDepth = categoryDescDepth.Default.(int32)
 	// categoryDescID is the schema descriptor for id field.
 	categoryDescID := categoryMixinFields0[0].Descriptor()
 	// category.IDValidator is a validator for the "id" field. It is called by the builders before save.
@@ -1333,11 +1333,11 @@ func init() {
 	// tag.DefaultSortOrder holds the default value on creation for the sort_order field.
 	tag.DefaultSortOrder = tagDescSortOrder.Default.(uint32)
 	// tagDescIsFeatured is the schema descriptor for is_featured field.
-	tagDescIsFeatured := tagFields[4].Descriptor()
+	tagDescIsFeatured := tagFields[5].Descriptor()
 	// tag.DefaultIsFeatured holds the default value on creation for the is_featured field.
 	tag.DefaultIsFeatured = tagDescIsFeatured.Default.(bool)
 	// tagDescPostCount is the schema descriptor for post_count field.
-	tagDescPostCount := tagFields[5].Descriptor()
+	tagDescPostCount := tagFields[6].Descriptor()
 	// tag.DefaultPostCount holds the default value on creation for the post_count field.
 	tag.DefaultPostCount = tagDescPostCount.Default.(uint32)
 	// tagDescID is the schema descriptor for id field.

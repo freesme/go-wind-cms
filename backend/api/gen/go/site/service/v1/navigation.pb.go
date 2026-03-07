@@ -91,9 +91,9 @@ type Navigation struct {
 	Id            *uint32                `protobuf:"varint,1,opt,name=id,proto3,oneof" json:"id,omitempty"`                                  // 导航ID
 	Name          *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`                               // 导航名称（如'主导航'、'页脚'）
 	Location      *string                `protobuf:"bytes,3,opt,name=location,proto3,oneof" json:"location,omitempty"`                       // 渲染位置标识（约定格式：{位置}-{语言}，如 'header', 'header-zh', 'header-en', 'footer-ja'；无语言后缀表示默认/通用导航）
-	IsActive      *bool                  `protobuf:"varint,4,opt,name=is_active,json=isActive,proto3,oneof" json:"is_active,omitempty"`      // 是否启用（禁用后前端不渲染）
-	Locale        *string                `protobuf:"bytes,5,opt,name=locale,proto3,oneof" json:"locale,omitempty"`                           // 关联的语言区域（如 'zh-CN', 'en-US'），空值表示默认/通用导航；仅用于后台管理筛选，不影响前端渲染逻辑）
-	Items         []*NavigationItem      `protobuf:"bytes,50,rep,name=items,proto3" json:"items,omitempty"`                                  // 导航项列表（按 sort_order 排序）
+	Locale        *string                `protobuf:"bytes,4,opt,name=locale,proto3,oneof" json:"locale,omitempty"`                           // 关联的语言区域（如 'zh-CN', 'en-US'），空值表示默认/通用导航；仅用于后台管理筛选，不影响前端渲染逻辑）
+	IsActive      *bool                  `protobuf:"varint,5,opt,name=is_active,json=isActive,proto3,oneof" json:"is_active,omitempty"`      // 是否启用（禁用后前端不渲染）
+	Items         []*NavigationItem      `protobuf:"bytes,10,rep,name=items,proto3" json:"items,omitempty"`                                  // 导航项列表（按 sort_order 排序）
 	CreatedBy     *uint32                `protobuf:"varint,100,opt,name=created_by,json=createdBy,proto3,oneof" json:"created_by,omitempty"` // 创建者用户ID
 	UpdatedBy     *uint32                `protobuf:"varint,101,opt,name=updated_by,json=updatedBy,proto3,oneof" json:"updated_by,omitempty"` // 更新者用户ID
 	DeletedBy     *uint32                `protobuf:"varint,102,opt,name=deleted_by,json=deletedBy,proto3,oneof" json:"deleted_by,omitempty"` // 删除者用户ID
@@ -155,18 +155,18 @@ func (x *Navigation) GetLocation() string {
 	return ""
 }
 
-func (x *Navigation) GetIsActive() bool {
-	if x != nil && x.IsActive != nil {
-		return *x.IsActive
-	}
-	return false
-}
-
 func (x *Navigation) GetLocale() string {
 	if x != nil && x.Locale != nil {
 		return *x.Locale
 	}
 	return ""
+}
+
+func (x *Navigation) GetIsActive() bool {
+	if x != nil && x.IsActive != nil {
+		return *x.IsActive
+	}
+	return false
 }
 
 func (x *Navigation) GetItems() []*NavigationItem {
@@ -224,9 +224,9 @@ type NavigationItem struct {
 	Id                 *uint32                  `protobuf:"varint,1,opt,name=id,proto3,oneof" json:"id,omitempty"`                                                                          // 导航项ID
 	NavigationId       *uint32                  `protobuf:"varint,2,opt,name=navigation_id,json=navigationId,proto3,oneof" json:"navigation_id,omitempty"`                                  // 所属导航菜单ID
 	Title              *string                  `protobuf:"bytes,3,opt,name=title,proto3,oneof" json:"title,omitempty"`                                                                     // 显示文本（单语言，多语言通过多套导航实现）
-	Url                *string                  `protobuf:"bytes,4,opt,name=url,proto3,oneof" json:"url,omitempty"`                                                                         // 目标 URL（link_type=CUSTOM/EXTERNAL 时必填；关联类型可自动生成）
+	Description        *string                  `protobuf:"bytes,4,opt,name=description,proto3,oneof" json:"description,omitempty"`                                                         // 描述文本（用于悬停提示或移动端）
 	Icon               *string                  `protobuf:"bytes,5,opt,name=icon,proto3,oneof" json:"icon,omitempty"`                                                                       // 图标（支持 Font Awesome 格式如 'fas fa-home'，或 SVG URL）
-	Description        *string                  `protobuf:"bytes,6,opt,name=description,proto3,oneof" json:"description,omitempty"`                                                         // 描述文本（用于悬停提示或移动端）
+	Url                *string                  `protobuf:"bytes,6,opt,name=url,proto3,oneof" json:"url,omitempty"`                                                                         // 目标 URL（link_type=CUSTOM/EXTERNAL 时必填；关联类型可自动生成）
 	LinkType           *NavigationItem_LinkType `protobuf:"varint,7,opt,name=link_type,json=linkType,proto3,enum=site.service.v1.NavigationItem_LinkType,oneof" json:"link_type,omitempty"` // 链接类型
 	ObjectId           *uint32                  `protobuf:"varint,8,opt,name=object_id,json=objectId,proto3,oneof" json:"object_id,omitempty"`                                              // 关联对象ID（link_type=POST/PAGE/CATEGORY 时使用）
 	SortOrder          *uint32                  `protobuf:"varint,9,opt,name=sort_order,json=sortOrder,proto3,oneof" json:"sort_order,omitempty"`                                           // 排序优先级（数值越小越靠前）
@@ -297,9 +297,9 @@ func (x *NavigationItem) GetTitle() string {
 	return ""
 }
 
-func (x *NavigationItem) GetUrl() string {
-	if x != nil && x.Url != nil {
-		return *x.Url
+func (x *NavigationItem) GetDescription() string {
+	if x != nil && x.Description != nil {
+		return *x.Description
 	}
 	return ""
 }
@@ -311,9 +311,9 @@ func (x *NavigationItem) GetIcon() string {
 	return ""
 }
 
-func (x *NavigationItem) GetDescription() string {
-	if x != nil && x.Description != nil {
-		return *x.Description
+func (x *NavigationItem) GetUrl() string {
+	if x != nil && x.Url != nil {
+		return *x.Url
 	}
 	return ""
 }
@@ -482,6 +482,7 @@ type GetNavigationRequest struct {
 	// Types that are valid to be assigned to QueryBy:
 	//
 	//	*GetNavigationRequest_Id
+	//	*GetNavigationRequest_Name
 	QueryBy       isGetNavigationRequest_QueryBy `protobuf_oneof:"query_by"`
 	ViewMask      *fieldmaskpb.FieldMask         `protobuf:"bytes,100,opt,name=view_mask,json=viewMask,proto3,oneof" json:"view_mask,omitempty"` // 视图字段过滤器，用于控制返回的字段
 	unknownFields protoimpl.UnknownFields
@@ -534,6 +535,15 @@ func (x *GetNavigationRequest) GetId() uint32 {
 	return 0
 }
 
+func (x *GetNavigationRequest) GetName() string {
+	if x != nil {
+		if x, ok := x.QueryBy.(*GetNavigationRequest_Name); ok {
+			return x.Name
+		}
+	}
+	return ""
+}
+
 func (x *GetNavigationRequest) GetViewMask() *fieldmaskpb.FieldMask {
 	if x != nil {
 		return x.ViewMask
@@ -549,7 +559,13 @@ type GetNavigationRequest_Id struct {
 	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // ID
 }
 
+type GetNavigationRequest_Name struct {
+	Name string `protobuf:"bytes,2,opt,name=name,proto3,oneof"` // 导航名称（如'主导航'、'页脚'）
+}
+
 func (*GetNavigationRequest_Id) isGetNavigationRequest_QueryBy() {}
+
+func (*GetNavigationRequest_Name) isGetNavigationRequest_QueryBy() {}
 
 // 请求 - 创建导航
 type CreateNavigationRequest struct {
@@ -667,8 +683,11 @@ func (x *UpdateNavigationRequest) GetAllowMissing() bool {
 
 // 请求 - 删除导航
 type DeleteNavigationRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to QueryBy:
+	//
+	//	*DeleteNavigationRequest_Id
+	QueryBy       isDeleteNavigationRequest_QueryBy `protobuf_oneof:"query_by"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -703,12 +722,31 @@ func (*DeleteNavigationRequest) Descriptor() ([]byte, []int) {
 	return file_site_service_v1_navigation_proto_rawDescGZIP(), []int{6}
 }
 
+func (x *DeleteNavigationRequest) GetQueryBy() isDeleteNavigationRequest_QueryBy {
+	if x != nil {
+		return x.QueryBy
+	}
+	return nil
+}
+
 func (x *DeleteNavigationRequest) GetId() uint32 {
 	if x != nil {
-		return x.Id
+		if x, ok := x.QueryBy.(*DeleteNavigationRequest_Id); ok {
+			return x.Id
+		}
 	}
 	return 0
 }
+
+type isDeleteNavigationRequest_QueryBy interface {
+	isDeleteNavigationRequest_QueryBy()
+}
+
+type DeleteNavigationRequest_Id struct {
+	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // ID
+}
+
+func (*DeleteNavigationRequest_Id) isDeleteNavigationRequest_QueryBy() {}
 
 var File_site_service_v1_navigation_proto protoreflect.FileDescriptor
 
@@ -719,10 +757,11 @@ const file_site_service_v1_navigation_proto_rawDesc = "" +
 	"Navigation\x12#\n" +
 	"\x02id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b导航IDH\x00R\x02id\x88\x01\x01\x12J\n" +
 	"\x04name\x18\x02 \x01(\tB1\xbaG.\x92\x02+导航名称（如'主导航'、'页脚'）H\x01R\x04name\x88\x01\x01\x12\xc3\x01\n" +
-	"\blocation\x18\x03 \x01(\tB\xa1\x01\xbaG\x9d\x01\x92\x02\x99\x01渲染位置标识（约定格式：{位置}-{语言}，如 'header', 'header-zh', 'header-en', 'footer-ja'；无语言后缀表示默认/通用导航）H\x02R\blocation\x88\x01\x01\x12R\n" +
-	"\tis_active\x18\x04 \x01(\bB0\xbaG-\x92\x02*是否启用（禁用后前端不渲染）H\x03R\bisActive\x88\x01\x01\x12\xb3\x01\n" +
-	"\x06locale\x18\x05 \x01(\tB\x95\x01\xbaG\x91\x01\x92\x02\x8d\x01关联的语言区域（如 'zh-CN', 'en-US'），空值表示默认/通用导航；仅用于后台管理筛选，不影响前端渲染逻辑H\x04R\x06locale\x88\x01\x01\x12g\n" +
-	"\x05items\x182 \x03(\v2\x1f.site.service.v1.NavigationItemB0\xbaG-\x92\x02*导航项列表（按 sort_order 排序）R\x05items\x12;\n" +
+	"\blocation\x18\x03 \x01(\tB\xa1\x01\xbaG\x9d\x01\x92\x02\x99\x01渲染位置标识（约定格式：{位置}-{语言}，如 'header', 'header-zh', 'header-en', 'footer-ja'；无语言后缀表示默认/通用导航）H\x02R\blocation\x88\x01\x01\x12\xb3\x01\n" +
+	"\x06locale\x18\x04 \x01(\tB\x95\x01\xbaG\x91\x01\x92\x02\x8d\x01关联的语言区域（如 'zh-CN', 'en-US'），空值表示默认/通用导航；仅用于后台管理筛选，不影响前端渲染逻辑H\x03R\x06locale\x88\x01\x01\x12R\n" +
+	"\tis_active\x18\x05 \x01(\bB0\xbaG-\x92\x02*是否启用（禁用后前端不渲染）H\x04R\bisActive\x88\x01\x01\x12g\n" +
+	"\x05items\x18\n" +
+	" \x03(\v2\x1f.site.service.v1.NavigationItemB0\xbaG-\x92\x02*导航项列表（按 sort_order 排序）R\x05items\x12;\n" +
 	"\n" +
 	"created_by\x18d \x01(\rB\x17\xbaG\x14\x92\x02\x11创建者用户IDH\x05R\tcreatedBy\x88\x01\x01\x12;\n" +
 	"\n" +
@@ -738,10 +777,10 @@ const file_site_service_v1_navigation_proto_rawDesc = "" +
 	"R\tdeletedAt\x88\x01\x01B\x05\n" +
 	"\x03_idB\a\n" +
 	"\x05_nameB\v\n" +
-	"\t_locationB\f\n" +
+	"\t_locationB\t\n" +
+	"\a_localeB\f\n" +
 	"\n" +
-	"_is_activeB\t\n" +
-	"\a_localeB\r\n" +
+	"_is_activeB\r\n" +
 	"\v_created_byB\r\n" +
 	"\v_updated_byB\r\n" +
 	"\v_deleted_byB\r\n" +
@@ -751,10 +790,10 @@ const file_site_service_v1_navigation_proto_rawDesc = "" +
 	"\x0eNavigationItem\x12&\n" +
 	"\x02id\x18\x01 \x01(\rB\x11\xbaG\x0e\x92\x02\v导航项IDH\x00R\x02id\x88\x01\x01\x12D\n" +
 	"\rnavigation_id\x18\x02 \x01(\rB\x1a\xbaG\x17\x92\x02\x14所属导航菜单IDH\x01R\fnavigationId\x88\x01\x01\x12`\n" +
-	"\x05title\x18\x03 \x01(\tBE\xbaGB\x92\x02?显示文本（单语言，多语言通过多套导航实现）H\x02R\x05title\x88\x01\x01\x12n\n" +
-	"\x03url\x18\x04 \x01(\tBW\xbaGT\x92\x02Q目标 URL（link_type=CUSTOM/EXTERNAL 时必填；关联类型可自动生成）H\x03R\x03url\x88\x01\x01\x12d\n" +
-	"\x04icon\x18\x05 \x01(\tBK\xbaGH\x92\x02E图标（支持 Font Awesome 格式如 'fas fa-home'，或 SVG URL）H\x04R\x04icon\x88\x01\x01\x12]\n" +
-	"\vdescription\x18\x06 \x01(\tB6\xbaG3\x92\x020描述文本（用于悬停提示或移动端）H\x05R\vdescription\x88\x01\x01\x12^\n" +
+	"\x05title\x18\x03 \x01(\tBE\xbaGB\x92\x02?显示文本（单语言，多语言通过多套导航实现）H\x02R\x05title\x88\x01\x01\x12]\n" +
+	"\vdescription\x18\x04 \x01(\tB6\xbaG3\x92\x020描述文本（用于悬停提示或移动端）H\x03R\vdescription\x88\x01\x01\x12d\n" +
+	"\x04icon\x18\x05 \x01(\tBK\xbaGH\x92\x02E图标（支持 Font Awesome 格式如 'fas fa-home'，或 SVG URL）H\x04R\x04icon\x88\x01\x01\x12n\n" +
+	"\x03url\x18\x06 \x01(\tBW\xbaGT\x92\x02Q目标 URL（link_type=CUSTOM/EXTERNAL 时必填；关联类型可自动生成）H\x05R\x03url\x88\x01\x01\x12^\n" +
 	"\tlink_type\x18\a \x01(\x0e2(.site.service.v1.NavigationItem.LinkTypeB\x12\xbaG\x0f\x92\x02\f链接类型H\x06R\blinkType\x88\x01\x01\x12b\n" +
 	"\tobject_id\x18\b \x01(\rB@\xbaG=\x92\x02:关联对象ID（link_type=POST/PAGE/CATEGORY 时使用）H\aR\bobjectId\x88\x01\x01\x12T\n" +
 	"\n" +
@@ -789,10 +828,10 @@ const file_site_service_v1_navigation_proto_rawDesc = "" +
 	"\x12LINK_TYPE_EXTERNAL\x10\x05B\x05\n" +
 	"\x03_idB\x10\n" +
 	"\x0e_navigation_idB\b\n" +
-	"\x06_titleB\x06\n" +
-	"\x04_urlB\a\n" +
-	"\x05_iconB\x0e\n" +
-	"\f_descriptionB\f\n" +
+	"\x06_titleB\x0e\n" +
+	"\f_descriptionB\a\n" +
+	"\x05_iconB\x06\n" +
+	"\x04_urlB\f\n" +
 	"\n" +
 	"_link_typeB\f\n" +
 	"\n" +
@@ -813,10 +852,11 @@ const file_site_service_v1_navigation_proto_rawDesc = "" +
 	"\v_deleted_at\"a\n" +
 	"\x16ListNavigationResponse\x121\n" +
 	"\x05items\x18\x01 \x03(\v2\x1b.site.service.v1.NavigationR\x05items\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x04R\x05total\"\xc7\x01\n" +
+	"\x05total\x18\x02 \x01(\x04R\x05total\"\x90\x02\n" +
 	"\x14GetNavigationRequest\x12\x1c\n" +
 	"\x02id\x18\x01 \x01(\rB\n" +
-	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02id\x12w\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02id\x12G\n" +
+	"\x04name\x18\x02 \x01(\tB1\xbaG.\x92\x02+导航名称（如'主导航'、'页脚'）H\x00R\x04name\x12w\n" +
 	"\tview_mask\x18d \x01(\v2\x1a.google.protobuf.FieldMaskB9\xbaG6\x92\x023视图字段过滤器，用于控制返回的字段H\x01R\bviewMask\x88\x01\x01B\n" +
 	"\n" +
 	"\bquery_byB\f\n" +
@@ -830,9 +870,12 @@ const file_site_service_v1_navigation_proto_rawDesc = "" +
 	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
 	"updateMask\x12\xb4\x01\n" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
-	"\x0e_allow_missing\")\n" +
-	"\x17DeleteNavigationRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id2\xa2\x03\n" +
+	"\x0e_allow_missing\"C\n" +
+	"\x17DeleteNavigationRequest\x12\x1c\n" +
+	"\x02id\x18\x01 \x01(\rB\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02idB\n" +
+	"\n" +
+	"\bquery_by2\xa2\x03\n" +
 	"\x11NavigationService\x12L\n" +
 	"\x04List\x12\x19.pagination.PagingRequest\x1a'.site.service.v1.ListNavigationResponse\"\x00\x12K\n" +
 	"\x03Get\x12%.site.service.v1.GetNavigationRequest\x1a\x1b.site.service.v1.Navigation\"\x00\x12Q\n" +
@@ -910,8 +953,12 @@ func file_site_service_v1_navigation_proto_init() {
 	file_site_service_v1_navigation_proto_msgTypes[1].OneofWrappers = []any{}
 	file_site_service_v1_navigation_proto_msgTypes[3].OneofWrappers = []any{
 		(*GetNavigationRequest_Id)(nil),
+		(*GetNavigationRequest_Name)(nil),
 	}
 	file_site_service_v1_navigation_proto_msgTypes[5].OneofWrappers = []any{}
+	file_site_service_v1_navigation_proto_msgTypes[6].OneofWrappers = []any{
+		(*DeleteNavigationRequest_Id)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

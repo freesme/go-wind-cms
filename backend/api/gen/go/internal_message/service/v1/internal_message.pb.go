@@ -553,8 +553,11 @@ func (x *UpdateInternalMessageRequest) GetAllowMissing() bool {
 
 // 删除站内信消息 - 请求
 type DeleteInternalMessageRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to QueryBy:
+	//
+	//	*DeleteInternalMessageRequest_Id
+	QueryBy       isDeleteInternalMessageRequest_QueryBy `protobuf_oneof:"query_by"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -589,12 +592,31 @@ func (*DeleteInternalMessageRequest) Descriptor() ([]byte, []int) {
 	return file_internal_message_service_v1_internal_message_proto_rawDescGZIP(), []int{5}
 }
 
+func (x *DeleteInternalMessageRequest) GetQueryBy() isDeleteInternalMessageRequest_QueryBy {
+	if x != nil {
+		return x.QueryBy
+	}
+	return nil
+}
+
 func (x *DeleteInternalMessageRequest) GetId() uint32 {
 	if x != nil {
-		return x.Id
+		if x, ok := x.QueryBy.(*DeleteInternalMessageRequest_Id); ok {
+			return x.Id
+		}
 	}
 	return 0
 }
+
+type isDeleteInternalMessageRequest_QueryBy interface {
+	isDeleteInternalMessageRequest_QueryBy()
+}
+
+type DeleteInternalMessageRequest_Id struct {
+	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // ID
+}
+
+func (*DeleteInternalMessageRequest_Id) isDeleteInternalMessageRequest_QueryBy() {}
 
 type SendMessageRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
@@ -883,9 +905,12 @@ const file_internal_message_service_v1_internal_message_proto_rawDesc = "" +
 	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
 	"updateMask\x12\xb4\x01\n" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
-	"\x0e_allow_missing\".\n" +
-	"\x1cDeleteInternalMessageRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"\xb6\x05\n" +
+	"\x0e_allow_missing\"H\n" +
+	"\x1cDeleteInternalMessageRequest\x12\x1c\n" +
+	"\x02id\x18\x01 \x01(\rB\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02idB\n" +
+	"\n" +
+	"\bquery_by\"\xb6\x05\n" +
 	"\x12SendMessageRequest\x12Y\n" +
 	"\x04type\x18\x01 \x01(\x0e21.internal_message.service.v1.InternalMessage.TypeB\x12\xbaG\x0f\x92\x02\f消息类型R\x04type\x12H\n" +
 	"\x11recipient_user_id\x18\x02 \x01(\rB\x17\xbaG\x14\x92\x02\x11接收者用户IDH\x00R\x0frecipientUserId\x88\x01\x01\x12<\n" +
@@ -998,6 +1023,9 @@ func file_internal_message_service_v1_internal_message_proto_init() {
 		(*GetInternalMessageRequest_Id)(nil),
 	}
 	file_internal_message_service_v1_internal_message_proto_msgTypes[4].OneofWrappers = []any{}
+	file_internal_message_service_v1_internal_message_proto_msgTypes[5].OneofWrappers = []any{
+		(*DeleteInternalMessageRequest_Id)(nil),
+	}
 	file_internal_message_service_v1_internal_message_proto_msgTypes[6].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

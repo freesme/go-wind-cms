@@ -75,9 +75,9 @@ message Page {
   optional string slug = 5 [
     json_name = "slug",
     (gnostic.openapi.v3.property) = {
-      description: "页面别名（URL 友好，首页可为空表示 '/'）"
+      description: "页面唯一标识（默认语言，URL 友好，决定主路由）"
     }
-  ]; // 页面别名
+  ]; // 页面唯一标识（默认语言，URL 友好，决定主路由）
 
   optional uint32 author_id = 6 [
     json_name = "authorId",
@@ -222,7 +222,7 @@ message PageTranslation {
   optional string slug = 11 [
     json_name = "slug",
     (gnostic.openapi.v3.property) = {
-      description: "语言特定的 slug（覆盖主表 slug，如中文用拼音）"
+      description: "语言特定的 slug（覆盖主表 slug，用于多语言路由，如中文用拼音）"
     }
   ]; // 语言特定的 slug
 
@@ -303,9 +303,9 @@ message GetPageRequest {
     ]; // ID
 
     string slug = 2 [
-      (gnostic.openapi.v3.property) = {description: "Slug", read_only: true},
+      (gnostic.openapi.v3.property) = {description: "页面唯一标识", read_only: true},
       json_name = "slug"
-    ]; // Slug
+    ]; // slug
   }
 
   optional string locale = 10 [
@@ -348,5 +348,10 @@ message UpdatePageRequest {
 
 // 请求 - 删除页面
 message DeletePageRequest {
-  uint32 id = 1;
+  oneof query_by {
+    uint32 id = 1 [
+      (gnostic.openapi.v3.property) = {description: "ID", read_only: true},
+      json_name = "id"
+    ]; // ID
+  }
 }

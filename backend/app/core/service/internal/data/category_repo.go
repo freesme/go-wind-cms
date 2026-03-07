@@ -149,7 +149,18 @@ func (r *CategoryRepo) Get(ctx context.Context, req *contentV1.GetCategoryReques
 		return nil, contentV1.ErrorBadRequest("invalid parameter")
 	}
 
-	entity, err := r.entClient.Client().Category.Get(ctx, req.GetId())
+	builder := r.entClient.Client().Category.Query()
+
+	switch req.QueryBy.(type) {
+	case *contentV1.GetCategoryRequest_Id:
+		builder.Where(category.IDEQ(req.GetId()))
+	case *contentV1.GetCategoryRequest_Code:
+		builder.Where(category.CodeEQ(req.GetCode()))
+	default:
+		return nil, contentV1.ErrorBadRequest("invalid query_by value")
+	}
+
+	entity, err := builder.Only(ctx)
 	if err != nil {
 		if ent.IsNotFound(err) {
 			return nil, contentV1.ErrorFileNotFound("category not found")
@@ -208,6 +219,7 @@ func (r *CategoryRepo) Create(ctx context.Context, req *contentV1.CreateCategory
 		SetNillableSortOrder(req.Data.SortOrder).
 		SetNillableIsNav(req.Data.IsNav).
 		SetNillableIcon(req.Data.Icon).
+		SetNillableCode(req.Data.Code).
 		SetNillablePostCount(req.Data.PostCount).
 		SetNillableDirectPostCount(req.Data.DirectPostCount).
 		SetNillableParentID(req.Data.ParentId).
@@ -215,6 +227,10 @@ func (r *CategoryRepo) Create(ctx context.Context, req *contentV1.CreateCategory
 		SetNillablePath(req.Data.Path).
 		SetNillableCreatedBy(req.Data.CreatedBy).
 		SetCreatedAt(time.Now())
+
+	if req.Data.CustomFields != nil {
+		builder.SetCustomFields(trans.Ptr(req.Data.GetCustomFields()))
+	}
 
 	var entity *ent.Category
 	if entity, err = builder.Save(ctx); err != nil {
@@ -329,6 +345,7 @@ func (r *CategoryRepo) Update(ctx context.Context, req *contentV1.UpdateCategory
 				SetNillableSortOrder(req.Data.SortOrder).
 				SetNillableIsNav(req.Data.IsNav).
 				SetNillableIcon(req.Data.Icon).
+				SetNillableCode(req.Data.Code).
 				SetNillablePostCount(req.Data.PostCount).
 				SetNillableDirectPostCount(req.Data.DirectPostCount).
 				SetNillableParentID(req.Data.ParentId).
@@ -336,6 +353,10 @@ func (r *CategoryRepo) Update(ctx context.Context, req *contentV1.UpdateCategory
 				SetNillablePath(req.Data.Path).
 				SetNillableUpdatedBy(req.Data.UpdatedBy).
 				SetUpdatedAt(time.Now())
+
+			if req.Data.CustomFields != nil {
+				builder.SetCustomFields(trans.Ptr(req.Data.GetCustomFields()))
+			}
 		},
 		func(s *sql.Selector) {
 			s.Where(sql.EQ(category.FieldID, req.GetId()))

@@ -158,11 +158,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 			category.FieldPath:            {Type: field.TypeString, Column: category.FieldPath},
 			category.FieldParentID:        {Type: field.TypeUint32, Column: category.FieldParentID},
 			category.FieldStatus:          {Type: field.TypeEnum, Column: category.FieldStatus},
-			category.FieldDepth:           {Type: field.TypeInt32, Column: category.FieldDepth},
 			category.FieldIsNav:           {Type: field.TypeBool, Column: category.FieldIsNav},
 			category.FieldIcon:            {Type: field.TypeString, Column: category.FieldIcon},
+			category.FieldCode:            {Type: field.TypeString, Column: category.FieldCode},
 			category.FieldPostCount:       {Type: field.TypeUint32, Column: category.FieldPostCount},
 			category.FieldDirectPostCount: {Type: field.TypeUint32, Column: category.FieldDirectPostCount},
+			category.FieldDepth:           {Type: field.TypeInt32, Column: category.FieldDepth},
 			category.FieldCustomFields:    {Type: field.TypeJSON, Column: category.FieldCustomFields},
 		},
 	}
@@ -1196,7 +1197,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			post.FieldSortOrder:       {Type: field.TypeUint32, Column: post.FieldSortOrder},
 			post.FieldEditorType:      {Type: field.TypeEnum, Column: post.FieldEditorType},
 			post.FieldStatus:          {Type: field.TypeEnum, Column: post.FieldStatus},
-			post.FieldSlug:            {Type: field.TypeString, Column: post.FieldSlug},
+			post.FieldCode:            {Type: field.TypeString, Column: post.FieldCode},
 			post.FieldDisallowComment: {Type: field.TypeBool, Column: post.FieldDisallowComment},
 			post.FieldInProgress:      {Type: field.TypeBool, Column: post.FieldInProgress},
 			post.FieldAutoSummary:     {Type: field.TypeBool, Column: post.FieldAutoSummary},
@@ -1210,6 +1211,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			post.FieldCustomFields:    {Type: field.TypeJSON, Column: post.FieldCustomFields},
 			post.FieldCategoryIds:     {Type: field.TypeJSON, Column: post.FieldCategoryIds},
 			post.FieldTagIds:          {Type: field.TypeJSON, Column: post.FieldTagIds},
+			post.FieldPublishTime:     {Type: field.TypeTime, Column: post.FieldPublishTime},
 		},
 	}
 	graph.Nodes[39] = &sqlgraph.Node{
@@ -1442,6 +1444,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tag.FieldColor:      {Type: field.TypeString, Column: tag.FieldColor},
 			tag.FieldIcon:       {Type: field.TypeString, Column: tag.FieldIcon},
 			tag.FieldGroup:      {Type: field.TypeString, Column: tag.FieldGroup},
+			tag.FieldCode:       {Type: field.TypeString, Column: tag.FieldCode},
 			tag.FieldIsFeatured: {Type: field.TypeBool, Column: tag.FieldIsFeatured},
 			tag.FieldPostCount:  {Type: field.TypeUint32, Column: tag.FieldPostCount},
 		},
@@ -2317,11 +2320,6 @@ func (f *CategoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(category.FieldStatus))
 }
 
-// WhereDepth applies the entql int32 predicate on the depth field.
-func (f *CategoryFilter) WhereDepth(p entql.Int32P) {
-	f.Where(p.Field(category.FieldDepth))
-}
-
 // WhereIsNav applies the entql bool predicate on the is_nav field.
 func (f *CategoryFilter) WhereIsNav(p entql.BoolP) {
 	f.Where(p.Field(category.FieldIsNav))
@@ -2332,6 +2330,11 @@ func (f *CategoryFilter) WhereIcon(p entql.StringP) {
 	f.Where(p.Field(category.FieldIcon))
 }
 
+// WhereCode applies the entql string predicate on the code field.
+func (f *CategoryFilter) WhereCode(p entql.StringP) {
+	f.Where(p.Field(category.FieldCode))
+}
+
 // WherePostCount applies the entql uint32 predicate on the post_count field.
 func (f *CategoryFilter) WherePostCount(p entql.Uint32P) {
 	f.Where(p.Field(category.FieldPostCount))
@@ -2340,6 +2343,11 @@ func (f *CategoryFilter) WherePostCount(p entql.Uint32P) {
 // WhereDirectPostCount applies the entql uint32 predicate on the direct_post_count field.
 func (f *CategoryFilter) WhereDirectPostCount(p entql.Uint32P) {
 	f.Where(p.Field(category.FieldDirectPostCount))
+}
+
+// WhereDepth applies the entql int32 predicate on the depth field.
+func (f *CategoryFilter) WhereDepth(p entql.Int32P) {
+	f.Where(p.Field(category.FieldDepth))
 }
 
 // WhereCustomFields applies the entql json.RawMessage predicate on the custom_fields field.
@@ -6887,9 +6895,9 @@ func (f *PostFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(post.FieldStatus))
 }
 
-// WhereSlug applies the entql string predicate on the slug field.
-func (f *PostFilter) WhereSlug(p entql.StringP) {
-	f.Where(p.Field(post.FieldSlug))
+// WhereCode applies the entql string predicate on the code field.
+func (f *PostFilter) WhereCode(p entql.StringP) {
+	f.Where(p.Field(post.FieldCode))
 }
 
 // WhereDisallowComment applies the entql bool predicate on the disallow_comment field.
@@ -6955,6 +6963,11 @@ func (f *PostFilter) WhereCategoryIds(p entql.BytesP) {
 // WhereTagIds applies the entql json.RawMessage predicate on the tag_ids field.
 func (f *PostFilter) WhereTagIds(p entql.BytesP) {
 	f.Where(p.Field(post.FieldTagIds))
+}
+
+// WherePublishTime applies the entql time.Time predicate on the publish_time field.
+func (f *PostFilter) WherePublishTime(p entql.TimeP) {
+	f.Where(p.Field(post.FieldPublishTime))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -7890,6 +7903,11 @@ func (f *TagFilter) WhereIcon(p entql.StringP) {
 // WhereGroup applies the entql string predicate on the group field.
 func (f *TagFilter) WhereGroup(p entql.StringP) {
 	f.Where(p.Field(tag.FieldGroup))
+}
+
+// WhereCode applies the entql string predicate on the code field.
+func (f *TagFilter) WhereCode(p entql.StringP) {
+	f.Where(p.Field(tag.FieldCode))
 }
 
 // WhereIsFeatured applies the entql bool predicate on the is_featured field.

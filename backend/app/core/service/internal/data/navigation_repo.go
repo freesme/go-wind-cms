@@ -129,7 +129,20 @@ func (r *NavigationRepo) Get(ctx context.Context, req *siteV1.GetNavigationReque
 		return nil, siteV1.ErrorBadRequest("invalid parameter")
 	}
 
-	entity, err := r.entClient.Client().Navigation.Get(ctx, req.GetId())
+	builder := r.entClient.Client().Navigation.Query()
+
+	switch req.QueryBy.(type) {
+	case *siteV1.GetNavigationRequest_Id:
+		builder.Where(navigation.IDEQ(req.GetId()))
+
+	case *siteV1.GetNavigationRequest_Name:
+		builder.Where(navigation.NameEQ(req.GetName()))
+
+	default:
+		return nil, siteV1.ErrorBadRequest("invalid query_by value")
+	}
+
+	entity, err := builder.Only(ctx)
 	if err != nil {
 		if ent.IsNotFound(err) {
 			return nil, siteV1.ErrorFileNotFound("navigation not found")

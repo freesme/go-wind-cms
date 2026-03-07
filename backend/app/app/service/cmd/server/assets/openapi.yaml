@@ -123,7 +123,7 @@ paths:
                   schema:
                     type: integer
                     format: uint32
-                - name: slug
+                - name: code
                   in: query
                   schema:
                     type: string
@@ -692,6 +692,10 @@ paths:
                   schema:
                     type: integer
                     format: uint32
+                - name: name
+                  in: query
+                  schema:
+                    type: string
                 - name: viewMask
                   in: query
                   schema:
@@ -1024,7 +1028,7 @@ paths:
                   schema:
                     type: integer
                     format: uint32
-                - name: slug
+                - name: code
                   in: query
                   schema:
                     type: string
@@ -1213,7 +1217,7 @@ paths:
                   schema:
                     type: integer
                     format: uint32
-                - name: slug
+                - name: code
                   in: query
                   schema:
                     type: string
@@ -1371,6 +1375,9 @@ components:
                 icon:
                     type: string
                     description: 分类图标
+                code:
+                    type: string
+                    description: 唯一代码（如 slug、编码等，便于唯一标识分类）
                 postCount:
                     type: integer
                     description: 该分类下的文章总数（含子分类，可选）
@@ -1926,12 +1933,12 @@ components:
                 location:
                     type: string
                     description: 渲染位置标识（约定格式：{位置}-{语言}，如 'header', 'header-zh', 'header-en', 'footer-ja'；无语言后缀表示默认/通用导航）
-                isActive:
-                    type: boolean
-                    description: 是否启用（禁用后前端不渲染）
                 locale:
                     type: string
                     description: 关联的语言区域（如 'zh-CN', 'en-US'），空值表示默认/通用导航；仅用于后台管理筛选，不影响前端渲染逻辑
+                isActive:
+                    type: boolean
+                    description: 是否启用（禁用后前端不渲染）
                 items:
                     type: array
                     items:
@@ -1976,15 +1983,15 @@ components:
                 title:
                     type: string
                     description: 显示文本（单语言，多语言通过多套导航实现）
-                url:
-                    type: string
-                    description: 目标 URL（link_type=CUSTOM/EXTERNAL 时必填；关联类型可自动生成）
-                icon:
-                    type: string
-                    description: 图标（支持 Font Awesome 格式如 'fas fa-home'，或 SVG URL）
                 description:
                     type: string
                     description: 描述文本（用于悬停提示或移动端）
+                icon:
+                    type: string
+                    description: 图标（支持 Font Awesome 格式如 'fas fa-home'，或 SVG URL）
+                url:
+                    type: string
+                    description: 目标 URL（link_type=CUSTOM/EXTERNAL 时必填；关联类型可自动生成）
                 linkType:
                     enum:
                         - LINK_TYPE_UNSPECIFIED
@@ -2091,7 +2098,7 @@ components:
                     format: enum
                 slug:
                     type: string
-                    description: 页面别名（URL 友好，首页可为空表示 '/'）
+                    description: 页面唯一标识（默认语言，URL 友好，决定主路由）
                 authorId:
                     type: integer
                     description: 页面作者ID
@@ -2204,7 +2211,7 @@ components:
                     description: 页面标题
                 slug:
                     type: string
-                    description: 语言特定的 slug（覆盖主表 slug，如中文用拼音）
+                    description: 语言特定的 slug（覆盖主表 slug，用于多语言路由，如中文用拼音）
                 summary:
                     type: string
                     description: 页面摘要（用于 meta description）
@@ -2302,9 +2309,9 @@ components:
                     type: string
                     description: 编辑器类型
                     format: enum
-                slug:
+                code:
                     type: string
-                    description: 默认 slug（当翻译中未提供 slug 时使用，建议保持英文）
+                    description: 唯一编码（必须唯一，建议使用英文）
                 disallowComment:
                     type: boolean
                     description: 帖子是否禁止评论
@@ -2405,7 +2412,7 @@ components:
             properties:
                 id:
                     type: integer
-                    description: 翻译记录ID
+                    description: 帖子翻译ID
                     format: uint32
                 postId:
                     type: integer

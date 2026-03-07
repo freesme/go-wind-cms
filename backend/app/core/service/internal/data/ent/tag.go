@@ -40,6 +40,8 @@ type Tag struct {
 	Icon *string `json:"icon,omitempty"`
 	// 标签分组
 	Group *string `json:"group,omitempty"`
+	// 唯一编码
+	Code *string `json:"code,omitempty"`
 	// 是否推荐
 	IsFeatured *bool `json:"is_featured,omitempty"`
 	// 使用该标签的文章总数
@@ -56,7 +58,7 @@ func (*Tag) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case tag.FieldID, tag.FieldCreatedBy, tag.FieldUpdatedBy, tag.FieldDeletedBy, tag.FieldSortOrder, tag.FieldPostCount:
 			values[i] = new(sql.NullInt64)
-		case tag.FieldStatus, tag.FieldColor, tag.FieldIcon, tag.FieldGroup:
+		case tag.FieldStatus, tag.FieldColor, tag.FieldIcon, tag.FieldGroup, tag.FieldCode:
 			values[i] = new(sql.NullString)
 		case tag.FieldCreatedAt, tag.FieldUpdatedAt, tag.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -157,6 +159,13 @@ func (_m *Tag) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Group = new(string)
 				*_m.Group = value.String
+			}
+		case tag.FieldCode:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field code", values[i])
+			} else if value.Valid {
+				_m.Code = new(string)
+				*_m.Code = value.String
 			}
 		case tag.FieldIsFeatured:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -260,6 +269,11 @@ func (_m *Tag) String() string {
 	builder.WriteString(", ")
 	if v := _m.Group; v != nil {
 		builder.WriteString("group=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.Code; v != nil {
+		builder.WriteString("code=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")

@@ -45,20 +45,20 @@ message Navigation {
     }
   ]; // 渲染位置标识（约定格式：{位置}-{语言}，如 'header', 'header-zh', 'header-en', 'footer-ja'；无语言后缀表示默认/通用导航）
 
-  optional bool is_active = 4 [
-    json_name = "isActive",
-    (gnostic.openapi.v3.property) = {description: "是否启用（禁用后前端不渲染）"}
-  ]; // 是否启用（禁用后前端不渲染）
-
-  optional string locale = 5 [
+  optional string locale = 4 [
     json_name = "locale",
     (gnostic.openapi.v3.property) = {
       description: "关联的语言区域（如 'zh-CN', 'en-US'），空值表示默认/通用导航；仅用于后台管理筛选，不影响前端渲染逻辑"
     }
   ]; // 关联的语言区域（如 'zh-CN', 'en-US'），空值表示默认/通用导航；仅用于后台管理筛选，不影响前端渲染逻辑）
 
+  optional bool is_active = 5 [
+    json_name = "isActive",
+    (gnostic.openapi.v3.property) = {description: "是否启用（禁用后前端不渲染）"}
+  ]; // 是否启用（禁用后前端不渲染）
 
-  repeated NavigationItem items = 50 [
+
+  repeated NavigationItem items = 10 [
     json_name = "items",
     (gnostic.openapi.v3.property) = {description: "导航项列表（按 sort_order 排序）"}
   ]; // 导航项列表（按 sort_order 排序）
@@ -101,12 +101,10 @@ message NavigationItem {
     (gnostic.openapi.v3.property) = {description: "显示文本（单语言，多语言通过多套导航实现）"}
   ]; // 显示文本（单语言，多语言通过多套导航实现）
 
-  optional string url = 4 [
-    json_name = "url",
-    (gnostic.openapi.v3.property) = {
-      description: "目标 URL（link_type=CUSTOM/EXTERNAL 时必填；关联类型可自动生成）"
-    }
-  ]; // 目标 URL（link_type=CUSTOM/EXTERNAL 时必填；关联类型可自动生成）
+  optional string description = 4 [
+    json_name = "description",
+    (gnostic.openapi.v3.property) = {description: "描述文本（用于悬停提示或移动端）"}
+  ]; // 描述文本（用于悬停提示或移动端）
 
   optional string icon = 5 [
     json_name = "icon",
@@ -114,10 +112,13 @@ message NavigationItem {
       description: "图标（支持 Font Awesome 格式如 'fas fa-home'，或 SVG URL）"
     }
   ]; // 图标（支持 Font Awesome 格式如 'fas fa-home'，或 SVG URL）
-  optional string description = 6 [
-    json_name = "description",
-    (gnostic.openapi.v3.property) = {description: "描述文本（用于悬停提示或移动端）"}
-  ]; // 描述文本（用于悬停提示或移动端）
+
+  optional string url = 6 [
+    json_name = "url",
+    (gnostic.openapi.v3.property) = {
+      description: "目标 URL（link_type=CUSTOM/EXTERNAL 时必填；关联类型可自动生成）"
+    }
+  ]; // 目标 URL（link_type=CUSTOM/EXTERNAL 时必填；关联类型可自动生成）
 
   optional LinkType link_type = 7 [
     json_name = "linkType",
@@ -161,7 +162,10 @@ message NavigationItem {
     json_name = "parentId",
     (gnostic.openapi.v3.property) = {description: "父菜单项ID（0 表示顶级项）"}
   ]; // 父菜单项ID（0 表示顶级项）
-  repeated NavigationItem children = 51 [json_name = "children", (gnostic.openapi.v3.property) = {description: "子节点树"}];  // 子节点树
+  repeated NavigationItem children = 51 [
+    json_name = "children",
+    (gnostic.openapi.v3.property) = {description: "子节点树"}
+  ];  // 子节点树
 
   optional uint32 created_by = 100 [json_name = "createdBy", (gnostic.openapi.v3.property) = {description: "创建者用户ID"}]; // 创建者用户ID
   optional uint32 updated_by = 101 [json_name = "updatedBy", (gnostic.openapi.v3.property) = {description: "更新者用户ID"}]; // 更新者用户ID
@@ -185,6 +189,11 @@ message GetNavigationRequest {
       (gnostic.openapi.v3.property) = {description: "ID", read_only: true},
       json_name = "id"
     ]; // ID
+
+    string name = 2 [
+      json_name = "name",
+      (gnostic.openapi.v3.property) = {description: "导航名称（如'主导航'、'页脚'）"}
+    ]; // 导航名称（如'主导航'、'页脚'）
   }
 
   optional google.protobuf.FieldMask view_mask = 100 [
@@ -222,5 +231,10 @@ message UpdateNavigationRequest {
 
 // 请求 - 删除导航
 message DeleteNavigationRequest {
-  uint32 id = 1;
+  oneof query_by {
+    uint32 id = 1 [
+      (gnostic.openapi.v3.property) = {description: "ID", read_only: true},
+      json_name = "id"
+    ]; // ID
+  }
 }

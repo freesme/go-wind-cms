@@ -235,10 +235,6 @@ func (x *GetPageRequest) Redact() string {
 		return ""
 	}
 
-	// Safe field: Id
-
-	// Safe field: Slug
-
 	// Safe field: Locale
 
 	// Safe field: ViewMask
@@ -276,7 +272,5 @@ func (x *DeletePageRequest) Redact() string {
 	if x == nil {
 		return ""
 	}
-
-	// Safe field: Id
 	return x.String()
 }

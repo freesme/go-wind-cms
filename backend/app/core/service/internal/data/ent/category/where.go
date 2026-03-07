@@ -100,11 +100,6 @@ func ParentID(v uint32) predicate.Category {
 	return predicate.Category(sql.FieldEQ(FieldParentID, v))
 }
 
-// Depth applies equality check predicate on the "depth" field. It's identical to DepthEQ.
-func Depth(v int32) predicate.Category {
-	return predicate.Category(sql.FieldEQ(FieldDepth, v))
-}
-
 // IsNav applies equality check predicate on the "is_nav" field. It's identical to IsNavEQ.
 func IsNav(v bool) predicate.Category {
 	return predicate.Category(sql.FieldEQ(FieldIsNav, v))
@@ -115,6 +110,11 @@ func Icon(v string) predicate.Category {
 	return predicate.Category(sql.FieldEQ(FieldIcon, v))
 }
 
+// Code applies equality check predicate on the "code" field. It's identical to CodeEQ.
+func Code(v string) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldCode, v))
+}
+
 // PostCount applies equality check predicate on the "post_count" field. It's identical to PostCountEQ.
 func PostCount(v uint32) predicate.Category {
 	return predicate.Category(sql.FieldEQ(FieldPostCount, v))
@@ -123,6 +123,11 @@ func PostCount(v uint32) predicate.Category {
 // DirectPostCount applies equality check predicate on the "direct_post_count" field. It's identical to DirectPostCountEQ.
 func DirectPostCount(v uint32) predicate.Category {
 	return predicate.Category(sql.FieldEQ(FieldDirectPostCount, v))
+}
+
+// Depth applies equality check predicate on the "depth" field. It's identical to DepthEQ.
+func Depth(v int32) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldDepth, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -610,56 +615,6 @@ func StatusNotNil() predicate.Category {
 	return predicate.Category(sql.FieldNotNull(FieldStatus))
 }
 
-// DepthEQ applies the EQ predicate on the "depth" field.
-func DepthEQ(v int32) predicate.Category {
-	return predicate.Category(sql.FieldEQ(FieldDepth, v))
-}
-
-// DepthNEQ applies the NEQ predicate on the "depth" field.
-func DepthNEQ(v int32) predicate.Category {
-	return predicate.Category(sql.FieldNEQ(FieldDepth, v))
-}
-
-// DepthIn applies the In predicate on the "depth" field.
-func DepthIn(vs ...int32) predicate.Category {
-	return predicate.Category(sql.FieldIn(FieldDepth, vs...))
-}
-
-// DepthNotIn applies the NotIn predicate on the "depth" field.
-func DepthNotIn(vs ...int32) predicate.Category {
-	return predicate.Category(sql.FieldNotIn(FieldDepth, vs...))
-}
-
-// DepthGT applies the GT predicate on the "depth" field.
-func DepthGT(v int32) predicate.Category {
-	return predicate.Category(sql.FieldGT(FieldDepth, v))
-}
-
-// DepthGTE applies the GTE predicate on the "depth" field.
-func DepthGTE(v int32) predicate.Category {
-	return predicate.Category(sql.FieldGTE(FieldDepth, v))
-}
-
-// DepthLT applies the LT predicate on the "depth" field.
-func DepthLT(v int32) predicate.Category {
-	return predicate.Category(sql.FieldLT(FieldDepth, v))
-}
-
-// DepthLTE applies the LTE predicate on the "depth" field.
-func DepthLTE(v int32) predicate.Category {
-	return predicate.Category(sql.FieldLTE(FieldDepth, v))
-}
-
-// DepthIsNil applies the IsNil predicate on the "depth" field.
-func DepthIsNil() predicate.Category {
-	return predicate.Category(sql.FieldIsNull(FieldDepth))
-}
-
-// DepthNotNil applies the NotNil predicate on the "depth" field.
-func DepthNotNil() predicate.Category {
-	return predicate.Category(sql.FieldNotNull(FieldDepth))
-}
-
 // IsNavEQ applies the EQ predicate on the "is_nav" field.
 func IsNavEQ(v bool) predicate.Category {
 	return predicate.Category(sql.FieldEQ(FieldIsNav, v))
@@ -753,6 +708,81 @@ func IconEqualFold(v string) predicate.Category {
 // IconContainsFold applies the ContainsFold predicate on the "icon" field.
 func IconContainsFold(v string) predicate.Category {
 	return predicate.Category(sql.FieldContainsFold(FieldIcon, v))
+}
+
+// CodeEQ applies the EQ predicate on the "code" field.
+func CodeEQ(v string) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldCode, v))
+}
+
+// CodeNEQ applies the NEQ predicate on the "code" field.
+func CodeNEQ(v string) predicate.Category {
+	return predicate.Category(sql.FieldNEQ(FieldCode, v))
+}
+
+// CodeIn applies the In predicate on the "code" field.
+func CodeIn(vs ...string) predicate.Category {
+	return predicate.Category(sql.FieldIn(FieldCode, vs...))
+}
+
+// CodeNotIn applies the NotIn predicate on the "code" field.
+func CodeNotIn(vs ...string) predicate.Category {
+	return predicate.Category(sql.FieldNotIn(FieldCode, vs...))
+}
+
+// CodeGT applies the GT predicate on the "code" field.
+func CodeGT(v string) predicate.Category {
+	return predicate.Category(sql.FieldGT(FieldCode, v))
+}
+
+// CodeGTE applies the GTE predicate on the "code" field.
+func CodeGTE(v string) predicate.Category {
+	return predicate.Category(sql.FieldGTE(FieldCode, v))
+}
+
+// CodeLT applies the LT predicate on the "code" field.
+func CodeLT(v string) predicate.Category {
+	return predicate.Category(sql.FieldLT(FieldCode, v))
+}
+
+// CodeLTE applies the LTE predicate on the "code" field.
+func CodeLTE(v string) predicate.Category {
+	return predicate.Category(sql.FieldLTE(FieldCode, v))
+}
+
+// CodeContains applies the Contains predicate on the "code" field.
+func CodeContains(v string) predicate.Category {
+	return predicate.Category(sql.FieldContains(FieldCode, v))
+}
+
+// CodeHasPrefix applies the HasPrefix predicate on the "code" field.
+func CodeHasPrefix(v string) predicate.Category {
+	return predicate.Category(sql.FieldHasPrefix(FieldCode, v))
+}
+
+// CodeHasSuffix applies the HasSuffix predicate on the "code" field.
+func CodeHasSuffix(v string) predicate.Category {
+	return predicate.Category(sql.FieldHasSuffix(FieldCode, v))
+}
+
+// CodeIsNil applies the IsNil predicate on the "code" field.
+func CodeIsNil() predicate.Category {
+	return predicate.Category(sql.FieldIsNull(FieldCode))
+}
+
+// CodeNotNil applies the NotNil predicate on the "code" field.
+func CodeNotNil() predicate.Category {
+	return predicate.Category(sql.FieldNotNull(FieldCode))
+}
+
+// CodeEqualFold applies the EqualFold predicate on the "code" field.
+func CodeEqualFold(v string) predicate.Category {
+	return predicate.Category(sql.FieldEqualFold(FieldCode, v))
+}
+
+// CodeContainsFold applies the ContainsFold predicate on the "code" field.
+func CodeContainsFold(v string) predicate.Category {
+	return predicate.Category(sql.FieldContainsFold(FieldCode, v))
 }
 
 // PostCountEQ applies the EQ predicate on the "post_count" field.
@@ -853,6 +883,56 @@ func DirectPostCountIsNil() predicate.Category {
 // DirectPostCountNotNil applies the NotNil predicate on the "direct_post_count" field.
 func DirectPostCountNotNil() predicate.Category {
 	return predicate.Category(sql.FieldNotNull(FieldDirectPostCount))
+}
+
+// DepthEQ applies the EQ predicate on the "depth" field.
+func DepthEQ(v int32) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldDepth, v))
+}
+
+// DepthNEQ applies the NEQ predicate on the "depth" field.
+func DepthNEQ(v int32) predicate.Category {
+	return predicate.Category(sql.FieldNEQ(FieldDepth, v))
+}
+
+// DepthIn applies the In predicate on the "depth" field.
+func DepthIn(vs ...int32) predicate.Category {
+	return predicate.Category(sql.FieldIn(FieldDepth, vs...))
+}
+
+// DepthNotIn applies the NotIn predicate on the "depth" field.
+func DepthNotIn(vs ...int32) predicate.Category {
+	return predicate.Category(sql.FieldNotIn(FieldDepth, vs...))
+}
+
+// DepthGT applies the GT predicate on the "depth" field.
+func DepthGT(v int32) predicate.Category {
+	return predicate.Category(sql.FieldGT(FieldDepth, v))
+}
+
+// DepthGTE applies the GTE predicate on the "depth" field.
+func DepthGTE(v int32) predicate.Category {
+	return predicate.Category(sql.FieldGTE(FieldDepth, v))
+}
+
+// DepthLT applies the LT predicate on the "depth" field.
+func DepthLT(v int32) predicate.Category {
+	return predicate.Category(sql.FieldLT(FieldDepth, v))
+}
+
+// DepthLTE applies the LTE predicate on the "depth" field.
+func DepthLTE(v int32) predicate.Category {
+	return predicate.Category(sql.FieldLTE(FieldDepth, v))
+}
+
+// DepthIsNil applies the IsNil predicate on the "depth" field.
+func DepthIsNil() predicate.Category {
+	return predicate.Category(sql.FieldIsNull(FieldDepth))
+}
+
+// DepthNotNil applies the NotNil predicate on the "depth" field.
+func DepthNotNil() predicate.Category {
+	return predicate.Category(sql.FieldNotNull(FieldDepth))
 }
 
 // CustomFieldsIsNil applies the IsNil predicate on the "custom_fields" field.

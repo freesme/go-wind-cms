@@ -168,8 +168,6 @@ func (x *GetPermissionGroupRequest) Redact() string {
 		return ""
 	}
 
-	// Safe field: Id
-
 	// Safe field: ViewMask
 	return x.String()
 }
@@ -205,8 +203,6 @@ func (x *DeletePermissionGroupRequest) Redact() string {
 	if x == nil {
 		return ""
 	}
-
-	// Safe field: Id
 	return x.String()
 }
 

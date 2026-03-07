@@ -145,7 +145,7 @@ type Page struct {
 	Status             *Page_PageStatus       `protobuf:"varint,2,opt,name=status,proto3,enum=content.service.v1.Page_PageStatus,oneof" json:"status,omitempty"`                                                             // 页面状态
 	Type               *Page_PageType         `protobuf:"varint,3,opt,name=type,proto3,enum=content.service.v1.Page_PageType,oneof" json:"type,omitempty"`                                                                   // 页面类型
 	EditorType         *EditorType            `protobuf:"varint,4,opt,name=editor_type,json=editorType,proto3,enum=content.service.v1.EditorType,oneof" json:"editor_type,omitempty"`                                        // 编辑器类型
-	Slug               *string                `protobuf:"bytes,5,opt,name=slug,proto3,oneof" json:"slug,omitempty"`                                                                                                          // 页面别名
+	Slug               *string                `protobuf:"bytes,5,opt,name=slug,proto3,oneof" json:"slug,omitempty"`                                                                                                          // 页面唯一标识（默认语言，URL 友好，决定主路由）
 	AuthorId           *uint32                `protobuf:"varint,6,opt,name=author_id,json=authorId,proto3,oneof" json:"author_id,omitempty"`                                                                                 // 页面作者ID
 	AuthorName         *string                `protobuf:"bytes,7,opt,name=author_name,json=authorName,proto3,oneof" json:"author_name,omitempty"`                                                                            // 页面作者名称
 	DisallowComment    *bool                  `protobuf:"varint,8,opt,name=disallow_comment,json=disallowComment,proto3,oneof" json:"disallow_comment,omitempty"`                                                            // 是否禁止评论
@@ -757,7 +757,7 @@ type GetPageRequest_Id struct {
 }
 
 type GetPageRequest_Slug struct {
-	Slug string `protobuf:"bytes,2,opt,name=slug,proto3,oneof"` // Slug
+	Slug string `protobuf:"bytes,2,opt,name=slug,proto3,oneof"` // slug
 }
 
 func (*GetPageRequest_Id) isGetPageRequest_QueryBy() {}
@@ -880,8 +880,11 @@ func (x *UpdatePageRequest) GetAllowMissing() bool {
 
 // 请求 - 删除页面
 type DeletePageRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to QueryBy:
+	//
+	//	*DeletePageRequest_Id
+	QueryBy       isDeletePageRequest_QueryBy `protobuf_oneof:"query_by"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -916,25 +919,44 @@ func (*DeletePageRequest) Descriptor() ([]byte, []int) {
 	return file_content_service_v1_page_proto_rawDescGZIP(), []int{6}
 }
 
+func (x *DeletePageRequest) GetQueryBy() isDeletePageRequest_QueryBy {
+	if x != nil {
+		return x.QueryBy
+	}
+	return nil
+}
+
 func (x *DeletePageRequest) GetId() uint32 {
 	if x != nil {
-		return x.Id
+		if x, ok := x.QueryBy.(*DeletePageRequest_Id); ok {
+			return x.Id
+		}
 	}
 	return 0
 }
+
+type isDeletePageRequest_QueryBy interface {
+	isDeletePageRequest_QueryBy()
+}
+
+type DeletePageRequest_Id struct {
+	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // ID
+}
+
+func (*DeletePageRequest_Id) isDeletePageRequest_QueryBy() {}
 
 var File_content_service_v1_page_proto protoreflect.FileDescriptor
 
 const file_content_service_v1_page_proto_rawDesc = "" +
 	"\n" +
-	"\x1dcontent/service/v1/page.proto\x12\x12content.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\x1a\x1econtent/service/v1/types.proto\"\xd0\x1a\n" +
+	"\x1dcontent/service/v1/page.proto\x12\x12content.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\x1a\x1econtent/service/v1/types.proto\"\xdb\x1a\n" +
 	"\x04Page\x12#\n" +
 	"\x02id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b页面IDH\x00R\x02id\x88\x01\x01\x12T\n" +
 	"\x06status\x18\x02 \x01(\x0e2#.content.service.v1.Page.PageStatusB\x12\xbaG\x0f\x92\x02\f页面状态H\x01R\x06status\x88\x01\x01\x12\x8c\x01\n" +
 	"\x04type\x18\x03 \x01(\x0e2!.content.service.v1.Page.PageTypeBP\xbaGM\x92\x02J页面类型（首页/404/普通页面等，影响路由和渲染逻辑）H\x02R\x04type\x88\x01\x01\x12[\n" +
 	"\veditor_type\x18\x04 \x01(\x0e2\x1e.content.service.v1.EditorTypeB\x15\xbaG\x12\x92\x02\x0f编辑器类型H\x03R\n" +
-	"editorType\x88\x01\x01\x12W\n" +
-	"\x04slug\x18\x05 \x01(\tB>\xbaG;\x92\x028页面别名（URL 友好，首页可为空表示 '/'）H\x04R\x04slug\x88\x01\x01\x126\n" +
+	"editorType\x88\x01\x01\x12b\n" +
+	"\x04slug\x18\x05 \x01(\tBI\xbaGF\x92\x02C页面唯一标识（默认语言，URL 友好，决定主路由）H\x04R\x04slug\x88\x01\x01\x126\n" +
 	"\tauthor_id\x18\x06 \x01(\rB\x14\xbaG\x11\x92\x02\x0e页面作者IDH\x05R\bauthorId\x88\x01\x01\x12>\n" +
 	"\vauthor_name\x18\a \x01(\tB\x18\xbaG\x15\x92\x02\x12页面作者名称H\x06R\n" +
 	"authorName\x88\x01\x01\x12t\n" +
@@ -1013,14 +1035,14 @@ const file_content_service_v1_page_proto_rawDesc = "" +
 	"\v_deleted_byB\r\n" +
 	"\v_created_atB\r\n" +
 	"\v_updated_atB\r\n" +
-	"\v_deleted_at\"\xb1\x0e\n" +
+	"\v_deleted_at\"\xc9\x0e\n" +
 	"\x0fPageTranslation\x12)\n" +
 	"\x02id\x18\x01 \x01(\rB\x14\xbaG\x11\x92\x02\x0e翻译记录IDH\x00R\x02id\x88\x01\x01\x125\n" +
 	"\apage_id\x18\x02 \x01(\rB\x17\xbaG\x14\x92\x02\x11关联的页面IDH\x01R\x06pageId\x88\x01\x01\x12R\n" +
 	"\rlanguage_code\x18\x03 \x01(\tB(\xbaG%\x92\x02\"语言代码（ISO 639-1 标准）H\x02R\flanguageCode\x88\x01\x01\x12-\n" +
 	"\x05title\x18\n" +
-	" \x01(\tB\x12\xbaG\x0f\x92\x02\f页面标题H\x03R\x05title\x88\x01\x01\x12_\n" +
-	"\x04slug\x18\v \x01(\tBF\xbaGC\x92\x02@语言特定的 slug（覆盖主表 slug，如中文用拼音）H\x04R\x04slug\x88\x01\x01\x12N\n" +
+	" \x01(\tB\x12\xbaG\x0f\x92\x02\f页面标题H\x03R\x05title\x88\x01\x01\x12w\n" +
+	"\x04slug\x18\v \x01(\tB^\xbaG[\x92\x02X语言特定的 slug（覆盖主表 slug，用于多语言路由，如中文用拼音）H\x04R\x04slug\x88\x01\x01\x12N\n" +
 	"\asummary\x18\f \x01(\tB/\xbaG,\x92\x02)页面摘要（用于 meta description）H\x05R\asummary\x88\x01\x01\x121\n" +
 	"\acontent\x18\r \x01(\tB\x12\xbaG\x0f\x92\x02\f页面内容H\x06R\acontent\x88\x01\x01\x12T\n" +
 	"\x10original_content\x18\x0e \x01(\tB$\xbaG!\x92\x02\x1e原始内容（未渲染前）H\aR\x0foriginalContent\x88\x01\x01\x122\n" +
@@ -1076,11 +1098,11 @@ const file_content_service_v1_page_proto_rawDesc = "" +
 	"\v_deleted_at\"X\n" +
 	"\x10ListPageResponse\x12.\n" +
 	"\x05items\x18\x01 \x03(\v2\x18.content.service.v1.PageR\x05items\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x04R\x05total\"\xd1\x02\n" +
+	"\x05total\x18\x02 \x01(\x04R\x05total\"\xdf\x02\n" +
 	"\x0eGetPageRequest\x12\x1c\n" +
 	"\x02id\x18\x01 \x01(\rB\n" +
-	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02id\x12\"\n" +
-	"\x04slug\x18\x02 \x01(\tB\f\xbaG\t\x18\x01\x92\x02\x04SlugH\x00R\x04slug\x12_\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02id\x120\n" +
+	"\x04slug\x18\x02 \x01(\tB\x1a\xbaG\x17\x18\x01\x92\x02\x12页面唯一标识H\x00R\x04slug\x12_\n" +
 	"\x06locale\x18\n" +
 	" \x01(\tBB\xbaG?\x92\x02<语言代码，用于指定返回哪个语言版本的数据H\x01R\x06locale\x88\x01\x01\x12w\n" +
 	"\tview_mask\x18d \x01(\v2\x1a.google.protobuf.FieldMaskB9\xbaG6\x92\x023视图字段过滤器，用于控制返回的字段H\x02R\bviewMask\x88\x01\x01B\n" +
@@ -1097,9 +1119,12 @@ const file_content_service_v1_page_proto_rawDesc = "" +
 	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
 	"updateMask\x12\xb4\x01\n" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
-	"\x0e_allow_missing\"#\n" +
-	"\x11DeletePageRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id2\x84\x03\n" +
+	"\x0e_allow_missing\"=\n" +
+	"\x11DeletePageRequest\x12\x1c\n" +
+	"\x02id\x18\x01 \x01(\rB\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02idB\n" +
+	"\n" +
+	"\bquery_by2\x84\x03\n" +
 	"\vPageService\x12I\n" +
 	"\x04List\x12\x19.pagination.PagingRequest\x1a$.content.service.v1.ListPageResponse\"\x00\x12E\n" +
 	"\x03Get\x12\".content.service.v1.GetPageRequest\x1a\x18.content.service.v1.Page\"\x00\x12K\n" +
@@ -1187,6 +1212,9 @@ func file_content_service_v1_page_proto_init() {
 		(*GetPageRequest_Slug)(nil),
 	}
 	file_content_service_v1_page_proto_msgTypes[5].OneofWrappers = []any{}
+	file_content_service_v1_page_proto_msgTypes[6].OneofWrappers = []any{
+		(*DeletePageRequest_Id)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

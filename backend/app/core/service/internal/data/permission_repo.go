@@ -458,7 +458,7 @@ func (r *PermissionRepo) Delete(ctx context.Context, req *permissionV1.DeletePer
 	}
 
 	var permissionIDs []uint32
-	switch req.DeleteBy.(type) {
+	switch req.QueryBy.(type) {
 	default:
 	case *permissionV1.DeletePermissionRequest_Id:
 		permissionIDs = append(permissionIDs, req.GetId())
@@ -485,7 +485,7 @@ func (r *PermissionRepo) Delete(ctx context.Context, req *permissionV1.DeletePer
 	}
 
 	builder := r.entClient.Client().Permission.Delete()
-	switch req.DeleteBy.(type) {
+	switch req.QueryBy.(type) {
 	default:
 	case *permissionV1.DeletePermissionRequest_Id:
 		builder.Where(permission.IDEQ(req.GetId()))

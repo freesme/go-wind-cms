@@ -545,12 +545,12 @@ func (x *UpdatePermissionRequest) GetAllowMissing() bool {
 // 删除 - 请求
 type DeletePermissionRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Types that are valid to be assigned to DeleteBy:
+	// Types that are valid to be assigned to QueryBy:
 	//
 	//	*DeletePermissionRequest_Id
 	//	*DeletePermissionRequest_Code
 	//	*DeletePermissionRequest_GroupId
-	DeleteBy      isDeletePermissionRequest_DeleteBy `protobuf_oneof:"delete_by"`
+	QueryBy       isDeletePermissionRequest_QueryBy `protobuf_oneof:"query_by"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -585,16 +585,16 @@ func (*DeletePermissionRequest) Descriptor() ([]byte, []int) {
 	return file_permission_service_v1_permission_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *DeletePermissionRequest) GetDeleteBy() isDeletePermissionRequest_DeleteBy {
+func (x *DeletePermissionRequest) GetQueryBy() isDeletePermissionRequest_QueryBy {
 	if x != nil {
-		return x.DeleteBy
+		return x.QueryBy
 	}
 	return nil
 }
 
 func (x *DeletePermissionRequest) GetId() uint32 {
 	if x != nil {
-		if x, ok := x.DeleteBy.(*DeletePermissionRequest_Id); ok {
+		if x, ok := x.QueryBy.(*DeletePermissionRequest_Id); ok {
 			return x.Id
 		}
 	}
@@ -603,7 +603,7 @@ func (x *DeletePermissionRequest) GetId() uint32 {
 
 func (x *DeletePermissionRequest) GetCode() string {
 	if x != nil {
-		if x, ok := x.DeleteBy.(*DeletePermissionRequest_Code); ok {
+		if x, ok := x.QueryBy.(*DeletePermissionRequest_Code); ok {
 			return x.Code
 		}
 	}
@@ -612,15 +612,15 @@ func (x *DeletePermissionRequest) GetCode() string {
 
 func (x *DeletePermissionRequest) GetGroupId() uint32 {
 	if x != nil {
-		if x, ok := x.DeleteBy.(*DeletePermissionRequest_GroupId); ok {
+		if x, ok := x.QueryBy.(*DeletePermissionRequest_GroupId); ok {
 			return x.GroupId
 		}
 	}
 	return 0
 }
 
-type isDeletePermissionRequest_DeleteBy interface {
-	isDeletePermissionRequest_DeleteBy()
+type isDeletePermissionRequest_QueryBy interface {
+	isDeletePermissionRequest_QueryBy()
 }
 
 type DeletePermissionRequest_Id struct {
@@ -635,11 +635,11 @@ type DeletePermissionRequest_GroupId struct {
 	GroupId uint32 `protobuf:"varint,3,opt,name=group_id,json=groupId,proto3,oneof"` // 权限分组
 }
 
-func (*DeletePermissionRequest_Id) isDeletePermissionRequest_DeleteBy() {}
+func (*DeletePermissionRequest_Id) isDeletePermissionRequest_QueryBy() {}
 
-func (*DeletePermissionRequest_Code) isDeletePermissionRequest_DeleteBy() {}
+func (*DeletePermissionRequest_Code) isDeletePermissionRequest_QueryBy() {}
 
-func (*DeletePermissionRequest_GroupId) isDeletePermissionRequest_DeleteBy() {}
+func (*DeletePermissionRequest_GroupId) isDeletePermissionRequest_QueryBy() {}
 
 type CountPermissionResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1138,13 +1138,14 @@ const file_permission_service_v1_permission_proto_rawDesc = "" +
 	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
 	"updateMask\x12\xb4\x01\n" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
-	"\x0e_allow_missing\"\xa6\x01\n" +
+	"\x0e_allow_missing\"\xa5\x01\n" +
 	"\x17DeletePermissionRequest\x12\x1c\n" +
 	"\x02id\x18\x01 \x01(\rB\n" +
 	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02id\x12-\n" +
 	"\x04code\x18\x02 \x01(\tB\x17\xbaG\x14\x18\x01\x92\x02\x0f权限点编码H\x00R\x04code\x121\n" +
-	"\bgroup_id\x18\x03 \x01(\rB\x14\xbaG\x11\x18\x01\x92\x02\f权限分组H\x00R\agroupIdB\v\n" +
-	"\tdelete_by\"/\n" +
+	"\bgroup_id\x18\x03 \x01(\rB\x14\xbaG\x11\x18\x01\x92\x02\f权限分组H\x00R\agroupIdB\n" +
+	"\n" +
+	"\bquery_by\"/\n" +
 	"\x17CountPermissionResponse\x12\x14\n" +
 	"\x05count\x18\x01 \x01(\x04R\x05count\"U\n" +
 	"\x1cBatchCreatePermissionRequest\x125\n" +

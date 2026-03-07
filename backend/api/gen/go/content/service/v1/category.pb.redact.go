@@ -117,6 +117,8 @@ func (x *Category) Redact() string {
 
 	// Safe field: Icon
 
+	// Safe field: Code
+
 	// Safe field: PostCount
 
 	// Safe field: DirectPostCount
@@ -213,10 +215,6 @@ func (x *GetCategoryRequest) Redact() string {
 		return ""
 	}
 
-	// Safe field: Id
-
-	// Safe field: Slug
-
 	// Safe field: Locale
 
 	// Safe field: ViewMask
@@ -254,7 +252,5 @@ func (x *DeleteCategoryRequest) Redact() string {
 	if x == nil {
 		return ""
 	}
-
-	// Safe field: Id
 	return x.String()
 }

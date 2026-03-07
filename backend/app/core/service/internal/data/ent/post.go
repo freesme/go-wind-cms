@@ -37,8 +37,8 @@ type Post struct {
 	EditorType *post.EditorType `json:"editor_type,omitempty"`
 	// 帖子状态
 	Status *post.Status `json:"status,omitempty"`
-	// 链接别名
-	Slug *string `json:"slug,omitempty"`
+	// 唯一编码
+	Code *string `json:"code,omitempty"`
 	// 不允许评论
 	DisallowComment *bool `json:"disallow_comment,omitempty"`
 	// 审核中
@@ -64,7 +64,9 @@ type Post struct {
 	// 关联的分类ID列表
 	CategoryIds *[]uint32 `json:"category_ids,omitempty"`
 	// 关联的标签ID列表
-	TagIds       *[]uint32 `json:"tag_ids,omitempty"`
+	TagIds *[]uint32 `json:"tag_ids,omitempty"`
+	// 发布时间
+	PublishTime  *time.Time `json:"publish_time,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -79,9 +81,9 @@ func (*Post) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case post.FieldID, post.FieldCreatedBy, post.FieldUpdatedBy, post.FieldDeletedBy, post.FieldSortOrder, post.FieldVisits, post.FieldLikes, post.FieldCommentCount, post.FieldAuthorID:
 			values[i] = new(sql.NullInt64)
-		case post.FieldEditorType, post.FieldStatus, post.FieldSlug, post.FieldAuthorName, post.FieldPasswordHash:
+		case post.FieldEditorType, post.FieldStatus, post.FieldCode, post.FieldAuthorName, post.FieldPasswordHash:
 			values[i] = new(sql.NullString)
-		case post.FieldCreatedAt, post.FieldUpdatedAt, post.FieldDeletedAt:
+		case post.FieldCreatedAt, post.FieldUpdatedAt, post.FieldDeletedAt, post.FieldPublishTime:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -167,12 +169,12 @@ func (_m *Post) assignValues(columns []string, values []any) error {
 				_m.Status = new(post.Status)
 				*_m.Status = post.Status(value.String)
 			}
-		case post.FieldSlug:
+		case post.FieldCode:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field slug", values[i])
+				return fmt.Errorf("unexpected type %T for field code", values[i])
 			} else if value.Valid {
-				_m.Slug = new(string)
-				*_m.Slug = value.String
+				_m.Code = new(string)
+				*_m.Code = value.String
 			}
 		case post.FieldDisallowComment:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -268,6 +270,13 @@ func (_m *Post) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tag_ids: %w", err)
 				}
 			}
+		case post.FieldPublishTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field publish_time", values[i])
+			} else if value.Valid {
+				_m.PublishTime = new(time.Time)
+				*_m.PublishTime = value.Time
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -349,8 +358,8 @@ func (_m *Post) String() string {
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
-	if v := _m.Slug; v != nil {
-		builder.WriteString("slug=")
+	if v := _m.Code; v != nil {
+		builder.WriteString("code=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
@@ -412,6 +421,11 @@ func (_m *Post) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tag_ids=")
 	builder.WriteString(fmt.Sprintf("%v", _m.TagIds))
+	builder.WriteString(", ")
+	if v := _m.PublishTime; v != nil {
+		builder.WriteString("publish_time=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -226,7 +226,12 @@ message UpdateCommentRequest {
 
 // 请求 - 删除评论
 message DeleteCommentRequest {
-  uint32 id = 1;
+  oneof query_by {
+    uint32 id = 1 [
+      (gnostic.openapi.v3.property) = {description: "ID", read_only: true},
+      json_name = "id"
+    ]; // ID
+  }
 }
 
 message CountCommentResponse {

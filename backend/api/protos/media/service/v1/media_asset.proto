@@ -218,5 +218,10 @@ message UpdateMediaAssetRequest {
 
 // 请求 - 删除媒体资源库
 message DeleteMediaAssetRequest {
-  uint32 id = 1;
+  oneof query_by {
+    uint32 id = 1 [
+      (gnostic.openapi.v3.property) = {description: "ID", read_only: true},
+      json_name = "id"
+    ]; // ID
+  }
 }

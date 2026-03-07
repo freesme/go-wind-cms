@@ -1030,11 +1030,11 @@ func (m *DeleteTenantRequest) validate(all bool) error {
 
 	var errors []error
 
-	switch v := m.DeleteBy.(type) {
+	switch v := m.QueryBy.(type) {
 	case *DeleteTenantRequest_Id:
 		if v == nil {
 			err := DeleteTenantRequestValidationError{
-				field:  "DeleteBy",
+				field:  "QueryBy",
 				reason: "oneof value cannot be a typed-nil",
 			}
 			if !all {
@@ -1046,7 +1046,7 @@ func (m *DeleteTenantRequest) validate(all bool) error {
 	case *DeleteTenantRequest_Code:
 		if v == nil {
 			err := DeleteTenantRequestValidationError{
-				field:  "DeleteBy",
+				field:  "QueryBy",
 				reason: "oneof value cannot be a typed-nil",
 			}
 			if !all {

@@ -35,6 +35,8 @@ const (
 	FieldIcon = "icon"
 	// FieldGroup holds the string denoting the group field in the database.
 	FieldGroup = "group"
+	// FieldCode holds the string denoting the code field in the database.
+	FieldCode = "code"
 	// FieldIsFeatured holds the string denoting the is_featured field in the database.
 	FieldIsFeatured = "is_featured"
 	// FieldPostCount holds the string denoting the post_count field in the database.
@@ -57,6 +59,7 @@ var Columns = []string{
 	FieldColor,
 	FieldIcon,
 	FieldGroup,
+	FieldCode,
 	FieldIsFeatured,
 	FieldPostCount,
 }
@@ -170,6 +173,11 @@ func ByIcon(opts ...sql.OrderTermOption) OrderOption {
 // ByGroup orders the results by the group field.
 func ByGroup(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldGroup, opts...).ToFunc()
+}
+
+// ByCode orders the results by the code field.
+func ByCode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCode, opts...).ToFunc()
 }
 
 // ByIsFeatured orders the results by the is_featured field.

@@ -89,9 +89,9 @@ func SortOrder(v uint32) predicate.Post {
 	return predicate.Post(sql.FieldEQ(FieldSortOrder, v))
 }
 
-// Slug applies equality check predicate on the "slug" field. It's identical to SlugEQ.
-func Slug(v string) predicate.Post {
-	return predicate.Post(sql.FieldEQ(FieldSlug, v))
+// Code applies equality check predicate on the "code" field. It's identical to CodeEQ.
+func Code(v string) predicate.Post {
+	return predicate.Post(sql.FieldEQ(FieldCode, v))
 }
 
 // DisallowComment applies equality check predicate on the "disallow_comment" field. It's identical to DisallowCommentEQ.
@@ -142,6 +142,11 @@ func AuthorName(v string) predicate.Post {
 // PasswordHash applies equality check predicate on the "password_hash" field. It's identical to PasswordHashEQ.
 func PasswordHash(v string) predicate.Post {
 	return predicate.Post(sql.FieldEQ(FieldPasswordHash, v))
+}
+
+// PublishTime applies equality check predicate on the "publish_time" field. It's identical to PublishTimeEQ.
+func PublishTime(v time.Time) predicate.Post {
+	return predicate.Post(sql.FieldEQ(FieldPublishTime, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -554,79 +559,79 @@ func StatusNotNil() predicate.Post {
 	return predicate.Post(sql.FieldNotNull(FieldStatus))
 }
 
-// SlugEQ applies the EQ predicate on the "slug" field.
-func SlugEQ(v string) predicate.Post {
-	return predicate.Post(sql.FieldEQ(FieldSlug, v))
+// CodeEQ applies the EQ predicate on the "code" field.
+func CodeEQ(v string) predicate.Post {
+	return predicate.Post(sql.FieldEQ(FieldCode, v))
 }
 
-// SlugNEQ applies the NEQ predicate on the "slug" field.
-func SlugNEQ(v string) predicate.Post {
-	return predicate.Post(sql.FieldNEQ(FieldSlug, v))
+// CodeNEQ applies the NEQ predicate on the "code" field.
+func CodeNEQ(v string) predicate.Post {
+	return predicate.Post(sql.FieldNEQ(FieldCode, v))
 }
 
-// SlugIn applies the In predicate on the "slug" field.
-func SlugIn(vs ...string) predicate.Post {
-	return predicate.Post(sql.FieldIn(FieldSlug, vs...))
+// CodeIn applies the In predicate on the "code" field.
+func CodeIn(vs ...string) predicate.Post {
+	return predicate.Post(sql.FieldIn(FieldCode, vs...))
 }
 
-// SlugNotIn applies the NotIn predicate on the "slug" field.
-func SlugNotIn(vs ...string) predicate.Post {
-	return predicate.Post(sql.FieldNotIn(FieldSlug, vs...))
+// CodeNotIn applies the NotIn predicate on the "code" field.
+func CodeNotIn(vs ...string) predicate.Post {
+	return predicate.Post(sql.FieldNotIn(FieldCode, vs...))
 }
 
-// SlugGT applies the GT predicate on the "slug" field.
-func SlugGT(v string) predicate.Post {
-	return predicate.Post(sql.FieldGT(FieldSlug, v))
+// CodeGT applies the GT predicate on the "code" field.
+func CodeGT(v string) predicate.Post {
+	return predicate.Post(sql.FieldGT(FieldCode, v))
 }
 
-// SlugGTE applies the GTE predicate on the "slug" field.
-func SlugGTE(v string) predicate.Post {
-	return predicate.Post(sql.FieldGTE(FieldSlug, v))
+// CodeGTE applies the GTE predicate on the "code" field.
+func CodeGTE(v string) predicate.Post {
+	return predicate.Post(sql.FieldGTE(FieldCode, v))
 }
 
-// SlugLT applies the LT predicate on the "slug" field.
-func SlugLT(v string) predicate.Post {
-	return predicate.Post(sql.FieldLT(FieldSlug, v))
+// CodeLT applies the LT predicate on the "code" field.
+func CodeLT(v string) predicate.Post {
+	return predicate.Post(sql.FieldLT(FieldCode, v))
 }
 
-// SlugLTE applies the LTE predicate on the "slug" field.
-func SlugLTE(v string) predicate.Post {
-	return predicate.Post(sql.FieldLTE(FieldSlug, v))
+// CodeLTE applies the LTE predicate on the "code" field.
+func CodeLTE(v string) predicate.Post {
+	return predicate.Post(sql.FieldLTE(FieldCode, v))
 }
 
-// SlugContains applies the Contains predicate on the "slug" field.
-func SlugContains(v string) predicate.Post {
-	return predicate.Post(sql.FieldContains(FieldSlug, v))
+// CodeContains applies the Contains predicate on the "code" field.
+func CodeContains(v string) predicate.Post {
+	return predicate.Post(sql.FieldContains(FieldCode, v))
 }
 
-// SlugHasPrefix applies the HasPrefix predicate on the "slug" field.
-func SlugHasPrefix(v string) predicate.Post {
-	return predicate.Post(sql.FieldHasPrefix(FieldSlug, v))
+// CodeHasPrefix applies the HasPrefix predicate on the "code" field.
+func CodeHasPrefix(v string) predicate.Post {
+	return predicate.Post(sql.FieldHasPrefix(FieldCode, v))
 }
 
-// SlugHasSuffix applies the HasSuffix predicate on the "slug" field.
-func SlugHasSuffix(v string) predicate.Post {
-	return predicate.Post(sql.FieldHasSuffix(FieldSlug, v))
+// CodeHasSuffix applies the HasSuffix predicate on the "code" field.
+func CodeHasSuffix(v string) predicate.Post {
+	return predicate.Post(sql.FieldHasSuffix(FieldCode, v))
 }
 
-// SlugIsNil applies the IsNil predicate on the "slug" field.
-func SlugIsNil() predicate.Post {
-	return predicate.Post(sql.FieldIsNull(FieldSlug))
+// CodeIsNil applies the IsNil predicate on the "code" field.
+func CodeIsNil() predicate.Post {
+	return predicate.Post(sql.FieldIsNull(FieldCode))
 }
 
-// SlugNotNil applies the NotNil predicate on the "slug" field.
-func SlugNotNil() predicate.Post {
-	return predicate.Post(sql.FieldNotNull(FieldSlug))
+// CodeNotNil applies the NotNil predicate on the "code" field.
+func CodeNotNil() predicate.Post {
+	return predicate.Post(sql.FieldNotNull(FieldCode))
 }
 
-// SlugEqualFold applies the EqualFold predicate on the "slug" field.
-func SlugEqualFold(v string) predicate.Post {
-	return predicate.Post(sql.FieldEqualFold(FieldSlug, v))
+// CodeEqualFold applies the EqualFold predicate on the "code" field.
+func CodeEqualFold(v string) predicate.Post {
+	return predicate.Post(sql.FieldEqualFold(FieldCode, v))
 }
 
-// SlugContainsFold applies the ContainsFold predicate on the "slug" field.
-func SlugContainsFold(v string) predicate.Post {
-	return predicate.Post(sql.FieldContainsFold(FieldSlug, v))
+// CodeContainsFold applies the ContainsFold predicate on the "code" field.
+func CodeContainsFold(v string) predicate.Post {
+	return predicate.Post(sql.FieldContainsFold(FieldCode, v))
 }
 
 // DisallowCommentEQ applies the EQ predicate on the "disallow_comment" field.
@@ -1087,6 +1092,56 @@ func TagIdsIsNil() predicate.Post {
 // TagIdsNotNil applies the NotNil predicate on the "tag_ids" field.
 func TagIdsNotNil() predicate.Post {
 	return predicate.Post(sql.FieldNotNull(FieldTagIds))
+}
+
+// PublishTimeEQ applies the EQ predicate on the "publish_time" field.
+func PublishTimeEQ(v time.Time) predicate.Post {
+	return predicate.Post(sql.FieldEQ(FieldPublishTime, v))
+}
+
+// PublishTimeNEQ applies the NEQ predicate on the "publish_time" field.
+func PublishTimeNEQ(v time.Time) predicate.Post {
+	return predicate.Post(sql.FieldNEQ(FieldPublishTime, v))
+}
+
+// PublishTimeIn applies the In predicate on the "publish_time" field.
+func PublishTimeIn(vs ...time.Time) predicate.Post {
+	return predicate.Post(sql.FieldIn(FieldPublishTime, vs...))
+}
+
+// PublishTimeNotIn applies the NotIn predicate on the "publish_time" field.
+func PublishTimeNotIn(vs ...time.Time) predicate.Post {
+	return predicate.Post(sql.FieldNotIn(FieldPublishTime, vs...))
+}
+
+// PublishTimeGT applies the GT predicate on the "publish_time" field.
+func PublishTimeGT(v time.Time) predicate.Post {
+	return predicate.Post(sql.FieldGT(FieldPublishTime, v))
+}
+
+// PublishTimeGTE applies the GTE predicate on the "publish_time" field.
+func PublishTimeGTE(v time.Time) predicate.Post {
+	return predicate.Post(sql.FieldGTE(FieldPublishTime, v))
+}
+
+// PublishTimeLT applies the LT predicate on the "publish_time" field.
+func PublishTimeLT(v time.Time) predicate.Post {
+	return predicate.Post(sql.FieldLT(FieldPublishTime, v))
+}
+
+// PublishTimeLTE applies the LTE predicate on the "publish_time" field.
+func PublishTimeLTE(v time.Time) predicate.Post {
+	return predicate.Post(sql.FieldLTE(FieldPublishTime, v))
+}
+
+// PublishTimeIsNil applies the IsNil predicate on the "publish_time" field.
+func PublishTimeIsNil() predicate.Post {
+	return predicate.Post(sql.FieldIsNull(FieldPublishTime))
+}
+
+// PublishTimeNotNil applies the NotNil predicate on the "publish_time" field.
+func PublishTimeNotNil() predicate.Post {
+	return predicate.Post(sql.FieldNotNull(FieldPublishTime))
 }
 
 // And groups predicates with the AND operator between them.

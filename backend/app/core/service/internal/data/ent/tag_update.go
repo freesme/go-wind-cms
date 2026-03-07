@@ -257,6 +257,26 @@ func (_u *TagUpdate) ClearGroup() *TagUpdate {
 	return _u
 }
 
+// SetCode sets the "code" field.
+func (_u *TagUpdate) SetCode(v string) *TagUpdate {
+	_u.mutation.SetCode(v)
+	return _u
+}
+
+// SetNillableCode sets the "code" field if the given value is not nil.
+func (_u *TagUpdate) SetNillableCode(v *string) *TagUpdate {
+	if v != nil {
+		_u.SetCode(*v)
+	}
+	return _u
+}
+
+// ClearCode clears the value of the "code" field.
+func (_u *TagUpdate) ClearCode() *TagUpdate {
+	_u.mutation.ClearCode()
+	return _u
+}
+
 // SetIsFeatured sets the "is_featured" field.
 func (_u *TagUpdate) SetIsFeatured(v bool) *TagUpdate {
 	_u.mutation.SetIsFeatured(v)
@@ -438,6 +458,12 @@ func (_u *TagUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.GroupCleared() {
 		_spec.ClearField(tag.FieldGroup, field.TypeString)
+	}
+	if value, ok := _u.mutation.Code(); ok {
+		_spec.SetField(tag.FieldCode, field.TypeString, value)
+	}
+	if _u.mutation.CodeCleared() {
+		_spec.ClearField(tag.FieldCode, field.TypeString)
 	}
 	if value, ok := _u.mutation.IsFeatured(); ok {
 		_spec.SetField(tag.FieldIsFeatured, field.TypeBool, value)
@@ -704,6 +730,26 @@ func (_u *TagUpdateOne) ClearGroup() *TagUpdateOne {
 	return _u
 }
 
+// SetCode sets the "code" field.
+func (_u *TagUpdateOne) SetCode(v string) *TagUpdateOne {
+	_u.mutation.SetCode(v)
+	return _u
+}
+
+// SetNillableCode sets the "code" field if the given value is not nil.
+func (_u *TagUpdateOne) SetNillableCode(v *string) *TagUpdateOne {
+	if v != nil {
+		_u.SetCode(*v)
+	}
+	return _u
+}
+
+// ClearCode clears the value of the "code" field.
+func (_u *TagUpdateOne) ClearCode() *TagUpdateOne {
+	_u.mutation.ClearCode()
+	return _u
+}
+
 // SetIsFeatured sets the "is_featured" field.
 func (_u *TagUpdateOne) SetIsFeatured(v bool) *TagUpdateOne {
 	_u.mutation.SetIsFeatured(v)
@@ -915,6 +961,12 @@ func (_u *TagUpdateOne) sqlSave(ctx context.Context) (_node *Tag, err error) {
 	}
 	if _u.mutation.GroupCleared() {
 		_spec.ClearField(tag.FieldGroup, field.TypeString)
+	}
+	if value, ok := _u.mutation.Code(); ok {
+		_spec.SetField(tag.FieldCode, field.TypeString, value)
+	}
+	if _u.mutation.CodeCleared() {
+		_spec.ClearField(tag.FieldCode, field.TypeString)
 	}
 	if value, ok := _u.mutation.IsFeatured(); ok {
 		_spec.SetField(tag.FieldIsFeatured, field.TypeBool, value)

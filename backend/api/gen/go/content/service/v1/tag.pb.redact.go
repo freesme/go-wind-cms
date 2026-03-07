@@ -121,6 +121,8 @@ func (x *Tag) Redact() string {
 
 	// Safe field: IsFeatured
 
+	// Safe field: Code
+
 	// Safe field: PostCount
 
 	// Safe field: Translations
@@ -205,10 +207,6 @@ func (x *GetTagRequest) Redact() string {
 		return ""
 	}
 
-	// Safe field: Id
-
-	// Safe field: Slug
-
 	// Safe field: Locale
 
 	// Safe field: ViewMask
@@ -246,7 +244,5 @@ func (x *DeleteTagRequest) Redact() string {
 	if x == nil {
 		return ""
 	}
-
-	// Safe field: Id
 	return x.String()
 }

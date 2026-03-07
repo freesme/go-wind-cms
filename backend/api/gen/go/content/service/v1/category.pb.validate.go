@@ -147,6 +147,10 @@ func (m *Category) validate(all bool) error {
 		// no validation rules for Icon
 	}
 
+	if m.Code != nil {
+		// no validation rules for Code
+	}
+
 	if m.PostCount != nil {
 		// no validation rules for PostCount
 	}
@@ -793,7 +797,7 @@ func (m *GetCategoryRequest) validate(all bool) error {
 			errors = append(errors, err)
 		}
 		// no validation rules for Id
-	case *GetCategoryRequest_Slug:
+	case *GetCategoryRequest_Code:
 		if v == nil {
 			err := GetCategoryRequestValidationError{
 				field:  "QueryBy",
@@ -804,7 +808,7 @@ func (m *GetCategoryRequest) validate(all bool) error {
 			}
 			errors = append(errors, err)
 		}
-		// no validation rules for Slug
+		// no validation rules for Code
 	default:
 		_ = v // ensures v is used
 	}
@@ -1245,7 +1249,22 @@ func (m *DeleteCategoryRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	switch v := m.QueryBy.(type) {
+	case *DeleteCategoryRequest_Id:
+		if v == nil {
+			err := DeleteCategoryRequestValidationError{
+				field:  "QueryBy",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		// no validation rules for Id
+	default:
+		_ = v // ensures v is used
+	}
 
 	if len(errors) > 0 {
 		return DeleteCategoryRequestMultiError(errors)

@@ -231,7 +231,12 @@ message UpdateOrgUnitRequest {
 
 // 删除组织单元 - 请求
 message DeleteOrgUnitRequest {
-  uint32 id = 1;
+  oneof query_by {
+    uint32 id = 1 [
+      (gnostic.openapi.v3.property) = {description: "ID", read_only: true},
+      json_name = "id"
+    ]; // ID
+  }
 }
 
 message BatchCreateOrgUnitsRequest {

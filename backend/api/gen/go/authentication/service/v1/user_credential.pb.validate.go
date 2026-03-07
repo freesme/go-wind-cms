@@ -747,11 +747,11 @@ func (m *DeleteUserCredentialRequest) validate(all bool) error {
 
 	var errors []error
 
-	switch v := m.DeleteBy.(type) {
+	switch v := m.QueryBy.(type) {
 	case *DeleteUserCredentialRequest_Id:
 		if v == nil {
 			err := DeleteUserCredentialRequestValidationError{
-				field:  "DeleteBy",
+				field:  "QueryBy",
 				reason: "oneof value cannot be a typed-nil",
 			}
 			if !all {
@@ -763,7 +763,7 @@ func (m *DeleteUserCredentialRequest) validate(all bool) error {
 	case *DeleteUserCredentialRequest_UserId:
 		if v == nil {
 			err := DeleteUserCredentialRequestValidationError{
-				field:  "DeleteBy",
+				field:  "QueryBy",
 				reason: "oneof value cannot be a typed-nil",
 			}
 			if !all {

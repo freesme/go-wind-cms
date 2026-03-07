@@ -103,12 +103,12 @@ func (m *Navigation) validate(all bool) error {
 		// no validation rules for Location
 	}
 
-	if m.IsActive != nil {
-		// no validation rules for IsActive
-	}
-
 	if m.Locale != nil {
 		// no validation rules for Locale
+	}
+
+	if m.IsActive != nil {
+		// no validation rules for IsActive
 	}
 
 	if m.CreatedBy != nil {
@@ -367,16 +367,16 @@ func (m *NavigationItem) validate(all bool) error {
 		// no validation rules for Title
 	}
 
-	if m.Url != nil {
-		// no validation rules for Url
+	if m.Description != nil {
+		// no validation rules for Description
 	}
 
 	if m.Icon != nil {
 		// no validation rules for Icon
 	}
 
-	if m.Description != nil {
-		// no validation rules for Description
+	if m.Url != nil {
+		// no validation rules for Url
 	}
 
 	if m.LinkType != nil {
@@ -773,6 +773,18 @@ func (m *GetNavigationRequest) validate(all bool) error {
 			errors = append(errors, err)
 		}
 		// no validation rules for Id
+	case *GetNavigationRequest_Name:
+		if v == nil {
+			err := GetNavigationRequestValidationError{
+				field:  "QueryBy",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		// no validation rules for Name
 	default:
 		_ = v // ensures v is used
 	}
@@ -1209,7 +1221,22 @@ func (m *DeleteNavigationRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	switch v := m.QueryBy.(type) {
+	case *DeleteNavigationRequest_Id:
+		if v == nil {
+			err := DeleteNavigationRequestValidationError{
+				field:  "QueryBy",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		// no validation rules for Id
+	default:
+		_ = v // ensures v is used
+	}
 
 	if len(errors) > 0 {
 		return DeleteNavigationRequestMultiError(errors)

@@ -39,16 +39,18 @@ type Category struct {
 	ParentID *uint32 `json:"parent_id,omitempty"`
 	// 分类状态
 	Status *category.Status `json:"status,omitempty"`
-	// 分类层级深度
-	Depth *int32 `json:"depth,omitempty"`
 	// 是否显示在导航菜单
 	IsNav *bool `json:"is_nav,omitempty"`
 	// 分类图标
 	Icon *string `json:"icon,omitempty"`
+	// 唯一编码
+	Code *string `json:"code,omitempty"`
 	// 该分类下的文章总数
 	PostCount *uint32 `json:"post_count,omitempty"`
 	// 该分类下的直接文章数
 	DirectPostCount *uint32 `json:"direct_post_count,omitempty"`
+	// 分类层级深度
+	Depth *int32 `json:"depth,omitempty"`
 	// 自定义字段
 	CustomFields *map[string]string `json:"custom_fields,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -97,9 +99,9 @@ func (*Category) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case category.FieldIsNav:
 			values[i] = new(sql.NullBool)
-		case category.FieldID, category.FieldCreatedBy, category.FieldUpdatedBy, category.FieldDeletedBy, category.FieldSortOrder, category.FieldParentID, category.FieldDepth, category.FieldPostCount, category.FieldDirectPostCount:
+		case category.FieldID, category.FieldCreatedBy, category.FieldUpdatedBy, category.FieldDeletedBy, category.FieldSortOrder, category.FieldParentID, category.FieldPostCount, category.FieldDirectPostCount, category.FieldDepth:
 			values[i] = new(sql.NullInt64)
-		case category.FieldPath, category.FieldStatus, category.FieldIcon:
+		case category.FieldPath, category.FieldStatus, category.FieldIcon, category.FieldCode:
 			values[i] = new(sql.NullString)
 		case category.FieldCreatedAt, category.FieldUpdatedAt, category.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -194,13 +196,6 @@ func (_m *Category) assignValues(columns []string, values []any) error {
 				_m.Status = new(category.Status)
 				*_m.Status = category.Status(value.String)
 			}
-		case category.FieldDepth:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field depth", values[i])
-			} else if value.Valid {
-				_m.Depth = new(int32)
-				*_m.Depth = int32(value.Int64)
-			}
 		case category.FieldIsNav:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_nav", values[i])
@@ -215,6 +210,13 @@ func (_m *Category) assignValues(columns []string, values []any) error {
 				_m.Icon = new(string)
 				*_m.Icon = value.String
 			}
+		case category.FieldCode:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field code", values[i])
+			} else if value.Valid {
+				_m.Code = new(string)
+				*_m.Code = value.String
+			}
 		case category.FieldPostCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field post_count", values[i])
@@ -228,6 +230,13 @@ func (_m *Category) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.DirectPostCount = new(uint32)
 				*_m.DirectPostCount = uint32(value.Int64)
+			}
+		case category.FieldDepth:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field depth", values[i])
+			} else if value.Valid {
+				_m.Depth = new(int32)
+				*_m.Depth = int32(value.Int64)
 			}
 		case category.FieldCustomFields:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -333,11 +342,6 @@ func (_m *Category) String() string {
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
-	if v := _m.Depth; v != nil {
-		builder.WriteString("depth=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
-	}
-	builder.WriteString(", ")
 	if v := _m.IsNav; v != nil {
 		builder.WriteString("is_nav=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
@@ -348,6 +352,11 @@ func (_m *Category) String() string {
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
+	if v := _m.Code; v != nil {
+		builder.WriteString("code=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	if v := _m.PostCount; v != nil {
 		builder.WriteString("post_count=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
@@ -355,6 +364,11 @@ func (_m *Category) String() string {
 	builder.WriteString(", ")
 	if v := _m.DirectPostCount; v != nil {
 		builder.WriteString("direct_post_count=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	if v := _m.Depth; v != nil {
+		builder.WriteString("depth=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")

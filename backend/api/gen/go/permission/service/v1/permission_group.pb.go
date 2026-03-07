@@ -475,8 +475,11 @@ func (x *UpdatePermissionGroupRequest) GetAllowMissing() bool {
 
 // 删除 - 请求
 type DeletePermissionGroupRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to QueryBy:
+	//
+	//	*DeletePermissionGroupRequest_Id
+	QueryBy       isDeletePermissionGroupRequest_QueryBy `protobuf_oneof:"query_by"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -511,12 +514,31 @@ func (*DeletePermissionGroupRequest) Descriptor() ([]byte, []int) {
 	return file_permission_service_v1_permission_group_proto_rawDescGZIP(), []int{5}
 }
 
+func (x *DeletePermissionGroupRequest) GetQueryBy() isDeletePermissionGroupRequest_QueryBy {
+	if x != nil {
+		return x.QueryBy
+	}
+	return nil
+}
+
 func (x *DeletePermissionGroupRequest) GetId() uint32 {
 	if x != nil {
-		return x.Id
+		if x, ok := x.QueryBy.(*DeletePermissionGroupRequest_Id); ok {
+			return x.Id
+		}
 	}
 	return 0
 }
+
+type isDeletePermissionGroupRequest_QueryBy interface {
+	isDeletePermissionGroupRequest_QueryBy()
+}
+
+type DeletePermissionGroupRequest_Id struct {
+	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // ID
+}
+
+func (*DeletePermissionGroupRequest_Id) isDeletePermissionGroupRequest_QueryBy() {}
 
 type CountPermissionGroupResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -629,9 +651,12 @@ const file_permission_service_v1_permission_group_proto_rawDesc = "" +
 	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
 	"updateMask\x12\xb4\x01\n" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
-	"\x0e_allow_missing\".\n" +
-	"\x1cDeletePermissionGroupRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"4\n" +
+	"\x0e_allow_missing\"H\n" +
+	"\x1cDeletePermissionGroupRequest\x12\x1c\n" +
+	"\x02id\x18\x01 \x01(\rB\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02idB\n" +
+	"\n" +
+	"\bquery_by\"4\n" +
 	"\x1cCountPermissionGroupResponse\x12\x14\n" +
 	"\x05count\x18\x01 \x01(\x04R\x05count2\xba\x04\n" +
 	"\x16PermissionGroupService\x12W\n" +
@@ -711,6 +736,9 @@ func file_permission_service_v1_permission_group_proto_init() {
 		(*GetPermissionGroupRequest_Id)(nil),
 	}
 	file_permission_service_v1_permission_group_proto_msgTypes[4].OneofWrappers = []any{}
+	file_permission_service_v1_permission_group_proto_msgTypes[5].OneofWrappers = []any{
+		(*DeletePermissionGroupRequest_Id)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

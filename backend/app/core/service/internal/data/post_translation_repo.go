@@ -2,13 +2,20 @@ package data
 
 import (
 	"context"
+	"go-wind-cms/pkg/content/count"
+	"go-wind-cms/pkg/content/summary"
+	"strconv"
 	"time"
 
+	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
 	entCrud "github.com/tx7do/go-crud/entgo"
 	"github.com/tx7do/go-utils/copierutil"
 	"github.com/tx7do/go-utils/mapper"
+	"github.com/tx7do/go-utils/slug"
+	"github.com/tx7do/go-utils/trans"
 	"github.com/tx7do/kratos-bootstrap/bootstrap"
+	"google.golang.org/protobuf/types/known/fieldmaskpb"
 
 	"go-wind-cms/app/core/service/internal/data/ent"
 	"go-wind-cms/app/core/service/internal/data/ent/posttranslation"
@@ -112,33 +119,39 @@ func (r *PostTranslationRepo) GetTranslation(ctx context.Context, postID uint32,
 	return r.mapper.ToDTO(entity), nil
 }
 
+func (r *PostTranslationRepo) newCreateBuilder(pt *ent.PostTranslationClient, data *contentV1.PostTranslation) *ent.PostTranslationCreate {
+	now := time.Now()
+
+	builder := pt.Create().
+		SetNillablePostID(data.PostId).
+		SetNillableLanguageCode(data.LanguageCode).
+		SetNillableTitle(data.Title).
+		SetNillableSlug(data.Slug).
+		SetNillableSummary(data.Summary).
+		SetNillableContent(data.Content).
+		SetNillableOriginalContent(data.OriginalContent).
+		SetNillableThumbnail(data.Thumbnail).
+		SetNillableTemplate(data.Template).
+		SetNillableWordCount(data.WordCount).
+		SetNillableFullPath(data.FullPath).
+		SetNillableMetaKeywords(data.MetaKeywords).
+		SetNillableMetaDescription(data.MetaDescription).
+		SetNillableSeoTitle(data.SeoTitle).
+		SetNillableCreatedBy(data.CreatedBy).
+		SetCreatedAt(now)
+
+	return builder
+}
+
 func (r *PostTranslationRepo) BatchCreate(ctx context.Context, tx *ent.Tx, items []*contentV1.PostTranslation) error {
 	if len(items) == 0 {
 		return nil
 	}
 
-	now := time.Now()
-
 	builders := make([]*ent.PostTranslationCreate, 0, len(items))
 	for _, data := range items {
-		builder := tx.PostTranslation.Create().
-			SetNillablePostID(data.PostId).
-			SetNillableLanguageCode(data.LanguageCode).
-			SetNillableTitle(data.Title).
-			SetNillableSlug(data.Slug).
-			SetNillableSummary(data.Summary).
-			SetNillableContent(data.Content).
-			SetNillableOriginalContent(data.OriginalContent).
-			SetNillableThumbnail(data.Thumbnail).
-			SetNillableTemplate(data.Template).
-			SetNillableWordCount(data.WordCount).
-			SetNillableFullPath(data.FullPath).
-			SetNillableMetaKeywords(data.MetaKeywords).
-			SetNillableMetaDescription(data.MetaDescription).
-			SetNillableSeoTitle(data.SeoTitle).
-			SetNillableCreatedBy(data.CreatedBy).
-			SetCreatedAt(now)
-
+		_ = r.PrepareTranslation(ctx, data)
+		builder := r.newCreateBuilder(tx.PostTranslation, data)
 		builders = append(builders, builder)
 	}
 
@@ -151,9 +164,92 @@ func (r *PostTranslationRepo) BatchCreate(ctx context.Context, tx *ent.Tx, items
 	return nil
 }
 
+// PrepareTranslation 预处理帖子翻译数据，生成slug、摘要、字数等信息
+func (r *PostTranslationRepo) PrepareTranslation(ctx context.Context, data *contentV1.PostTranslation) error {
+	baseSlug := slug.Generate(data.GetTitle())
+	slugCount, err := r.CountByBaseSlug(ctx, baseSlug)
+	if err != nil {
+		r.log.Errorf("count slug failed: %s", err.Error())
+		return contentV1.ErrorInternalServerError("count slug failed")
+	}
+
+	if slugCount > 0 {
+		baseSlug = slug.Generate(data.GetTitle()) + "-" + strconv.Itoa(int(slugCount))
+	}
+	data.Slug = trans.Ptr(baseSlug)
+
+	if len(data.GetSummary()) == 0 {
+		sm := summary.GenerateSummaryByRule(data.GetContent(), 100, true)
+		data.Summary = trans.Ptr(sm)
+	}
+
+	counter := count.NewContentCounter(data.GetContent())
+	data.WordCount = trans.Ptr(uint32(counter.RawChars()))
+
+	return nil
+}
+
+func (r *PostTranslationRepo) Create(ctx context.Context, data *contentV1.PostTranslation) (*contentV1.PostTranslation, error) {
+	if data == nil {
+		return nil, nil
+	}
+
+	_ = r.PrepareTranslation(ctx, data)
+
+	builder := r.newCreateBuilder(r.entClient.Client().PostTranslation, data)
+
+	var entity *ent.PostTranslation
+	var err error
+	if entity, err = builder.Save(ctx); err != nil {
+		r.log.Errorf("create post translation failed: %s", err.Error())
+		return nil, contentV1.ErrorInternalServerError("create post translation failed")
+	}
+
+	return r.mapper.ToDTO(entity), nil
+}
+
+func (r *PostTranslationRepo) Update(ctx context.Context, id uint32, data *contentV1.PostTranslation, updateMask *fieldmaskpb.FieldMask) (*contentV1.PostTranslation, error) {
+	if data == nil {
+		return nil, nil
+	}
+
+	builder := r.entClient.Client().PostTranslation.UpdateOneID(id)
+
+	dto, err := r.repository.UpdateOne(ctx, builder, data, updateMask,
+		func(dto *contentV1.PostTranslation) {
+			builder.
+				SetNillablePostID(data.PostId).
+				SetNillableLanguageCode(data.LanguageCode).
+				SetNillableTitle(data.Title).
+				SetNillableSlug(data.Slug).
+				SetNillableSummary(data.Summary).
+				SetNillableContent(data.Content).
+				SetNillableOriginalContent(data.OriginalContent).
+				SetNillableThumbnail(data.Thumbnail).
+				SetNillableTemplate(data.Template).
+				SetNillableWordCount(data.WordCount).
+				SetNillableFullPath(data.FullPath).
+				SetNillableMetaKeywords(data.MetaKeywords).
+				SetNillableMetaDescription(data.MetaDescription).
+				SetNillableSeoTitle(data.SeoTitle).
+				SetNillableUpdatedBy(data.UpdatedBy).
+				SetUpdatedAt(time.Now())
+		},
+		func(s *sql.Selector) {
+			s.Where(sql.EQ(posttranslation.FieldID, id))
+		},
+	)
+	if err != nil {
+		r.log.Errorf("update post translation failed: %s", err.Error())
+		return nil, contentV1.ErrorInternalServerError("update post translation failed")
+	}
+
+	return dto, nil
+}
+
 // CountByBaseSlug counts the number of post translations with the given base slug (case-insensitive).
 func (r *PostTranslationRepo) CountByBaseSlug(ctx context.Context, baseSlug string) (int64, error) {
-	count, err := r.entClient.Client().PostTranslation.Query().
+	c, err := r.entClient.Client().PostTranslation.Query().
 		Where(
 			posttranslation.SlugHasPrefix(baseSlug),
 		).
@@ -163,12 +259,12 @@ func (r *PostTranslationRepo) CountByBaseSlug(ctx context.Context, baseSlug stri
 		return 0, contentV1.ErrorInternalServerError("count post translations by slug failed")
 	}
 
-	return int64(count), nil
+	return int64(c), nil
 }
 
 // TranslationExists checks if a translation exists for the given post ID and language code.
 func (r *PostTranslationRepo) TranslationExists(ctx context.Context, postId uint32, languageCode string) (bool, error) {
-	count, err := r.entClient.Client().PostTranslation.Query().
+	c, err := r.entClient.Client().PostTranslation.Query().
 		Where(
 			posttranslation.PostIDEQ(postId),
 			posttranslation.LanguageCodeEQ(languageCode),
@@ -179,7 +275,7 @@ func (r *PostTranslationRepo) TranslationExists(ctx context.Context, postId uint
 		return false, contentV1.ErrorInternalServerError("count post translations by post id and language code failed")
 	}
 
-	return count > 0, nil
+	return c > 0, nil
 }
 
 // ListAvailedLanguages lists the language codes of all translations available for the given post ID.
@@ -196,4 +292,59 @@ func (r *PostTranslationRepo) ListAvailedLanguages(ctx context.Context, postId u
 	}
 
 	return entities, nil
+}
+
+func (r *PostTranslationRepo) DeleteTranslation(ctx context.Context, req *contentV1.DeletePostTranslationRequest) error {
+	if req.QueryBy == nil {
+		return contentV1.ErrorBadRequest("invalid parameter: query_by is required")
+	}
+
+	switch req.QueryBy.(type) {
+	case *contentV1.DeletePostTranslationRequest_Id:
+		if req.GetId() == 0 {
+			return contentV1.ErrorBadRequest("invalid parameter: id must be greater than 0")
+		}
+
+	case *contentV1.DeletePostTranslationRequest_Identifier:
+		if req.GetIdentifier() == nil {
+			return contentV1.ErrorBadRequest("invalid parameter: identifier is required")
+		}
+		if req.GetIdentifier().GetPostId() == 0 {
+			return contentV1.ErrorBadRequest("invalid parameter: post_id must be greater than 0")
+		}
+		if len(req.GetIdentifier().GetLanguageCode()) == 0 {
+			return contentV1.ErrorBadRequest("invalid parameter: language_code is required")
+		}
+
+	default:
+		return contentV1.ErrorBadRequest("invalid parameter: unsupported query_by type")
+	}
+
+	builder := r.entClient.Client().PostTranslation.Delete()
+
+	_, err := r.repository.Delete(ctx, builder, func(s *sql.Selector) {
+		switch req.QueryBy.(type) {
+		case *contentV1.DeletePostTranslationRequest_Id:
+			id := req.GetId()
+			s.Where(sql.EQ(posttranslation.FieldID, id))
+
+		case *contentV1.DeletePostTranslationRequest_Identifier:
+			identifier := req.GetIdentifier()
+			s.Where(
+				sql.And(
+					sql.EQ(posttranslation.FieldPostID, identifier.GetPostId()),
+					sql.EQ(posttranslation.FieldLanguageCode, identifier.GetLanguageCode()),
+				),
+			)
+
+		default:
+			return
+		}
+	})
+	if err != nil {
+		r.log.Errorf("delete post translation failed: %s", err.Error())
+		return contentV1.ErrorInternalServerError("delete post translation failed")
+	}
+
+	return nil
 }

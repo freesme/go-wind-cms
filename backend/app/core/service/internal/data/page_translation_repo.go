@@ -2,12 +2,17 @@ package data
 
 import (
 	"context"
+	"go-wind-cms/pkg/content/count"
+	"go-wind-cms/pkg/content/summary"
+	"strconv"
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
 	entCrud "github.com/tx7do/go-crud/entgo"
 	"github.com/tx7do/go-utils/copierutil"
 	"github.com/tx7do/go-utils/mapper"
+	"github.com/tx7do/go-utils/slug"
+	"github.com/tx7do/go-utils/trans"
 	"github.com/tx7do/kratos-bootstrap/bootstrap"
 
 	"go-wind-cms/app/core/service/internal/data/ent"
@@ -96,32 +101,40 @@ func (r *PageTranslationRepo) ListTranslations(ctx context.Context, pageID uint3
 	return dtos, nil
 }
 
+func (r *PageTranslationRepo) newCreateBuilder(ctx context.Context, data *contentV1.PageTranslation) *ent.PageTranslationCreate {
+	now := time.Now()
+
+	builder := r.entClient.Client().PageTranslation.Create().
+		SetNillablePageID(data.PageId).
+		SetNillableLanguageCode(data.LanguageCode).
+		SetNillableTitle(data.Title).
+		SetNillableSlug(data.Slug).
+		SetNillableSummary(data.Summary).
+		SetNillableContent(data.Content).
+		SetNillableOriginalContent(data.OriginalContent).
+		SetNillableThumbnail(data.Thumbnail).
+		SetNillableCoverImage(data.CoverImage).
+		SetNillableWordCount(data.WordCount).
+		SetNillableFullPath(data.FullPath).
+		SetNillableMetaKeywords(data.MetaKeywords).
+		SetNillableMetaDescription(data.MetaDescription).
+		SetNillableSeoTitle(data.SeoTitle).
+		SetNillableCreatedBy(data.CreatedBy).
+		SetCreatedAt(now)
+
+	return builder
+}
+
 func (r *PageTranslationRepo) BatchCreate(ctx context.Context, tx *ent.Tx, items []*contentV1.PageTranslation) error {
 	if len(items) == 0 {
 		return nil
 	}
 
-	now := time.Now()
-
 	builders := make([]*ent.PageTranslationCreate, 0, len(items))
 	for _, data := range items {
-		builder := tx.PageTranslation.Create().
-			SetNillablePageID(data.PageId).
-			SetNillableLanguageCode(data.LanguageCode).
-			SetNillableTitle(data.Title).
-			SetNillableSlug(data.Slug).
-			SetNillableSummary(data.Summary).
-			SetNillableContent(data.Content).
-			SetNillableOriginalContent(data.OriginalContent).
-			SetNillableThumbnail(data.Thumbnail).
-			SetNillableCoverImage(data.CoverImage).
-			SetNillableWordCount(data.WordCount).
-			SetNillableFullPath(data.FullPath).
-			SetNillableMetaKeywords(data.MetaKeywords).
-			SetNillableMetaDescription(data.MetaDescription).
-			SetNillableSeoTitle(data.SeoTitle).
-			SetNillableCreatedBy(data.CreatedBy).
-			SetCreatedAt(now)
+		_ = r.PrepareTranslation(ctx, data)
+
+		builder := r.newCreateBuilder(ctx, data)
 
 		builders = append(builders, builder)
 	}
@@ -136,7 +149,7 @@ func (r *PageTranslationRepo) BatchCreate(ctx context.Context, tx *ent.Tx, items
 }
 
 func (r *PageTranslationRepo) CountByBaseSlug(ctx context.Context, baseSlug string) (int64, error) {
-	count, err := r.entClient.Client().PageTranslation.Query().
+	c, err := r.entClient.Client().PageTranslation.Query().
 		Where(
 			pagetranslation.SlugHasPrefix(baseSlug),
 		).
@@ -146,12 +159,12 @@ func (r *PageTranslationRepo) CountByBaseSlug(ctx context.Context, baseSlug stri
 		return 0, contentV1.ErrorInternalServerError("count page translations by slug failed")
 	}
 
-	return int64(count), nil
+	return int64(c), nil
 }
 
 // TranslationExists checks if a translation exists for the given page ID and language code.
 func (r *PageTranslationRepo) TranslationExists(ctx context.Context, pageId uint32, languageCode string) (bool, error) {
-	count, err := r.entClient.Client().PageTranslation.Query().
+	c, err := r.entClient.Client().PageTranslation.Query().
 		Where(
 			pagetranslation.PageIDEQ(pageId),
 			pagetranslation.LanguageCodeEQ(languageCode),
@@ -162,7 +175,7 @@ func (r *PageTranslationRepo) TranslationExists(ctx context.Context, pageId uint
 		return false, contentV1.ErrorInternalServerError("count page translations by page id and language code failed")
 	}
 
-	return count > 0, nil
+	return c > 0, nil
 }
 
 // ListAvailedLanguages lists the language codes of all translations available for the given page ID.
@@ -179,4 +192,28 @@ func (r *PageTranslationRepo) ListAvailedLanguages(ctx context.Context, pageId u
 	}
 
 	return entities, nil
+}
+
+func (r *PageTranslationRepo) PrepareTranslation(ctx context.Context, data *contentV1.PageTranslation) error {
+	baseSlug := slug.Generate(data.GetTitle())
+	slugCount, err := r.CountByBaseSlug(ctx, baseSlug)
+	if err != nil {
+		r.log.Errorf("count slug failed: %s", err.Error())
+		return contentV1.ErrorInternalServerError("count slug failed")
+	}
+
+	if slugCount > 0 {
+		baseSlug = slug.Generate(data.GetTitle()) + "-" + strconv.Itoa(int(slugCount))
+	}
+	data.Slug = trans.Ptr(baseSlug)
+
+	if len(data.GetSummary()) == 0 {
+		sm := summary.GenerateSummaryByRule(data.GetContent(), 100, true)
+		data.Summary = trans.Ptr(sm)
+	}
+
+	counter := count.NewContentCounter(data.GetContent())
+	data.WordCount = trans.Ptr(uint32(counter.RawChars()))
+
+	return nil
 }

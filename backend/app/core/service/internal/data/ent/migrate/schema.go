@@ -173,11 +173,12 @@ var (
 		{Name: "sort_order", Type: field.TypeUint32, Nullable: true, Comment: "排序值（越小越靠前）", Default: 0},
 		{Name: "path", Type: field.TypeString, Nullable: true, Size: 512, Comment: "树路径，规范： 根节点: /，非根节点: /1/2/3/（以 / 开头且以 / 结尾）。禁止空字符串（NULL 表示未设置）。"},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Comment: "分类状态", Enums: []string{"CATEGORY_STATUS_ACTIVE", "CATEGORY_STATUS_HIDDEN", "CATEGORY_STATUS_ARCHIVED"}},
-		{Name: "depth", Type: field.TypeInt32, Nullable: true, Comment: "分类层级深度", Default: 0},
 		{Name: "is_nav", Type: field.TypeBool, Nullable: true, Comment: "是否显示在导航菜单", Default: false},
 		{Name: "icon", Type: field.TypeString, Nullable: true, Comment: "分类图标"},
+		{Name: "code", Type: field.TypeString, Nullable: true, Comment: "唯一编码"},
 		{Name: "post_count", Type: field.TypeUint32, Nullable: true, Comment: "该分类下的文章总数", Default: 0},
 		{Name: "direct_post_count", Type: field.TypeUint32, Nullable: true, Comment: "该分类下的直接文章数", Default: 0},
+		{Name: "depth", Type: field.TypeInt32, Nullable: true, Comment: "分类层级深度", Default: 0},
 		{Name: "custom_fields", Type: field.TypeJSON, Nullable: true, Comment: "自定义字段"},
 		{Name: "parent_id", Type: field.TypeUint32, Nullable: true, Comment: "父节点ID"},
 	}
@@ -190,7 +191,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "categories_categories_children",
-				Columns:    []*schema.Column{CategoriesColumns[16]},
+				Columns:    []*schema.Column{CategoriesColumns[17]},
 				RefColumns: []*schema.Column{CategoriesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -204,12 +205,12 @@ var (
 			{
 				Name:    "category_is_nav",
 				Unique:  false,
-				Columns: []*schema.Column{CategoriesColumns[11]},
+				Columns: []*schema.Column{CategoriesColumns[10]},
 			},
 			{
 				Name:    "category_parent_id",
 				Unique:  false,
-				Columns: []*schema.Column{CategoriesColumns[16]},
+				Columns: []*schema.Column{CategoriesColumns[17]},
 			},
 		},
 	}
@@ -2021,7 +2022,7 @@ var (
 		{Name: "editor_type", Type: field.TypeEnum, Nullable: true, Comment: "编辑器类型", Enums: []string{"EDITOR_TYPE_MARKDOWN", "EDITOR_TYPE_RICH_TEXT", "EDITOR_TYPE_PLAIN_TEXT", "EDITOR_TYPE_CODE", "EDITOR_TYPE_JSON_BLOCK", "EDITOR_TYPE_VISUAL_BUILDER"}, Default: "EDITOR_TYPE_MARKDOWN"},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Comment: "页面状态", Enums: []string{"PAGE_STATUS_DRAFT", "PAGE_STATUS_PUBLISHED", "PAGE_STATUS_ARCHIVED"}, Default: "PAGE_STATUS_DRAFT"},
 		{Name: "type", Type: field.TypeEnum, Nullable: true, Comment: "页面类型", Enums: []string{"PAGE_TYPE_DEFAULT", "PAGE_TYPE_HOME", "PAGE_TYPE_ERROR_404", "PAGE_TYPE_ERROR_500", "PAGE_TYPE_CUSTOM"}, Default: "PAGE_TYPE_HOME"},
-		{Name: "slug", Type: field.TypeString, Nullable: true, Comment: "页面别名"},
+		{Name: "slug", Type: field.TypeString, Nullable: true, Comment: "页面唯一标识"},
 		{Name: "author_id", Type: field.TypeUint32, Nullable: true, Comment: "评论作者ID，0表示游客", Default: 0},
 		{Name: "author_name", Type: field.TypeString, Nullable: true, Comment: "评论作者名称"},
 		{Name: "disallow_comment", Type: field.TypeBool, Nullable: true, Comment: "是否禁止评论", Default: false},
@@ -2650,7 +2651,7 @@ var (
 		{Name: "sort_order", Type: field.TypeUint32, Nullable: true, Comment: "排序值（越小越靠前）", Default: 0},
 		{Name: "editor_type", Type: field.TypeEnum, Nullable: true, Comment: "编辑器类型", Enums: []string{"EDITOR_TYPE_MARKDOWN", "EDITOR_TYPE_RICH_TEXT", "EDITOR_TYPE_PLAIN_TEXT", "EDITOR_TYPE_CODE", "EDITOR_TYPE_JSON_BLOCK", "EDITOR_TYPE_VISUAL_BUILDER"}, Default: "EDITOR_TYPE_MARKDOWN"},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Comment: "帖子状态", Enums: []string{"POST_STATUS_DRAFT", "POST_STATUS_PUBLISHED", "POST_STATUS_SCHEDULED", "POST_STATUS_TRASHED"}, Default: "POST_STATUS_DRAFT"},
-		{Name: "slug", Type: field.TypeString, Nullable: true, Comment: "链接别名"},
+		{Name: "code", Type: field.TypeString, Nullable: true, Comment: "唯一编码"},
 		{Name: "disallow_comment", Type: field.TypeBool, Nullable: true, Comment: "不允许评论", Default: false},
 		{Name: "in_progress", Type: field.TypeBool, Nullable: true, Comment: "审核中", Default: false},
 		{Name: "auto_summary", Type: field.TypeBool, Nullable: true, Comment: "是否自动生成摘要", Default: true},
@@ -2664,6 +2665,7 @@ var (
 		{Name: "custom_fields", Type: field.TypeJSON, Nullable: true, Comment: "自定义字段"},
 		{Name: "category_ids", Type: field.TypeJSON, Nullable: true, Comment: "关联的分类ID列表"},
 		{Name: "tag_ids", Type: field.TypeJSON, Nullable: true, Comment: "关联的标签ID列表"},
+		{Name: "publish_time", Type: field.TypeTime, Nullable: true, Comment: "发布时间"},
 	}
 	// PostsTable holds the schema information for the "posts" table.
 	PostsTable = &schema.Table{
@@ -2683,7 +2685,7 @@ var (
 				Columns: []*schema.Column{PostsColumns[8]},
 			},
 			{
-				Name:    "post_slug",
+				Name:    "post_code",
 				Unique:  false,
 				Columns: []*schema.Column{PostsColumns[10]},
 			},
@@ -3196,6 +3198,7 @@ var (
 		{Name: "color", Type: field.TypeString, Nullable: true, Comment: "标签颜色"},
 		{Name: "icon", Type: field.TypeString, Nullable: true, Comment: "标签图标"},
 		{Name: "group", Type: field.TypeString, Nullable: true, Comment: "标签分组"},
+		{Name: "code", Type: field.TypeString, Nullable: true, Comment: "唯一编码"},
 		{Name: "is_featured", Type: field.TypeBool, Nullable: true, Comment: "是否推荐", Default: false},
 		{Name: "post_count", Type: field.TypeUint32, Nullable: true, Comment: "使用该标签的文章总数", Default: 0},
 	}
@@ -3219,7 +3222,7 @@ var (
 			{
 				Name:    "tag_is_featured",
 				Unique:  false,
-				Columns: []*schema.Column{TagsColumns[12]},
+				Columns: []*schema.Column{TagsColumns[13]},
 			},
 			{
 				Name:    "tag_status_group",
@@ -3229,7 +3232,7 @@ var (
 			{
 				Name:    "tag_status_is_featured",
 				Unique:  false,
-				Columns: []*schema.Column{TagsColumns[8], TagsColumns[12]},
+				Columns: []*schema.Column{TagsColumns[8], TagsColumns[13]},
 			},
 		},
 	}

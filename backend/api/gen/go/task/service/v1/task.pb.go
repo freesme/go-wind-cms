@@ -654,8 +654,11 @@ func (x *UpdateTaskRequest) GetAllowMissing() bool {
 
 // 删除调度任务 - 请求
 type DeleteTaskRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to QueryBy:
+	//
+	//	*DeleteTaskRequest_Id
+	QueryBy       isDeleteTaskRequest_QueryBy `protobuf_oneof:"query_by"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -690,12 +693,31 @@ func (*DeleteTaskRequest) Descriptor() ([]byte, []int) {
 	return file_task_service_v1_task_proto_rawDescGZIP(), []int{6}
 }
 
+func (x *DeleteTaskRequest) GetQueryBy() isDeleteTaskRequest_QueryBy {
+	if x != nil {
+		return x.QueryBy
+	}
+	return nil
+}
+
 func (x *DeleteTaskRequest) GetId() uint32 {
 	if x != nil {
-		return x.Id
+		if x, ok := x.QueryBy.(*DeleteTaskRequest_Id); ok {
+			return x.Id
+		}
 	}
 	return 0
 }
+
+type isDeleteTaskRequest_QueryBy interface {
+	isDeleteTaskRequest_QueryBy()
+}
+
+type DeleteTaskRequest_Id struct {
+	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // ID
+}
+
+func (*DeleteTaskRequest_Id) isDeleteTaskRequest_QueryBy() {}
 
 // 重启调度任务 - 回应
 type RestartAllTaskResponse struct {
@@ -982,9 +1004,12 @@ const file_task_service_v1_task_proto_rawDesc = "" +
 	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
 	"updateMask\x12\xb4\x01\n" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
-	"\x0e_allow_missing\"#\n" +
-	"\x11DeleteTaskRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\".\n" +
+	"\x0e_allow_missing\"=\n" +
+	"\x11DeleteTaskRequest\x12\x1c\n" +
+	"\x02id\x18\x01 \x01(\rB\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02idB\n" +
+	"\n" +
+	"\bquery_by\".\n" +
 	"\x16RestartAllTaskResponse\x12\x14\n" +
 	"\x05count\x18\x01 \x01(\x05R\x05count\"\xbd\x02\n" +
 	"\x12ControlTaskRequest\x12f\n" +
@@ -1106,6 +1131,9 @@ func file_task_service_v1_task_proto_init() {
 		(*GetTaskRequest_TypeName)(nil),
 	}
 	file_task_service_v1_task_proto_msgTypes[5].OneofWrappers = []any{}
+	file_task_service_v1_task_proto_msgTypes[6].OneofWrappers = []any{
+		(*DeleteTaskRequest_Id)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

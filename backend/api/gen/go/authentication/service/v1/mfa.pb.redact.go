@@ -238,12 +238,6 @@ func (x *StartEnrollMethodResponse) Redact() string {
 		return ""
 	}
 
-	// Safe field: Totp
-
-	// Safe field: Sms
-
-	// Safe field: Webauthn
-
 	// Safe field: ExpiresAt
 
 	// Safe field: OperationId
@@ -302,14 +296,6 @@ func (x *ConfirmEnrollMethodRequest) Redact() string {
 
 	// Safe field: OperationId
 
-	// Safe field: TotpCode
-
-	// Safe field: Sms
-
-	// Safe field: Webauthn
-
-	// Safe field: BackupCode
-
 	// Safe field: Display
 	return x.String()
 }
@@ -336,14 +322,6 @@ func (x *DisableMFARequest) Redact() string {
 
 	// Safe field: Method
 
-	// Safe field: Password
-
-	// Safe field: TotpCode
-
-	// Safe field: Sms
-
-	// Safe field: Webauthn
-
 	// Safe field: Reason
 	return x.String()
 }
@@ -368,10 +346,6 @@ func (x *StartMFAChallengeResponse) Redact() string {
 		return ""
 	}
 
-	// Safe field: Sms
-
-	// Safe field: Webauthn
-
 	// Safe field: OperationId
 
 	// Safe field: ExpiresAt
@@ -385,14 +359,6 @@ func (x *VerifyMFAChallengeRequest) Redact() string {
 	}
 
 	// Safe field: OperationId
-
-	// Safe field: TotpCode
-
-	// Safe field: Sms
-
-	// Safe field: Webauthn
-
-	// Safe field: BackupCode
 	return x.String()
 }
 

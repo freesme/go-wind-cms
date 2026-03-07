@@ -2,7 +2,6 @@ package data
 
 import (
 	"context"
-	"strconv"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -14,7 +13,7 @@ import (
 
 	"github.com/tx7do/go-utils/copierutil"
 	"github.com/tx7do/go-utils/mapper"
-	"github.com/tx7do/go-utils/slug"
+	"github.com/tx7do/go-utils/timeutil"
 	"github.com/tx7do/go-utils/trans"
 
 	"go-wind-cms/app/core/service/internal/data/ent"
@@ -22,9 +21,6 @@ import (
 	"go-wind-cms/app/core/service/internal/data/ent/predicate"
 
 	contentV1 "go-wind-cms/api/gen/go/content/service/v1"
-
-	"go-wind-cms/pkg/content/count"
-	"go-wind-cms/pkg/content/summary"
 )
 
 type PostRepo struct {
@@ -46,7 +42,9 @@ type PostRepo struct {
 	editorTypeConverter *mapper.EnumTypeConverter[contentV1.EditorType, post.EditorType]
 
 	postTranslationRepo *PostTranslationRepo
-	postCategoryRepo    *PostCategoryRepo
+
+	postCategoryRepo *PostCategoryRepo
+	postTagRepo      *PostTagRepo
 }
 
 func NewPostRepo(
@@ -54,6 +52,7 @@ func NewPostRepo(
 	entClient *entCrud.EntClient[*ent.Client],
 	postTranslationRepo *PostTranslationRepo,
 	postCategoryRepo *PostCategoryRepo,
+	postTagRepo *PostTagRepo,
 ) *PostRepo {
 	repo := &PostRepo{
 		entClient: entClient,
@@ -67,6 +66,7 @@ func NewPostRepo(
 		),
 		postTranslationRepo: postTranslationRepo,
 		postCategoryRepo:    postCategoryRepo,
+		postTagRepo:         postTagRepo,
 	}
 
 	repo.init()
@@ -147,6 +147,20 @@ func (r *PostRepo) List(ctx context.Context, req *paginationV1.PagingRequest) (*
 			return nil, contentV1.ErrorInternalServerError("query availed languages failed")
 		}
 		item.AvailableLanguages = languages
+
+		if tagIds, err := r.postTagRepo.ListTagIDs(ctx, item.GetId()); err != nil {
+			r.log.Errorf("query tag ids failed: %s", err.Error())
+			return nil, contentV1.ErrorInternalServerError("query tag ids failed")
+		} else {
+			item.TagIds = tagIds
+		}
+
+		if categoryIds, err := r.postCategoryRepo.ListCategoryIDs(ctx, item.GetId()); err != nil {
+			r.log.Errorf("query category ids failed: %s", err.Error())
+			return nil, contentV1.ErrorInternalServerError("query category ids failed")
+		} else {
+			item.CategoryIds = categoryIds
+		}
 	}
 
 	return &contentV1.ListPostResponse{
@@ -162,7 +176,16 @@ func (r *PostRepo) Get(ctx context.Context, req *contentV1.GetPostRequest) (*con
 
 	build := r.entClient.Client().Post.Query()
 
-	build.Where(post.IDEQ(req.GetId()))
+	switch req.QueryBy.(type) {
+	case *contentV1.GetPostRequest_Id:
+		build.Where(post.IDEQ(req.GetId()))
+
+	case *contentV1.GetPostRequest_Code:
+		build.Where(post.CodeEQ(req.GetCode()))
+
+	default:
+		return nil, contentV1.ErrorBadRequest("invalid query field")
+	}
 
 	entity, err := build.Only(ctx)
 	if err != nil {
@@ -184,7 +207,7 @@ func (r *PostRepo) Get(ctx context.Context, req *contentV1.GetPostRequest) (*con
 	}
 	dto.AvailableLanguages = languages
 
-	if req.LanguageCode == nil {
+	if req.Locale == nil {
 		translations, err := r.postTranslationRepo.ListTranslations(ctx, dto.GetId())
 		if err != nil {
 			r.log.Errorf("query translations failed: %s", err.Error())
@@ -192,7 +215,7 @@ func (r *PostRepo) Get(ctx context.Context, req *contentV1.GetPostRequest) (*con
 		}
 		dto.Translations = translations
 	} else {
-		translation, err := r.postTranslationRepo.GetTranslation(ctx, dto.GetId(), *req.LanguageCode)
+		translation, err := r.postTranslationRepo.GetTranslation(ctx, dto.GetId(), req.GetLocale())
 		if err != nil {
 			r.log.Errorf("query translation failed: %s", err.Error())
 			return nil, contentV1.ErrorInternalServerError("query translation failed")
@@ -200,6 +223,20 @@ func (r *PostRepo) Get(ctx context.Context, req *contentV1.GetPostRequest) (*con
 		if translation != nil {
 			dto.Translations = append(dto.Translations, translation)
 		}
+	}
+
+	if tagIds, err := r.postTagRepo.ListTagIDs(ctx, dto.GetId()); err != nil {
+		r.log.Errorf("query tag ids failed: %s", err.Error())
+		return nil, contentV1.ErrorInternalServerError("query tag ids failed")
+	} else {
+		dto.TagIds = tagIds
+	}
+
+	if categoryIds, err := r.postCategoryRepo.ListCategoryIDs(ctx, dto.GetId()); err != nil {
+		r.log.Errorf("query category ids failed: %s", err.Error())
+		return nil, contentV1.ErrorInternalServerError("query category ids failed")
+	} else {
+		dto.CategoryIds = categoryIds
 	}
 
 	return dto, nil
@@ -236,7 +273,7 @@ func (r *PostRepo) Create(ctx context.Context, req *contentV1.CreatePostRequest)
 	builder := tx.Post.Create().
 		SetNillableStatus(r.statusConverter.ToEntity(req.Data.Status)).
 		SetNillableEditorType(r.editorTypeConverter.ToEntity(req.Data.EditorType)).
-		SetNillableSlug(req.Data.Slug).
+		SetNillableCode(req.Data.Code).
 		SetNillableDisallowComment(req.Data.DisallowComment).
 		SetNillableInProgress(req.Data.InProgress).
 		SetNillableAutoSummary(req.Data.AutoSummary).
@@ -249,6 +286,7 @@ func (r *PostRepo) Create(ctx context.Context, req *contentV1.CreatePostRequest)
 		SetNillableAuthorName(req.Data.AuthorName).
 		SetNillablePasswordHash(req.Data.PasswordHash).
 		SetNillableCreatedBy(req.Data.CreatedBy).
+		SetNillablePublishTime(timeutil.TimestamppbToTime(req.Data.PublishTime)).
 		SetCreatedAt(time.Now())
 
 	if req.Data.CustomFields != nil {
@@ -269,32 +307,35 @@ func (r *PostRepo) Create(ctx context.Context, req *contentV1.CreatePostRequest)
 
 		for i := range req.Data.Translations {
 			req.Data.Translations[i].PostId = trans.Ptr(entity.ID)
-
-			baseSlug := slug.Generate(req.Data.Translations[i].GetTitle())
-			slugCount, err := r.postTranslationRepo.CountByBaseSlug(ctx, baseSlug)
-			if err != nil {
-				r.log.Errorf("count slug failed: %s", err.Error())
-				return nil, contentV1.ErrorInternalServerError("count slug failed")
-			}
-
-			if slugCount > 0 {
-				baseSlug = slug.Generate(req.Data.Translations[i].GetTitle()) + "-" + strconv.Itoa(int(slugCount))
-			}
-
-			if req.Data.AutoSummary != nil && req.Data.GetAutoSummary() || len(req.Data.Translations[i].GetSummary()) == 0 {
-				sm := summary.GenerateSummaryByRule(req.Data.Translations[i].GetContent(), 100, true)
-				req.Data.Translations[i].Summary = trans.Ptr(sm)
-			}
-
-			counter := count.NewContentCounter(req.Data.Translations[i].GetContent())
-
-			req.Data.Translations[i].Slug = trans.Ptr(baseSlug)
-			req.Data.Translations[i].WordCount = trans.Ptr(uint32(counter.RawChars()))
 		}
 
 		if err = r.postTranslationRepo.BatchCreate(ctx, tx, req.Data.GetTranslations()); err != nil {
 			r.log.Errorf("batch insert translations failed: %s", err.Error())
 			return nil, contentV1.ErrorInternalServerError("batch insert translations failed")
+		}
+	}
+
+	if len(req.Data.CategoryIds) > 0 {
+		if err = r.postCategoryRepo.CleanCategories(ctx, tx, entity.ID); err != nil {
+			r.log.Errorf("clean categories failed: %s", err.Error())
+			return nil, contentV1.ErrorInternalServerError("clean categories failed")
+		}
+
+		if err = r.postCategoryRepo.BatchCreate(ctx, tx, entity.ID, req.Data.GetCategoryIds()); err != nil {
+			r.log.Errorf("batch insert categories failed: %s", err.Error())
+			return nil, contentV1.ErrorInternalServerError("batch insert categories failed")
+		}
+	}
+
+	if len(req.Data.TagIds) > 0 {
+		if err = r.postTagRepo.CleanTags(ctx, tx, entity.ID); err != nil {
+			r.log.Errorf("clean tags failed: %s", err.Error())
+			return nil, contentV1.ErrorInternalServerError("clean tags failed")
+		}
+
+		if err = r.postTagRepo.BatchCreate(ctx, tx, entity.ID, req.Data.GetTagIds()); err != nil {
+			r.log.Errorf("batch insert tags failed: %s", err.Error())
+			return nil, contentV1.ErrorInternalServerError("batch insert tags failed")
 		}
 	}
 
@@ -342,32 +383,35 @@ func (r *PostRepo) Update(ctx context.Context, req *contentV1.UpdatePostRequest)
 	if len(req.Data.Translations) > 0 {
 		for i := range req.Data.Translations {
 			req.Data.Translations[i].PostId = trans.Ptr(req.GetId())
-
-			baseSlug := slug.Generate(req.Data.Translations[i].GetTitle())
-			slugCount, err := r.postTranslationRepo.CountByBaseSlug(ctx, baseSlug)
-			if err != nil {
-				r.log.Errorf("count slug failed: %s", err.Error())
-				return nil, contentV1.ErrorInternalServerError("count slug failed")
-			}
-
-			if slugCount > 0 {
-				baseSlug = slug.Generate(req.Data.Translations[i].GetTitle()) + "-" + strconv.Itoa(int(slugCount))
-			}
-
-			if req.Data.AutoSummary != nil && req.Data.GetAutoSummary() || len(req.Data.Translations[i].GetSummary()) == 0 {
-				sm := summary.GenerateSummaryByRule(req.Data.Translations[i].GetContent(), 100, true)
-				req.Data.Translations[i].Summary = trans.Ptr(sm)
-			}
-
-			counter := count.NewContentCounter(req.Data.Translations[i].GetContent())
-
-			req.Data.Translations[i].Slug = trans.Ptr(baseSlug)
-			req.Data.Translations[i].WordCount = trans.Ptr(uint32(counter.RawChars()))
 		}
 
 		if err = r.postTranslationRepo.BatchCreate(ctx, tx, req.Data.GetTranslations()); err != nil {
 			r.log.Errorf("batch insert translations failed: %s", err.Error())
 			return nil, contentV1.ErrorInternalServerError("batch insert translations failed")
+		}
+	}
+
+	if req.Data.CategoryIds != nil {
+		if err = r.postCategoryRepo.CleanCategories(ctx, tx, req.GetId()); err != nil {
+			r.log.Errorf("clean categories failed: %s", err.Error())
+			return nil, contentV1.ErrorInternalServerError("clean categories failed")
+		}
+
+		if err = r.postCategoryRepo.BatchCreate(ctx, tx, req.GetId(), req.Data.GetCategoryIds()); err != nil {
+			r.log.Errorf("batch insert categories failed: %s", err.Error())
+			return nil, contentV1.ErrorInternalServerError("batch insert categories failed")
+		}
+	}
+
+	if req.Data.TagIds != nil {
+		if err = r.postTagRepo.CleanTags(ctx, tx, req.GetId()); err != nil {
+			r.log.Errorf("clean tags failed: %s", err.Error())
+			return nil, contentV1.ErrorInternalServerError("clean tags failed")
+		}
+
+		if err = r.postTagRepo.BatchCreate(ctx, tx, req.GetId(), req.Data.GetTagIds()); err != nil {
+			r.log.Errorf("batch insert tags failed: %s", err.Error())
+			return nil, contentV1.ErrorInternalServerError("batch insert tags failed")
 		}
 	}
 
@@ -377,7 +421,7 @@ func (r *PostRepo) Update(ctx context.Context, req *contentV1.UpdatePostRequest)
 			builder.
 				SetNillableStatus(r.statusConverter.ToEntity(req.Data.Status)).
 				SetNillableEditorType(r.editorTypeConverter.ToEntity(req.Data.EditorType)).
-				SetNillableSlug(req.Data.Slug).
+				SetNillableCode(req.Data.Code).
 				SetNillableDisallowComment(req.Data.DisallowComment).
 				SetNillableInProgress(req.Data.InProgress).
 				SetNillableAutoSummary(req.Data.AutoSummary).
@@ -390,6 +434,7 @@ func (r *PostRepo) Update(ctx context.Context, req *contentV1.UpdatePostRequest)
 				SetNillableAuthorName(req.Data.AuthorName).
 				SetNillablePasswordHash(req.Data.PasswordHash).
 				SetNillableUpdatedBy(req.Data.UpdatedBy).
+				SetNillablePublishTime(timeutil.TimestamppbToTime(req.Data.PublishTime)).
 				SetUpdatedAt(time.Now())
 
 			if req.Data.CustomFields != nil {
@@ -428,15 +473,29 @@ func (r *PostRepo) Delete(ctx context.Context, req *contentV1.DeletePostRequest)
 		}
 	}()
 
+	// 删除帖子数据
 	if err = r.entClient.Client().Post.
 		DeleteOneID(req.GetId()).
 		Exec(ctx); err != nil {
 		r.log.Errorf("delete one data failed: %s", err.Error())
 	}
 
+	// 删除关联数据
 	if err = r.postTranslationRepo.CleanTranslations(ctx, tx, req.GetId()); err != nil {
 		r.log.Errorf("clean translations failed: %s", err.Error())
 		return contentV1.ErrorInternalServerError("clean translations failed")
+	}
+
+	// 删除关联数据
+	if err = r.postCategoryRepo.CleanCategories(ctx, tx, req.GetId()); err != nil {
+		r.log.Errorf("clean categories failed: %s", err.Error())
+		return contentV1.ErrorInternalServerError("clean categories failed")
+	}
+
+	// 删除关联数据
+	if err = r.postTagRepo.CleanTags(ctx, tx, req.GetId()); err != nil {
+		r.log.Errorf("clean tags failed: %s", err.Error())
+		return contentV1.ErrorInternalServerError("clean tags failed")
 	}
 
 	return err
@@ -444,4 +503,75 @@ func (r *PostRepo) Delete(ctx context.Context, req *contentV1.DeletePostRequest)
 
 func (r *PostRepo) TranslationExists(ctx context.Context, postId uint32, languageCode string) (bool, error) {
 	return r.postTranslationRepo.TranslationExists(ctx, postId, languageCode)
+}
+
+func (r *PostRepo) CreateTranslation(ctx context.Context, req *contentV1.CreatePostTranslationRequest) (*contentV1.PostTranslation, error) {
+	if req == nil || req.Data == nil {
+		return nil, contentV1.ErrorBadRequest("invalid parameter")
+	}
+
+	if len(req.Data.GetLanguageCode()) == 0 {
+		return nil, contentV1.ErrorBadRequest("language code is required")
+	}
+
+	if req.GetPostId() == 0 {
+		return nil, contentV1.ErrorBadRequest("post id is required")
+	}
+
+	req.Data.PostId = trans.Ptr(req.GetPostId())
+
+	return r.postTranslationRepo.Create(ctx, req.Data)
+}
+
+func (r *PostRepo) UpdateTranslation(ctx context.Context, req *contentV1.UpdatePostTranslationRequest) (*contentV1.PostTranslation, error) {
+	if req == nil || req.Data == nil {
+		return nil, contentV1.ErrorBadRequest("invalid parameter")
+	}
+
+	if len(req.Data.GetLanguageCode()) == 0 {
+		return nil, contentV1.ErrorBadRequest("language code is required")
+	}
+
+	if req.Data.GetPostId() == 0 {
+		return nil, contentV1.ErrorBadRequest("post id is required")
+	}
+
+	if exist, err := r.TranslationExists(ctx, req.Data.GetPostId(), req.Data.GetLanguageCode()); err != nil {
+		return nil, err
+	} else if !exist {
+		if req.GetAllowMissing() {
+			return r.CreateTranslation(ctx, &contentV1.CreatePostTranslationRequest{
+				Data:   req.Data,
+				PostId: req.Data.GetPostId(),
+			})
+		}
+
+		return nil, contentV1.ErrorFileNotFound("translation not found")
+	}
+
+	return r.postTranslationRepo.Update(ctx, req.GetId(), req.Data, req.GetUpdateMask())
+}
+
+func (r *PostRepo) GetTranslation(ctx context.Context, req *contentV1.GetPostRequest) (*contentV1.PostTranslation, error) {
+	if req == nil {
+		return nil, contentV1.ErrorBadRequest("invalid parameter")
+	}
+
+	return r.postTranslationRepo.GetTranslation(ctx, req.GetId(), req.GetLocale())
+}
+
+func (r *PostRepo) ListTranslations(ctx context.Context, postId uint32) ([]*contentV1.PostTranslation, error) {
+	return r.postTranslationRepo.ListTranslations(ctx, postId)
+}
+
+func (r *PostRepo) DeleteTranslation(ctx context.Context, req *contentV1.DeletePostTranslationRequest) error {
+	return r.postTranslationRepo.DeleteTranslation(ctx, req)
+}
+
+func (r *PostRepo) CleanTranslations(ctx context.Context, tx *ent.Tx, postID uint32) error {
+	return r.postTranslationRepo.CleanTranslations(ctx, tx, postID)
+}
+
+func (r *PostRepo) CleanCategories(ctx context.Context, tx *ent.Tx, postID uint32) error {
+	return r.postCategoryRepo.CleanCategories(ctx, tx, postID)
 }

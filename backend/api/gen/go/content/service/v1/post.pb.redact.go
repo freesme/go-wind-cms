@@ -112,6 +112,50 @@ func (s *redactedPostServiceServer) TranslationExists(ctx context.Context, in *P
 	return res, err
 }
 
+// GetTranslation is the redacted wrapper for the actual PostServiceServer.GetTranslation method
+// Unary RPC
+func (s *redactedPostServiceServer) GetTranslation(ctx context.Context, in *GetPostRequest) (*PostTranslation, error) {
+	res, err := s.srv.GetTranslation(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// CreateTranslation is the redacted wrapper for the actual PostServiceServer.CreateTranslation method
+// Unary RPC
+func (s *redactedPostServiceServer) CreateTranslation(ctx context.Context, in *CreatePostTranslationRequest) (*PostTranslation, error) {
+	res, err := s.srv.CreateTranslation(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// UpdateTranslation is the redacted wrapper for the actual PostServiceServer.UpdateTranslation method
+// Unary RPC
+func (s *redactedPostServiceServer) UpdateTranslation(ctx context.Context, in *UpdatePostTranslationRequest) (*PostTranslation, error) {
+	res, err := s.srv.UpdateTranslation(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// DeleteTranslation is the redacted wrapper for the actual PostServiceServer.DeleteTranslation method
+// Unary RPC
+func (s *redactedPostServiceServer) DeleteTranslation(ctx context.Context, in *DeletePostTranslationRequest) (*emptypb.Empty, error) {
+	res, err := s.srv.DeleteTranslation(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Redact method implementation for Post
 func (x *Post) Redact() string {
 	if x == nil {
@@ -124,7 +168,7 @@ func (x *Post) Redact() string {
 
 	// Safe field: EditorType
 
-	// Safe field: Slug
+	// Safe field: Code
 
 	// Safe field: DisallowComment
 
@@ -224,18 +268,6 @@ func (x *PostTranslation) Redact() string {
 	return x.String()
 }
 
-// Redact method implementation for PostCategory
-func (x *PostCategory) Redact() string {
-	if x == nil {
-		return ""
-	}
-
-	// Safe field: PostId
-
-	// Safe field: CategoryId
-	return x.String()
-}
-
 // Redact method implementation for ListPostResponse
 func (x *ListPostResponse) Redact() string {
 	if x == nil {
@@ -253,10 +285,6 @@ func (x *GetPostRequest) Redact() string {
 	if x == nil {
 		return ""
 	}
-
-	// Safe field: Id
-
-	// Safe field: Slug
 
 	// Safe field: Locale
 
@@ -295,8 +323,6 @@ func (x *DeletePostRequest) Redact() string {
 	if x == nil {
 		return ""
 	}
-
-	// Safe field: Id
 	return x.String()
 }
 
@@ -319,5 +345,53 @@ func (x *PostTranslationExistsResponse) Redact() string {
 	}
 
 	// Safe field: Exists
+	return x.String()
+}
+
+// Redact method implementation for CreatePostTranslationRequest
+func (x *CreatePostTranslationRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: PostId
+
+	// Safe field: Data
+	return x.String()
+}
+
+// Redact method implementation for UpdatePostTranslationRequest
+func (x *UpdatePostTranslationRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Id
+
+	// Safe field: Data
+
+	// Safe field: UpdateMask
+
+	// Safe field: AllowMissing
+	return x.String()
+}
+
+// Redact method implementation for PostTranslationIdentifier
+func (x *PostTranslationIdentifier) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: PostId
+
+	// Safe field: LanguageCode
+	return x.String()
+}
+
+// Redact method implementation for DeletePostTranslationRequest
+func (x *DeletePostTranslationRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
 	return x.String()
 }

@@ -286,19 +286,24 @@ func (r *MenuRepo) Delete(ctx context.Context, req *resourceV1.DeleteMenuRequest
 		return resourceV1.ErrorBadRequest("invalid parameter")
 	}
 
-	ids, err := entCrud.QueryAllChildrenIds(ctx, r.entClient, "sys_menus", req.GetId())
+	childrenIds, err := entCrud.QueryAllChildrenIds(ctx, r.entClient, "sys_menus", req.GetId())
 	if err != nil {
 		r.log.Errorf("query child menus failed: %s", err.Error())
 		return resourceV1.ErrorInternalServerError("query child menus failed")
 	}
-	ids = append(ids, req.GetId())
+	childrenIds = append(childrenIds, req.GetId())
 
-	//r.log.Info("menu ids to delete: ", ids)
+	//r.log.Info("menu childrenIds to delete: ", childrenIds)
+
+	var ids []any
+	for _, id := range childrenIds {
+		ids = append(ids, id)
+	}
 
 	builder := r.entClient.Client().Debug().Menu.Delete()
 
 	_, err = r.repository.Delete(ctx, builder, func(s *sql.Selector) {
-		s.Where(sql.In(menu.FieldID, ids))
+		s.Where(sql.In(menu.FieldID, ids...))
 	})
 	if err != nil {
 		r.log.Errorf("delete menu failed: %s", err.Error())

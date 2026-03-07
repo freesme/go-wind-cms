@@ -371,19 +371,24 @@ func (r *OrgUnitRepo) Delete(ctx context.Context, req *identityV1.DeleteOrgUnitR
 		return identityV1.ErrorBadRequest("invalid parameter")
 	}
 
-	ids, err := entCrud.QueryAllChildrenIds(ctx, r.entClient, "sys_org_units", req.GetId())
+	childrenIds, err := entCrud.QueryAllChildrenIds(ctx, r.entClient, "sys_org_units", req.GetId())
 	if err != nil {
 		r.log.Errorf("query child orgUnits failed: %s", err.Error())
 		return identityV1.ErrorInternalServerError("query child orgUnits failed")
 	}
-	ids = append(ids, req.GetId())
+	childrenIds = append(childrenIds, req.GetId())
 
-	//r.log.Info("orgunits ids to delete: ", ids)
+	//r.log.Info("orgunits childrenIds to delete: ", childrenIds)
+
+	var ids []any
+	for _, id := range childrenIds {
+		ids = append(ids, id)
+	}
 
 	builder := r.entClient.Client().Debug().OrgUnit.Delete()
 
 	_, err = r.repository.Delete(ctx, builder, func(s *sql.Selector) {
-		s.Where(sql.In(orgunit.FieldID, ids))
+		s.Where(sql.In(orgunit.FieldID, ids...))
 	})
 	if err != nil {
 		r.log.Errorf("delete orgUnit failed: %s", err.Error())

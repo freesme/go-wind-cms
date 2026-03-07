@@ -87,6 +87,7 @@ type Category struct {
 	SortOrder          *uint32                  `protobuf:"varint,3,opt,name=sort_order,json=sortOrder,proto3,oneof" json:"sort_order,omitempty"`                          // 排序优先级（数值越小越靠前，同级分类间排序）
 	IsNav              *bool                    `protobuf:"varint,4,opt,name=is_nav,json=isNav,proto3,oneof" json:"is_nav,omitempty"`                                      // 是否显示在导航菜单（可选，默认 false）
 	Icon               *string                  `protobuf:"bytes,5,opt,name=icon,proto3,oneof" json:"icon,omitempty"`                                                      // 分类图标（可选，支持图标名称如 'fas fa-folder' 或 SVG URL）
+	Code               *string                  `protobuf:"bytes,6,opt,name=code,proto3,oneof" json:"code,omitempty"`                                                      // 唯一代码（如 slug、编码等，便于唯一标识分类）
 	PostCount          *uint32                  `protobuf:"varint,10,opt,name=post_count,json=postCount,proto3,oneof" json:"post_count,omitempty"`                         // 该分类下的文章总数（含子分类，可选）
 	DirectPostCount    *uint32                  `protobuf:"varint,11,opt,name=direct_post_count,json=directPostCount,proto3,oneof" json:"direct_post_count,omitempty"`     // 该分类下的直接文章数（不含子分类）
 	Translations       []*CategoryTranslation   `protobuf:"bytes,20,rep,name=translations,proto3" json:"translations,omitempty"`
@@ -167,6 +168,13 @@ func (x *Category) GetIsNav() bool {
 func (x *Category) GetIcon() string {
 	if x != nil && x.Icon != nil {
 		return *x.Icon
+	}
+	return ""
+}
+
+func (x *Category) GetCode() string {
+	if x != nil && x.Code != nil {
+		return *x.Code
 	}
 	return ""
 }
@@ -524,7 +532,7 @@ type GetCategoryRequest struct {
 	// Types that are valid to be assigned to QueryBy:
 	//
 	//	*GetCategoryRequest_Id
-	//	*GetCategoryRequest_Slug
+	//	*GetCategoryRequest_Code
 	QueryBy       isGetCategoryRequest_QueryBy `protobuf_oneof:"query_by"`
 	Locale        *string                      `protobuf:"bytes,10,opt,name=locale,proto3,oneof" json:"locale,omitempty"`                      // 语言代码，用于指定返回哪个语言版本的数据
 	ViewMask      *fieldmaskpb.FieldMask       `protobuf:"bytes,100,opt,name=view_mask,json=viewMask,proto3,oneof" json:"view_mask,omitempty"` // 视图字段过滤器，用于控制返回的字段
@@ -578,10 +586,10 @@ func (x *GetCategoryRequest) GetId() uint32 {
 	return 0
 }
 
-func (x *GetCategoryRequest) GetSlug() string {
+func (x *GetCategoryRequest) GetCode() string {
 	if x != nil {
-		if x, ok := x.QueryBy.(*GetCategoryRequest_Slug); ok {
-			return x.Slug
+		if x, ok := x.QueryBy.(*GetCategoryRequest_Code); ok {
+			return x.Code
 		}
 	}
 	return ""
@@ -609,13 +617,13 @@ type GetCategoryRequest_Id struct {
 	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // ID
 }
 
-type GetCategoryRequest_Slug struct {
-	Slug string `protobuf:"bytes,2,opt,name=slug,proto3,oneof"` // Slug
+type GetCategoryRequest_Code struct {
+	Code string `protobuf:"bytes,2,opt,name=code,proto3,oneof"` // 唯一代码（如 slug 或其他唯一标识符，优先级高于 ID）
 }
 
 func (*GetCategoryRequest_Id) isGetCategoryRequest_QueryBy() {}
 
-func (*GetCategoryRequest_Slug) isGetCategoryRequest_QueryBy() {}
+func (*GetCategoryRequest_Code) isGetCategoryRequest_QueryBy() {}
 
 // 请求 - 创建类别
 type CreateCategoryRequest struct {
@@ -733,8 +741,11 @@ func (x *UpdateCategoryRequest) GetAllowMissing() bool {
 
 // 请求 - 删除类别
 type DeleteCategoryRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to QueryBy:
+	//
+	//	*DeleteCategoryRequest_Id
+	QueryBy       isDeleteCategoryRequest_QueryBy `protobuf_oneof:"query_by"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -769,18 +780,37 @@ func (*DeleteCategoryRequest) Descriptor() ([]byte, []int) {
 	return file_content_service_v1_category_proto_rawDescGZIP(), []int{6}
 }
 
+func (x *DeleteCategoryRequest) GetQueryBy() isDeleteCategoryRequest_QueryBy {
+	if x != nil {
+		return x.QueryBy
+	}
+	return nil
+}
+
 func (x *DeleteCategoryRequest) GetId() uint32 {
 	if x != nil {
-		return x.Id
+		if x, ok := x.QueryBy.(*DeleteCategoryRequest_Id); ok {
+			return x.Id
+		}
 	}
 	return 0
 }
+
+type isDeleteCategoryRequest_QueryBy interface {
+	isDeleteCategoryRequest_QueryBy()
+}
+
+type DeleteCategoryRequest_Id struct {
+	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // ID
+}
+
+func (*DeleteCategoryRequest_Id) isDeleteCategoryRequest_QueryBy() {}
 
 var File_content_service_v1_category_proto protoreflect.FileDescriptor
 
 const file_content_service_v1_category_proto_rawDesc = "" +
 	"\n" +
-	"!content/service/v1/category.proto\x12\x12content.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xed\x10\n" +
+	"!content/service/v1/category.proto\x12\x12content.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xd8\x11\n" +
 	"\bCategory\x12#\n" +
 	"\x02id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b类别IDH\x00R\x02id\x88\x01\x01\x12\\\n" +
 	"\x06status\x18\x02 \x01(\x0e2+.content.service.v1.Category.CategoryStatusB\x12\xbaG\x0f\x92\x02\f分类状态H\x01R\x06status\x88\x01\x01\x12l\n" +
@@ -788,30 +818,31 @@ const file_content_service_v1_category_proto_rawDesc = "" +
 	"sort_order\x18\x03 \x01(\rBH\xbaGE\x92\x02B排序优先级（数值越小越靠前，同级分类间排序）H\x02R\tsortOrder\x88\x01\x01\x12=\n" +
 	"\x06is_nav\x18\x04 \x01(\bB!\xbaG\x1e\x92\x02\x1b是否显示在导航菜单H\x03R\x05isNav\x88\x01\x01\x12+\n" +
 	"\x04icon\x18\x05 \x01(\tB\x12\xbaG\x0f\x92\x02\f分类图标H\x04R\x04icon\x88\x01\x01\x12`\n" +
+	"\x04code\x18\x06 \x01(\tBG\xbaGD\x92\x02A唯一代码（如 slug、编码等，便于唯一标识分类）H\x05R\x04code\x88\x01\x01\x12`\n" +
 	"\n" +
 	"post_count\x18\n" +
-	" \x01(\rB<\xbaG9\x92\x026该分类下的文章总数（含子分类，可选）H\x05R\tpostCount\x88\x01\x01\x12j\n" +
-	"\x11direct_post_count\x18\v \x01(\rB9\xbaG6\x92\x023该分类下的直接文章数（不含子分类）H\x06R\x0fdirectPostCount\x88\x01\x01\x12h\n" +
+	" \x01(\rB<\xbaG9\x92\x026该分类下的文章总数（含子分类，可选）H\x06R\tpostCount\x88\x01\x01\x12j\n" +
+	"\x11direct_post_count\x18\v \x01(\rB9\xbaG6\x92\x023该分类下的直接文章数（不含子分类）H\aR\x0fdirectPostCount\x88\x01\x01\x12h\n" +
 	"\ftranslations\x18\x14 \x03(\v2'.content.service.v1.CategoryTranslationB\x1b\xbaG\x18\x92\x02\x15多语言翻译列表R\ftranslations\x12\x9f\x01\n" +
 	"\x13available_languages\x18\x15 \x03(\tBn\xbaGk:\x1d\x12\x1b[\"zh-CN\", \"en-US\", \"ja-JP\"]\x92\x02I可用的语言代码列表（快速查询，避免遍历 translations）R\x12availableLanguages\x12\x8b\x01\n" +
 	"\rcustom_fields\x18\x1e \x03(\v2..content.service.v1.Category.CustomFieldsEntryB6\xbaG3\x92\x020自定义字段，键值对形式，便于扩展R\fcustomFields\x123\n" +
-	"\tparent_id\x18< \x01(\rB\x11\xbaG\x0e\x92\x02\v父节点IDH\aR\bparentId\x88\x01\x01\x12L\n" +
+	"\tparent_id\x18< \x01(\rB\x11\xbaG\x0e\x92\x02\v父节点IDH\bR\bparentId\x88\x01\x01\x12L\n" +
 	"\bchildren\x18= \x03(\v2\x1c.content.service.v1.CategoryB\x12\xbaG\x0f\x92\x02\f子节点树R\bchildren\x12[\n" +
-	"\x05depth\x18> \x01(\x05B@\xbaG=\x92\x02:分类层级深度（0=顶级，1=二级，以此类推）H\bR\x05depth\x88\x01\x01\x12f\n" +
-	"\x04path\x18? \x01(\tBM\xbaGJ\x92\x02G物化路径（Materialized Path），如 '1/5/23'，便于层级查询H\tR\x04path\x88\x01\x01\x12;\n" +
+	"\x05depth\x18> \x01(\x05B@\xbaG=\x92\x02:分类层级深度（0=顶级，1=二级，以此类推）H\tR\x05depth\x88\x01\x01\x12f\n" +
+	"\x04path\x18? \x01(\tBM\xbaGJ\x92\x02G物化路径（Materialized Path），如 '1/5/23'，便于层级查询H\n" +
+	"R\x04path\x88\x01\x01\x12;\n" +
 	"\n" +
-	"created_by\x18d \x01(\rB\x17\xbaG\x14\x92\x02\x11创建者用户IDH\n" +
-	"R\tcreatedBy\x88\x01\x01\x12;\n" +
+	"created_by\x18d \x01(\rB\x17\xbaG\x14\x92\x02\x11创建者用户IDH\vR\tcreatedBy\x88\x01\x01\x12;\n" +
 	"\n" +
-	"updated_by\x18e \x01(\rB\x17\xbaG\x14\x92\x02\x11更新者用户IDH\vR\tupdatedBy\x88\x01\x01\x12;\n" +
+	"updated_by\x18e \x01(\rB\x17\xbaG\x14\x92\x02\x11更新者用户IDH\fR\tupdatedBy\x88\x01\x01\x12;\n" +
 	"\n" +
-	"deleted_by\x18f \x01(\rB\x17\xbaG\x14\x92\x02\x11删除者用户IDH\fR\tdeletedBy\x88\x01\x01\x12S\n" +
+	"deleted_by\x18f \x01(\rB\x17\xbaG\x14\x92\x02\x11删除者用户IDH\rR\tdeletedBy\x88\x01\x01\x12S\n" +
 	"\n" +
-	"created_at\x18\xc8\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f创建时间H\rR\tcreatedAt\x88\x01\x01\x12S\n" +
+	"created_at\x18\xc8\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f创建时间H\x0eR\tcreatedAt\x88\x01\x01\x12S\n" +
 	"\n" +
-	"updated_at\x18\xc9\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f更新时间H\x0eR\tupdatedAt\x88\x01\x01\x12S\n" +
+	"updated_at\x18\xc9\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f更新时间H\x0fR\tupdatedAt\x88\x01\x01\x12S\n" +
 	"\n" +
-	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\x0fR\tdeletedAt\x88\x01\x01\x1a?\n" +
+	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\x10R\tdeletedAt\x88\x01\x01\x1a?\n" +
 	"\x11CustomFieldsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x87\x01\n" +
@@ -824,7 +855,8 @@ const file_content_service_v1_category_proto_rawDesc = "" +
 	"\a_statusB\r\n" +
 	"\v_sort_orderB\t\n" +
 	"\a_is_navB\a\n" +
-	"\x05_iconB\r\n" +
+	"\x05_iconB\a\n" +
+	"\x05_codeB\r\n" +
 	"\v_post_countB\x14\n" +
 	"\x12_direct_post_countB\f\n" +
 	"\n" +
@@ -893,11 +925,11 @@ const file_content_service_v1_category_proto_rawDesc = "" +
 	"\v_deleted_at\"`\n" +
 	"\x14ListCategoryResponse\x122\n" +
 	"\x05items\x18\x01 \x03(\v2\x1c.content.service.v1.CategoryR\x05items\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x04R\x05total\"\xd5\x02\n" +
+	"\x05total\x18\x02 \x01(\x04R\x05total\"\x99\x03\n" +
 	"\x12GetCategoryRequest\x12\x1c\n" +
 	"\x02id\x18\x01 \x01(\rB\n" +
-	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02id\x12\"\n" +
-	"\x04slug\x18\x02 \x01(\tB\f\xbaG\t\x18\x01\x92\x02\x04SlugH\x00R\x04slug\x12_\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02id\x12f\n" +
+	"\x04code\x18\x02 \x01(\tBP\xbaGM\x18\x01\x92\x02H唯一代码（如 slug 或其他唯一标识符，优先级高于 ID）H\x00R\x04code\x12_\n" +
 	"\x06locale\x18\n" +
 	" \x01(\tBB\xbaG?\x92\x02<语言代码，用于指定返回哪个语言版本的数据H\x01R\x06locale\x88\x01\x01\x12w\n" +
 	"\tview_mask\x18d \x01(\v2\x1a.google.protobuf.FieldMaskB9\xbaG6\x92\x023视图字段过滤器，用于控制返回的字段H\x02R\bviewMask\x88\x01\x01B\n" +
@@ -914,9 +946,12 @@ const file_content_service_v1_category_proto_rawDesc = "" +
 	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
 	"updateMask\x12\xb4\x01\n" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
-	"\x0e_allow_missing\"'\n" +
-	"\x15DeleteCategoryRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id2\xa8\x03\n" +
+	"\x0e_allow_missing\"A\n" +
+	"\x15DeleteCategoryRequest\x12\x1c\n" +
+	"\x02id\x18\x01 \x01(\rB\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02idB\n" +
+	"\n" +
+	"\bquery_by2\xa8\x03\n" +
 	"\x0fCategoryService\x12M\n" +
 	"\x04List\x12\x19.pagination.PagingRequest\x1a(.content.service.v1.ListCategoryResponse\"\x00\x12M\n" +
 	"\x03Get\x12&.content.service.v1.GetCategoryRequest\x1a\x1c.content.service.v1.Category\"\x00\x12S\n" +
@@ -996,9 +1031,12 @@ func file_content_service_v1_category_proto_init() {
 	file_content_service_v1_category_proto_msgTypes[1].OneofWrappers = []any{}
 	file_content_service_v1_category_proto_msgTypes[3].OneofWrappers = []any{
 		(*GetCategoryRequest_Id)(nil),
-		(*GetCategoryRequest_Slug)(nil),
+		(*GetCategoryRequest_Code)(nil),
 	}
 	file_content_service_v1_category_proto_msgTypes[5].OneofWrappers = []any{}
+	file_content_service_v1_category_proto_msgTypes[6].OneofWrappers = []any{
+		(*DeleteCategoryRequest_Id)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

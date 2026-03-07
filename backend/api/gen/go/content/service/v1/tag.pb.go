@@ -90,6 +90,7 @@ type Tag struct {
 	Group              *string                `protobuf:"bytes,5,opt,name=group,proto3,oneof" json:"group,omitempty"`                              // 标签分组（可选，如 '技术栈'、'行业'，用于后台分类管理，不影响前台展示）
 	SortOrder          *uint32                `protobuf:"varint,6,opt,name=sort_order,json=sortOrder,proto3,oneof" json:"sort_order,omitempty"`    // 排序优先级（数值越小越靠前，同组内排序）
 	IsFeatured         *bool                  `protobuf:"varint,7,opt,name=is_featured,json=isFeatured,proto3,oneof" json:"is_featured,omitempty"` // 是否推荐（前台可用来突出显示，如标签云中加大字体或特殊标识）
+	Code               *string                `protobuf:"bytes,8,opt,name=code,proto3,oneof" json:"code,omitempty"`                                // 唯一代码（如 slug、编码等，便于唯一标识标签）
 	PostCount          *uint32                `protobuf:"varint,10,opt,name=post_count,json=postCount,proto3,oneof" json:"post_count,omitempty"`   // 使用该标签的文章总数（跨所有语言，仅统计 status=ACTIVE 的文章）
 	Translations       []*TagTranslation      `protobuf:"bytes,20,rep,name=translations,proto3" json:"translations,omitempty"`
 	AvailableLanguages []string               `protobuf:"bytes,21,rep,name=available_languages,json=availableLanguages,proto3" json:"available_languages,omitempty"` // 可用的语言代码列表
@@ -180,6 +181,13 @@ func (x *Tag) GetIsFeatured() bool {
 		return *x.IsFeatured
 	}
 	return false
+}
+
+func (x *Tag) GetCode() string {
+	if x != nil && x.Code != nil {
+		return *x.Code
+	}
+	return ""
 }
 
 func (x *Tag) GetPostCount() uint32 {
@@ -493,7 +501,7 @@ type GetTagRequest struct {
 	// Types that are valid to be assigned to QueryBy:
 	//
 	//	*GetTagRequest_Id
-	//	*GetTagRequest_Slug
+	//	*GetTagRequest_Code
 	QueryBy       isGetTagRequest_QueryBy `protobuf_oneof:"query_by"`
 	Locale        *string                 `protobuf:"bytes,10,opt,name=locale,proto3,oneof" json:"locale,omitempty"`                      // 语言代码，用于指定返回哪个语言版本的数据
 	ViewMask      *fieldmaskpb.FieldMask  `protobuf:"bytes,100,opt,name=view_mask,json=viewMask,proto3,oneof" json:"view_mask,omitempty"` // 视图字段过滤器，用于控制返回的字段
@@ -547,10 +555,10 @@ func (x *GetTagRequest) GetId() uint32 {
 	return 0
 }
 
-func (x *GetTagRequest) GetSlug() string {
+func (x *GetTagRequest) GetCode() string {
 	if x != nil {
-		if x, ok := x.QueryBy.(*GetTagRequest_Slug); ok {
-			return x.Slug
+		if x, ok := x.QueryBy.(*GetTagRequest_Code); ok {
+			return x.Code
 		}
 	}
 	return ""
@@ -578,13 +586,13 @@ type GetTagRequest_Id struct {
 	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // ID
 }
 
-type GetTagRequest_Slug struct {
-	Slug string `protobuf:"bytes,2,opt,name=slug,proto3,oneof"` // Slug
+type GetTagRequest_Code struct {
+	Code string `protobuf:"bytes,2,opt,name=code,proto3,oneof"` // 唯一代码（如 slug 或其他唯一标识符，优先级高于 ID）
 }
 
 func (*GetTagRequest_Id) isGetTagRequest_QueryBy() {}
 
-func (*GetTagRequest_Slug) isGetTagRequest_QueryBy() {}
+func (*GetTagRequest_Code) isGetTagRequest_QueryBy() {}
 
 // 请求 - 创建标签
 type CreateTagRequest struct {
@@ -702,8 +710,11 @@ func (x *UpdateTagRequest) GetAllowMissing() bool {
 
 // 请求 - 删除标签
 type DeleteTagRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to QueryBy:
+	//
+	//	*DeleteTagRequest_Id
+	QueryBy       isDeleteTagRequest_QueryBy `protobuf_oneof:"query_by"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -738,18 +749,37 @@ func (*DeleteTagRequest) Descriptor() ([]byte, []int) {
 	return file_content_service_v1_tag_proto_rawDescGZIP(), []int{6}
 }
 
+func (x *DeleteTagRequest) GetQueryBy() isDeleteTagRequest_QueryBy {
+	if x != nil {
+		return x.QueryBy
+	}
+	return nil
+}
+
 func (x *DeleteTagRequest) GetId() uint32 {
 	if x != nil {
-		return x.Id
+		if x, ok := x.QueryBy.(*DeleteTagRequest_Id); ok {
+			return x.Id
+		}
 	}
 	return 0
 }
+
+type isDeleteTagRequest_QueryBy interface {
+	isDeleteTagRequest_QueryBy()
+}
+
+type DeleteTagRequest_Id struct {
+	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // ID
+}
+
+func (*DeleteTagRequest_Id) isDeleteTagRequest_QueryBy() {}
 
 var File_content_service_v1_tag_proto protoreflect.FileDescriptor
 
 const file_content_service_v1_tag_proto_rawDesc = "" +
 	"\n" +
-	"\x1ccontent/service/v1/tag.proto\x12\x12content.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xed\r\n" +
+	"\x1ccontent/service/v1/tag.proto\x12\x12content.service.v1\x1a$gnostic/openapi/v3/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x1epagination/v1/pagination.proto\"\xd8\x0e\n" +
 	"\x03Tag\x12#\n" +
 	"\x02id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b标签IDH\x00R\x02id\x88\x01\x01\x12R\n" +
 	"\x06status\x18\x02 \x01(\x0e2!.content.service.v1.Tag.TagStatusB\x12\xbaG\x0f\x92\x02\f标签状态H\x01R\x06status\x88\x01\x01\x12l\n" +
@@ -759,25 +789,26 @@ const file_content_service_v1_tag_proto_rawDesc = "" +
 	"\n" +
 	"sort_order\x18\x06 \x01(\rBB\xbaG?\x92\x02<排序优先级（数值越小越靠前，同组内排序）H\x05R\tsortOrder\x88\x01\x01\x128\n" +
 	"\vis_featured\x18\a \x01(\bB\x12\xbaG\x0f\x92\x02\f是否推荐H\x06R\n" +
-	"isFeatured\x88\x01\x01\x12\x81\x01\n" +
+	"isFeatured\x88\x01\x01\x12`\n" +
+	"\x04code\x18\b \x01(\tBG\xbaGD\x92\x02A唯一代码（如 slug、编码等，便于唯一标识标签）H\aR\x04code\x88\x01\x01\x12\x81\x01\n" +
 	"\n" +
 	"post_count\x18\n" +
-	" \x01(\rB]\xbaGZ\x92\x02W使用该标签的文章总数（跨所有语言，仅统计 status=ACTIVE 的文章）H\aR\tpostCount\x88\x01\x01\x12c\n" +
+	" \x01(\rB]\xbaGZ\x92\x02W使用该标签的文章总数（跨所有语言，仅统计 status=ACTIVE 的文章）H\bR\tpostCount\x88\x01\x01\x12c\n" +
 	"\ftranslations\x18\x14 \x03(\v2\".content.service.v1.TagTranslationB\x1b\xbaG\x18\x92\x02\x15多语言翻译列表R\ftranslations\x12\x9f\x01\n" +
 	"\x13available_languages\x18\x15 \x03(\tBn\xbaGk:\x1d\x12\x1b[\"zh-CN\", \"en-US\", \"ja-JP\"]\x92\x02I可用的语言代码列表（快速查询，避免遍历 translations）R\x12availableLanguages\x12;\n" +
 	"\n" +
-	"created_by\x18d \x01(\rB\x17\xbaG\x14\x92\x02\x11创建者用户IDH\bR\tcreatedBy\x88\x01\x01\x12;\n" +
+	"created_by\x18d \x01(\rB\x17\xbaG\x14\x92\x02\x11创建者用户IDH\tR\tcreatedBy\x88\x01\x01\x12;\n" +
 	"\n" +
-	"updated_by\x18e \x01(\rB\x17\xbaG\x14\x92\x02\x11更新者用户IDH\tR\tupdatedBy\x88\x01\x01\x12;\n" +
+	"updated_by\x18e \x01(\rB\x17\xbaG\x14\x92\x02\x11更新者用户IDH\n" +
+	"R\tupdatedBy\x88\x01\x01\x12;\n" +
 	"\n" +
-	"deleted_by\x18f \x01(\rB\x17\xbaG\x14\x92\x02\x11删除者用户IDH\n" +
-	"R\tdeletedBy\x88\x01\x01\x12S\n" +
+	"deleted_by\x18f \x01(\rB\x17\xbaG\x14\x92\x02\x11删除者用户IDH\vR\tdeletedBy\x88\x01\x01\x12S\n" +
 	"\n" +
-	"created_at\x18\xc8\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f创建时间H\vR\tcreatedAt\x88\x01\x01\x12S\n" +
+	"created_at\x18\xc8\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f创建时间H\fR\tcreatedAt\x88\x01\x01\x12S\n" +
 	"\n" +
-	"updated_at\x18\xc9\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f更新时间H\fR\tupdatedAt\x88\x01\x01\x12S\n" +
+	"updated_at\x18\xc9\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f更新时间H\rR\tupdatedAt\x88\x01\x01\x12S\n" +
 	"\n" +
-	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\rR\tdeletedAt\x88\x01\x01\"n\n" +
+	"deleted_at\x18\xca\x01 \x01(\v2\x1a.google.protobuf.TimestampB\x12\xbaG\x0f\x92\x02\f删除时间H\x0eR\tdeletedAt\x88\x01\x01\"n\n" +
 	"\tTagStatus\x12\x1a\n" +
 	"\x16TAG_STATUS_UNSPECIFIED\x10\x00\x12\x15\n" +
 	"\x11TAG_STATUS_ACTIVE\x10\x01\x12\x15\n" +
@@ -789,7 +820,8 @@ const file_content_service_v1_tag_proto_rawDesc = "" +
 	"\x05_iconB\b\n" +
 	"\x06_groupB\r\n" +
 	"\v_sort_orderB\x0e\n" +
-	"\f_is_featuredB\r\n" +
+	"\f_is_featuredB\a\n" +
+	"\x05_codeB\r\n" +
 	"\v_post_countB\r\n" +
 	"\v_created_byB\r\n" +
 	"\v_updated_byB\r\n" +
@@ -851,11 +883,11 @@ const file_content_service_v1_tag_proto_rawDesc = "" +
 	"\v_deleted_at\"V\n" +
 	"\x0fListTagResponse\x12-\n" +
 	"\x05items\x18\x01 \x03(\v2\x17.content.service.v1.TagR\x05items\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x04R\x05total\"\xd0\x02\n" +
+	"\x05total\x18\x02 \x01(\x04R\x05total\"\x94\x03\n" +
 	"\rGetTagRequest\x12\x1c\n" +
 	"\x02id\x18\x01 \x01(\rB\n" +
-	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02id\x12\"\n" +
-	"\x04slug\x18\x02 \x01(\tB\f\xbaG\t\x18\x01\x92\x02\x04SlugH\x00R\x04slug\x12_\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02id\x12f\n" +
+	"\x04code\x18\x02 \x01(\tBP\xbaGM\x18\x01\x92\x02H唯一代码（如 slug 或其他唯一标识符，优先级高于 ID）H\x00R\x04code\x12_\n" +
 	"\x06locale\x18\n" +
 	" \x01(\tBB\xbaG?\x92\x02<语言代码，用于指定返回哪个语言版本的数据H\x01R\x06locale\x88\x01\x01\x12w\n" +
 	"\tview_mask\x18d \x01(\v2\x1a.google.protobuf.FieldMaskB9\xbaG6\x92\x023视图字段过滤器，用于控制返回的字段H\x02R\bviewMask\x88\x01\x01B\n" +
@@ -872,9 +904,12 @@ const file_content_service_v1_tag_proto_rawDesc = "" +
 	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
 	"updateMask\x12\xb4\x01\n" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
-	"\x0e_allow_missing\"\"\n" +
-	"\x10DeleteTagRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id2\xfb\x02\n" +
+	"\x0e_allow_missing\"<\n" +
+	"\x10DeleteTagRequest\x12\x1c\n" +
+	"\x02id\x18\x01 \x01(\rB\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02idB\n" +
+	"\n" +
+	"\bquery_by2\xfb\x02\n" +
 	"\n" +
 	"TagService\x12H\n" +
 	"\x04List\x12\x19.pagination.PagingRequest\x1a#.content.service.v1.ListTagResponse\"\x00\x12C\n" +
@@ -952,9 +987,12 @@ func file_content_service_v1_tag_proto_init() {
 	file_content_service_v1_tag_proto_msgTypes[1].OneofWrappers = []any{}
 	file_content_service_v1_tag_proto_msgTypes[3].OneofWrappers = []any{
 		(*GetTagRequest_Id)(nil),
-		(*GetTagRequest_Slug)(nil),
+		(*GetTagRequest_Code)(nil),
 	}
 	file_content_service_v1_tag_proto_msgTypes[5].OneofWrappers = []any{}
+	file_content_service_v1_tag_proto_msgTypes[6].OneofWrappers = []any{
+		(*DeleteTagRequest_Id)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

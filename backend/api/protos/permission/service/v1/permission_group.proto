@@ -135,7 +135,12 @@ message UpdatePermissionGroupRequest {
 
 // 删除 - 请求
 message DeletePermissionGroupRequest {
-  uint32 id = 1;
+  oneof query_by {
+    uint32 id = 1 [
+      (gnostic.openapi.v3.property) = {description: "ID", read_only: true},
+      json_name = "id"
+    ]; // ID
+  }
 }
 
 message CountPermissionGroupResponse {

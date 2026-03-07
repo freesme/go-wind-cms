@@ -134,7 +134,7 @@ func (r *TagTranslationRepo) BatchCreate(ctx context.Context, tx *ent.Tx, items 
 }
 
 func (r *TagTranslationRepo) CountByBaseSlug(ctx context.Context, baseSlug string) (int64, error) {
-	count, err := r.entClient.Client().TagTranslation.Query().
+	c, err := r.entClient.Client().TagTranslation.Query().
 		Where(
 			tagtranslation.SlugHasPrefix(baseSlug),
 		).
@@ -144,12 +144,12 @@ func (r *TagTranslationRepo) CountByBaseSlug(ctx context.Context, baseSlug strin
 		return 0, contentV1.ErrorInternalServerError("count tag translations by slug failed")
 	}
 
-	return int64(count), nil
+	return int64(c), nil
 }
 
 // TranslationExists checks if a translation exists for the given tag ID and language code.
 func (r *TagTranslationRepo) TranslationExists(ctx context.Context, tagId uint32, languageCode string) (bool, error) {
-	count, err := r.entClient.Client().TagTranslation.Query().
+	c, err := r.entClient.Client().TagTranslation.Query().
 		Where(
 			tagtranslation.TagIDEQ(tagId),
 			tagtranslation.LanguageCodeEQ(languageCode),
@@ -160,7 +160,7 @@ func (r *TagTranslationRepo) TranslationExists(ctx context.Context, tagId uint32
 		return false, contentV1.ErrorInternalServerError("count tag translations by tag id and language code failed")
 	}
 
-	return count > 0, nil
+	return c > 0, nil
 }
 
 // ListAvailedLanguages lists the language codes of all translations available for the given tag ID.

@@ -253,10 +253,6 @@ func (x *GetTaskRequest) Redact() string {
 		return ""
 	}
 
-	// Safe field: Id
-
-	// Safe field: TypeName
-
 	// Safe field: ViewMask
 	return x.String()
 }
@@ -292,8 +288,6 @@ func (x *DeleteTaskRequest) Redact() string {
 	if x == nil {
 		return ""
 	}
-
-	// Safe field: Id
 	return x.String()
 }
 

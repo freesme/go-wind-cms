@@ -226,7 +226,5 @@ func (x *DeleteMediaAssetRequest) Redact() string {
 	if x == nil {
 		return ""
 	}
-
-	// Safe field: Id
 	return x.String()
 }

@@ -148,16 +148,16 @@ func (_c *PostCreate) SetNillableStatus(v *post.Status) *PostCreate {
 	return _c
 }
 
-// SetSlug sets the "slug" field.
-func (_c *PostCreate) SetSlug(v string) *PostCreate {
-	_c.mutation.SetSlug(v)
+// SetCode sets the "code" field.
+func (_c *PostCreate) SetCode(v string) *PostCreate {
+	_c.mutation.SetCode(v)
 	return _c
 }
 
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (_c *PostCreate) SetNillableSlug(v *string) *PostCreate {
+// SetNillableCode sets the "code" field if the given value is not nil.
+func (_c *PostCreate) SetNillableCode(v *string) *PostCreate {
 	if v != nil {
-		_c.SetSlug(*v)
+		_c.SetCode(*v)
 	}
 	return _c
 }
@@ -317,6 +317,20 @@ func (_c *PostCreate) SetCategoryIds(v *[]uint32) *PostCreate {
 // SetTagIds sets the "tag_ids" field.
 func (_c *PostCreate) SetTagIds(v *[]uint32) *PostCreate {
 	_c.mutation.SetTagIds(v)
+	return _c
+}
+
+// SetPublishTime sets the "publish_time" field.
+func (_c *PostCreate) SetPublishTime(v time.Time) *PostCreate {
+	_c.mutation.SetPublishTime(v)
+	return _c
+}
+
+// SetNillablePublishTime sets the "publish_time" field if the given value is not nil.
+func (_c *PostCreate) SetNillablePublishTime(v *time.Time) *PostCreate {
+	if v != nil {
+		_c.SetPublishTime(*v)
+	}
 	return _c
 }
 
@@ -493,9 +507,9 @@ func (_c *PostCreate) createSpec() (*Post, *sqlgraph.CreateSpec) {
 		_spec.SetField(post.FieldStatus, field.TypeEnum, value)
 		_node.Status = &value
 	}
-	if value, ok := _c.mutation.Slug(); ok {
-		_spec.SetField(post.FieldSlug, field.TypeString, value)
-		_node.Slug = &value
+	if value, ok := _c.mutation.Code(); ok {
+		_spec.SetField(post.FieldCode, field.TypeString, value)
+		_node.Code = &value
 	}
 	if value, ok := _c.mutation.DisallowComment(); ok {
 		_spec.SetField(post.FieldDisallowComment, field.TypeBool, value)
@@ -548,6 +562,10 @@ func (_c *PostCreate) createSpec() (*Post, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.TagIds(); ok {
 		_spec.SetField(post.FieldTagIds, field.TypeJSON, value)
 		_node.TagIds = value
+	}
+	if value, ok := _c.mutation.PublishTime(); ok {
+		_spec.SetField(post.FieldPublishTime, field.TypeTime, value)
+		_node.PublishTime = &value
 	}
 	return _node, _spec
 }
@@ -769,21 +787,21 @@ func (u *PostUpsert) ClearStatus() *PostUpsert {
 	return u
 }
 
-// SetSlug sets the "slug" field.
-func (u *PostUpsert) SetSlug(v string) *PostUpsert {
-	u.Set(post.FieldSlug, v)
+// SetCode sets the "code" field.
+func (u *PostUpsert) SetCode(v string) *PostUpsert {
+	u.Set(post.FieldCode, v)
 	return u
 }
 
-// UpdateSlug sets the "slug" field to the value that was provided on create.
-func (u *PostUpsert) UpdateSlug() *PostUpsert {
-	u.SetExcluded(post.FieldSlug)
+// UpdateCode sets the "code" field to the value that was provided on create.
+func (u *PostUpsert) UpdateCode() *PostUpsert {
+	u.SetExcluded(post.FieldCode)
 	return u
 }
 
-// ClearSlug clears the value of the "slug" field.
-func (u *PostUpsert) ClearSlug() *PostUpsert {
-	u.SetNull(post.FieldSlug)
+// ClearCode clears the value of the "code" field.
+func (u *PostUpsert) ClearCode() *PostUpsert {
+	u.SetNull(post.FieldCode)
 	return u
 }
 
@@ -1045,6 +1063,24 @@ func (u *PostUpsert) ClearTagIds() *PostUpsert {
 	return u
 }
 
+// SetPublishTime sets the "publish_time" field.
+func (u *PostUpsert) SetPublishTime(v time.Time) *PostUpsert {
+	u.Set(post.FieldPublishTime, v)
+	return u
+}
+
+// UpdatePublishTime sets the "publish_time" field to the value that was provided on create.
+func (u *PostUpsert) UpdatePublishTime() *PostUpsert {
+	u.SetExcluded(post.FieldPublishTime)
+	return u
+}
+
+// ClearPublishTime clears the value of the "publish_time" field.
+func (u *PostUpsert) ClearPublishTime() *PostUpsert {
+	u.SetNull(post.FieldPublishTime)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -1292,24 +1328,24 @@ func (u *PostUpsertOne) ClearStatus() *PostUpsertOne {
 	})
 }
 
-// SetSlug sets the "slug" field.
-func (u *PostUpsertOne) SetSlug(v string) *PostUpsertOne {
+// SetCode sets the "code" field.
+func (u *PostUpsertOne) SetCode(v string) *PostUpsertOne {
 	return u.Update(func(s *PostUpsert) {
-		s.SetSlug(v)
+		s.SetCode(v)
 	})
 }
 
-// UpdateSlug sets the "slug" field to the value that was provided on create.
-func (u *PostUpsertOne) UpdateSlug() *PostUpsertOne {
+// UpdateCode sets the "code" field to the value that was provided on create.
+func (u *PostUpsertOne) UpdateCode() *PostUpsertOne {
 	return u.Update(func(s *PostUpsert) {
-		s.UpdateSlug()
+		s.UpdateCode()
 	})
 }
 
-// ClearSlug clears the value of the "slug" field.
-func (u *PostUpsertOne) ClearSlug() *PostUpsertOne {
+// ClearCode clears the value of the "code" field.
+func (u *PostUpsertOne) ClearCode() *PostUpsertOne {
 	return u.Update(func(s *PostUpsert) {
-		s.ClearSlug()
+		s.ClearCode()
 	})
 }
 
@@ -1611,6 +1647,27 @@ func (u *PostUpsertOne) UpdateTagIds() *PostUpsertOne {
 func (u *PostUpsertOne) ClearTagIds() *PostUpsertOne {
 	return u.Update(func(s *PostUpsert) {
 		s.ClearTagIds()
+	})
+}
+
+// SetPublishTime sets the "publish_time" field.
+func (u *PostUpsertOne) SetPublishTime(v time.Time) *PostUpsertOne {
+	return u.Update(func(s *PostUpsert) {
+		s.SetPublishTime(v)
+	})
+}
+
+// UpdatePublishTime sets the "publish_time" field to the value that was provided on create.
+func (u *PostUpsertOne) UpdatePublishTime() *PostUpsertOne {
+	return u.Update(func(s *PostUpsert) {
+		s.UpdatePublishTime()
+	})
+}
+
+// ClearPublishTime clears the value of the "publish_time" field.
+func (u *PostUpsertOne) ClearPublishTime() *PostUpsertOne {
+	return u.Update(func(s *PostUpsert) {
+		s.ClearPublishTime()
 	})
 }
 
@@ -2027,24 +2084,24 @@ func (u *PostUpsertBulk) ClearStatus() *PostUpsertBulk {
 	})
 }
 
-// SetSlug sets the "slug" field.
-func (u *PostUpsertBulk) SetSlug(v string) *PostUpsertBulk {
+// SetCode sets the "code" field.
+func (u *PostUpsertBulk) SetCode(v string) *PostUpsertBulk {
 	return u.Update(func(s *PostUpsert) {
-		s.SetSlug(v)
+		s.SetCode(v)
 	})
 }
 
-// UpdateSlug sets the "slug" field to the value that was provided on create.
-func (u *PostUpsertBulk) UpdateSlug() *PostUpsertBulk {
+// UpdateCode sets the "code" field to the value that was provided on create.
+func (u *PostUpsertBulk) UpdateCode() *PostUpsertBulk {
 	return u.Update(func(s *PostUpsert) {
-		s.UpdateSlug()
+		s.UpdateCode()
 	})
 }
 
-// ClearSlug clears the value of the "slug" field.
-func (u *PostUpsertBulk) ClearSlug() *PostUpsertBulk {
+// ClearCode clears the value of the "code" field.
+func (u *PostUpsertBulk) ClearCode() *PostUpsertBulk {
 	return u.Update(func(s *PostUpsert) {
-		s.ClearSlug()
+		s.ClearCode()
 	})
 }
 
@@ -2346,6 +2403,27 @@ func (u *PostUpsertBulk) UpdateTagIds() *PostUpsertBulk {
 func (u *PostUpsertBulk) ClearTagIds() *PostUpsertBulk {
 	return u.Update(func(s *PostUpsert) {
 		s.ClearTagIds()
+	})
+}
+
+// SetPublishTime sets the "publish_time" field.
+func (u *PostUpsertBulk) SetPublishTime(v time.Time) *PostUpsertBulk {
+	return u.Update(func(s *PostUpsert) {
+		s.SetPublishTime(v)
+	})
+}
+
+// UpdatePublishTime sets the "publish_time" field to the value that was provided on create.
+func (u *PostUpsertBulk) UpdatePublishTime() *PostUpsertBulk {
+	return u.Update(func(s *PostUpsert) {
+		s.UpdatePublishTime()
+	})
+}
+
+// ClearPublishTime clears the value of the "publish_time" field.
+func (u *PostUpsertBulk) ClearPublishTime() *PostUpsertBulk {
+	return u.Update(func(s *PostUpsert) {
+		s.ClearPublishTime()
 	})
 }
 

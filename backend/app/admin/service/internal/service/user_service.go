@@ -285,7 +285,7 @@ func (s *UserService) Delete(ctx context.Context, req *identityV1.DeleteUserRequ
 			Id: operator.UserId,
 		},
 	}
-	switch req.DeleteBy.(type) {
+	switch req.QueryBy.(type) {
 	case *identityV1.DeleteUserRequest_Username:
 		getRequest.QueryBy = &identityV1.GetUserRequest_Id{
 			Id: req.GetId(),

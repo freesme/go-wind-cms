@@ -237,33 +237,6 @@ func (_u *CategoryUpdate) ClearStatus() *CategoryUpdate {
 	return _u
 }
 
-// SetDepth sets the "depth" field.
-func (_u *CategoryUpdate) SetDepth(v int32) *CategoryUpdate {
-	_u.mutation.ResetDepth()
-	_u.mutation.SetDepth(v)
-	return _u
-}
-
-// SetNillableDepth sets the "depth" field if the given value is not nil.
-func (_u *CategoryUpdate) SetNillableDepth(v *int32) *CategoryUpdate {
-	if v != nil {
-		_u.SetDepth(*v)
-	}
-	return _u
-}
-
-// AddDepth adds value to the "depth" field.
-func (_u *CategoryUpdate) AddDepth(v int32) *CategoryUpdate {
-	_u.mutation.AddDepth(v)
-	return _u
-}
-
-// ClearDepth clears the value of the "depth" field.
-func (_u *CategoryUpdate) ClearDepth() *CategoryUpdate {
-	_u.mutation.ClearDepth()
-	return _u
-}
-
 // SetIsNav sets the "is_nav" field.
 func (_u *CategoryUpdate) SetIsNav(v bool) *CategoryUpdate {
 	_u.mutation.SetIsNav(v)
@@ -301,6 +274,26 @@ func (_u *CategoryUpdate) SetNillableIcon(v *string) *CategoryUpdate {
 // ClearIcon clears the value of the "icon" field.
 func (_u *CategoryUpdate) ClearIcon() *CategoryUpdate {
 	_u.mutation.ClearIcon()
+	return _u
+}
+
+// SetCode sets the "code" field.
+func (_u *CategoryUpdate) SetCode(v string) *CategoryUpdate {
+	_u.mutation.SetCode(v)
+	return _u
+}
+
+// SetNillableCode sets the "code" field if the given value is not nil.
+func (_u *CategoryUpdate) SetNillableCode(v *string) *CategoryUpdate {
+	if v != nil {
+		_u.SetCode(*v)
+	}
+	return _u
+}
+
+// ClearCode clears the value of the "code" field.
+func (_u *CategoryUpdate) ClearCode() *CategoryUpdate {
+	_u.mutation.ClearCode()
 	return _u
 }
 
@@ -355,6 +348,33 @@ func (_u *CategoryUpdate) AddDirectPostCount(v int32) *CategoryUpdate {
 // ClearDirectPostCount clears the value of the "direct_post_count" field.
 func (_u *CategoryUpdate) ClearDirectPostCount() *CategoryUpdate {
 	_u.mutation.ClearDirectPostCount()
+	return _u
+}
+
+// SetDepth sets the "depth" field.
+func (_u *CategoryUpdate) SetDepth(v int32) *CategoryUpdate {
+	_u.mutation.ResetDepth()
+	_u.mutation.SetDepth(v)
+	return _u
+}
+
+// SetNillableDepth sets the "depth" field if the given value is not nil.
+func (_u *CategoryUpdate) SetNillableDepth(v *int32) *CategoryUpdate {
+	if v != nil {
+		_u.SetDepth(*v)
+	}
+	return _u
+}
+
+// AddDepth adds value to the "depth" field.
+func (_u *CategoryUpdate) AddDepth(v int32) *CategoryUpdate {
+	_u.mutation.AddDepth(v)
+	return _u
+}
+
+// ClearDepth clears the value of the "depth" field.
+func (_u *CategoryUpdate) ClearDepth() *CategoryUpdate {
+	_u.mutation.ClearDepth()
 	return _u
 }
 
@@ -545,15 +565,6 @@ func (_u *CategoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(category.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.Depth(); ok {
-		_spec.SetField(category.FieldDepth, field.TypeInt32, value)
-	}
-	if value, ok := _u.mutation.AddedDepth(); ok {
-		_spec.AddField(category.FieldDepth, field.TypeInt32, value)
-	}
-	if _u.mutation.DepthCleared() {
-		_spec.ClearField(category.FieldDepth, field.TypeInt32)
-	}
 	if value, ok := _u.mutation.IsNav(); ok {
 		_spec.SetField(category.FieldIsNav, field.TypeBool, value)
 	}
@@ -565,6 +576,12 @@ func (_u *CategoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.IconCleared() {
 		_spec.ClearField(category.FieldIcon, field.TypeString)
+	}
+	if value, ok := _u.mutation.Code(); ok {
+		_spec.SetField(category.FieldCode, field.TypeString, value)
+	}
+	if _u.mutation.CodeCleared() {
+		_spec.ClearField(category.FieldCode, field.TypeString)
 	}
 	if value, ok := _u.mutation.PostCount(); ok {
 		_spec.SetField(category.FieldPostCount, field.TypeUint32, value)
@@ -583,6 +600,15 @@ func (_u *CategoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.DirectPostCountCleared() {
 		_spec.ClearField(category.FieldDirectPostCount, field.TypeUint32)
+	}
+	if value, ok := _u.mutation.Depth(); ok {
+		_spec.SetField(category.FieldDepth, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.AddedDepth(); ok {
+		_spec.AddField(category.FieldDepth, field.TypeInt32, value)
+	}
+	if _u.mutation.DepthCleared() {
+		_spec.ClearField(category.FieldDepth, field.TypeInt32)
 	}
 	if value, ok := _u.mutation.CustomFields(); ok {
 		_spec.SetField(category.FieldCustomFields, field.TypeJSON, value)
@@ -894,33 +920,6 @@ func (_u *CategoryUpdateOne) ClearStatus() *CategoryUpdateOne {
 	return _u
 }
 
-// SetDepth sets the "depth" field.
-func (_u *CategoryUpdateOne) SetDepth(v int32) *CategoryUpdateOne {
-	_u.mutation.ResetDepth()
-	_u.mutation.SetDepth(v)
-	return _u
-}
-
-// SetNillableDepth sets the "depth" field if the given value is not nil.
-func (_u *CategoryUpdateOne) SetNillableDepth(v *int32) *CategoryUpdateOne {
-	if v != nil {
-		_u.SetDepth(*v)
-	}
-	return _u
-}
-
-// AddDepth adds value to the "depth" field.
-func (_u *CategoryUpdateOne) AddDepth(v int32) *CategoryUpdateOne {
-	_u.mutation.AddDepth(v)
-	return _u
-}
-
-// ClearDepth clears the value of the "depth" field.
-func (_u *CategoryUpdateOne) ClearDepth() *CategoryUpdateOne {
-	_u.mutation.ClearDepth()
-	return _u
-}
-
 // SetIsNav sets the "is_nav" field.
 func (_u *CategoryUpdateOne) SetIsNav(v bool) *CategoryUpdateOne {
 	_u.mutation.SetIsNav(v)
@@ -958,6 +957,26 @@ func (_u *CategoryUpdateOne) SetNillableIcon(v *string) *CategoryUpdateOne {
 // ClearIcon clears the value of the "icon" field.
 func (_u *CategoryUpdateOne) ClearIcon() *CategoryUpdateOne {
 	_u.mutation.ClearIcon()
+	return _u
+}
+
+// SetCode sets the "code" field.
+func (_u *CategoryUpdateOne) SetCode(v string) *CategoryUpdateOne {
+	_u.mutation.SetCode(v)
+	return _u
+}
+
+// SetNillableCode sets the "code" field if the given value is not nil.
+func (_u *CategoryUpdateOne) SetNillableCode(v *string) *CategoryUpdateOne {
+	if v != nil {
+		_u.SetCode(*v)
+	}
+	return _u
+}
+
+// ClearCode clears the value of the "code" field.
+func (_u *CategoryUpdateOne) ClearCode() *CategoryUpdateOne {
+	_u.mutation.ClearCode()
 	return _u
 }
 
@@ -1012,6 +1031,33 @@ func (_u *CategoryUpdateOne) AddDirectPostCount(v int32) *CategoryUpdateOne {
 // ClearDirectPostCount clears the value of the "direct_post_count" field.
 func (_u *CategoryUpdateOne) ClearDirectPostCount() *CategoryUpdateOne {
 	_u.mutation.ClearDirectPostCount()
+	return _u
+}
+
+// SetDepth sets the "depth" field.
+func (_u *CategoryUpdateOne) SetDepth(v int32) *CategoryUpdateOne {
+	_u.mutation.ResetDepth()
+	_u.mutation.SetDepth(v)
+	return _u
+}
+
+// SetNillableDepth sets the "depth" field if the given value is not nil.
+func (_u *CategoryUpdateOne) SetNillableDepth(v *int32) *CategoryUpdateOne {
+	if v != nil {
+		_u.SetDepth(*v)
+	}
+	return _u
+}
+
+// AddDepth adds value to the "depth" field.
+func (_u *CategoryUpdateOne) AddDepth(v int32) *CategoryUpdateOne {
+	_u.mutation.AddDepth(v)
+	return _u
+}
+
+// ClearDepth clears the value of the "depth" field.
+func (_u *CategoryUpdateOne) ClearDepth() *CategoryUpdateOne {
+	_u.mutation.ClearDepth()
 	return _u
 }
 
@@ -1232,15 +1278,6 @@ func (_u *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err 
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(category.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.Depth(); ok {
-		_spec.SetField(category.FieldDepth, field.TypeInt32, value)
-	}
-	if value, ok := _u.mutation.AddedDepth(); ok {
-		_spec.AddField(category.FieldDepth, field.TypeInt32, value)
-	}
-	if _u.mutation.DepthCleared() {
-		_spec.ClearField(category.FieldDepth, field.TypeInt32)
-	}
 	if value, ok := _u.mutation.IsNav(); ok {
 		_spec.SetField(category.FieldIsNav, field.TypeBool, value)
 	}
@@ -1252,6 +1289,12 @@ func (_u *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err 
 	}
 	if _u.mutation.IconCleared() {
 		_spec.ClearField(category.FieldIcon, field.TypeString)
+	}
+	if value, ok := _u.mutation.Code(); ok {
+		_spec.SetField(category.FieldCode, field.TypeString, value)
+	}
+	if _u.mutation.CodeCleared() {
+		_spec.ClearField(category.FieldCode, field.TypeString)
 	}
 	if value, ok := _u.mutation.PostCount(); ok {
 		_spec.SetField(category.FieldPostCount, field.TypeUint32, value)
@@ -1270,6 +1313,15 @@ func (_u *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err 
 	}
 	if _u.mutation.DirectPostCountCleared() {
 		_spec.ClearField(category.FieldDirectPostCount, field.TypeUint32)
+	}
+	if value, ok := _u.mutation.Depth(); ok {
+		_spec.SetField(category.FieldDepth, field.TypeInt32, value)
+	}
+	if value, ok := _u.mutation.AddedDepth(); ok {
+		_spec.AddField(category.FieldDepth, field.TypeInt32, value)
+	}
+	if _u.mutation.DepthCleared() {
+		_spec.ClearField(category.FieldDepth, field.TypeInt32)
 	}
 	if value, ok := _u.mutation.CustomFields(); ok {
 		_spec.SetField(category.FieldCustomFields, field.TypeJSON, value)

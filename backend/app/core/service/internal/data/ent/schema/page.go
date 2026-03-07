@@ -57,7 +57,7 @@ func (Page) Fields() []ent.Field {
 			Nillable(),
 
 		field.String("slug").
-			Comment("页面别名").
+			Comment("页面唯一标识").
 			Optional().
 			Nillable(),
 

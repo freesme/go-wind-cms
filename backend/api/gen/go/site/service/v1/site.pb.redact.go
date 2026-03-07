@@ -200,7 +200,5 @@ func (x *DeleteSiteRequest) Redact() string {
 	if x == nil {
 		return ""
 	}
-
-	// Safe field: Id
 	return x.String()
 }

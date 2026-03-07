@@ -62,6 +62,12 @@ message Category {
     (gnostic.openapi.v3.property) = {description: "分类图标"}
   ]; // 分类图标（可选，支持图标名称如 'fas fa-folder' 或 SVG URL）
 
+  optional string code = 6 [
+    json_name = "code",
+    (gnostic.openapi.v3.property) = {description: "唯一代码（如 slug、编码等，便于唯一标识分类）"}
+  ]; // 唯一代码（如 slug、编码等，便于唯一标识分类）
+
+
   optional uint32 post_count = 10 [
     json_name = "postCount",
     (gnostic.openapi.v3.property) = {description: "该分类下的文章总数（含子分类，可选）"}
@@ -92,13 +98,18 @@ message Category {
   ]; // 自定义字段，键值对形式，便于扩展
 
 
-  optional uint32 parent_id = 60 [json_name = "parentId", (gnostic.openapi.v3.property) = {description: "父节点ID"}];  // 父节点ID
-  repeated Category children = 61 [json_name = "children", (gnostic.openapi.v3.property) = {description: "子节点树"}];  // 子节点树
+  optional uint32 parent_id = 60 [
+    json_name = "parentId",
+    (gnostic.openapi.v3.property) = {description: "父节点ID"}
+  ];  // 父节点ID
+  repeated Category children = 61 [
+    json_name = "children",
+    (gnostic.openapi.v3.property) = {description: "子节点树"}
+  ];  // 子节点树
   optional int32 depth = 62 [
     json_name = "depth",
     (gnostic.openapi.v3.property) = {description: "分类层级深度（0=顶级，1=二级，以此类推）"}
   ]; // 分类层级深度（0=顶级，1=二级，以此类推）
-
   optional string path = 63 [
     json_name = "path",
     (gnostic.openapi.v3.property) = {description: "物化路径（Materialized Path），如 '1/5/23'，便于层级查询"}
@@ -207,10 +218,10 @@ message GetCategoryRequest {
       json_name = "id"
     ]; // ID
 
-    string slug = 2 [
-      (gnostic.openapi.v3.property) = {description: "Slug", read_only: true},
-      json_name = "slug"
-    ]; // Slug
+    string code = 2 [
+      (gnostic.openapi.v3.property) = {description: "唯一代码（如 slug 或其他唯一标识符，优先级高于 ID）", read_only: true},
+      json_name = "code"
+    ]; // 唯一代码（如 slug 或其他唯一标识符，优先级高于 ID）
   }
 
   optional string locale = 10 [
@@ -253,5 +264,10 @@ message UpdateCategoryRequest {
 
 // 请求 - 删除类别
 message DeleteCategoryRequest {
-  uint32 id = 1;
+  oneof query_by {
+    uint32 id = 1 [
+      (gnostic.openapi.v3.property) = {description: "ID", read_only: true},
+      json_name = "id"
+    ]; // ID
+  }
 }

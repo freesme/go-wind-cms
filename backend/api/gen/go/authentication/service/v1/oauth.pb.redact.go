@@ -315,12 +315,6 @@ func (x *ConfirmLinkOAuthRequest) Redact() string {
 
 	// Safe field: ProviderCustom
 
-	// Safe field: OauthToken
-
-	// Safe field: Code
-
-	// Safe field: AuthorizationResponse
-
 	// Safe field: State
 
 	// Safe field: DisplayName

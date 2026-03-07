@@ -104,8 +104,8 @@ func (m *Post) validate(all bool) error {
 		// no validation rules for EditorType
 	}
 
-	if m.Slug != nil {
-		// no validation rules for Slug
+	if m.Code != nil {
+		// no validation rules for Code
 	}
 
 	if m.DisallowComment != nil {
@@ -644,109 +644,6 @@ var _ interface {
 	ErrorName() string
 } = PostTranslationValidationError{}
 
-// Validate checks the field values on PostCategory with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *PostCategory) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on PostCategory with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in PostCategoryMultiError, or
-// nil if none found.
-func (m *PostCategory) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *PostCategory) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for PostId
-
-	// no validation rules for CategoryId
-
-	if len(errors) > 0 {
-		return PostCategoryMultiError(errors)
-	}
-
-	return nil
-}
-
-// PostCategoryMultiError is an error wrapping multiple validation errors
-// returned by PostCategory.ValidateAll() if the designated constraints aren't met.
-type PostCategoryMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m PostCategoryMultiError) Error() string {
-	msgs := make([]string, 0, len(m))
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m PostCategoryMultiError) AllErrors() []error { return m }
-
-// PostCategoryValidationError is the validation error returned by
-// PostCategory.Validate if the designated constraints aren't met.
-type PostCategoryValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e PostCategoryValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e PostCategoryValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e PostCategoryValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e PostCategoryValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e PostCategoryValidationError) ErrorName() string { return "PostCategoryValidationError" }
-
-// Error satisfies the builtin error interface
-func (e PostCategoryValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sPostCategory.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = PostCategoryValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = PostCategoryValidationError{}
-
 // Validate checks the field values on ListPostResponse with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -918,7 +815,7 @@ func (m *GetPostRequest) validate(all bool) error {
 			errors = append(errors, err)
 		}
 		// no validation rules for Id
-	case *GetPostRequest_Slug:
+	case *GetPostRequest_Code:
 		if v == nil {
 			err := GetPostRequestValidationError{
 				field:  "QueryBy",
@@ -929,7 +826,7 @@ func (m *GetPostRequest) validate(all bool) error {
 			}
 			errors = append(errors, err)
 		}
-		// no validation rules for Slug
+		// no validation rules for Code
 	default:
 		_ = v // ensures v is used
 	}
@@ -1368,7 +1265,22 @@ func (m *DeletePostRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	switch v := m.QueryBy.(type) {
+	case *DeletePostRequest_Id:
+		if v == nil {
+			err := DeletePostRequestValidationError{
+				field:  "QueryBy",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		// no validation rules for Id
+	default:
+		_ = v // ensures v is used
+	}
 
 	if len(errors) > 0 {
 		return DeletePostRequestMultiError(errors)
@@ -1661,3 +1573,571 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = PostTranslationExistsResponseValidationError{}
+
+// Validate checks the field values on CreatePostTranslationRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CreatePostTranslationRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreatePostTranslationRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CreatePostTranslationRequestMultiError, or nil if none found.
+func (m *CreatePostTranslationRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreatePostTranslationRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for PostId
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreatePostTranslationRequestValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreatePostTranslationRequestValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreatePostTranslationRequestValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return CreatePostTranslationRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreatePostTranslationRequestMultiError is an error wrapping multiple
+// validation errors returned by CreatePostTranslationRequest.ValidateAll() if
+// the designated constraints aren't met.
+type CreatePostTranslationRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreatePostTranslationRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreatePostTranslationRequestMultiError) AllErrors() []error { return m }
+
+// CreatePostTranslationRequestValidationError is the validation error returned
+// by CreatePostTranslationRequest.Validate if the designated constraints
+// aren't met.
+type CreatePostTranslationRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreatePostTranslationRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreatePostTranslationRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreatePostTranslationRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreatePostTranslationRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreatePostTranslationRequestValidationError) ErrorName() string {
+	return "CreatePostTranslationRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreatePostTranslationRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreatePostTranslationRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreatePostTranslationRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreatePostTranslationRequestValidationError{}
+
+// Validate checks the field values on UpdatePostTranslationRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *UpdatePostTranslationRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UpdatePostTranslationRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// UpdatePostTranslationRequestMultiError, or nil if none found.
+func (m *UpdatePostTranslationRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdatePostTranslationRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdatePostTranslationRequestValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdatePostTranslationRequestValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdatePostTranslationRequestValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdateMask()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdatePostTranslationRequestValidationError{
+					field:  "UpdateMask",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdatePostTranslationRequestValidationError{
+					field:  "UpdateMask",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdateMask()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdatePostTranslationRequestValidationError{
+				field:  "UpdateMask",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.AllowMissing != nil {
+		// no validation rules for AllowMissing
+	}
+
+	if len(errors) > 0 {
+		return UpdatePostTranslationRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// UpdatePostTranslationRequestMultiError is an error wrapping multiple
+// validation errors returned by UpdatePostTranslationRequest.ValidateAll() if
+// the designated constraints aren't met.
+type UpdatePostTranslationRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdatePostTranslationRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdatePostTranslationRequestMultiError) AllErrors() []error { return m }
+
+// UpdatePostTranslationRequestValidationError is the validation error returned
+// by UpdatePostTranslationRequest.Validate if the designated constraints
+// aren't met.
+type UpdatePostTranslationRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdatePostTranslationRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdatePostTranslationRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdatePostTranslationRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdatePostTranslationRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdatePostTranslationRequestValidationError) ErrorName() string {
+	return "UpdatePostTranslationRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdatePostTranslationRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdatePostTranslationRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdatePostTranslationRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdatePostTranslationRequestValidationError{}
+
+// Validate checks the field values on PostTranslationIdentifier with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *PostTranslationIdentifier) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PostTranslationIdentifier with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// PostTranslationIdentifierMultiError, or nil if none found.
+func (m *PostTranslationIdentifier) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PostTranslationIdentifier) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for PostId
+
+	// no validation rules for LanguageCode
+
+	if len(errors) > 0 {
+		return PostTranslationIdentifierMultiError(errors)
+	}
+
+	return nil
+}
+
+// PostTranslationIdentifierMultiError is an error wrapping multiple validation
+// errors returned by PostTranslationIdentifier.ValidateAll() if the
+// designated constraints aren't met.
+type PostTranslationIdentifierMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PostTranslationIdentifierMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PostTranslationIdentifierMultiError) AllErrors() []error { return m }
+
+// PostTranslationIdentifierValidationError is the validation error returned by
+// PostTranslationIdentifier.Validate if the designated constraints aren't met.
+type PostTranslationIdentifierValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PostTranslationIdentifierValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PostTranslationIdentifierValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PostTranslationIdentifierValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PostTranslationIdentifierValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PostTranslationIdentifierValidationError) ErrorName() string {
+	return "PostTranslationIdentifierValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e PostTranslationIdentifierValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPostTranslationIdentifier.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PostTranslationIdentifierValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PostTranslationIdentifierValidationError{}
+
+// Validate checks the field values on DeletePostTranslationRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *DeletePostTranslationRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DeletePostTranslationRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// DeletePostTranslationRequestMultiError, or nil if none found.
+func (m *DeletePostTranslationRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DeletePostTranslationRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	switch v := m.QueryBy.(type) {
+	case *DeletePostTranslationRequest_Id:
+		if v == nil {
+			err := DeletePostTranslationRequestValidationError{
+				field:  "QueryBy",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		// no validation rules for Id
+	case *DeletePostTranslationRequest_Identifier:
+		if v == nil {
+			err := DeletePostTranslationRequestValidationError{
+				field:  "QueryBy",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if all {
+			switch v := interface{}(m.GetIdentifier()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, DeletePostTranslationRequestValidationError{
+						field:  "Identifier",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, DeletePostTranslationRequestValidationError{
+						field:  "Identifier",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetIdentifier()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return DeletePostTranslationRequestValidationError{
+					field:  "Identifier",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		_ = v // ensures v is used
+	}
+
+	if len(errors) > 0 {
+		return DeletePostTranslationRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// DeletePostTranslationRequestMultiError is an error wrapping multiple
+// validation errors returned by DeletePostTranslationRequest.ValidateAll() if
+// the designated constraints aren't met.
+type DeletePostTranslationRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeletePostTranslationRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeletePostTranslationRequestMultiError) AllErrors() []error { return m }
+
+// DeletePostTranslationRequestValidationError is the validation error returned
+// by DeletePostTranslationRequest.Validate if the designated constraints
+// aren't met.
+type DeletePostTranslationRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeletePostTranslationRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeletePostTranslationRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeletePostTranslationRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeletePostTranslationRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeletePostTranslationRequestValidationError) ErrorName() string {
+	return "DeletePostTranslationRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DeletePostTranslationRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeletePostTranslationRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeletePostTranslationRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeletePostTranslationRequestValidationError{}

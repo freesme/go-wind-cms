@@ -657,8 +657,11 @@ func (x *UpdateMediaAssetRequest) GetAllowMissing() bool {
 
 // 请求 - 删除媒体资源库
 type DeleteMediaAssetRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to QueryBy:
+	//
+	//	*DeleteMediaAssetRequest_Id
+	QueryBy       isDeleteMediaAssetRequest_QueryBy `protobuf_oneof:"query_by"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -693,12 +696,31 @@ func (*DeleteMediaAssetRequest) Descriptor() ([]byte, []int) {
 	return file_media_service_v1_media_asset_proto_rawDescGZIP(), []int{6}
 }
 
+func (x *DeleteMediaAssetRequest) GetQueryBy() isDeleteMediaAssetRequest_QueryBy {
+	if x != nil {
+		return x.QueryBy
+	}
+	return nil
+}
+
 func (x *DeleteMediaAssetRequest) GetId() uint32 {
 	if x != nil {
-		return x.Id
+		if x, ok := x.QueryBy.(*DeleteMediaAssetRequest_Id); ok {
+			return x.Id
+		}
 	}
 	return 0
 }
+
+type isDeleteMediaAssetRequest_QueryBy interface {
+	isDeleteMediaAssetRequest_QueryBy()
+}
+
+type DeleteMediaAssetRequest_Id struct {
+	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // ID
+}
+
+func (*DeleteMediaAssetRequest_Id) isDeleteMediaAssetRequest_QueryBy() {}
 
 var File_media_service_v1_media_asset_proto protoreflect.FileDescriptor
 
@@ -808,9 +830,12 @@ const file_media_service_v1_media_asset_proto_rawDesc = "" +
 	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
 	"updateMask\x12\xb4\x01\n" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
-	"\x0e_allow_missing\")\n" +
-	"\x17DeleteMediaAssetRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id2\xaa\x03\n" +
+	"\x0e_allow_missing\"C\n" +
+	"\x17DeleteMediaAssetRequest\x12\x1c\n" +
+	"\x02id\x18\x01 \x01(\rB\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02idB\n" +
+	"\n" +
+	"\bquery_by2\xaa\x03\n" +
 	"\x11MediaAssetService\x12M\n" +
 	"\x04List\x12\x19.pagination.PagingRequest\x1a(.media.service.v1.ListMediaAssetResponse\"\x00\x12M\n" +
 	"\x03Get\x12&.media.service.v1.GetMediaAssetRequest\x1a\x1c.media.service.v1.MediaAsset\"\x00\x12S\n" +
@@ -886,6 +911,9 @@ func file_media_service_v1_media_asset_proto_init() {
 	file_media_service_v1_media_asset_proto_msgTypes[0].OneofWrappers = []any{}
 	file_media_service_v1_media_asset_proto_msgTypes[3].OneofWrappers = []any{}
 	file_media_service_v1_media_asset_proto_msgTypes[5].OneofWrappers = []any{}
+	file_media_service_v1_media_asset_proto_msgTypes[6].OneofWrappers = []any{
+		(*DeleteMediaAssetRequest_Id)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

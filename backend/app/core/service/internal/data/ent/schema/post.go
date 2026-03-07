@@ -44,8 +44,8 @@ func (Post) Fields() []ent.Field {
 			Optional().
 			Nillable(),
 
-		field.String("slug").
-			Comment("链接别名").
+		field.String("code").
+			Comment("唯一编码").
 			Optional().
 			Nillable(),
 
@@ -118,6 +118,11 @@ func (Post) Fields() []ent.Field {
 		field.JSON("tag_ids", &[]uint32{}).
 			Comment("关联的标签ID列表").
 			Optional(),
+
+		field.Time("publish_time").
+			Comment("发布时间").
+			Optional().
+			Nillable(),
 	}
 }
 
@@ -139,7 +144,7 @@ func (Post) Indexes() []ent.Index {
 		// 单字段索引，用于按编辑器类型查询
 		index.Fields("editor_type"),
 		// 单字段索引，用于按链接别名查询
-		index.Fields("slug"),
+		index.Fields("code"),
 		// 单字段索引，用于按作者ID查询其所有帖子
 		index.Fields("author_id"),
 		// 单字段索引，用于按是否推荐过滤

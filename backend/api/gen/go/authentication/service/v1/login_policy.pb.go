@@ -529,8 +529,11 @@ func (x *UpdateLoginPolicyRequest) GetAllowMissing() bool {
 
 // 删除登录策略 - 请求
 type DeleteLoginPolicyRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to QueryBy:
+	//
+	//	*DeleteLoginPolicyRequest_Id
+	QueryBy       isDeleteLoginPolicyRequest_QueryBy `protobuf_oneof:"query_by"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -565,12 +568,31 @@ func (*DeleteLoginPolicyRequest) Descriptor() ([]byte, []int) {
 	return file_authentication_service_v1_login_policy_proto_rawDescGZIP(), []int{5}
 }
 
+func (x *DeleteLoginPolicyRequest) GetQueryBy() isDeleteLoginPolicyRequest_QueryBy {
+	if x != nil {
+		return x.QueryBy
+	}
+	return nil
+}
+
 func (x *DeleteLoginPolicyRequest) GetId() uint32 {
 	if x != nil {
-		return x.Id
+		if x, ok := x.QueryBy.(*DeleteLoginPolicyRequest_Id); ok {
+			return x.Id
+		}
 	}
 	return 0
 }
+
+type isDeleteLoginPolicyRequest_QueryBy interface {
+	isDeleteLoginPolicyRequest_QueryBy()
+}
+
+type DeleteLoginPolicyRequest_Id struct {
+	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // ID
+}
+
+func (*DeleteLoginPolicyRequest_Id) isDeleteLoginPolicyRequest_QueryBy() {}
 
 type CountLoginPolicyResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -693,9 +715,12 @@ const file_authentication_service_v1_login_policy_proto_rawDesc = "" +
 	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
 	"updateMask\x12\xb4\x01\n" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
-	"\x0e_allow_missing\"*\n" +
-	"\x18DeleteLoginPolicyRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"0\n" +
+	"\x0e_allow_missing\"D\n" +
+	"\x18DeleteLoginPolicyRequest\x12\x1c\n" +
+	"\x02id\x18\x01 \x01(\rB\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02idB\n" +
+	"\n" +
+	"\bquery_by\"0\n" +
 	"\x18CountLoginPolicyResponse\x12\x14\n" +
 	"\x05count\x18\x01 \x01(\x04R\x05count2\xb6\x04\n" +
 	"\x12LoginPolicyService\x12W\n" +
@@ -776,6 +801,9 @@ func file_authentication_service_v1_login_policy_proto_init() {
 		(*GetLoginPolicyRequest_Id)(nil),
 	}
 	file_authentication_service_v1_login_policy_proto_msgTypes[4].OneofWrappers = []any{}
+	file_authentication_service_v1_login_policy_proto_msgTypes[5].OneofWrappers = []any{
+		(*DeleteLoginPolicyRequest_Id)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

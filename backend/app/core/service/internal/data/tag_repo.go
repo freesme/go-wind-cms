@@ -149,7 +149,20 @@ func (r *TagRepo) Get(ctx context.Context, req *contentV1.GetTagRequest) (*conte
 		return nil, contentV1.ErrorBadRequest("invalid parameter")
 	}
 
-	entity, err := r.entClient.Client().Tag.Get(ctx, req.GetId())
+	builder := r.entClient.Client().Tag.Query()
+
+	switch req.QueryBy.(type) {
+	case *contentV1.GetTagRequest_Id:
+		builder.Where(tag.IDEQ(req.GetId()))
+
+	case *contentV1.GetTagRequest_Code:
+		builder.Where(tag.CodeEQ(req.GetCode()))
+
+	default:
+		return nil, contentV1.ErrorBadRequest("invalid query field")
+	}
+
+	entity, err := builder.Only(ctx)
 	if err != nil {
 		if ent.IsNotFound(err) {
 			return nil, contentV1.ErrorFileNotFound("tag not found")
@@ -208,6 +221,7 @@ func (r *TagRepo) Create(ctx context.Context, req *contentV1.CreateTagRequest) (
 		SetNillableColor(req.Data.Color).
 		SetNillableIcon(req.Data.Icon).
 		SetNillableGroup(req.Data.Group).
+		SetNillableCode(req.Data.Code).
 		SetNillableSortOrder(req.Data.SortOrder).
 		SetNillableIsFeatured(req.Data.IsFeatured).
 		SetNillablePostCount(req.Data.PostCount).
@@ -327,6 +341,7 @@ func (r *TagRepo) Update(ctx context.Context, req *contentV1.UpdateTagRequest) (
 				SetNillableColor(req.Data.Color).
 				SetNillableIcon(req.Data.Icon).
 				SetNillableGroup(req.Data.Group).
+				SetNillableCode(req.Data.Code).
 				SetNillableSortOrder(req.Data.SortOrder).
 				SetNillableIsFeatured(req.Data.IsFeatured).
 				SetNillablePostCount(req.Data.PostCount).

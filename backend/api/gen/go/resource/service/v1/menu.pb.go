@@ -861,9 +861,12 @@ func (x *UpdateMenuRequest) GetAllowMissing() bool {
 
 // 删除菜单 - 请求
 type DeleteMenuRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	OperatorId    *uint32                `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3,oneof" json:"operator_id,omitempty"` // 操作用户ID
-	Id            uint32                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	OperatorId *uint32                `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3,oneof" json:"operator_id,omitempty"` // 操作用户ID
+	// Types that are valid to be assigned to QueryBy:
+	//
+	//	*DeleteMenuRequest_Id
+	QueryBy       isDeleteMenuRequest_QueryBy `protobuf_oneof:"query_by"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -905,12 +908,31 @@ func (x *DeleteMenuRequest) GetOperatorId() uint32 {
 	return 0
 }
 
+func (x *DeleteMenuRequest) GetQueryBy() isDeleteMenuRequest_QueryBy {
+	if x != nil {
+		return x.QueryBy
+	}
+	return nil
+}
+
 func (x *DeleteMenuRequest) GetId() uint32 {
 	if x != nil {
-		return x.Id
+		if x, ok := x.QueryBy.(*DeleteMenuRequest_Id); ok {
+			return x.Id
+		}
 	}
 	return 0
 }
+
+type isDeleteMenuRequest_QueryBy interface {
+	isDeleteMenuRequest_QueryBy()
+}
+
+type DeleteMenuRequest_Id struct {
+	Id uint32 `protobuf:"varint,2,opt,name=id,proto3,oneof"` // ID
+}
+
+func (*DeleteMenuRequest_Id) isDeleteMenuRequest_QueryBy() {}
 
 type CountMenuResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1108,11 +1130,14 @@ const file_resource_service_v1_menu_proto_rawDesc = "" +
 	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
 	"updateMask\x12\xb4\x01\n" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
-	"\x0e_allow_missing\"q\n" +
+	"\x0e_allow_missing\"\x8b\x01\n" +
 	"\x11DeleteMenuRequest\x12<\n" +
-	"\voperator_id\x18\x01 \x01(\rB\x16\xbaG\x13\x18\x01\x92\x02\x0e操作用户IDH\x00R\n" +
-	"operatorId\x88\x01\x01\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\rR\x02idB\x0e\n" +
+	"\voperator_id\x18\x01 \x01(\rB\x16\xbaG\x13\x18\x01\x92\x02\x0e操作用户IDH\x01R\n" +
+	"operatorId\x88\x01\x01\x12\x1c\n" +
+	"\x02id\x18\x02 \x01(\rB\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02idB\n" +
+	"\n" +
+	"\bquery_byB\x0e\n" +
 	"\f_operator_id\")\n" +
 	"\x11CountMenuResponse\x12\x14\n" +
 	"\x05count\x18\x01 \x01(\x04R\x05count2\xd4\x03\n" +
@@ -1202,7 +1227,9 @@ func file_resource_service_v1_menu_proto_init() {
 		(*GetMenuRequest_Id)(nil),
 	}
 	file_resource_service_v1_menu_proto_msgTypes[6].OneofWrappers = []any{}
-	file_resource_service_v1_menu_proto_msgTypes[7].OneofWrappers = []any{}
+	file_resource_service_v1_menu_proto_msgTypes[7].OneofWrappers = []any{
+		(*DeleteMenuRequest_Id)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

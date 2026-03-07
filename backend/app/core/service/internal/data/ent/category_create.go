@@ -162,20 +162,6 @@ func (_c *CategoryCreate) SetNillableStatus(v *category.Status) *CategoryCreate 
 	return _c
 }
 
-// SetDepth sets the "depth" field.
-func (_c *CategoryCreate) SetDepth(v int32) *CategoryCreate {
-	_c.mutation.SetDepth(v)
-	return _c
-}
-
-// SetNillableDepth sets the "depth" field if the given value is not nil.
-func (_c *CategoryCreate) SetNillableDepth(v *int32) *CategoryCreate {
-	if v != nil {
-		_c.SetDepth(*v)
-	}
-	return _c
-}
-
 // SetIsNav sets the "is_nav" field.
 func (_c *CategoryCreate) SetIsNav(v bool) *CategoryCreate {
 	_c.mutation.SetIsNav(v)
@@ -204,6 +190,20 @@ func (_c *CategoryCreate) SetNillableIcon(v *string) *CategoryCreate {
 	return _c
 }
 
+// SetCode sets the "code" field.
+func (_c *CategoryCreate) SetCode(v string) *CategoryCreate {
+	_c.mutation.SetCode(v)
+	return _c
+}
+
+// SetNillableCode sets the "code" field if the given value is not nil.
+func (_c *CategoryCreate) SetNillableCode(v *string) *CategoryCreate {
+	if v != nil {
+		_c.SetCode(*v)
+	}
+	return _c
+}
+
 // SetPostCount sets the "post_count" field.
 func (_c *CategoryCreate) SetPostCount(v uint32) *CategoryCreate {
 	_c.mutation.SetPostCount(v)
@@ -228,6 +228,20 @@ func (_c *CategoryCreate) SetDirectPostCount(v uint32) *CategoryCreate {
 func (_c *CategoryCreate) SetNillableDirectPostCount(v *uint32) *CategoryCreate {
 	if v != nil {
 		_c.SetDirectPostCount(*v)
+	}
+	return _c
+}
+
+// SetDepth sets the "depth" field.
+func (_c *CategoryCreate) SetDepth(v int32) *CategoryCreate {
+	_c.mutation.SetDepth(v)
+	return _c
+}
+
+// SetNillableDepth sets the "depth" field if the given value is not nil.
+func (_c *CategoryCreate) SetNillableDepth(v *int32) *CategoryCreate {
+	if v != nil {
+		_c.SetDepth(*v)
 	}
 	return _c
 }
@@ -303,10 +317,6 @@ func (_c *CategoryCreate) defaults() {
 		v := category.DefaultSortOrder
 		_c.mutation.SetSortOrder(v)
 	}
-	if _, ok := _c.mutation.Depth(); !ok {
-		v := category.DefaultDepth
-		_c.mutation.SetDepth(v)
-	}
 	if _, ok := _c.mutation.IsNav(); !ok {
 		v := category.DefaultIsNav
 		_c.mutation.SetIsNav(v)
@@ -318,6 +328,10 @@ func (_c *CategoryCreate) defaults() {
 	if _, ok := _c.mutation.DirectPostCount(); !ok {
 		v := category.DefaultDirectPostCount
 		_c.mutation.SetDirectPostCount(v)
+	}
+	if _, ok := _c.mutation.Depth(); !ok {
+		v := category.DefaultDepth
+		_c.mutation.SetDepth(v)
 	}
 }
 
@@ -407,10 +421,6 @@ func (_c *CategoryCreate) createSpec() (*Category, *sqlgraph.CreateSpec) {
 		_spec.SetField(category.FieldStatus, field.TypeEnum, value)
 		_node.Status = &value
 	}
-	if value, ok := _c.mutation.Depth(); ok {
-		_spec.SetField(category.FieldDepth, field.TypeInt32, value)
-		_node.Depth = &value
-	}
 	if value, ok := _c.mutation.IsNav(); ok {
 		_spec.SetField(category.FieldIsNav, field.TypeBool, value)
 		_node.IsNav = &value
@@ -419,6 +429,10 @@ func (_c *CategoryCreate) createSpec() (*Category, *sqlgraph.CreateSpec) {
 		_spec.SetField(category.FieldIcon, field.TypeString, value)
 		_node.Icon = &value
 	}
+	if value, ok := _c.mutation.Code(); ok {
+		_spec.SetField(category.FieldCode, field.TypeString, value)
+		_node.Code = &value
+	}
 	if value, ok := _c.mutation.PostCount(); ok {
 		_spec.SetField(category.FieldPostCount, field.TypeUint32, value)
 		_node.PostCount = &value
@@ -426,6 +440,10 @@ func (_c *CategoryCreate) createSpec() (*Category, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.DirectPostCount(); ok {
 		_spec.SetField(category.FieldDirectPostCount, field.TypeUint32, value)
 		_node.DirectPostCount = &value
+	}
+	if value, ok := _c.mutation.Depth(); ok {
+		_spec.SetField(category.FieldDepth, field.TypeInt32, value)
+		_node.Depth = &value
 	}
 	if value, ok := _c.mutation.CustomFields(); ok {
 		_spec.SetField(category.FieldCustomFields, field.TypeJSON, value)
@@ -702,30 +720,6 @@ func (u *CategoryUpsert) ClearStatus() *CategoryUpsert {
 	return u
 }
 
-// SetDepth sets the "depth" field.
-func (u *CategoryUpsert) SetDepth(v int32) *CategoryUpsert {
-	u.Set(category.FieldDepth, v)
-	return u
-}
-
-// UpdateDepth sets the "depth" field to the value that was provided on create.
-func (u *CategoryUpsert) UpdateDepth() *CategoryUpsert {
-	u.SetExcluded(category.FieldDepth)
-	return u
-}
-
-// AddDepth adds v to the "depth" field.
-func (u *CategoryUpsert) AddDepth(v int32) *CategoryUpsert {
-	u.Add(category.FieldDepth, v)
-	return u
-}
-
-// ClearDepth clears the value of the "depth" field.
-func (u *CategoryUpsert) ClearDepth() *CategoryUpsert {
-	u.SetNull(category.FieldDepth)
-	return u
-}
-
 // SetIsNav sets the "is_nav" field.
 func (u *CategoryUpsert) SetIsNav(v bool) *CategoryUpsert {
 	u.Set(category.FieldIsNav, v)
@@ -759,6 +753,24 @@ func (u *CategoryUpsert) UpdateIcon() *CategoryUpsert {
 // ClearIcon clears the value of the "icon" field.
 func (u *CategoryUpsert) ClearIcon() *CategoryUpsert {
 	u.SetNull(category.FieldIcon)
+	return u
+}
+
+// SetCode sets the "code" field.
+func (u *CategoryUpsert) SetCode(v string) *CategoryUpsert {
+	u.Set(category.FieldCode, v)
+	return u
+}
+
+// UpdateCode sets the "code" field to the value that was provided on create.
+func (u *CategoryUpsert) UpdateCode() *CategoryUpsert {
+	u.SetExcluded(category.FieldCode)
+	return u
+}
+
+// ClearCode clears the value of the "code" field.
+func (u *CategoryUpsert) ClearCode() *CategoryUpsert {
+	u.SetNull(category.FieldCode)
 	return u
 }
 
@@ -807,6 +819,30 @@ func (u *CategoryUpsert) AddDirectPostCount(v uint32) *CategoryUpsert {
 // ClearDirectPostCount clears the value of the "direct_post_count" field.
 func (u *CategoryUpsert) ClearDirectPostCount() *CategoryUpsert {
 	u.SetNull(category.FieldDirectPostCount)
+	return u
+}
+
+// SetDepth sets the "depth" field.
+func (u *CategoryUpsert) SetDepth(v int32) *CategoryUpsert {
+	u.Set(category.FieldDepth, v)
+	return u
+}
+
+// UpdateDepth sets the "depth" field to the value that was provided on create.
+func (u *CategoryUpsert) UpdateDepth() *CategoryUpsert {
+	u.SetExcluded(category.FieldDepth)
+	return u
+}
+
+// AddDepth adds v to the "depth" field.
+func (u *CategoryUpsert) AddDepth(v int32) *CategoryUpsert {
+	u.Add(category.FieldDepth, v)
+	return u
+}
+
+// ClearDepth clears the value of the "depth" field.
+func (u *CategoryUpsert) ClearDepth() *CategoryUpsert {
+	u.SetNull(category.FieldDepth)
 	return u
 }
 
@@ -1096,34 +1132,6 @@ func (u *CategoryUpsertOne) ClearStatus() *CategoryUpsertOne {
 	})
 }
 
-// SetDepth sets the "depth" field.
-func (u *CategoryUpsertOne) SetDepth(v int32) *CategoryUpsertOne {
-	return u.Update(func(s *CategoryUpsert) {
-		s.SetDepth(v)
-	})
-}
-
-// AddDepth adds v to the "depth" field.
-func (u *CategoryUpsertOne) AddDepth(v int32) *CategoryUpsertOne {
-	return u.Update(func(s *CategoryUpsert) {
-		s.AddDepth(v)
-	})
-}
-
-// UpdateDepth sets the "depth" field to the value that was provided on create.
-func (u *CategoryUpsertOne) UpdateDepth() *CategoryUpsertOne {
-	return u.Update(func(s *CategoryUpsert) {
-		s.UpdateDepth()
-	})
-}
-
-// ClearDepth clears the value of the "depth" field.
-func (u *CategoryUpsertOne) ClearDepth() *CategoryUpsertOne {
-	return u.Update(func(s *CategoryUpsert) {
-		s.ClearDepth()
-	})
-}
-
 // SetIsNav sets the "is_nav" field.
 func (u *CategoryUpsertOne) SetIsNav(v bool) *CategoryUpsertOne {
 	return u.Update(func(s *CategoryUpsert) {
@@ -1163,6 +1171,27 @@ func (u *CategoryUpsertOne) UpdateIcon() *CategoryUpsertOne {
 func (u *CategoryUpsertOne) ClearIcon() *CategoryUpsertOne {
 	return u.Update(func(s *CategoryUpsert) {
 		s.ClearIcon()
+	})
+}
+
+// SetCode sets the "code" field.
+func (u *CategoryUpsertOne) SetCode(v string) *CategoryUpsertOne {
+	return u.Update(func(s *CategoryUpsert) {
+		s.SetCode(v)
+	})
+}
+
+// UpdateCode sets the "code" field to the value that was provided on create.
+func (u *CategoryUpsertOne) UpdateCode() *CategoryUpsertOne {
+	return u.Update(func(s *CategoryUpsert) {
+		s.UpdateCode()
+	})
+}
+
+// ClearCode clears the value of the "code" field.
+func (u *CategoryUpsertOne) ClearCode() *CategoryUpsertOne {
+	return u.Update(func(s *CategoryUpsert) {
+		s.ClearCode()
 	})
 }
 
@@ -1219,6 +1248,34 @@ func (u *CategoryUpsertOne) UpdateDirectPostCount() *CategoryUpsertOne {
 func (u *CategoryUpsertOne) ClearDirectPostCount() *CategoryUpsertOne {
 	return u.Update(func(s *CategoryUpsert) {
 		s.ClearDirectPostCount()
+	})
+}
+
+// SetDepth sets the "depth" field.
+func (u *CategoryUpsertOne) SetDepth(v int32) *CategoryUpsertOne {
+	return u.Update(func(s *CategoryUpsert) {
+		s.SetDepth(v)
+	})
+}
+
+// AddDepth adds v to the "depth" field.
+func (u *CategoryUpsertOne) AddDepth(v int32) *CategoryUpsertOne {
+	return u.Update(func(s *CategoryUpsert) {
+		s.AddDepth(v)
+	})
+}
+
+// UpdateDepth sets the "depth" field to the value that was provided on create.
+func (u *CategoryUpsertOne) UpdateDepth() *CategoryUpsertOne {
+	return u.Update(func(s *CategoryUpsert) {
+		s.UpdateDepth()
+	})
+}
+
+// ClearDepth clears the value of the "depth" field.
+func (u *CategoryUpsertOne) ClearDepth() *CategoryUpsertOne {
+	return u.Update(func(s *CategoryUpsert) {
+		s.ClearDepth()
 	})
 }
 
@@ -1677,34 +1734,6 @@ func (u *CategoryUpsertBulk) ClearStatus() *CategoryUpsertBulk {
 	})
 }
 
-// SetDepth sets the "depth" field.
-func (u *CategoryUpsertBulk) SetDepth(v int32) *CategoryUpsertBulk {
-	return u.Update(func(s *CategoryUpsert) {
-		s.SetDepth(v)
-	})
-}
-
-// AddDepth adds v to the "depth" field.
-func (u *CategoryUpsertBulk) AddDepth(v int32) *CategoryUpsertBulk {
-	return u.Update(func(s *CategoryUpsert) {
-		s.AddDepth(v)
-	})
-}
-
-// UpdateDepth sets the "depth" field to the value that was provided on create.
-func (u *CategoryUpsertBulk) UpdateDepth() *CategoryUpsertBulk {
-	return u.Update(func(s *CategoryUpsert) {
-		s.UpdateDepth()
-	})
-}
-
-// ClearDepth clears the value of the "depth" field.
-func (u *CategoryUpsertBulk) ClearDepth() *CategoryUpsertBulk {
-	return u.Update(func(s *CategoryUpsert) {
-		s.ClearDepth()
-	})
-}
-
 // SetIsNav sets the "is_nav" field.
 func (u *CategoryUpsertBulk) SetIsNav(v bool) *CategoryUpsertBulk {
 	return u.Update(func(s *CategoryUpsert) {
@@ -1744,6 +1773,27 @@ func (u *CategoryUpsertBulk) UpdateIcon() *CategoryUpsertBulk {
 func (u *CategoryUpsertBulk) ClearIcon() *CategoryUpsertBulk {
 	return u.Update(func(s *CategoryUpsert) {
 		s.ClearIcon()
+	})
+}
+
+// SetCode sets the "code" field.
+func (u *CategoryUpsertBulk) SetCode(v string) *CategoryUpsertBulk {
+	return u.Update(func(s *CategoryUpsert) {
+		s.SetCode(v)
+	})
+}
+
+// UpdateCode sets the "code" field to the value that was provided on create.
+func (u *CategoryUpsertBulk) UpdateCode() *CategoryUpsertBulk {
+	return u.Update(func(s *CategoryUpsert) {
+		s.UpdateCode()
+	})
+}
+
+// ClearCode clears the value of the "code" field.
+func (u *CategoryUpsertBulk) ClearCode() *CategoryUpsertBulk {
+	return u.Update(func(s *CategoryUpsert) {
+		s.ClearCode()
 	})
 }
 
@@ -1800,6 +1850,34 @@ func (u *CategoryUpsertBulk) UpdateDirectPostCount() *CategoryUpsertBulk {
 func (u *CategoryUpsertBulk) ClearDirectPostCount() *CategoryUpsertBulk {
 	return u.Update(func(s *CategoryUpsert) {
 		s.ClearDirectPostCount()
+	})
+}
+
+// SetDepth sets the "depth" field.
+func (u *CategoryUpsertBulk) SetDepth(v int32) *CategoryUpsertBulk {
+	return u.Update(func(s *CategoryUpsert) {
+		s.SetDepth(v)
+	})
+}
+
+// AddDepth adds v to the "depth" field.
+func (u *CategoryUpsertBulk) AddDepth(v int32) *CategoryUpsertBulk {
+	return u.Update(func(s *CategoryUpsert) {
+		s.AddDepth(v)
+	})
+}
+
+// UpdateDepth sets the "depth" field to the value that was provided on create.
+func (u *CategoryUpsertBulk) UpdateDepth() *CategoryUpsertBulk {
+	return u.Update(func(s *CategoryUpsert) {
+		s.UpdateDepth()
+	})
+}
+
+// ClearDepth clears the value of the "depth" field.
+func (u *CategoryUpsertBulk) ClearDepth() *CategoryUpsertBulk {
+	return u.Update(func(s *CategoryUpsert) {
+		s.ClearDepth()
 	})
 }
 

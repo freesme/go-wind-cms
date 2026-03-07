@@ -674,8 +674,11 @@ func (x *UpdateCommentRequest) GetAllowMissing() bool {
 
 // 请求 - 删除评论
 type DeleteCommentRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to QueryBy:
+	//
+	//	*DeleteCommentRequest_Id
+	QueryBy       isDeleteCommentRequest_QueryBy `protobuf_oneof:"query_by"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -710,12 +713,31 @@ func (*DeleteCommentRequest) Descriptor() ([]byte, []int) {
 	return file_comment_service_v1_comment_proto_rawDescGZIP(), []int{5}
 }
 
+func (x *DeleteCommentRequest) GetQueryBy() isDeleteCommentRequest_QueryBy {
+	if x != nil {
+		return x.QueryBy
+	}
+	return nil
+}
+
 func (x *DeleteCommentRequest) GetId() uint32 {
 	if x != nil {
-		return x.Id
+		if x, ok := x.QueryBy.(*DeleteCommentRequest_Id); ok {
+			return x.Id
+		}
 	}
 	return 0
 }
+
+type isDeleteCommentRequest_QueryBy interface {
+	isDeleteCommentRequest_QueryBy()
+}
+
+type DeleteCommentRequest_Id struct {
+	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // ID
+}
+
+func (*DeleteCommentRequest_Id) isDeleteCommentRequest_QueryBy() {}
 
 type CountCommentResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -878,9 +900,12 @@ const file_comment_service_v1_comment_proto_rawDesc = "" +
 	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
 	"updateMask\x12\xb4\x01\n" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
-	"\x0e_allow_missing\"&\n" +
-	"\x14DeleteCommentRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\",\n" +
+	"\x0e_allow_missing\"@\n" +
+	"\x14DeleteCommentRequest\x12\x1c\n" +
+	"\x02id\x18\x01 \x01(\rB\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02idB\n" +
+	"\n" +
+	"\bquery_by\",\n" +
 	"\x14CountCommentResponse\x12\x14\n" +
 	"\x05count\x18\x01 \x01(\x04R\x05count2\xef\x03\n" +
 	"\x0eCommentService\x12L\n" +
@@ -962,6 +987,9 @@ func file_comment_service_v1_comment_proto_init() {
 	file_comment_service_v1_comment_proto_msgTypes[0].OneofWrappers = []any{}
 	file_comment_service_v1_comment_proto_msgTypes[2].OneofWrappers = []any{}
 	file_comment_service_v1_comment_proto_msgTypes[4].OneofWrappers = []any{}
+	file_comment_service_v1_comment_proto_msgTypes[5].OneofWrappers = []any{
+		(*DeleteCommentRequest_Id)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

@@ -231,8 +231,6 @@ func (x *DeleteCommentRequest) Redact() string {
 	if x == nil {
 		return ""
 	}
-
-	// Safe field: Id
 	return x.String()
 }
 

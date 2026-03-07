@@ -894,11 +894,11 @@ func (m *DeletePermissionRequest) validate(all bool) error {
 
 	var errors []error
 
-	switch v := m.DeleteBy.(type) {
+	switch v := m.QueryBy.(type) {
 	case *DeletePermissionRequest_Id:
 		if v == nil {
 			err := DeletePermissionRequestValidationError{
-				field:  "DeleteBy",
+				field:  "QueryBy",
 				reason: "oneof value cannot be a typed-nil",
 			}
 			if !all {
@@ -910,7 +910,7 @@ func (m *DeletePermissionRequest) validate(all bool) error {
 	case *DeletePermissionRequest_Code:
 		if v == nil {
 			err := DeletePermissionRequestValidationError{
-				field:  "DeleteBy",
+				field:  "QueryBy",
 				reason: "oneof value cannot be a typed-nil",
 			}
 			if !all {
@@ -922,7 +922,7 @@ func (m *DeletePermissionRequest) validate(all bool) error {
 	case *DeletePermissionRequest_GroupId:
 		if v == nil {
 			err := DeletePermissionRequestValidationError{
-				field:  "DeleteBy",
+				field:  "QueryBy",
 				reason: "oneof value cannot be a typed-nil",
 			}
 			if !all {

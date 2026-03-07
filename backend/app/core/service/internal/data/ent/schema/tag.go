@@ -55,6 +55,11 @@ func (Tag) Fields() []ent.Field {
 			Optional().
 			Nillable(),
 
+		field.String("code").
+			Comment("唯一编码").
+			Optional().
+			Nillable(),
+
 		field.Bool("is_featured").
 			Comment("是否推荐").
 			Default(false).

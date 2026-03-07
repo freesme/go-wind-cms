@@ -66,3 +66,23 @@ func (s *PostService) TranslationExists(ctx context.Context, req *contentV1.Post
 		Exists: exists,
 	}, nil
 }
+
+func (s *PostService) GetTranslation(ctx context.Context, req *contentV1.GetPostRequest) (*contentV1.PostTranslation, error) {
+	return s.postRepo.GetTranslation(ctx, req)
+}
+
+func (s *PostService) CreateTranslation(ctx context.Context, req *contentV1.CreatePostTranslationRequest) (*contentV1.PostTranslation, error) {
+	return s.postRepo.CreateTranslation(ctx, req)
+}
+
+func (s *PostService) UpdateTranslation(ctx context.Context, req *contentV1.UpdatePostTranslationRequest) (*contentV1.PostTranslation, error) {
+	return s.postRepo.UpdateTranslation(ctx, req)
+}
+
+func (s *PostService) DeleteTranslation(ctx context.Context, req *contentV1.DeletePostTranslationRequest) (*emptypb.Empty, error) {
+	err := s.postRepo.DeleteTranslation(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &emptypb.Empty{}, nil
+}

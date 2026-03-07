@@ -422,7 +422,12 @@ message DeleteMenuRequest {
     json_name = "operatorId"
   ]; // 操作用户ID
 
-  uint32 id = 2;
+  oneof query_by {
+    uint32 id = 2 [
+      (gnostic.openapi.v3.property) = {description: "ID", read_only: true},
+      json_name = "id"
+    ]; // ID
+  }
 }
 
 message CountMenuResponse {

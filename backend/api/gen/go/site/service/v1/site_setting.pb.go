@@ -508,8 +508,11 @@ func (x *UpdateSiteSettingRequest) GetAllowMissing() bool {
 
 // 请求 - 删除站点配置
 type DeleteSiteSettingRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to QueryBy:
+	//
+	//	*DeleteSiteSettingRequest_Id
+	QueryBy       isDeleteSiteSettingRequest_QueryBy `protobuf_oneof:"query_by"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -544,12 +547,31 @@ func (*DeleteSiteSettingRequest) Descriptor() ([]byte, []int) {
 	return file_site_service_v1_site_setting_proto_rawDescGZIP(), []int{5}
 }
 
+func (x *DeleteSiteSettingRequest) GetQueryBy() isDeleteSiteSettingRequest_QueryBy {
+	if x != nil {
+		return x.QueryBy
+	}
+	return nil
+}
+
 func (x *DeleteSiteSettingRequest) GetId() uint32 {
 	if x != nil {
-		return x.Id
+		if x, ok := x.QueryBy.(*DeleteSiteSettingRequest_Id); ok {
+			return x.Id
+		}
 	}
 	return 0
 }
+
+type isDeleteSiteSettingRequest_QueryBy interface {
+	isDeleteSiteSettingRequest_QueryBy()
+}
+
+type DeleteSiteSettingRequest_Id struct {
+	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // ID
+}
+
+func (*DeleteSiteSettingRequest_Id) isDeleteSiteSettingRequest_QueryBy() {}
 
 var File_site_service_v1_site_setting_proto protoreflect.FileDescriptor
 
@@ -634,9 +656,12 @@ const file_site_service_v1_site_setting_proto_rawDesc = "" +
 	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
 	"updateMask\x12\xb4\x01\n" +
 	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
-	"\x0e_allow_missing\"*\n" +
-	"\x18DeleteSiteSettingRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id2\xab\x03\n" +
+	"\x0e_allow_missing\"D\n" +
+	"\x18DeleteSiteSettingRequest\x12\x1c\n" +
+	"\x02id\x18\x01 \x01(\rB\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02idB\n" +
+	"\n" +
+	"\bquery_by2\xab\x03\n" +
 	"\x12SiteSettingService\x12M\n" +
 	"\x04List\x12\x19.pagination.PagingRequest\x1a(.site.service.v1.ListSiteSettingResponse\"\x00\x12M\n" +
 	"\x03Get\x12&.site.service.v1.GetSiteSettingRequest\x1a\x1c.site.service.v1.SiteSetting\"\x00\x12S\n" +
@@ -709,6 +734,9 @@ func file_site_service_v1_site_setting_proto_init() {
 	file_site_service_v1_site_setting_proto_msgTypes[0].OneofWrappers = []any{}
 	file_site_service_v1_site_setting_proto_msgTypes[2].OneofWrappers = []any{}
 	file_site_service_v1_site_setting_proto_msgTypes[4].OneofWrappers = []any{}
+	file_site_service_v1_site_setting_proto_msgTypes[5].OneofWrappers = []any{
+		(*DeleteSiteSettingRequest_Id)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

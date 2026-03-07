@@ -113,9 +113,9 @@ func (x *Navigation) Redact() string {
 
 	// Safe field: Location
 
-	// Safe field: IsActive
-
 	// Safe field: Locale
+
+	// Safe field: IsActive
 
 	// Safe field: Items
 
@@ -145,11 +145,11 @@ func (x *NavigationItem) Redact() string {
 
 	// Safe field: Title
 
-	// Safe field: Url
+	// Safe field: Description
 
 	// Safe field: Icon
 
-	// Safe field: Description
+	// Safe field: Url
 
 	// Safe field: LinkType
 
@@ -201,8 +201,6 @@ func (x *GetNavigationRequest) Redact() string {
 		return ""
 	}
 
-	// Safe field: Id
-
 	// Safe field: ViewMask
 	return x.String()
 }
@@ -238,7 +236,5 @@ func (x *DeleteNavigationRequest) Redact() string {
 	if x == nil {
 		return ""
 	}
-
-	// Safe field: Id
 	return x.String()
 }

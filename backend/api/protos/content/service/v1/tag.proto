@@ -79,6 +79,11 @@ message Tag {
     (gnostic.openapi.v3.property) = {description: "是否推荐"}
   ]; // 是否推荐（前台可用来突出显示，如标签云中加大字体或特殊标识）
 
+  optional string code = 8 [
+    json_name = "code",
+    (gnostic.openapi.v3.property) = {description: "唯一代码（如 slug、编码等，便于唯一标识标签）"}
+  ]; // 唯一代码（如 slug、编码等，便于唯一标识标签）
+
   optional uint32 post_count = 10 [
     json_name = "postCount",
     (gnostic.openapi.v3.property) = {description: "使用该标签的文章总数（跨所有语言，仅统计 status=ACTIVE 的文章）"}
@@ -201,10 +206,10 @@ message GetTagRequest {
       json_name = "id"
     ]; // ID
 
-    string slug = 2 [
-      (gnostic.openapi.v3.property) = {description: "Slug", read_only: true},
-      json_name = "slug"
-    ]; // Slug
+    string code = 2 [
+      (gnostic.openapi.v3.property) = {description: "唯一代码（如 slug 或其他唯一标识符，优先级高于 ID）", read_only: true},
+      json_name = "code"
+    ]; // 唯一代码（如 slug 或其他唯一标识符，优先级高于 ID）
   }
 
   optional string locale = 10 [
@@ -247,5 +252,10 @@ message UpdateTagRequest {
 
 // 请求 - 删除标签
 message DeleteTagRequest {
-  uint32 id = 1;
+  oneof query_by {
+    uint32 id = 1 [
+      (gnostic.openapi.v3.property) = {description: "ID", read_only: true},
+      json_name = "id"
+    ]; // ID
+  }
 }

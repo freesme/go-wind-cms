@@ -180,8 +180,6 @@ func (x *GetFileRequest) Redact() string {
 		return ""
 	}
 
-	// Safe field: Id
-
 	// Safe field: ViewMask
 	return x.String()
 }
@@ -217,8 +215,6 @@ func (x *DeleteFileRequest) Redact() string {
 	if x == nil {
 		return ""
 	}
-
-	// Safe field: Id
 	return x.String()
 }
 

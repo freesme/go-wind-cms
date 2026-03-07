@@ -1388,11 +1388,11 @@ func (m *DeleteRoleRequest) validate(all bool) error {
 
 	var errors []error
 
-	switch v := m.DeleteBy.(type) {
+	switch v := m.QueryBy.(type) {
 	case *DeleteRoleRequest_Id:
 		if v == nil {
 			err := DeleteRoleRequestValidationError{
-				field:  "DeleteBy",
+				field:  "QueryBy",
 				reason: "oneof value cannot be a typed-nil",
 			}
 			if !all {
@@ -1404,7 +1404,7 @@ func (m *DeleteRoleRequest) validate(all bool) error {
 	case *DeleteRoleRequest_Code:
 		if v == nil {
 			err := DeleteRoleRequestValidationError{
-				field:  "DeleteBy",
+				field:  "QueryBy",
 				reason: "oneof value cannot be a typed-nil",
 			}
 			if !all {
@@ -1416,7 +1416,7 @@ func (m *DeleteRoleRequest) validate(all bool) error {
 	case *DeleteRoleRequest_TenantId:
 		if v == nil {
 			err := DeleteRoleRequestValidationError{
-				field:  "DeleteBy",
+				field:  "QueryBy",
 				reason: "oneof value cannot be a typed-nil",
 			}
 			if !all {

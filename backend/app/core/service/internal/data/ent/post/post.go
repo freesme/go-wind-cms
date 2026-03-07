@@ -31,8 +31,8 @@ const (
 	FieldEditorType = "editor_type"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// FieldSlug holds the string denoting the slug field in the database.
-	FieldSlug = "slug"
+	// FieldCode holds the string denoting the code field in the database.
+	FieldCode = "code"
 	// FieldDisallowComment holds the string denoting the disallow_comment field in the database.
 	FieldDisallowComment = "disallow_comment"
 	// FieldInProgress holds the string denoting the in_progress field in the database.
@@ -59,6 +59,8 @@ const (
 	FieldCategoryIds = "category_ids"
 	// FieldTagIds holds the string denoting the tag_ids field in the database.
 	FieldTagIds = "tag_ids"
+	// FieldPublishTime holds the string denoting the publish_time field in the database.
+	FieldPublishTime = "publish_time"
 	// Table holds the table name of the post in the database.
 	Table = "posts"
 )
@@ -75,7 +77,7 @@ var Columns = []string{
 	FieldSortOrder,
 	FieldEditorType,
 	FieldStatus,
-	FieldSlug,
+	FieldCode,
 	FieldDisallowComment,
 	FieldInProgress,
 	FieldAutoSummary,
@@ -89,6 +91,7 @@ var Columns = []string{
 	FieldCustomFields,
 	FieldCategoryIds,
 	FieldTagIds,
+	FieldPublishTime,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -235,9 +238,9 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
-// BySlug orders the results by the slug field.
-func BySlug(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSlug, opts...).ToFunc()
+// ByCode orders the results by the code field.
+func ByCode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCode, opts...).ToFunc()
 }
 
 // ByDisallowComment orders the results by the disallow_comment field.
@@ -288,4 +291,9 @@ func ByAuthorName(opts ...sql.OrderTermOption) OrderOption {
 // ByPasswordHash orders the results by the password_hash field.
 func ByPasswordHash(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPasswordHash, opts...).ToFunc()
+}
+
+// ByPublishTime orders the results by the publish_time field.
+func ByPublishTime(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPublishTime, opts...).ToFunc()
 }

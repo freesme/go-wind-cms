@@ -217,23 +217,23 @@ func (_u *PostUpdate) ClearStatus() *PostUpdate {
 	return _u
 }
 
-// SetSlug sets the "slug" field.
-func (_u *PostUpdate) SetSlug(v string) *PostUpdate {
-	_u.mutation.SetSlug(v)
+// SetCode sets the "code" field.
+func (_u *PostUpdate) SetCode(v string) *PostUpdate {
+	_u.mutation.SetCode(v)
 	return _u
 }
 
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (_u *PostUpdate) SetNillableSlug(v *string) *PostUpdate {
+// SetNillableCode sets the "code" field if the given value is not nil.
+func (_u *PostUpdate) SetNillableCode(v *string) *PostUpdate {
 	if v != nil {
-		_u.SetSlug(*v)
+		_u.SetCode(*v)
 	}
 	return _u
 }
 
-// ClearSlug clears the value of the "slug" field.
-func (_u *PostUpdate) ClearSlug() *PostUpdate {
-	_u.mutation.ClearSlug()
+// ClearCode clears the value of the "code" field.
+func (_u *PostUpdate) ClearCode() *PostUpdate {
+	_u.mutation.ClearCode()
 	return _u
 }
 
@@ -501,6 +501,26 @@ func (_u *PostUpdate) ClearTagIds() *PostUpdate {
 	return _u
 }
 
+// SetPublishTime sets the "publish_time" field.
+func (_u *PostUpdate) SetPublishTime(v time.Time) *PostUpdate {
+	_u.mutation.SetPublishTime(v)
+	return _u
+}
+
+// SetNillablePublishTime sets the "publish_time" field if the given value is not nil.
+func (_u *PostUpdate) SetNillablePublishTime(v *time.Time) *PostUpdate {
+	if v != nil {
+		_u.SetPublishTime(*v)
+	}
+	return _u
+}
+
+// ClearPublishTime clears the value of the "publish_time" field.
+func (_u *PostUpdate) ClearPublishTime() *PostUpdate {
+	_u.mutation.ClearPublishTime()
+	return _u
+}
+
 // Mutation returns the PostMutation object of the builder.
 func (_u *PostUpdate) Mutation() *PostMutation {
 	return _u.mutation
@@ -629,11 +649,11 @@ func (_u *PostUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(post.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.Slug(); ok {
-		_spec.SetField(post.FieldSlug, field.TypeString, value)
+	if value, ok := _u.mutation.Code(); ok {
+		_spec.SetField(post.FieldCode, field.TypeString, value)
 	}
-	if _u.mutation.SlugCleared() {
-		_spec.ClearField(post.FieldSlug, field.TypeString)
+	if _u.mutation.CodeCleared() {
+		_spec.ClearField(post.FieldCode, field.TypeString)
 	}
 	if value, ok := _u.mutation.DisallowComment(); ok {
 		_spec.SetField(post.FieldDisallowComment, field.TypeBool, value)
@@ -724,6 +744,12 @@ func (_u *PostUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.TagIdsCleared() {
 		_spec.ClearField(post.FieldTagIds, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.PublishTime(); ok {
+		_spec.SetField(post.FieldPublishTime, field.TypeTime, value)
+	}
+	if _u.mutation.PublishTimeCleared() {
+		_spec.ClearField(post.FieldPublishTime, field.TypeTime)
 	}
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
@@ -935,23 +961,23 @@ func (_u *PostUpdateOne) ClearStatus() *PostUpdateOne {
 	return _u
 }
 
-// SetSlug sets the "slug" field.
-func (_u *PostUpdateOne) SetSlug(v string) *PostUpdateOne {
-	_u.mutation.SetSlug(v)
+// SetCode sets the "code" field.
+func (_u *PostUpdateOne) SetCode(v string) *PostUpdateOne {
+	_u.mutation.SetCode(v)
 	return _u
 }
 
-// SetNillableSlug sets the "slug" field if the given value is not nil.
-func (_u *PostUpdateOne) SetNillableSlug(v *string) *PostUpdateOne {
+// SetNillableCode sets the "code" field if the given value is not nil.
+func (_u *PostUpdateOne) SetNillableCode(v *string) *PostUpdateOne {
 	if v != nil {
-		_u.SetSlug(*v)
+		_u.SetCode(*v)
 	}
 	return _u
 }
 
-// ClearSlug clears the value of the "slug" field.
-func (_u *PostUpdateOne) ClearSlug() *PostUpdateOne {
-	_u.mutation.ClearSlug()
+// ClearCode clears the value of the "code" field.
+func (_u *PostUpdateOne) ClearCode() *PostUpdateOne {
+	_u.mutation.ClearCode()
 	return _u
 }
 
@@ -1219,6 +1245,26 @@ func (_u *PostUpdateOne) ClearTagIds() *PostUpdateOne {
 	return _u
 }
 
+// SetPublishTime sets the "publish_time" field.
+func (_u *PostUpdateOne) SetPublishTime(v time.Time) *PostUpdateOne {
+	_u.mutation.SetPublishTime(v)
+	return _u
+}
+
+// SetNillablePublishTime sets the "publish_time" field if the given value is not nil.
+func (_u *PostUpdateOne) SetNillablePublishTime(v *time.Time) *PostUpdateOne {
+	if v != nil {
+		_u.SetPublishTime(*v)
+	}
+	return _u
+}
+
+// ClearPublishTime clears the value of the "publish_time" field.
+func (_u *PostUpdateOne) ClearPublishTime() *PostUpdateOne {
+	_u.mutation.ClearPublishTime()
+	return _u
+}
+
 // Mutation returns the PostMutation object of the builder.
 func (_u *PostUpdateOne) Mutation() *PostMutation {
 	return _u.mutation
@@ -1377,11 +1423,11 @@ func (_u *PostUpdateOne) sqlSave(ctx context.Context) (_node *Post, err error) {
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(post.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.Slug(); ok {
-		_spec.SetField(post.FieldSlug, field.TypeString, value)
+	if value, ok := _u.mutation.Code(); ok {
+		_spec.SetField(post.FieldCode, field.TypeString, value)
 	}
-	if _u.mutation.SlugCleared() {
-		_spec.ClearField(post.FieldSlug, field.TypeString)
+	if _u.mutation.CodeCleared() {
+		_spec.ClearField(post.FieldCode, field.TypeString)
 	}
 	if value, ok := _u.mutation.DisallowComment(); ok {
 		_spec.SetField(post.FieldDisallowComment, field.TypeBool, value)
@@ -1472,6 +1518,12 @@ func (_u *PostUpdateOne) sqlSave(ctx context.Context) (_node *Post, err error) {
 	}
 	if _u.mutation.TagIdsCleared() {
 		_spec.ClearField(post.FieldTagIds, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.PublishTime(); ok {
+		_spec.SetField(post.FieldPublishTime, field.TypeTime, value)
+	}
+	if _u.mutation.PublishTimeCleared() {
+		_spec.ClearField(post.FieldPublishTime, field.TypeTime)
 	}
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &Post{config: _u.config}

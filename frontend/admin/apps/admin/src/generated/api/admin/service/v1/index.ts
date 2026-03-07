@@ -729,7 +729,7 @@ export type resourceservicev1_UpdateApiRequest = {
 
 // 删除 - 请求
 export type resourceservicev1_DeleteApiRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // API审计日志管理服务
@@ -1156,8 +1156,8 @@ export function createCategoryServiceClient(
       const path = `admin/v1/categories/${request.id}`; // eslint-disable-line quotes
       const body = null;
       const queryParams: string[] = [];
-      if (request.slug) {
-        queryParams.push(`slug=${encodeURIComponent(request.slug.toString())}`)
+      if (request.code) {
+        queryParams.push(`code=${encodeURIComponent(request.code.toString())}`)
       }
       if (request.locale) {
         queryParams.push(`locale=${encodeURIComponent(request.locale.toString())}`)
@@ -1250,6 +1250,7 @@ export type contentservicev1_Category = {
   sortOrder?: number;
   isNav?: boolean;
   icon?: string;
+  code?: string;
   postCount?: number;
   directPostCount?: number;
   translations: contentservicev1_CategoryTranslation[] | undefined;
@@ -1299,7 +1300,7 @@ export type contentservicev1_CategoryTranslation = {
 // 请求 - 类别数据
 export type contentservicev1_GetCategoryRequest = {
   id?: number;
-  slug?: string;
+  code?: string;
   locale?: string;
   viewMask?: wellKnownFieldMask;
 };
@@ -1319,7 +1320,7 @@ export type contentservicev1_UpdateCategoryRequest = {
 
 // 请求 - 删除类别
 export type contentservicev1_DeleteCategoryRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 评论服务
@@ -1580,7 +1581,7 @@ export type commentservicev1_UpdateCommentRequest = {
 
 // 请求 - 删除评论
 export type commentservicev1_DeleteCommentRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 数据访问审计日志管理服务
@@ -2461,7 +2462,7 @@ export type storageservicev1_UpdateFileRequest = {
 
 // 删除 - 请求
 export type storageservicev1_DeleteFileRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 文件传输服务
@@ -2968,7 +2969,7 @@ export type internal_messageservicev1_UpdateInternalMessageRequest = {
 
 // 删除站内信消息 - 请求
 export type internal_messageservicev1_DeleteInternalMessageRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 export type internal_messageservicev1_SendMessageRequest = {
@@ -3216,7 +3217,7 @@ export type internal_messageservicev1_UpdateInternalMessageCategoryRequest = {
 
 // 删除站内信消息分类 - 请求
 export type internal_messageservicev1_DeleteInternalMessageCategoryRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 站内信消息管理服务
@@ -3636,7 +3637,7 @@ export type dictservicev1_UpdateLanguageRequest = {
 
 // 删除语言 - 请求
 export type dictservicev1_DeleteLanguageRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 export type dictservicev1_BatchCreateLanguagesRequest = {
@@ -4066,7 +4067,7 @@ export type authenticationservicev1_UpdateLoginPolicyRequest = {
 
 // 删除登录策略 - 请求
 export type authenticationservicev1_DeleteLoginPolicyRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 媒体资源库服务
@@ -4324,7 +4325,7 @@ export type mediaservicev1_UpdateMediaAssetRequest = {
 
 // 请求 - 删除媒体资源库
 export type mediaservicev1_DeleteMediaAssetRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 后台菜单管理服务
@@ -4583,7 +4584,7 @@ export type resourceservicev1_UpdateMenuRequest = {
 // 删除菜单 - 请求
 export type resourceservicev1_DeleteMenuRequest = {
   operatorId?: number;
-  id: number | undefined;
+  id?: number;
 };
 
 // 导航服务
@@ -4690,6 +4691,9 @@ export function createNavigationServiceClient(
       const path = `admin/v1/navigations/${request.id}`; // eslint-disable-line quotes
       const body = null;
       const queryParams: string[] = [];
+      if (request.name) {
+        queryParams.push(`name=${encodeURIComponent(request.name.toString())}`)
+      }
       if (request.viewMask) {
         queryParams.push(`viewMask=${encodeURIComponent(request.viewMask.toString())}`)
       }
@@ -4776,8 +4780,8 @@ export type siteservicev1_Navigation = {
   id?: number;
   name?: string;
   location?: string;
-  isActive?: boolean;
   locale?: string;
+  isActive?: boolean;
   items: siteservicev1_NavigationItem[] | undefined;
   createdBy?: number;
   updatedBy?: number;
@@ -4792,9 +4796,9 @@ export type siteservicev1_NavigationItem = {
   id?: number;
   navigationId?: number;
   title?: string;
-  url?: string;
-  icon?: string;
   description?: string;
+  icon?: string;
+  url?: string;
   linkType?: siteservicev1_NavigationItem_LinkType;
   objectId?: number;
   sortOrder?: number;
@@ -4823,6 +4827,7 @@ export type siteservicev1_NavigationItem_LinkType =
 // 请求 - 导航数据
 export type siteservicev1_GetNavigationRequest = {
   id?: number;
+  name?: string;
   viewMask?: wellKnownFieldMask;
 };
 
@@ -4841,7 +4846,7 @@ export type siteservicev1_UpdateNavigationRequest = {
 
 // 请求 - 删除导航
 export type siteservicev1_DeleteNavigationRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 操作审计日志管理服务
@@ -5274,7 +5279,7 @@ export type identityservicev1_UpdateOrgUnitRequest = {
 
 // 删除组织单元 - 请求
 export type identityservicev1_DeleteOrgUnitRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 页面服务
@@ -5573,7 +5578,7 @@ export type contentservicev1_UpdatePageRequest = {
 
 // 请求 - 删除页面
 export type contentservicev1_DeletePageRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 权限点管理服务
@@ -6234,7 +6239,7 @@ export type permissionservicev1_UpdatePermissionGroupRequest = {
 
 // 删除 - 请求
 export type permissionservicev1_DeletePermissionGroupRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 策略评估日志服务
@@ -6643,7 +6648,7 @@ export type identityservicev1_UpdatePositionRequest = {
 
 // 删除职位 - 请求
 export type identityservicev1_DeletePositionRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 帖子服务
@@ -6752,8 +6757,8 @@ export function createPostServiceClient(
       const path = `admin/v1/posts/${request.id}`; // eslint-disable-line quotes
       const body = null;
       const queryParams: string[] = [];
-      if (request.slug) {
-        queryParams.push(`slug=${encodeURIComponent(request.slug.toString())}`)
+      if (request.code) {
+        queryParams.push(`code=${encodeURIComponent(request.code.toString())}`)
       }
       if (request.locale) {
         queryParams.push(`locale=${encodeURIComponent(request.locale.toString())}`)
@@ -6867,7 +6872,7 @@ export type contentservicev1_Post = {
   id?: number;
   status?: contentservicev1_Post_PostStatus;
   editorType?: contentservicev1_EditorType;
-  slug?: string;
+  code?: string;
   disallowComment?: boolean;
   inProgress?: boolean;
   autoSummary?: boolean;
@@ -6928,7 +6933,7 @@ export type contentservicev1_PostTranslation = {
 // 请求 - 帖子数据
 export type contentservicev1_GetPostRequest = {
   id?: number;
-  slug?: string;
+  code?: string;
   locale?: string;
   viewMask?: wellKnownFieldMask;
 };
@@ -6948,7 +6953,7 @@ export type contentservicev1_UpdatePostRequest = {
 
 // 请求 - 删除帖子
 export type contentservicev1_DeletePostRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 export type contentservicev1_PostTranslationExistsRequest = {
@@ -7449,7 +7454,7 @@ export type siteservicev1_UpdateSiteRequest = {
 
 // 请求 - 删除站点
 export type siteservicev1_DeleteSiteRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 站点配置服务
@@ -7693,7 +7698,7 @@ export type siteservicev1_UpdateSiteSettingRequest = {
 
 // 请求 - 删除站点配置
 export type siteservicev1_DeleteSiteSettingRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 标签服务
@@ -7800,8 +7805,8 @@ export function createTagServiceClient(
       const path = `admin/v1/tags/${request.id}`; // eslint-disable-line quotes
       const body = null;
       const queryParams: string[] = [];
-      if (request.slug) {
-        queryParams.push(`slug=${encodeURIComponent(request.slug.toString())}`)
+      if (request.code) {
+        queryParams.push(`code=${encodeURIComponent(request.code.toString())}`)
       }
       if (request.locale) {
         queryParams.push(`locale=${encodeURIComponent(request.locale.toString())}`)
@@ -7897,6 +7902,7 @@ export type contentservicev1_Tag = {
   group?: string;
   sortOrder?: number;
   isFeatured?: boolean;
+  code?: string;
   postCount?: number;
   translations: contentservicev1_TagTranslation[] | undefined;
   availableLanguages: string[] | undefined;
@@ -7940,7 +7946,7 @@ export type contentservicev1_TagTranslation = {
 // 请求 - 标签数据
 export type contentservicev1_GetTagRequest = {
   id?: number;
-  slug?: string;
+  code?: string;
   locale?: string;
   viewMask?: wellKnownFieldMask;
 };
@@ -7960,7 +7966,7 @@ export type contentservicev1_UpdateTagRequest = {
 
 // 请求 - 删除标签
 export type contentservicev1_DeleteTagRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 调度任务管理服务
@@ -8343,7 +8349,7 @@ export type taskservicev1_UpdateTaskRequest = {
 
 // 删除调度任务 - 请求
 export type taskservicev1_DeleteTaskRequest = {
-  id: number | undefined;
+  id?: number;
 };
 
 // 任务类型名称列表 - 回应

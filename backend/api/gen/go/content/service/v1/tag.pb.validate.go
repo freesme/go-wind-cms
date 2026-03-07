@@ -118,6 +118,10 @@ func (m *Tag) validate(all bool) error {
 		// no validation rules for IsFeatured
 	}
 
+	if m.Code != nil {
+		// no validation rules for Code
+	}
+
 	if m.PostCount != nil {
 		// no validation rules for PostCount
 	}
@@ -744,7 +748,7 @@ func (m *GetTagRequest) validate(all bool) error {
 			errors = append(errors, err)
 		}
 		// no validation rules for Id
-	case *GetTagRequest_Slug:
+	case *GetTagRequest_Code:
 		if v == nil {
 			err := GetTagRequestValidationError{
 				field:  "QueryBy",
@@ -755,7 +759,7 @@ func (m *GetTagRequest) validate(all bool) error {
 			}
 			errors = append(errors, err)
 		}
-		// no validation rules for Slug
+		// no validation rules for Code
 	default:
 		_ = v // ensures v is used
 	}
@@ -1190,7 +1194,22 @@ func (m *DeleteTagRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	switch v := m.QueryBy.(type) {
+	case *DeleteTagRequest_Id:
+		if v == nil {
+			err := DeleteTagRequestValidationError{
+				field:  "QueryBy",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		// no validation rules for Id
+	default:
+		_ = v // ensures v is used
+	}
 
 	if len(errors) > 0 {
 		return DeleteTagRequestMultiError(errors)

@@ -43,7 +43,7 @@ type Page struct {
 	Status *page.Status `json:"status,omitempty"`
 	// 页面类型
 	Type *page.Type `json:"type,omitempty"`
-	// 页面别名
+	// 页面唯一标识
 	Slug *string `json:"slug,omitempty"`
 	// 评论作者ID，0表示游客
 	AuthorID *uint32 `json:"author_id,omitempty"`
