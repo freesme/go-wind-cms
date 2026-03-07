@@ -56,7 +56,9 @@
     "all_posts": "全部文章",
     "direct_posts": "只看本级",
     "back_to_parent": "返回上一级",
-    "back_to_list": "返回列表"
+    "back_to_list": "返回列表",
+    "articles_count": "篇文章",
+    "category_untitled": "未命名分类"
   },
   "post_detail": {
     "untitled": "未命名",

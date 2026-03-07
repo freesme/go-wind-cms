@@ -3,11 +3,15 @@ import {h, ref, onMounted} from 'vue';
 import {useRouter} from 'vue-router';
 
 import {useNavbarStore, useNavigationStore} from "@/stores";
-import {XIcon} from '@/plugins/xicon';
+import {XIcon} from "@/plugins/xicon";
+import {useLanguageChangeEffect} from '@/hooks/useLanguageChangeEffect';
+import type {
+  siteservicev1_NavigationItem
+} from "@/api/generated/app/service/v1";
 
 import type {TopNavBarTabItem} from "./types";
 import TopNavbarTab from './TopNavbarTab.vue';
-import {useLanguageChangeEffect} from '@/hooks/useLanguageChangeEffect';
+
 
 const router = useRouter();
 const navbarStore = useNavbarStore();
@@ -15,7 +19,7 @@ const navigationStore = useNavigationStore();
 
 const leftTabList: TopNavBarTabItem[] = []
 const rightTabList: TopNavBarTabItem[] = [];
-const navigationItems = ref<any[]>([]);
+const navigationItems = ref<siteservicev1_NavigationItem[]>([]);
 
 /**
  * 隐藏所有的悬浮层
@@ -52,7 +56,7 @@ function handleNavigate(item: any) {
     router.push({
       path: item.url,
       // 保留必要的 state 信息
-      state: { ...history.state, from: 'navbar' }
+      state: {...history.state, from: 'navbar'}
     });
   }
 }

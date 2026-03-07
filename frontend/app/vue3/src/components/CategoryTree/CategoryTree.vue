@@ -1,49 +1,47 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import {useRouter} from 'vue-router'
+import {$t, currentLocaleLanguageCode} from '@/locales'
+import type {Props} from "./types";
+import type {contentservicev1_Category} from "@/api/generated/app/service/v1";
 
-interface Category {
-  id: number
-  translations?: Array<{
-    name: string
-    description: string
-    thumbnail: string
-  }>
-  postCount: number
-  children?: Category[]
-  depth: number
-}
 
-interface Props {
-  categories: Category[]
-  level?: number
-}
-
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   level: 0
 })
 
 const router = useRouter()
+const expandedCategories = ref<Set<number>>(new Set())
 
-function getCategoryName(category: Category) {
-  return category.translations?.[0]?.name || '未命名分类'
+function getTranslation(category: contentservicev1_Category) {
+  const locale = currentLocaleLanguageCode();
+  // 优先查找当前语言的翻译
+  const translation = category.translations?.find((t: any) => t.languageCode === locale);
+  // 如果找不到，回退到第一个翻译
+  return translation || category.translations?.[0];
 }
 
-function getCategoryDescription(category: Category) {
-  return category.translations?.[0]?.description || ''
+function getCategoryName(category: contentservicev1_Category) {
+  const translation = getTranslation(category);
+  return translation?.name || $t('page.categories.category_untitled')
 }
 
-function getCategoryThumbnail(category: Category) {
-  return category.translations?.[0]?.thumbnail || '/placeholder.jpg'
+function getCategoryDescription(category: contentservicev1_Category) {
+  const translation = getTranslation(category);
+  return translation?.description || ''
+}
+
+function getCategoryThumbnail(category: contentservicev1_Category) {
+  const translation = getTranslation(category);
+  return translation?.thumbnail || '/placeholder.jpg'
 }
 
 function handleViewCategory(id: number) {
   router.push(`/category/${id}`)
 }
 
-const expandedCategories = ref<Set<number>>(new Set())
 
-function toggleExpand(category: Category) {
+function toggleExpand(category: contentservicev1_Category) {
   if (category.children && category.children.length > 0) {
     if (expandedCategories.value.has(category.id)) {
       expandedCategories.value.delete(category.id)
@@ -53,7 +51,7 @@ function toggleExpand(category: Category) {
   }
 }
 
-function isExpanded(category: Category) {
+function isExpanded(category: contentservicev1_Category) {
   return expandedCategories.value.has(category.id)
 }
 </script>
@@ -69,8 +67,8 @@ function isExpanded(category: Category) {
       <div class="category-item" @click="handleViewCategory(category.id)">
         <div class="category-info">
           <div class="category-image">
-            <img :src="getCategoryThumbnail(category)" :alt="getCategoryName(category)" />
-            <div class="image-overlay" />
+            <img :src="getCategoryThumbnail(category)" :alt="getCategoryName(category)"/>
+            <div class="image-overlay"/>
           </div>
           <div class="category-content">
             <h3 :class="{'has-children': category.children && category.children.length > 0}">
@@ -79,13 +77,15 @@ function isExpanded(category: Category) {
             <p class="description">{{ getCategoryDescription(category) }}</p>
             <div class="category-meta">
               <span class="meta-icon">
-                <span class="i-carbon:document" />
+                <span class="i-carbon:document"/>
               </span>
-              <span class="meta-text">{{ category.postCount || 0 }} 篇文章</span>
+              <span class="meta-text">{{
+                  category.postCount || 0
+                }} {{ $t('page.categories.articles_count') }}</span>
             </div>
           </div>
         </div>
-        
+
         <!-- 展开/收起按钮 (如果有子分类) -->
         <button
           v-if="category.children && category.children.length > 0"
@@ -93,7 +93,7 @@ function isExpanded(category: Category) {
           @click.stop="toggleExpand(category)"
           :class="{ expanded: isExpanded(category) }"
         >
-          <span :class="isExpanded(category) ? 'i-carbon:chevron-down' : 'i-carbon:chevron-right'" />
+          <span :class="isExpanded(category) ? 'i-carbon:chevron-down' : 'i-carbon:chevron-right'"/>
         </button>
       </div>
 
@@ -364,7 +364,7 @@ function isExpanded(category: Category) {
         align-items: center;
         justify-content: center;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        
+
         &:hover {
           background: var(--color-brand);
           border-color: var(--color-brand);

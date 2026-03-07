@@ -5,7 +5,10 @@ import {useRoute, useRouter} from 'vue-router'
 import {usePostStore, useCategoryStore} from '@/stores/modules/app'
 import {useMessage} from 'naive-ui'
 import {$t, currentLocaleLanguageCode} from '@/locales'
-import type {contentservicev1_Post} from "@/api/generated/app/service/v1";
+import type {
+  contentservicev1_Category,
+  contentservicev1_Post
+} from "@/api/generated/app/service/v1";
 import {formatDate} from "@/utils/date";
 import {useLanguageChangeEffect} from '@/hooks/useLanguageChangeEffect';
 
@@ -24,9 +27,9 @@ const categoryStore = useCategoryStore()
 const message = useMessage()
 
 const loading = ref(false)
-const category = ref<any>(null)
-const posts = ref<any[]>([])
-const childCategories = ref<any[]>([])
+const category = ref<contentservicev1_Category>(null)
+const posts = ref<contentservicev1_Post[]>([])
+const childCategories = ref<contentservicev1_Category[]>([])
 const activeFilter = ref<'all' | 'direct'>('all')
 const pagination = ref({
   page: 1,
@@ -50,10 +53,14 @@ async function loadCategory() {
 
   loading.value = true
   try {
-    category.value = await categoryStore.getCategory(categoryId.value)
-    // 提取子分类
-    if (category.value?.children && category.value.children.length > 0) {
-      childCategories.value = category.value.children
+    const categoryData = await categoryStore.getCategory(categoryId.value)
+    category.value = categoryData
+    // 提取子分类 - 使用新的数组引用确保响应式更新
+    if (categoryData?.children && categoryData.children.length > 0) {
+      // 创建新的数组引用，触发响应式更新
+      childCategories.value = [...categoryData.children]
+    } else {
+      childCategories.value = []
     }
   } catch (error) {
     console.error('Load category failed:', error)
@@ -197,7 +204,7 @@ function handlePageSizeChange(pageSize: number) {
 function getChildCategoryName(childCategory: any) {
   const locale = currentLocaleLanguageCode();
   const translation = childCategory.translations?.find((t: any) => t.languageCode === locale) || childCategory.translations?.[0]
-  return translation?.name || '未命名分类'
+  return translation?.name || $t('page.categories.category_untitled')
 }
 
 function getChildCategoryDescription(childCategory: any) {
@@ -720,7 +727,7 @@ useLanguageChangeEffect(async () => {
 // Back Button
 .back-button-container {
   margin-bottom: 24px;
-  
+
   :deep(.n-button) {
     border-radius: 12px;
     padding: 12px 20px;
@@ -731,25 +738,25 @@ useLanguageChangeEffect(async () => {
     border: 1.5px solid var(--color-border);
     color: var(--color-text-primary);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    
+
     span[class^="i-"] {
       font-size: 16px;
       margin-right: 8px;
       transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    
+
     &:hover {
       border-color: var(--color-brand);
       color: var(--color-brand);
       background: rgba(102, 126, 234, 0.08);
       transform: translateX(-4px);
       box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
-      
+
       span[class^="i-"] {
         transform: translateX(-4px);
       }
     }
-    
+
     &:active {
       transform: translateX(-2px);
       box-shadow: 0 2px 6px rgba(102, 126, 234, 0.1);
@@ -1030,13 +1037,13 @@ useLanguageChangeEffect(async () => {
 @media (max-width: 480px) {
   .back-button-container {
     margin-bottom: 16px;
-    
+
     :deep(.n-button) {
       padding: 12px 16px;
       font-size: 13px;
       border-radius: 12px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-      
+
       span[class^="i-"] {
         font-size: 15px;
         margin-right: 8px;
@@ -1798,4 +1805,3 @@ html.dark {
 }
 
 </style>
-

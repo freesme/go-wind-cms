@@ -4,9 +4,13 @@ import {ref, onMounted, watch} from 'vue'
 import {useRouter, useRoute} from 'vue-router'
 
 import {usePostStore, useCategoryStore} from '@/stores/modules/app'
-import {$t} from '@/locales'
+import {$t, currentLocaleLanguageCode} from '@/locales'
 import {formatDate} from "@/utils/date";
 import {useLanguageChangeEffect} from '@/hooks/useLanguageChangeEffect';
+import type {
+  contentservicev1_Category,
+  contentservicev1_Post
+} from "@/api/generated/app/service/v1";
 
 definePage({
   name: 'post-list',
@@ -22,8 +26,8 @@ const postStore = usePostStore()
 const categoryStore = useCategoryStore()
 
 const loading = ref(false)
-const posts = ref<any[]>([])
-const categories = ref<any[]>([])
+const posts = ref<contentservicev1_Post[]>([])
+const categories = ref<contentservicev1_Category[]>([])
 const total = ref(0)
 const pagination = ref({
   page: 1,
@@ -64,20 +68,40 @@ async function loadCategories() {
   }
 }
 
-function getPostTitle(post: any) {
-  return post.translations?.[0]?.title || $t('page.home.untitled')
+function getCategoryTranslation(category: contentservicev1_Category) {
+  const locale = currentLocaleLanguageCode();
+  // 优先查找当前语言的翻译
+  const translation = category.translations?.find((t: any) => t.languageCode === locale);
+  // 如果找不到，回退到第一个翻译
+  return translation || category.translations?.[0];
 }
 
-function getPostSummary(post: any) {
-  return post.translations?.[0]?.summary || ''
+function getPostTranslation(post: contentservicev1_Post) {
+  const locale = currentLocaleLanguageCode();
+  // 优先查找当前语言的翻译
+  const translation = post.translations?.find((t: any) => t.languageCode === locale);
+  // 如果找不到，回退到第一个翻译
+  return translation || post.translations?.[0];
 }
 
-function getPostThumbnail(post: any) {
-  return post.translations?.[0]?.thumbnail || '/placeholder.jpg'
+function getPostTitle(post: contentservicev1_Post) {
+  const translation = getPostTranslation(post)
+  return translation?.title || $t('page.home.untitled')
 }
 
-function getCategoryName(category: any) {
-  return category.translations?.[0]?.name || $t('page.home.category_default')
+function getPostSummary(post: contentservicev1_Post) {
+  const translation = getPostTranslation(post)
+  return translation?.summary || ''
+}
+
+function getPostThumbnail(post: contentservicev1_Post) {
+  const translation = getPostTranslation(post)
+  return translation?.thumbnail || '/placeholder.jpg'
+}
+
+function getCategoryName(category: contentservicev1_Category) {
+  const translation = getCategoryTranslation(category)
+  return translation?.name || $t('page.home.category_default')
 }
 
 function handleViewPost(postId: number) {
@@ -191,7 +215,7 @@ watch(() => route.query.category, (newVal) => {
         <!-- Loading Skeleton -->
         <div v-if="loading" class="posts-grid">
           <div v-for="i in 12" :key="i" class="post-card">
-            <n-skeleton height="380px" />
+            <n-skeleton height="380px"/>
           </div>
         </div>
         <!-- Loaded Content -->

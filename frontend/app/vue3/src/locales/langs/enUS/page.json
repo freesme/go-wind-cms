@@ -56,7 +56,9 @@
     "all_posts": "All Posts",
     "direct_posts": "Direct Only",
     "back_to_parent": "Back to Parent",
-    "back_to_list": "Back to List"
+    "back_to_list": "Back to List",
+    "articles_count": "articles",
+    "category_untitled": "Untitled Category"
   },
   "post_detail": {
     "untitled": "Untitled",

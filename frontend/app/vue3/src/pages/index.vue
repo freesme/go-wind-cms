@@ -4,10 +4,14 @@ import {useRouter} from 'vue-router'
 import {ref, onMounted, computed, onUnmounted} from 'vue'
 
 import {usePostStore, useCategoryStore, useTagStore} from '@/stores/modules/app'
-import {$t, i18n} from '@/locales'
+import {$t, currentLocaleLanguageCode, i18n} from '@/locales'
 import {XIcon} from "@/plugins/xicon";
 import {formatDate} from "@/utils/date";
 import {useLanguageChangeEffect} from '@/hooks/useLanguageChangeEffect';
+import type {
+  contentservicev1_Category,
+  contentservicev1_Post, contentservicev1_Tag
+} from "@/api/generated/app/service/v1";
 
 definePage({
   name: 'home',
@@ -21,10 +25,10 @@ const postStore = usePostStore()
 const categoryStore = useCategoryStore()
 const tagStore = useTagStore()
 
-const latestPosts = ref<any[]>([])
-const featuredPosts = ref<any[]>([])
-const categories = ref<any[]>([])
-const popularTags = ref<any[]>([])
+const latestPosts = ref<contentservicev1_Post[]>([])
+const featuredPosts = ref<contentservicev1_Post[]>([])
+const categories = ref<contentservicev1_Category[]>([])
+const popularTags = ref<contentservicev1_Tag[]>([])
 const loading = ref(false)
 
 // 滚动动画相关
@@ -110,7 +114,7 @@ async function loadPopularTags() {
       {status: 'TAG_STATUS_ACTIVE', isFeatured: true}
     )
     // 将标签数据转换为显示格式
-    popularTags.value = res.items?.map((tag: any, index: number) => ({
+    popularTags.value = res.items?.map((tag: contentservicev1_Tag, index: number) => ({
       id: tag.id,
       name: tag.translations?.[0]?.name || tag.name || $t('page.home.tag_default'),
       color: tag.color || `hsl(${index * 60}, 100%, 50%)`,
@@ -121,20 +125,40 @@ async function loadPopularTags() {
   }
 }
 
+function getPostTranslation(post: contentservicev1_Post) {
+  const locale = currentLocaleLanguageCode();
+  // 优先查找当前语言的翻译
+  const translation = post.translations?.find((t: any) => t.languageCode === locale);
+  // 如果找不到，回退到第一个翻译
+  return translation || post.translations?.[0];
+}
+
+function getCategoryTranslation(category: contentservicev1_Category) {
+  const locale = currentLocaleLanguageCode();
+  // 优先查找当前语言的翻译
+  const translation = category.translations?.find((t: any) => t.languageCode === locale);
+  // 如果找不到，回退到第一个翻译
+  return translation || category.translations?.[0];
+}
+
 function getPostTitle(post: any) {
-  return post.translations?.[0]?.title || $t('page.home.untitled')
+  const translation = getPostTranslation(post)
+  return translation?.title || $t('page.home.untitled')
 }
 
 function getPostSummary(post: any) {
-  return post.translations?.[0]?.summary || ''
+  const translation = getPostTranslation(post)
+  return translation?.summary || ''
 }
 
 function getPostThumbnail(post: any) {
-  return post.translations?.[0]?.thumbnail || '/placeholder.jpg'
+  const translation = getPostTranslation(post)
+  return translation?.thumbnail || '/placeholder.jpg'
 }
 
 function getCategoryName(category: any) {
-  return category.translations?.[0]?.name || $t('page.home.category_default')
+  const translation = getCategoryTranslation(category)
+  return translation?.name || $t('page.home.category_default')
 }
 
 function handleViewPost(id: number) {
@@ -229,6 +253,14 @@ useLanguageChangeEffect(async () => {
     loadPopularTags(),
   ])
   loading.value = false
+
+  // 数据更新后，需要重新初始化滚动观察器
+  // 先销毁旧的观察器
+  destroyScrollObserver()
+  // 等待 DOM 更新完成后重新初始化
+  setTimeout(() => {
+    initScrollObserver()
+  }, 100)
 }, {
   immediate: false,    // 已经在 onMounted 中加载过，不需要立即执行
   autoCleanup: true,  // 组件卸载时自动取消订阅
@@ -322,55 +354,55 @@ onUnmounted(() => {
       <!-- Loading Skeleton -->
       <div v-if="loading" class="featured-grid">
         <div v-for="i in 3" :key="i" class="featured-card">
-          <n-skeleton height="220px" />
+          <n-skeleton height="220px"/>
           <div class="featured-content" style="padding: 24px;">
-            <n-skeleton :width="'80%'" size="medium" style="margin-bottom: 12px;" />
-            <n-skeleton :width="'90%'" size="small" style="margin-bottom: 16px;" />
+            <n-skeleton :width="'80%'" size="medium" style="margin-bottom: 12px;"/>
+            <n-skeleton :width="'90%'" size="small" style="margin-bottom: 16px;"/>
             <div class="featured-meta" style="display: flex; gap: 12px;">
-              <n-skeleton :width="60" size="small" />
-              <n-skeleton :width="60" size="small" />
-              <n-skeleton :width="60" size="small" />
+              <n-skeleton :width="60" size="small"/>
+              <n-skeleton :width="60" size="small"/>
+              <n-skeleton :width="60" size="small"/>
             </div>
           </div>
         </div>
       </div>
       <!-- Loaded Content -->
       <div v-else class="featured-grid">
-          <div
-            v-for="post in featuredPosts"
-            :key="post.id"
-            class="featured-card scroll-reveal-item"
-            @click="handleViewPost(post.id)"
-          >
-            <div class="featured-image">
-              <img :src="getPostThumbnail(post)" :alt="getPostTitle(post)"/>
-              <div class="featured-overlay">
+        <div
+          v-for="post in featuredPosts"
+          :key="post.id"
+          class="featured-card scroll-reveal-item"
+          @click="handleViewPost(post.id)"
+        >
+          <div class="featured-image">
+            <img :src="getPostThumbnail(post)" :alt="getPostTitle(post)"/>
+            <div class="featured-overlay">
                 <span class="featured-badge">
                   <XIcon name="carbon:star-filled" :size="14"/>
                   推荐
                 </span>
-              </div>
             </div>
-            <div class="featured-content">
-              <h3>{{ getPostTitle(post) }}</h3>
-              <p>{{ getPostSummary(post) }}</p>
-              <div class="featured-meta">
+          </div>
+          <div class="featured-content">
+            <h3>{{ getPostTitle(post) }}</h3>
+            <p>{{ getPostSummary(post) }}</p>
+            <div class="featured-meta">
                 <span>
                   <XIcon name="carbon:user" :size="14"/>
                   {{ post.authorName || '匿名' }}
                 </span>
-                <span>
+              <span>
                   <XIcon name="carbon:time" :size="14"/>
                   {{ formatDate(post.createdAt) }}
                 </span>
-                <span>
+              <span>
                   <XIcon name="carbon:view" :size="14"/>
-                  {{ post.viewCount || 0 }}
+                  {{ post.visits || 0 }}
                 </span>
-              </div>
             </div>
           </div>
         </div>
+      </div>
 
       <!-- Scroll Indicator -->
       <div class="scroll-indicator">
@@ -394,7 +426,7 @@ onUnmounted(() => {
       <!-- Loading Skeleton -->
       <div v-if="loading" class="categories-grid desktop-grid">
         <div v-for="i in 8" :key="i" class="category-card">
-          <n-skeleton height="140px" />
+          <n-skeleton height="140px"/>
         </div>
       </div>
       <!-- Loaded Content -->
@@ -521,42 +553,42 @@ onUnmounted(() => {
       <!-- Loading Skeleton -->
       <div v-if="loading" class="posts-grid">
         <div v-for="i in 6" :key="i" class="post-card">
-          <n-skeleton height="220px" />
+          <n-skeleton height="220px"/>
           <div style="padding: 24px;">
-            <n-skeleton :width="'80%'" size="medium" style="margin-bottom: 12px;" />
-            <n-skeleton :width="'90%'" size="small" style="margin-bottom: 16px;" />
+            <n-skeleton :width="'80%'" size="medium" style="margin-bottom: 12px;"/>
+            <n-skeleton :width="'90%'" size="small" style="margin-bottom: 16px;"/>
             <div style="display: flex; gap: 12px;">
-              <n-skeleton :width="60" size="small" />
-              <n-skeleton :width="60" size="small" />
-              <n-skeleton :width="60" size="small" />
+              <n-skeleton :width="60" size="small"/>
+              <n-skeleton :width="60" size="small"/>
+              <n-skeleton :width="60" size="small"/>
             </div>
           </div>
         </div>
       </div>
       <!-- Loaded Content -->
       <div v-else class="posts-grid">
-          <div
-            v-for="post in latestPosts"
-            :key="post.id"
-            class="post-card scroll-reveal-item"
-            @click="handleViewPost(post.id)"
-          >
-            <div class="post-image">
-              <img :src="getPostThumbnail(post)" :alt="getPostTitle(post)"/>
-            </div>
-            <div class="post-content">
-              <h3>{{ getPostTitle(post) }}</h3>
-              <p>{{ getPostSummary(post) }}</p>
-              <div class="post-meta">
-                <span class="author">{{ post.authorName }}</span>
-                <span class="date">{{ formatDate(post.createdAt) }}</span>
-                <span class="views">{{
-                    $t('page.home.views_count', {count: post.visits || 0})
-                  }}</span>
-              </div>
+        <div
+          v-for="post in latestPosts"
+          :key="post.id"
+          class="post-card scroll-reveal-item"
+          @click="handleViewPost(post.id)"
+        >
+          <div class="post-image">
+            <img :src="getPostThumbnail(post)" :alt="getPostTitle(post)"/>
+          </div>
+          <div class="post-content">
+            <h3>{{ getPostTitle(post) }}</h3>
+            <p>{{ getPostSummary(post) }}</p>
+            <div class="post-meta">
+              <span class="author">{{ post.authorName }}</span>
+              <span class="date">{{ formatDate(post.createdAt) }}</span>
+              <span class="views">{{
+                  $t('page.home.views_count', {count: post.visits || 0})
+                }}</span>
             </div>
           </div>
         </div>
+      </div>
     </section>
 
     <!-- Features Section -->

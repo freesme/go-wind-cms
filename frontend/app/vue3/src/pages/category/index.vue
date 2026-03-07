@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { definePage } from 'unplugin-vue-router/runtime'
-import { ref, onMounted } from 'vue'
+import {definePage} from 'unplugin-vue-router/runtime'
+import {ref, onMounted} from 'vue'
 
-import { useCategoryStore } from '@/stores/modules/app'
-import { $t } from '@/locales'
+import {useCategoryStore} from '@/stores/modules/app'
+import {$t} from '@/locales'
 import {useLanguageChangeEffect} from '@/hooks/useLanguageChangeEffect';
-import { CategoryTree } from '@/components/CategoryTree'
+import {CategoryTree} from '@/components/CategoryTree'
+import type {contentservicev1_Category} from "@/api/generated/app/service/v1";
 
 definePage({
   name: 'category-list',
@@ -18,14 +19,14 @@ definePage({
 const categoryStore = useCategoryStore()
 
 const loading = ref(false)
-const categories = ref<any[]>([])
+const categories = ref<contentservicev1_Category[]>([])
 
 async function loadCategories() {
   loading.value = true
   try {
     const res = await categoryStore.listCategory(
       undefined,
-      { status: 'CATEGORY_STATUS_ACTIVE' }
+      {status: 'CATEGORY_STATUS_ACTIVE'}
     )
     categories.value = res.items || []
   } catch (error) {
@@ -61,7 +62,7 @@ useLanguageChangeEffect(loadCategories, {
       <!-- Loading Skeleton -->
       <div v-if="loading" class="categories-loading">
         <div v-for="i in 6" :key="i" class="category-loading-card">
-          <n-skeleton height="160px" />
+          <n-skeleton height="160px"/>
         </div>
       </div>
 
@@ -78,7 +79,7 @@ useLanguageChangeEffect(loadCategories, {
           style="margin: 80px 0;"
         >
           <template #icon>
-            <span class="i-carbon:folder-blank" style="font-size: 64px;" />
+            <span class="i-carbon:folder-blank" style="font-size: 64px;"/>
           </template>
         </n-empty>
       </div>
@@ -115,10 +116,9 @@ useLanguageChangeEffect(loadCategories, {
     left: 0;
     right: 0;
     bottom: 0;
-    background:
-      radial-gradient(ellipse at 20% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
-      linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+    background: radial-gradient(ellipse at 20% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
+    linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
     animation: gradientShift 15s ease-in-out infinite;
     z-index: 0;
   }
@@ -131,9 +131,8 @@ useLanguageChangeEffect(loadCategories, {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
     background-size: 50px 50px;
     animation: gridMove 20s linear infinite;
     opacity: 0.6;
@@ -157,30 +156,24 @@ useLanguageChangeEffect(loadCategories, {
       line-height: 1.1;
 
       // 添加发光效果
-      background: linear-gradient(
-        135deg,
-        #ffffff 0%,
-        #f0f0ff 25%,
-        #e0e0ff 50%,
-        #f0f0ff 75%,
-        #ffffff 100%
-      );
+      background: linear-gradient(135deg,
+      #ffffff 0%,
+      #f0f0ff 25%,
+      #e0e0ff 50%,
+      #f0f0ff 75%,
+      #ffffff 100%);
       background-size: 200% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
 
-      text-shadow:
-        0 0 40px rgba(255, 255, 255, 0.9),
-        0 0 80px rgba(var(--color-primary-purple-rgb), 0.7),
-        0 0 120px rgba(99, 102, 241, 0.5),
-        0 6px 24px rgba(0, 0, 0, 0.5),
-        0 3px 12px rgba(0, 0, 0, 0.4);
+      text-shadow: 0 0 40px rgba(255, 255, 255, 0.9),
+      0 0 80px rgba(var(--color-primary-purple-rgb), 0.7),
+      0 0 120px rgba(99, 102, 241, 0.5),
+      0 6px 24px rgba(0, 0, 0, 0.5),
+      0 3px 12px rgba(0, 0, 0, 0.4);
 
-      filter:
-        drop-shadow(0 0 30px rgba(var(--color-primary-purple-rgb), 0.6))
-        drop-shadow(0 0 60px rgba(99, 102, 241, 0.4))
-        drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+      filter: drop-shadow(0 0 30px rgba(var(--color-primary-purple-rgb), 0.6)) drop-shadow(0 0 60px rgba(99, 102, 241, 0.4)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
 
       animation-name: slideDown, glowPulseTitle, gradientShine;
       animation-duration: 0.8s, 3s, 6s;
@@ -328,14 +321,11 @@ useLanguageChangeEffect(loadCategories, {
         line-height: 1.3;
 
         // 移动端简化发光效果
-        text-shadow:
-          0 0 30px rgba(255, 255, 255, 0.8),
-          0 0 60px rgba(var(--color-primary-purple-rgb), 0.6),
-          0 4px 16px rgba(0, 0, 0, 0.4);
+        text-shadow: 0 0 30px rgba(255, 255, 255, 0.8),
+        0 0 60px rgba(var(--color-primary-purple-rgb), 0.6),
+        0 4px 16px rgba(0, 0, 0, 0.4);
 
-        filter:
-          drop-shadow(0 0 20px rgba(var(--color-primary-purple-rgb), 0.5))
-          drop-shadow(0 3px 10px rgba(0, 0, 0, 0.3));
+        filter: drop-shadow(0 0 20px rgba(var(--color-primary-purple-rgb), 0.5)) drop-shadow(0 3px 10px rgba(0, 0, 0, 0.3));
       }
 
       p {
@@ -375,16 +365,14 @@ useLanguageChangeEffect(loadCategories, {
 
 @keyframes gradientShift {
   0%, 100% {
-    background:
-      radial-gradient(ellipse at 20% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
-      linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+    background: radial-gradient(ellipse at 20% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
+    linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
   }
   50% {
-    background:
-      radial-gradient(ellipse at 80% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 20% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
-      linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #6366f1 100%);
+    background: radial-gradient(ellipse at 80% 50%, rgba(100, 200, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 80%, rgba(200, 100, 255, 0.12) 0%, transparent 50%),
+    linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #6366f1 100%);
   }
 }
 
@@ -409,30 +397,24 @@ html.dark {
 
     .hero-content {
       h1 {
-        background: linear-gradient(
-          135deg,
-          #ffffff 0%,
-          #f5f5ff 25%,
-          #ebebff 50%,
-          #f5f5ff 75%,
-          #ffffff 100%
-        );
+        background: linear-gradient(135deg,
+        #ffffff 0%,
+        #f5f5ff 25%,
+        #ebebff 50%,
+        #f5f5ff 75%,
+        #ffffff 100%);
         background-size: 200% auto;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
 
-        text-shadow:
-          0 0 50px rgba(255, 255, 255, 1),
-          0 0 100px rgba(var(--color-primary-purple-rgb), 0.8),
-          0 0 150px rgba(99, 102, 241, 0.6),
-          0 8px 30px rgba(0, 0, 0, 0.6),
-          0 4px 15px rgba(0, 0, 0, 0.4);
+        text-shadow: 0 0 50px rgba(255, 255, 255, 1),
+        0 0 100px rgba(var(--color-primary-purple-rgb), 0.8),
+        0 0 150px rgba(99, 102, 241, 0.6),
+        0 8px 30px rgba(0, 0, 0, 0.6),
+        0 4px 15px rgba(0, 0, 0, 0.4);
 
-        filter:
-          drop-shadow(0 0 35px rgba(var(--color-primary-purple-rgb), 0.7))
-          drop-shadow(0 0 70px rgba(99, 102, 241, 0.5))
-          drop-shadow(0 6px 20px rgba(0, 0, 0, 0.4));
+        filter: drop-shadow(0 0 35px rgba(var(--color-primary-purple-rgb), 0.7)) drop-shadow(0 0 70px rgba(99, 102, 241, 0.5)) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.4));
       }
     }
   }

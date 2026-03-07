@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router'
 import { useUserProfileStore } from '@/stores/modules/app/user-profile.state'
 import { usePostStore } from '@/stores/modules/app/post.state'
 import { $t } from '@/locales'
-import type { identityservicev1_User } from '@/api/generated/app/service/v1'
+import type {contentservicev1_Post, identityservicev1_User} from '@/api/generated/app/service/v1'
 import {useLanguageChangeEffect} from '@/hooks/useLanguageChangeEffect';
 
 definePage({
@@ -24,7 +24,7 @@ const loading = ref(false)
 const postsLoading = ref(false)
 const user = ref<identityservicev1_User | null>(null)
 const activeTab = ref('posts')
-const posts = ref<any[]>([])
+const posts = ref<contentservicev1_Post[]>([])
 const postsTotal = ref(0)
 
 // 统计数据
