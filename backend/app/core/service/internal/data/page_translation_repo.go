@@ -2,24 +2,30 @@ package data
 
 import (
 	"context"
-	"go-wind-cms/pkg/content/count"
-	"go-wind-cms/pkg/content/summary"
+
 	"strconv"
 	"time"
 
+	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
+	"google.golang.org/protobuf/types/known/fieldmaskpb"
+
 	entCrud "github.com/tx7do/go-crud/entgo"
+	"github.com/tx7do/kratos-bootstrap/bootstrap"
+
 	"github.com/tx7do/go-utils/copierutil"
 	"github.com/tx7do/go-utils/mapper"
 	"github.com/tx7do/go-utils/slug"
 	"github.com/tx7do/go-utils/trans"
-	"github.com/tx7do/kratos-bootstrap/bootstrap"
 
 	"go-wind-cms/app/core/service/internal/data/ent"
 	"go-wind-cms/app/core/service/internal/data/ent/pagetranslation"
 	"go-wind-cms/app/core/service/internal/data/ent/predicate"
 
 	contentV1 "go-wind-cms/api/gen/go/content/service/v1"
+
+	"go-wind-cms/pkg/content/count"
+	"go-wind-cms/pkg/content/summary"
 )
 
 type PageTranslationRepo struct {
@@ -148,6 +154,60 @@ func (r *PageTranslationRepo) BatchCreate(ctx context.Context, tx *ent.Tx, items
 	return nil
 }
 
+func (r *PageTranslationRepo) CreateTranslation(ctx context.Context, data *contentV1.PageTranslation) (*contentV1.PageTranslation, error) {
+	if err := r.PrepareTranslation(ctx, data); err != nil {
+		return nil, err
+	}
+
+	builder := r.newCreateBuilder(ctx, data)
+
+	entity, err := builder.Save(ctx)
+	if err != nil {
+		r.log.Errorf("create page translation failed: %s", err.Error())
+		return nil, contentV1.ErrorInternalServerError("create page translation failed")
+	}
+
+	dto := r.mapper.ToDTO(entity)
+
+	return dto, nil
+}
+
+func (r *PageTranslationRepo) UpdateTranslation(ctx context.Context, id uint32, data *contentV1.PageTranslation, updateMask *fieldmaskpb.FieldMask) (*contentV1.PageTranslation, error) {
+	if data == nil {
+		return nil, nil
+	}
+
+	builder := r.entClient.Client().PageTranslation.UpdateOneID(id)
+
+	dto, err := r.repository.UpdateOne(ctx, builder, data, updateMask,
+		func(dto *contentV1.PageTranslation) {
+			builder.
+				SetNillableTitle(data.Title).
+				SetNillableSummary(data.Summary).
+				SetNillableContent(data.Content).
+				SetNillableOriginalContent(data.OriginalContent).
+				SetNillableThumbnail(data.Thumbnail).
+				SetNillableCoverImage(data.CoverImage).
+				SetNillableWordCount(data.WordCount).
+				SetNillableFullPath(data.FullPath).
+				SetNillableMetaKeywords(data.MetaKeywords).
+				SetNillableMetaDescription(data.MetaDescription).
+				SetNillableSeoTitle(data.SeoTitle).
+				SetNillableUpdatedBy(data.UpdatedBy).
+				SetUpdatedAt(time.Now())
+		},
+		func(s *sql.Selector) {
+			s.Where(sql.EQ(pagetranslation.FieldID, id))
+		},
+	)
+	if err != nil {
+		r.log.Errorf("update page translation failed: %s", err.Error())
+		return nil, contentV1.ErrorInternalServerError("update page translation failed")
+	}
+
+	return dto, nil
+}
+
 func (r *PageTranslationRepo) CountByBaseSlug(ctx context.Context, baseSlug string) (int64, error) {
 	c, err := r.entClient.Client().PageTranslation.Query().
 		Where(
@@ -214,6 +274,78 @@ func (r *PageTranslationRepo) PrepareTranslation(ctx context.Context, data *cont
 
 	counter := count.NewContentCounter(data.GetContent())
 	data.WordCount = trans.Ptr(uint32(counter.RawChars()))
+
+	return nil
+}
+
+func (r *PageTranslationRepo) GetTranslation(ctx context.Context, pageId uint32, languageCode string) (*contentV1.PageTranslation, error) {
+	entity, err := r.entClient.Client().PageTranslation.Query().
+		Where(
+			pagetranslation.PageIDEQ(pageId),
+			pagetranslation.LanguageCodeEQ(languageCode),
+		).
+		Only(ctx)
+	if err != nil {
+		r.log.Errorf("query page translation by page id and language code failed: %s", err.Error())
+		return nil, contentV1.ErrorInternalServerError("query page translation by page id and language code failed")
+	}
+
+	dto := r.mapper.ToDTO(entity)
+
+	return dto, nil
+}
+
+func (r *PageTranslationRepo) DeleteTranslation(ctx context.Context, req *contentV1.DeletePageTranslationRequest) error {
+	if req.QueryBy == nil {
+		return contentV1.ErrorBadRequest("invalid parameter: query_by is required")
+	}
+
+	switch req.QueryBy.(type) {
+	case *contentV1.DeletePageTranslationRequest_Id:
+		if req.GetId() == 0 {
+			return contentV1.ErrorBadRequest("invalid parameter: id must be greater than 0")
+		}
+
+	case *contentV1.DeletePageTranslationRequest_Identifier:
+		if req.GetIdentifier() == nil {
+			return contentV1.ErrorBadRequest("invalid parameter: identifier is required")
+		}
+		if req.GetIdentifier().GetPageId() == 0 {
+			return contentV1.ErrorBadRequest("invalid parameter: page_id must be greater than 0")
+		}
+		if len(req.GetIdentifier().GetLanguageCode()) == 0 {
+			return contentV1.ErrorBadRequest("invalid parameter: language_code is required")
+		}
+
+	default:
+		return contentV1.ErrorBadRequest("invalid parameter: unsupported query_by type")
+	}
+
+	builder := r.entClient.Client().PageTranslation.Delete()
+
+	_, err := r.repository.Delete(ctx, builder, func(s *sql.Selector) {
+		switch req.QueryBy.(type) {
+		case *contentV1.DeletePageTranslationRequest_Id:
+			id := req.GetId()
+			s.Where(sql.EQ(pagetranslation.FieldID, id))
+
+		case *contentV1.DeletePageTranslationRequest_Identifier:
+			identifier := req.GetIdentifier()
+			s.Where(
+				sql.And(
+					sql.EQ(pagetranslation.FieldPageID, identifier.GetPageId()),
+					sql.EQ(pagetranslation.FieldLanguageCode, identifier.GetLanguageCode()),
+				),
+			)
+
+		default:
+			return
+		}
+	})
+	if err != nil {
+		r.log.Errorf("delete page translation failed: %s", err.Error())
+		return contentV1.ErrorInternalServerError("delete page translation failed")
+	}
 
 	return nil
 }

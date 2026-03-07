@@ -50,3 +50,34 @@ func (s *CategoryService) Delete(ctx context.Context, req *contentV1.DeleteCateg
 	}
 	return &emptypb.Empty{}, nil
 }
+
+func (s *CategoryService) TranslationExists(ctx context.Context, req *contentV1.CategoryTranslationExistsRequest) (*contentV1.CategoryTranslationExistsResponse, error) {
+	exists, err := s.categoryRepo.TranslationExists(ctx, req.GetCategoryId(), req.GetLanguageCode())
+	if err != nil {
+		return nil, err
+	}
+
+	return &contentV1.CategoryTranslationExistsResponse{
+		Exists: exists,
+	}, nil
+}
+
+func (s *CategoryService) GetTranslation(ctx context.Context, req *contentV1.GetCategoryRequest) (*contentV1.CategoryTranslation, error) {
+	return s.categoryRepo.GetTranslation(ctx, req)
+}
+
+func (s *CategoryService) CreateTranslation(ctx context.Context, req *contentV1.CreateCategoryTranslationRequest) (*contentV1.CategoryTranslation, error) {
+	return s.categoryRepo.CreateTranslation(ctx, req)
+}
+
+func (s *CategoryService) UpdateTranslation(ctx context.Context, req *contentV1.UpdateCategoryTranslationRequest) (*contentV1.CategoryTranslation, error) {
+	return s.categoryRepo.UpdateTranslation(ctx, req)
+}
+
+func (s *CategoryService) DeleteTranslation(ctx context.Context, req *contentV1.DeleteCategoryTranslationRequest) (*emptypb.Empty, error) {
+	err := s.categoryRepo.DeleteTranslation(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &emptypb.Empty{}, nil
+}

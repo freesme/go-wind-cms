@@ -806,6 +806,356 @@ type DeleteCategoryRequest_Id struct {
 
 func (*DeleteCategoryRequest_Id) isDeleteCategoryRequest_QueryBy() {}
 
+type CategoryTranslationExistsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CategoryId    uint32                 `protobuf:"varint,1,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`      // 关联的分类ID
+	LanguageCode  string                 `protobuf:"bytes,2,opt,name=language_code,json=languageCode,proto3" json:"language_code,omitempty"` // 语言代码
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CategoryTranslationExistsRequest) Reset() {
+	*x = CategoryTranslationExistsRequest{}
+	mi := &file_content_service_v1_category_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CategoryTranslationExistsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CategoryTranslationExistsRequest) ProtoMessage() {}
+
+func (x *CategoryTranslationExistsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_content_service_v1_category_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CategoryTranslationExistsRequest.ProtoReflect.Descriptor instead.
+func (*CategoryTranslationExistsRequest) Descriptor() ([]byte, []int) {
+	return file_content_service_v1_category_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *CategoryTranslationExistsRequest) GetCategoryId() uint32 {
+	if x != nil {
+		return x.CategoryId
+	}
+	return 0
+}
+
+func (x *CategoryTranslationExistsRequest) GetLanguageCode() string {
+	if x != nil {
+		return x.LanguageCode
+	}
+	return ""
+}
+
+type CategoryTranslationExistsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Exists        bool                   `protobuf:"varint,1,opt,name=exists,proto3" json:"exists,omitempty"` // 翻译是否存在
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CategoryTranslationExistsResponse) Reset() {
+	*x = CategoryTranslationExistsResponse{}
+	mi := &file_content_service_v1_category_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CategoryTranslationExistsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CategoryTranslationExistsResponse) ProtoMessage() {}
+
+func (x *CategoryTranslationExistsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_content_service_v1_category_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CategoryTranslationExistsResponse.ProtoReflect.Descriptor instead.
+func (*CategoryTranslationExistsResponse) Descriptor() ([]byte, []int) {
+	return file_content_service_v1_category_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *CategoryTranslationExistsResponse) GetExists() bool {
+	if x != nil {
+		return x.Exists
+	}
+	return false
+}
+
+type CreateCategoryTranslationRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CategoryId    uint32                 `protobuf:"varint,1,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"` // 关联的分类ID
+	Data          *CategoryTranslation   `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateCategoryTranslationRequest) Reset() {
+	*x = CreateCategoryTranslationRequest{}
+	mi := &file_content_service_v1_category_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateCategoryTranslationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateCategoryTranslationRequest) ProtoMessage() {}
+
+func (x *CreateCategoryTranslationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_content_service_v1_category_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateCategoryTranslationRequest.ProtoReflect.Descriptor instead.
+func (*CreateCategoryTranslationRequest) Descriptor() ([]byte, []int) {
+	return file_content_service_v1_category_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *CreateCategoryTranslationRequest) GetCategoryId() uint32 {
+	if x != nil {
+		return x.CategoryId
+	}
+	return 0
+}
+
+func (x *CreateCategoryTranslationRequest) GetData() *CategoryTranslation {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type UpdateCategoryTranslationRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` // 翻译ID
+	Data          *CategoryTranslation   `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	UpdateMask    *fieldmaskpb.FieldMask `protobuf:"bytes,3,opt,name=update_mask,json=updateMask,proto3" json:"update_mask,omitempty"`              // 要更新的字段列表
+	AllowMissing  *bool                  `protobuf:"varint,4,opt,name=allow_missing,json=allowMissing,proto3,oneof" json:"allow_missing,omitempty"` // 如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateCategoryTranslationRequest) Reset() {
+	*x = UpdateCategoryTranslationRequest{}
+	mi := &file_content_service_v1_category_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateCategoryTranslationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateCategoryTranslationRequest) ProtoMessage() {}
+
+func (x *UpdateCategoryTranslationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_content_service_v1_category_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateCategoryTranslationRequest.ProtoReflect.Descriptor instead.
+func (*UpdateCategoryTranslationRequest) Descriptor() ([]byte, []int) {
+	return file_content_service_v1_category_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *UpdateCategoryTranslationRequest) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UpdateCategoryTranslationRequest) GetData() *CategoryTranslation {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *UpdateCategoryTranslationRequest) GetUpdateMask() *fieldmaskpb.FieldMask {
+	if x != nil {
+		return x.UpdateMask
+	}
+	return nil
+}
+
+func (x *UpdateCategoryTranslationRequest) GetAllowMissing() bool {
+	if x != nil && x.AllowMissing != nil {
+		return *x.AllowMissing
+	}
+	return false
+}
+
+type CategoryTranslationIdentifier struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CategoryId    uint32                 `protobuf:"varint,1,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`      // 关联的分类ID
+	LanguageCode  string                 `protobuf:"bytes,2,opt,name=language_code,json=languageCode,proto3" json:"language_code,omitempty"` // 语言代码
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CategoryTranslationIdentifier) Reset() {
+	*x = CategoryTranslationIdentifier{}
+	mi := &file_content_service_v1_category_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CategoryTranslationIdentifier) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CategoryTranslationIdentifier) ProtoMessage() {}
+
+func (x *CategoryTranslationIdentifier) ProtoReflect() protoreflect.Message {
+	mi := &file_content_service_v1_category_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CategoryTranslationIdentifier.ProtoReflect.Descriptor instead.
+func (*CategoryTranslationIdentifier) Descriptor() ([]byte, []int) {
+	return file_content_service_v1_category_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *CategoryTranslationIdentifier) GetCategoryId() uint32 {
+	if x != nil {
+		return x.CategoryId
+	}
+	return 0
+}
+
+func (x *CategoryTranslationIdentifier) GetLanguageCode() string {
+	if x != nil {
+		return x.LanguageCode
+	}
+	return ""
+}
+
+type DeleteCategoryTranslationRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to QueryBy:
+	//
+	//	*DeleteCategoryTranslationRequest_Id
+	//	*DeleteCategoryTranslationRequest_Identifier
+	QueryBy       isDeleteCategoryTranslationRequest_QueryBy `protobuf_oneof:"query_by"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteCategoryTranslationRequest) Reset() {
+	*x = DeleteCategoryTranslationRequest{}
+	mi := &file_content_service_v1_category_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteCategoryTranslationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteCategoryTranslationRequest) ProtoMessage() {}
+
+func (x *DeleteCategoryTranslationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_content_service_v1_category_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteCategoryTranslationRequest.ProtoReflect.Descriptor instead.
+func (*DeleteCategoryTranslationRequest) Descriptor() ([]byte, []int) {
+	return file_content_service_v1_category_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *DeleteCategoryTranslationRequest) GetQueryBy() isDeleteCategoryTranslationRequest_QueryBy {
+	if x != nil {
+		return x.QueryBy
+	}
+	return nil
+}
+
+func (x *DeleteCategoryTranslationRequest) GetId() uint32 {
+	if x != nil {
+		if x, ok := x.QueryBy.(*DeleteCategoryTranslationRequest_Id); ok {
+			return x.Id
+		}
+	}
+	return 0
+}
+
+func (x *DeleteCategoryTranslationRequest) GetIdentifier() *CategoryTranslationIdentifier {
+	if x != nil {
+		if x, ok := x.QueryBy.(*DeleteCategoryTranslationRequest_Identifier); ok {
+			return x.Identifier
+		}
+	}
+	return nil
+}
+
+type isDeleteCategoryTranslationRequest_QueryBy interface {
+	isDeleteCategoryTranslationRequest_QueryBy()
+}
+
+type DeleteCategoryTranslationRequest_Id struct {
+	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // ID
+}
+
+type DeleteCategoryTranslationRequest_Identifier struct {
+	Identifier *CategoryTranslationIdentifier `protobuf:"bytes,2,opt,name=identifier,proto3,oneof"` // 通过 category_id 和 language_code 组合查询
+}
+
+func (*DeleteCategoryTranslationRequest_Id) isDeleteCategoryTranslationRequest_QueryBy() {}
+
+func (*DeleteCategoryTranslationRequest_Identifier) isDeleteCategoryTranslationRequest_QueryBy() {}
+
 var File_content_service_v1_category_proto protoreflect.FileDescriptor
 
 const file_content_service_v1_category_proto_rawDesc = "" +
@@ -951,13 +1301,47 @@ const file_content_service_v1_category_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\rB\n" +
 	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02idB\n" +
 	"\n" +
-	"\bquery_by2\xa8\x03\n" +
+	"\bquery_by\"\x95\x01\n" +
+	" CategoryTranslationExistsRequest\x128\n" +
+	"\vcategory_id\x18\x01 \x01(\rB\x17\xbaG\x14\x92\x02\x11关联的分类IDR\n" +
+	"categoryId\x127\n" +
+	"\rlanguage_code\x18\x02 \x01(\tB\x12\xbaG\x0f\x92\x02\f语言代码R\flanguageCode\"U\n" +
+	"!CategoryTranslationExistsResponse\x120\n" +
+	"\x06exists\x18\x01 \x01(\bB\x18\xbaG\x15\x92\x02\x12翻译是否存在R\x06exists\"\x99\x01\n" +
+	" CreateCategoryTranslationRequest\x128\n" +
+	"\vcategory_id\x18\x01 \x01(\rB\x17\xbaG\x14\x92\x02\x11关联的分类IDR\n" +
+	"categoryId\x12;\n" +
+	"\x04data\x18\x02 \x01(\v2'.content.service.v1.CategoryTranslationR\x04data\"\xbd\x03\n" +
+	" UpdateCategoryTranslationRequest\x12\x1e\n" +
+	"\x02id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b翻译IDR\x02id\x12;\n" +
+	"\x04data\x18\x02 \x01(\v2'.content.service.v1.CategoryTranslationR\x04data\x12s\n" +
+	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
+	"updateMask\x12\xb4\x01\n" +
+	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
+	"\x0e_allow_missing\"\x92\x01\n" +
+	"\x1dCategoryTranslationIdentifier\x128\n" +
+	"\vcategory_id\x18\x01 \x01(\rB\x17\xbaG\x14\x92\x02\x11关联的分类IDR\n" +
+	"categoryId\x127\n" +
+	"\rlanguage_code\x18\x02 \x01(\tB\x12\xbaG\x0f\x92\x02\f语言代码R\flanguageCode\"\xdb\x01\n" +
+	" DeleteCategoryTranslationRequest\x12\x1c\n" +
+	"\x02id\x18\x01 \x01(\rB\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02id\x12\x8c\x01\n" +
+	"\n" +
+	"identifier\x18\x02 \x01(\v21.content.service.v1.CategoryTranslationIdentifierB7\xbaG4\x92\x021通过 category_id 和 language_code 组合查询H\x00R\n" +
+	"identifierB\n" +
+	"\n" +
+	"\bquery_by2\xe3\a\n" +
 	"\x0fCategoryService\x12M\n" +
 	"\x04List\x12\x19.pagination.PagingRequest\x1a(.content.service.v1.ListCategoryResponse\"\x00\x12M\n" +
 	"\x03Get\x12&.content.service.v1.GetCategoryRequest\x1a\x1c.content.service.v1.Category\"\x00\x12S\n" +
 	"\x06Create\x12).content.service.v1.CreateCategoryRequest\x1a\x1c.content.service.v1.Category\"\x00\x12S\n" +
 	"\x06Update\x12).content.service.v1.UpdateCategoryRequest\x1a\x1c.content.service.v1.Category\"\x00\x12M\n" +
-	"\x06Delete\x12).content.service.v1.DeleteCategoryRequest\x1a\x16.google.protobuf.Empty\"\x00B\xc6\x01\n" +
+	"\x06Delete\x12).content.service.v1.DeleteCategoryRequest\x1a\x16.google.protobuf.Empty\"\x00\x12\x82\x01\n" +
+	"\x11TranslationExists\x124.content.service.v1.CategoryTranslationExistsRequest\x1a5.content.service.v1.CategoryTranslationExistsResponse\"\x00\x12c\n" +
+	"\x0eGetTranslation\x12&.content.service.v1.GetCategoryRequest\x1a'.content.service.v1.CategoryTranslation\"\x00\x12t\n" +
+	"\x11CreateTranslation\x124.content.service.v1.CreateCategoryTranslationRequest\x1a'.content.service.v1.CategoryTranslation\"\x00\x12t\n" +
+	"\x11UpdateTranslation\x124.content.service.v1.UpdateCategoryTranslationRequest\x1a'.content.service.v1.CategoryTranslation\"\x00\x12c\n" +
+	"\x11DeleteTranslation\x124.content.service.v1.DeleteCategoryTranslationRequest\x1a\x16.google.protobuf.Empty\"\x00B\xc6\x01\n" +
 	"\x16com.content.service.v1B\rCategoryProtoP\x01Z3go-wind-cms/api/gen/go/content/service/v1;contentpb\xa2\x02\x03CSX\xaa\x02\x12Content.Service.V1\xca\x02\x12Content\\Service\\V1\xe2\x02\x1eContent\\Service\\V1\\GPBMetadata\xea\x02\x14Content::Service::V1b\x06proto3"
 
 var (
@@ -973,53 +1357,73 @@ func file_content_service_v1_category_proto_rawDescGZIP() []byte {
 }
 
 var file_content_service_v1_category_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_content_service_v1_category_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_content_service_v1_category_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_content_service_v1_category_proto_goTypes = []any{
-	(Category_CategoryStatus)(0),  // 0: content.service.v1.Category.CategoryStatus
-	(*Category)(nil),              // 1: content.service.v1.Category
-	(*CategoryTranslation)(nil),   // 2: content.service.v1.CategoryTranslation
-	(*ListCategoryResponse)(nil),  // 3: content.service.v1.ListCategoryResponse
-	(*GetCategoryRequest)(nil),    // 4: content.service.v1.GetCategoryRequest
-	(*CreateCategoryRequest)(nil), // 5: content.service.v1.CreateCategoryRequest
-	(*UpdateCategoryRequest)(nil), // 6: content.service.v1.UpdateCategoryRequest
-	(*DeleteCategoryRequest)(nil), // 7: content.service.v1.DeleteCategoryRequest
-	nil,                           // 8: content.service.v1.Category.CustomFieldsEntry
-	(*timestamppb.Timestamp)(nil), // 9: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil), // 10: google.protobuf.FieldMask
-	(*v1.PagingRequest)(nil),      // 11: pagination.PagingRequest
-	(*emptypb.Empty)(nil),         // 12: google.protobuf.Empty
+	(Category_CategoryStatus)(0),              // 0: content.service.v1.Category.CategoryStatus
+	(*Category)(nil),                          // 1: content.service.v1.Category
+	(*CategoryTranslation)(nil),               // 2: content.service.v1.CategoryTranslation
+	(*ListCategoryResponse)(nil),              // 3: content.service.v1.ListCategoryResponse
+	(*GetCategoryRequest)(nil),                // 4: content.service.v1.GetCategoryRequest
+	(*CreateCategoryRequest)(nil),             // 5: content.service.v1.CreateCategoryRequest
+	(*UpdateCategoryRequest)(nil),             // 6: content.service.v1.UpdateCategoryRequest
+	(*DeleteCategoryRequest)(nil),             // 7: content.service.v1.DeleteCategoryRequest
+	(*CategoryTranslationExistsRequest)(nil),  // 8: content.service.v1.CategoryTranslationExistsRequest
+	(*CategoryTranslationExistsResponse)(nil), // 9: content.service.v1.CategoryTranslationExistsResponse
+	(*CreateCategoryTranslationRequest)(nil),  // 10: content.service.v1.CreateCategoryTranslationRequest
+	(*UpdateCategoryTranslationRequest)(nil),  // 11: content.service.v1.UpdateCategoryTranslationRequest
+	(*CategoryTranslationIdentifier)(nil),     // 12: content.service.v1.CategoryTranslationIdentifier
+	(*DeleteCategoryTranslationRequest)(nil),  // 13: content.service.v1.DeleteCategoryTranslationRequest
+	nil,                                       // 14: content.service.v1.Category.CustomFieldsEntry
+	(*timestamppb.Timestamp)(nil),             // 15: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil),             // 16: google.protobuf.FieldMask
+	(*v1.PagingRequest)(nil),                  // 17: pagination.PagingRequest
+	(*emptypb.Empty)(nil),                     // 18: google.protobuf.Empty
 }
 var file_content_service_v1_category_proto_depIdxs = []int32{
 	0,  // 0: content.service.v1.Category.status:type_name -> content.service.v1.Category.CategoryStatus
 	2,  // 1: content.service.v1.Category.translations:type_name -> content.service.v1.CategoryTranslation
-	8,  // 2: content.service.v1.Category.custom_fields:type_name -> content.service.v1.Category.CustomFieldsEntry
+	14, // 2: content.service.v1.Category.custom_fields:type_name -> content.service.v1.Category.CustomFieldsEntry
 	1,  // 3: content.service.v1.Category.children:type_name -> content.service.v1.Category
-	9,  // 4: content.service.v1.Category.created_at:type_name -> google.protobuf.Timestamp
-	9,  // 5: content.service.v1.Category.updated_at:type_name -> google.protobuf.Timestamp
-	9,  // 6: content.service.v1.Category.deleted_at:type_name -> google.protobuf.Timestamp
-	9,  // 7: content.service.v1.CategoryTranslation.created_at:type_name -> google.protobuf.Timestamp
-	9,  // 8: content.service.v1.CategoryTranslation.updated_at:type_name -> google.protobuf.Timestamp
-	9,  // 9: content.service.v1.CategoryTranslation.deleted_at:type_name -> google.protobuf.Timestamp
+	15, // 4: content.service.v1.Category.created_at:type_name -> google.protobuf.Timestamp
+	15, // 5: content.service.v1.Category.updated_at:type_name -> google.protobuf.Timestamp
+	15, // 6: content.service.v1.Category.deleted_at:type_name -> google.protobuf.Timestamp
+	15, // 7: content.service.v1.CategoryTranslation.created_at:type_name -> google.protobuf.Timestamp
+	15, // 8: content.service.v1.CategoryTranslation.updated_at:type_name -> google.protobuf.Timestamp
+	15, // 9: content.service.v1.CategoryTranslation.deleted_at:type_name -> google.protobuf.Timestamp
 	1,  // 10: content.service.v1.ListCategoryResponse.items:type_name -> content.service.v1.Category
-	10, // 11: content.service.v1.GetCategoryRequest.view_mask:type_name -> google.protobuf.FieldMask
+	16, // 11: content.service.v1.GetCategoryRequest.view_mask:type_name -> google.protobuf.FieldMask
 	1,  // 12: content.service.v1.CreateCategoryRequest.data:type_name -> content.service.v1.Category
 	1,  // 13: content.service.v1.UpdateCategoryRequest.data:type_name -> content.service.v1.Category
-	10, // 14: content.service.v1.UpdateCategoryRequest.update_mask:type_name -> google.protobuf.FieldMask
-	11, // 15: content.service.v1.CategoryService.List:input_type -> pagination.PagingRequest
-	4,  // 16: content.service.v1.CategoryService.Get:input_type -> content.service.v1.GetCategoryRequest
-	5,  // 17: content.service.v1.CategoryService.Create:input_type -> content.service.v1.CreateCategoryRequest
-	6,  // 18: content.service.v1.CategoryService.Update:input_type -> content.service.v1.UpdateCategoryRequest
-	7,  // 19: content.service.v1.CategoryService.Delete:input_type -> content.service.v1.DeleteCategoryRequest
-	3,  // 20: content.service.v1.CategoryService.List:output_type -> content.service.v1.ListCategoryResponse
-	1,  // 21: content.service.v1.CategoryService.Get:output_type -> content.service.v1.Category
-	1,  // 22: content.service.v1.CategoryService.Create:output_type -> content.service.v1.Category
-	1,  // 23: content.service.v1.CategoryService.Update:output_type -> content.service.v1.Category
-	12, // 24: content.service.v1.CategoryService.Delete:output_type -> google.protobuf.Empty
-	20, // [20:25] is the sub-list for method output_type
-	15, // [15:20] is the sub-list for method input_type
-	15, // [15:15] is the sub-list for extension type_name
-	15, // [15:15] is the sub-list for extension extendee
-	0,  // [0:15] is the sub-list for field type_name
+	16, // 14: content.service.v1.UpdateCategoryRequest.update_mask:type_name -> google.protobuf.FieldMask
+	2,  // 15: content.service.v1.CreateCategoryTranslationRequest.data:type_name -> content.service.v1.CategoryTranslation
+	2,  // 16: content.service.v1.UpdateCategoryTranslationRequest.data:type_name -> content.service.v1.CategoryTranslation
+	16, // 17: content.service.v1.UpdateCategoryTranslationRequest.update_mask:type_name -> google.protobuf.FieldMask
+	12, // 18: content.service.v1.DeleteCategoryTranslationRequest.identifier:type_name -> content.service.v1.CategoryTranslationIdentifier
+	17, // 19: content.service.v1.CategoryService.List:input_type -> pagination.PagingRequest
+	4,  // 20: content.service.v1.CategoryService.Get:input_type -> content.service.v1.GetCategoryRequest
+	5,  // 21: content.service.v1.CategoryService.Create:input_type -> content.service.v1.CreateCategoryRequest
+	6,  // 22: content.service.v1.CategoryService.Update:input_type -> content.service.v1.UpdateCategoryRequest
+	7,  // 23: content.service.v1.CategoryService.Delete:input_type -> content.service.v1.DeleteCategoryRequest
+	8,  // 24: content.service.v1.CategoryService.TranslationExists:input_type -> content.service.v1.CategoryTranslationExistsRequest
+	4,  // 25: content.service.v1.CategoryService.GetTranslation:input_type -> content.service.v1.GetCategoryRequest
+	10, // 26: content.service.v1.CategoryService.CreateTranslation:input_type -> content.service.v1.CreateCategoryTranslationRequest
+	11, // 27: content.service.v1.CategoryService.UpdateTranslation:input_type -> content.service.v1.UpdateCategoryTranslationRequest
+	13, // 28: content.service.v1.CategoryService.DeleteTranslation:input_type -> content.service.v1.DeleteCategoryTranslationRequest
+	3,  // 29: content.service.v1.CategoryService.List:output_type -> content.service.v1.ListCategoryResponse
+	1,  // 30: content.service.v1.CategoryService.Get:output_type -> content.service.v1.Category
+	1,  // 31: content.service.v1.CategoryService.Create:output_type -> content.service.v1.Category
+	1,  // 32: content.service.v1.CategoryService.Update:output_type -> content.service.v1.Category
+	18, // 33: content.service.v1.CategoryService.Delete:output_type -> google.protobuf.Empty
+	9,  // 34: content.service.v1.CategoryService.TranslationExists:output_type -> content.service.v1.CategoryTranslationExistsResponse
+	2,  // 35: content.service.v1.CategoryService.GetTranslation:output_type -> content.service.v1.CategoryTranslation
+	2,  // 36: content.service.v1.CategoryService.CreateTranslation:output_type -> content.service.v1.CategoryTranslation
+	2,  // 37: content.service.v1.CategoryService.UpdateTranslation:output_type -> content.service.v1.CategoryTranslation
+	18, // 38: content.service.v1.CategoryService.DeleteTranslation:output_type -> google.protobuf.Empty
+	29, // [29:39] is the sub-list for method output_type
+	19, // [19:29] is the sub-list for method input_type
+	19, // [19:19] is the sub-list for extension type_name
+	19, // [19:19] is the sub-list for extension extendee
+	0,  // [0:19] is the sub-list for field type_name
 }
 
 func init() { file_content_service_v1_category_proto_init() }
@@ -1037,13 +1441,18 @@ func file_content_service_v1_category_proto_init() {
 	file_content_service_v1_category_proto_msgTypes[6].OneofWrappers = []any{
 		(*DeleteCategoryRequest_Id)(nil),
 	}
+	file_content_service_v1_category_proto_msgTypes[10].OneofWrappers = []any{}
+	file_content_service_v1_category_proto_msgTypes[12].OneofWrappers = []any{
+		(*DeleteCategoryTranslationRequest_Id)(nil),
+		(*DeleteCategoryTranslationRequest_Identifier)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_content_service_v1_category_proto_rawDesc), len(file_content_service_v1_category_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   8,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

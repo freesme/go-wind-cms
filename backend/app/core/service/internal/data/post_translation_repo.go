@@ -2,26 +2,30 @@ package data
 
 import (
 	"context"
-	"go-wind-cms/pkg/content/count"
-	"go-wind-cms/pkg/content/summary"
+
 	"strconv"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
+	"google.golang.org/protobuf/types/known/fieldmaskpb"
+
 	entCrud "github.com/tx7do/go-crud/entgo"
+	"github.com/tx7do/kratos-bootstrap/bootstrap"
+
 	"github.com/tx7do/go-utils/copierutil"
 	"github.com/tx7do/go-utils/mapper"
 	"github.com/tx7do/go-utils/slug"
 	"github.com/tx7do/go-utils/trans"
-	"github.com/tx7do/kratos-bootstrap/bootstrap"
-	"google.golang.org/protobuf/types/known/fieldmaskpb"
 
 	"go-wind-cms/app/core/service/internal/data/ent"
 	"go-wind-cms/app/core/service/internal/data/ent/posttranslation"
 	"go-wind-cms/app/core/service/internal/data/ent/predicate"
 
 	contentV1 "go-wind-cms/api/gen/go/content/service/v1"
+
+	"go-wind-cms/pkg/content/count"
+	"go-wind-cms/pkg/content/summary"
 )
 
 type PostTranslationRepo struct {
@@ -189,7 +193,7 @@ func (r *PostTranslationRepo) PrepareTranslation(ctx context.Context, data *cont
 	return nil
 }
 
-func (r *PostTranslationRepo) Create(ctx context.Context, data *contentV1.PostTranslation) (*contentV1.PostTranslation, error) {
+func (r *PostTranslationRepo) CreateTranslation(ctx context.Context, data *contentV1.PostTranslation) (*contentV1.PostTranslation, error) {
 	if data == nil {
 		return nil, nil
 	}
@@ -208,7 +212,7 @@ func (r *PostTranslationRepo) Create(ctx context.Context, data *contentV1.PostTr
 	return r.mapper.ToDTO(entity), nil
 }
 
-func (r *PostTranslationRepo) Update(ctx context.Context, id uint32, data *contentV1.PostTranslation, updateMask *fieldmaskpb.FieldMask) (*contentV1.PostTranslation, error) {
+func (r *PostTranslationRepo) UpdateTranslation(ctx context.Context, id uint32, data *contentV1.PostTranslation, updateMask *fieldmaskpb.FieldMask) (*contentV1.PostTranslation, error) {
 	if data == nil {
 		return nil, nil
 	}

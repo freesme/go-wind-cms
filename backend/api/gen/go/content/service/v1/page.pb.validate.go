@@ -1378,3 +1378,783 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DeletePageRequestValidationError{}
+
+// Validate checks the field values on PageTranslationExistsRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *PageTranslationExistsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PageTranslationExistsRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// PageTranslationExistsRequestMultiError, or nil if none found.
+func (m *PageTranslationExistsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PageTranslationExistsRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for PageId
+
+	// no validation rules for LanguageCode
+
+	if len(errors) > 0 {
+		return PageTranslationExistsRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// PageTranslationExistsRequestMultiError is an error wrapping multiple
+// validation errors returned by PageTranslationExistsRequest.ValidateAll() if
+// the designated constraints aren't met.
+type PageTranslationExistsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PageTranslationExistsRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PageTranslationExistsRequestMultiError) AllErrors() []error { return m }
+
+// PageTranslationExistsRequestValidationError is the validation error returned
+// by PageTranslationExistsRequest.Validate if the designated constraints
+// aren't met.
+type PageTranslationExistsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PageTranslationExistsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PageTranslationExistsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PageTranslationExistsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PageTranslationExistsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PageTranslationExistsRequestValidationError) ErrorName() string {
+	return "PageTranslationExistsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e PageTranslationExistsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPageTranslationExistsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PageTranslationExistsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PageTranslationExistsRequestValidationError{}
+
+// Validate checks the field values on PageTranslationExistsResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *PageTranslationExistsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PageTranslationExistsResponse with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// PageTranslationExistsResponseMultiError, or nil if none found.
+func (m *PageTranslationExistsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PageTranslationExistsResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Exists
+
+	if len(errors) > 0 {
+		return PageTranslationExistsResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// PageTranslationExistsResponseMultiError is an error wrapping multiple
+// validation errors returned by PageTranslationExistsResponse.ValidateAll()
+// if the designated constraints aren't met.
+type PageTranslationExistsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PageTranslationExistsResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PageTranslationExistsResponseMultiError) AllErrors() []error { return m }
+
+// PageTranslationExistsResponseValidationError is the validation error
+// returned by PageTranslationExistsResponse.Validate if the designated
+// constraints aren't met.
+type PageTranslationExistsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PageTranslationExistsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PageTranslationExistsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PageTranslationExistsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PageTranslationExistsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PageTranslationExistsResponseValidationError) ErrorName() string {
+	return "PageTranslationExistsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e PageTranslationExistsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPageTranslationExistsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PageTranslationExistsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PageTranslationExistsResponseValidationError{}
+
+// Validate checks the field values on CreatePageTranslationRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CreatePageTranslationRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreatePageTranslationRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CreatePageTranslationRequestMultiError, or nil if none found.
+func (m *CreatePageTranslationRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreatePageTranslationRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for PageId
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreatePageTranslationRequestValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreatePageTranslationRequestValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreatePageTranslationRequestValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return CreatePageTranslationRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreatePageTranslationRequestMultiError is an error wrapping multiple
+// validation errors returned by CreatePageTranslationRequest.ValidateAll() if
+// the designated constraints aren't met.
+type CreatePageTranslationRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreatePageTranslationRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreatePageTranslationRequestMultiError) AllErrors() []error { return m }
+
+// CreatePageTranslationRequestValidationError is the validation error returned
+// by CreatePageTranslationRequest.Validate if the designated constraints
+// aren't met.
+type CreatePageTranslationRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreatePageTranslationRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreatePageTranslationRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreatePageTranslationRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreatePageTranslationRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreatePageTranslationRequestValidationError) ErrorName() string {
+	return "CreatePageTranslationRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreatePageTranslationRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreatePageTranslationRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreatePageTranslationRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreatePageTranslationRequestValidationError{}
+
+// Validate checks the field values on UpdatePageTranslationRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *UpdatePageTranslationRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UpdatePageTranslationRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// UpdatePageTranslationRequestMultiError, or nil if none found.
+func (m *UpdatePageTranslationRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdatePageTranslationRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdatePageTranslationRequestValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdatePageTranslationRequestValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdatePageTranslationRequestValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdateMask()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdatePageTranslationRequestValidationError{
+					field:  "UpdateMask",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdatePageTranslationRequestValidationError{
+					field:  "UpdateMask",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdateMask()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdatePageTranslationRequestValidationError{
+				field:  "UpdateMask",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.AllowMissing != nil {
+		// no validation rules for AllowMissing
+	}
+
+	if len(errors) > 0 {
+		return UpdatePageTranslationRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// UpdatePageTranslationRequestMultiError is an error wrapping multiple
+// validation errors returned by UpdatePageTranslationRequest.ValidateAll() if
+// the designated constraints aren't met.
+type UpdatePageTranslationRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdatePageTranslationRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdatePageTranslationRequestMultiError) AllErrors() []error { return m }
+
+// UpdatePageTranslationRequestValidationError is the validation error returned
+// by UpdatePageTranslationRequest.Validate if the designated constraints
+// aren't met.
+type UpdatePageTranslationRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdatePageTranslationRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdatePageTranslationRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdatePageTranslationRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdatePageTranslationRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdatePageTranslationRequestValidationError) ErrorName() string {
+	return "UpdatePageTranslationRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdatePageTranslationRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdatePageTranslationRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdatePageTranslationRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdatePageTranslationRequestValidationError{}
+
+// Validate checks the field values on PageTranslationIdentifier with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *PageTranslationIdentifier) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PageTranslationIdentifier with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// PageTranslationIdentifierMultiError, or nil if none found.
+func (m *PageTranslationIdentifier) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PageTranslationIdentifier) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for PageId
+
+	// no validation rules for LanguageCode
+
+	if len(errors) > 0 {
+		return PageTranslationIdentifierMultiError(errors)
+	}
+
+	return nil
+}
+
+// PageTranslationIdentifierMultiError is an error wrapping multiple validation
+// errors returned by PageTranslationIdentifier.ValidateAll() if the
+// designated constraints aren't met.
+type PageTranslationIdentifierMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PageTranslationIdentifierMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PageTranslationIdentifierMultiError) AllErrors() []error { return m }
+
+// PageTranslationIdentifierValidationError is the validation error returned by
+// PageTranslationIdentifier.Validate if the designated constraints aren't met.
+type PageTranslationIdentifierValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PageTranslationIdentifierValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PageTranslationIdentifierValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PageTranslationIdentifierValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PageTranslationIdentifierValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PageTranslationIdentifierValidationError) ErrorName() string {
+	return "PageTranslationIdentifierValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e PageTranslationIdentifierValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPageTranslationIdentifier.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PageTranslationIdentifierValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PageTranslationIdentifierValidationError{}
+
+// Validate checks the field values on DeletePageTranslationRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *DeletePageTranslationRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DeletePageTranslationRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// DeletePageTranslationRequestMultiError, or nil if none found.
+func (m *DeletePageTranslationRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DeletePageTranslationRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	switch v := m.QueryBy.(type) {
+	case *DeletePageTranslationRequest_Id:
+		if v == nil {
+			err := DeletePageTranslationRequestValidationError{
+				field:  "QueryBy",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		// no validation rules for Id
+	case *DeletePageTranslationRequest_Identifier:
+		if v == nil {
+			err := DeletePageTranslationRequestValidationError{
+				field:  "QueryBy",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if all {
+			switch v := interface{}(m.GetIdentifier()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, DeletePageTranslationRequestValidationError{
+						field:  "Identifier",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, DeletePageTranslationRequestValidationError{
+						field:  "Identifier",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetIdentifier()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return DeletePageTranslationRequestValidationError{
+					field:  "Identifier",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		_ = v // ensures v is used
+	}
+
+	if len(errors) > 0 {
+		return DeletePageTranslationRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// DeletePageTranslationRequestMultiError is an error wrapping multiple
+// validation errors returned by DeletePageTranslationRequest.ValidateAll() if
+// the designated constraints aren't met.
+type DeletePageTranslationRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeletePageTranslationRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeletePageTranslationRequestMultiError) AllErrors() []error { return m }
+
+// DeletePageTranslationRequestValidationError is the validation error returned
+// by DeletePageTranslationRequest.Validate if the designated constraints
+// aren't met.
+type DeletePageTranslationRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeletePageTranslationRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeletePageTranslationRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeletePageTranslationRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeletePageTranslationRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeletePageTranslationRequestValidationError) ErrorName() string {
+	return "DeletePageTranslationRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DeletePageTranslationRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeletePageTranslationRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeletePageTranslationRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeletePageTranslationRequestValidationError{}

@@ -295,16 +295,16 @@ func (_c *NavigationCreate) createSpec() (*Navigation, *sqlgraph.CreateSpec) {
 // OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
 // of the `INSERT` statement. For example:
 //
-//	client.Navigation.Create().
+//	client.Navigation.CreateTranslation().
 //		SetCreatedAt(v).
 //		OnConflict(
-//			// Update the row with the new values
+//			// UpdateTranslation the row with the new values
 //			// the was proposed for insertion.
 //			sql.ResolveWithNewValues(),
 //		).
 //		// Override some of the fields with custom
 //		// update values.
-//		Update(func(u *ent.NavigationUpsert) {
+//		UpdateTranslation(func(u *ent.NavigationUpsert) {
 //			SetCreatedAt(v+v).
 //		}).
 //		Exec(ctx)
@@ -318,7 +318,7 @@ func (_c *NavigationCreate) OnConflict(opts ...sql.ConflictOption) *NavigationUp
 // OnConflictColumns calls `OnConflict` and configures the columns
 // as conflict target. Using this option is equivalent to using:
 //
-//	client.Navigation.Create().
+//	client.Navigation.CreateTranslation().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
 func (_c *NavigationCreate) OnConflictColumns(columns ...string) *NavigationUpsertOne {
@@ -524,7 +524,7 @@ func (u *NavigationUpsert) ClearIsActive() *NavigationUpsert {
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
-//	client.Navigation.Create().
+//	client.Navigation.CreateTranslation().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
 //			sql.ResolveWith(func(u *sql.UpdateSet) {
@@ -548,7 +548,7 @@ func (u *NavigationUpsertOne) UpdateNewValues() *NavigationUpsertOne {
 // Ignore sets each column to itself in case of conflict.
 // Using this option is equivalent to using:
 //
-//	client.Navigation.Create().
+//	client.Navigation.CreateTranslation().
 //	    OnConflict(sql.ResolveWithIgnore()).
 //	    Exec(ctx)
 func (u *NavigationUpsertOne) Ignore() *NavigationUpsertOne {
@@ -910,13 +910,13 @@ func (_c *NavigationCreateBulk) ExecX(ctx context.Context) {
 //
 //	client.Navigation.CreateBulk(builders...).
 //		OnConflict(
-//			// Update the row with the new values
+//			// UpdateTranslation the row with the new values
 //			// the was proposed for insertion.
 //			sql.ResolveWithNewValues(),
 //		).
 //		// Override some of the fields with custom
 //		// update values.
-//		Update(func(u *ent.NavigationUpsert) {
+//		UpdateTranslation(func(u *ent.NavigationUpsert) {
 //			SetCreatedAt(v+v).
 //		}).
 //		Exec(ctx)
@@ -930,7 +930,7 @@ func (_c *NavigationCreateBulk) OnConflict(opts ...sql.ConflictOption) *Navigati
 // OnConflictColumns calls `OnConflict` and configures the columns
 // as conflict target. Using this option is equivalent to using:
 //
-//	client.Navigation.Create().
+//	client.Navigation.CreateTranslation().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
 func (_c *NavigationCreateBulk) OnConflictColumns(columns ...string) *NavigationUpsertBulk {
@@ -949,7 +949,7 @@ type NavigationUpsertBulk struct {
 // UpdateNewValues updates the mutable fields using the new values that
 // were set on create. Using this option is equivalent to using:
 //
-//	client.Navigation.Create().
+//	client.Navigation.CreateTranslation().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
 //			sql.ResolveWith(func(u *sql.UpdateSet) {
@@ -975,7 +975,7 @@ func (u *NavigationUpsertBulk) UpdateNewValues() *NavigationUpsertBulk {
 // Ignore sets each column to itself in case of conflict.
 // Using this option is equivalent to using:
 //
-//	client.Navigation.Create().
+//	client.Navigation.CreateTranslation().
 //		OnConflict(sql.ResolveWithIgnore()).
 //		Exec(ctx)
 func (u *NavigationUpsertBulk) Ignore() *NavigationUpsertBulk {

@@ -354,16 +354,16 @@ func (_c *LanguageCreate) createSpec() (*Language, *sqlgraph.CreateSpec) {
 // OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
 // of the `INSERT` statement. For example:
 //
-//	client.Language.Create().
+//	client.Language.CreateTranslation().
 //		SetCreatedAt(v).
 //		OnConflict(
-//			// Update the row with the new values
+//			// UpdateTranslation the row with the new values
 //			// the was proposed for insertion.
 //			sql.ResolveWithNewValues(),
 //		).
 //		// Override some of the fields with custom
 //		// update values.
-//		Update(func(u *ent.LanguageUpsert) {
+//		UpdateTranslation(func(u *ent.LanguageUpsert) {
 //			SetCreatedAt(v+v).
 //		}).
 //		Exec(ctx)
@@ -377,7 +377,7 @@ func (_c *LanguageCreate) OnConflict(opts ...sql.ConflictOption) *LanguageUpsert
 // OnConflictColumns calls `OnConflict` and configures the columns
 // as conflict target. Using this option is equivalent to using:
 //
-//	client.Language.Create().
+//	client.Language.CreateTranslation().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
 func (_c *LanguageCreate) OnConflictColumns(columns ...string) *LanguageUpsertOne {
@@ -607,7 +607,7 @@ func (u *LanguageUpsert) ClearIsDefault() *LanguageUpsert {
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
-//	client.Language.Create().
+//	client.Language.CreateTranslation().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
 //			sql.ResolveWith(func(u *sql.UpdateSet) {
@@ -634,7 +634,7 @@ func (u *LanguageUpsertOne) UpdateNewValues() *LanguageUpsertOne {
 // Ignore sets each column to itself in case of conflict.
 // Using this option is equivalent to using:
 //
-//	client.Language.Create().
+//	client.Language.CreateTranslation().
 //	    OnConflict(sql.ResolveWithIgnore()).
 //	    Exec(ctx)
 func (u *LanguageUpsertOne) Ignore() *LanguageUpsertOne {
@@ -1024,13 +1024,13 @@ func (_c *LanguageCreateBulk) ExecX(ctx context.Context) {
 //
 //	client.Language.CreateBulk(builders...).
 //		OnConflict(
-//			// Update the row with the new values
+//			// UpdateTranslation the row with the new values
 //			// the was proposed for insertion.
 //			sql.ResolveWithNewValues(),
 //		).
 //		// Override some of the fields with custom
 //		// update values.
-//		Update(func(u *ent.LanguageUpsert) {
+//		UpdateTranslation(func(u *ent.LanguageUpsert) {
 //			SetCreatedAt(v+v).
 //		}).
 //		Exec(ctx)
@@ -1044,7 +1044,7 @@ func (_c *LanguageCreateBulk) OnConflict(opts ...sql.ConflictOption) *LanguageUp
 // OnConflictColumns calls `OnConflict` and configures the columns
 // as conflict target. Using this option is equivalent to using:
 //
-//	client.Language.Create().
+//	client.Language.CreateTranslation().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
 func (_c *LanguageCreateBulk) OnConflictColumns(columns ...string) *LanguageUpsertBulk {
@@ -1063,7 +1063,7 @@ type LanguageUpsertBulk struct {
 // UpdateNewValues updates the mutable fields using the new values that
 // were set on create. Using this option is equivalent to using:
 //
-//	client.Language.Create().
+//	client.Language.CreateTranslation().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
 //			sql.ResolveWith(func(u *sql.UpdateSet) {
@@ -1092,7 +1092,7 @@ func (u *LanguageUpsertBulk) UpdateNewValues() *LanguageUpsertBulk {
 // Ignore sets each column to itself in case of conflict.
 // Using this option is equivalent to using:
 //
-//	client.Language.Create().
+//	client.Language.CreateTranslation().
 //		OnConflict(sql.ResolveWithIgnore()).
 //		Exec(ctx)
 func (u *LanguageUpsertBulk) Ignore() *LanguageUpsertBulk {

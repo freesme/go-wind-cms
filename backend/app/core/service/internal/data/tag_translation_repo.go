@@ -2,13 +2,20 @@ package data
 
 import (
 	"context"
+	"strconv"
 	"time"
 
+	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
+	"google.golang.org/protobuf/types/known/fieldmaskpb"
+
 	entCrud "github.com/tx7do/go-crud/entgo"
+	"github.com/tx7do/kratos-bootstrap/bootstrap"
+
 	"github.com/tx7do/go-utils/copierutil"
 	"github.com/tx7do/go-utils/mapper"
-	"github.com/tx7do/kratos-bootstrap/bootstrap"
+	"github.com/tx7do/go-utils/slug"
+	"github.com/tx7do/go-utils/trans"
 
 	"go-wind-cms/app/core/service/internal/data/ent"
 	"go-wind-cms/app/core/service/internal/data/ent/predicate"
@@ -96,30 +103,35 @@ func (r *TagTranslationRepo) ListTranslations(ctx context.Context, tagID uint32)
 	return dtos, nil
 }
 
+func (r *TagTranslationRepo) newCreateBuilder(tt *ent.TagTranslationClient, data *contentV1.TagTranslation) *ent.TagTranslationCreate {
+	builder := tt.Create().
+		SetNillableTagID(data.TagId).
+		SetNillableLanguageCode(data.LanguageCode).
+		SetNillableName(data.Name).
+		SetNillableSlug(data.Slug).
+		SetNillableDescription(data.Description).
+		SetNillableCoverImage(data.CoverImage).
+		SetNillableTemplate(data.Template).
+		SetNillableFullPath(data.FullPath).
+		SetNillableMetaKeywords(data.MetaKeywords).
+		SetNillableMetaDescription(data.MetaDescription).
+		SetNillableSeoTitle(data.SeoTitle).
+		SetNillableCanonicalURL(data.CanonicalUrl).
+		SetNillableCreatedBy(data.CreatedBy).
+		SetCreatedAt(time.Now())
+	return builder
+}
+
 func (r *TagTranslationRepo) BatchCreate(ctx context.Context, tx *ent.Tx, items []*contentV1.TagTranslation) error {
 	if len(items) == 0 {
 		return nil
 	}
 
-	now := time.Now()
-
 	builders := make([]*ent.TagTranslationCreate, 0, len(items))
 	for _, data := range items {
-		builder := tx.TagTranslation.Create().
-			SetNillableTagID(data.TagId).
-			SetNillableLanguageCode(data.LanguageCode).
-			SetNillableName(data.Name).
-			SetNillableSlug(data.Slug).
-			SetNillableDescription(data.Description).
-			SetNillableCoverImage(data.CoverImage).
-			SetNillableTemplate(data.Template).
-			SetNillableFullPath(data.FullPath).
-			SetNillableMetaKeywords(data.MetaKeywords).
-			SetNillableMetaDescription(data.MetaDescription).
-			SetNillableSeoTitle(data.SeoTitle).
-			SetNillableCanonicalURL(data.CanonicalUrl).
-			SetNillableCreatedBy(data.CreatedBy).
-			SetCreatedAt(now)
+		_ = r.PrepareTranslation(ctx, data)
+
+		builder := r.newCreateBuilder(r.entClient.Client().TagTranslation, data)
 
 		builders = append(builders, builder)
 	}
@@ -131,6 +143,58 @@ func (r *TagTranslationRepo) BatchCreate(ctx context.Context, tx *ent.Tx, items 
 	}
 
 	return nil
+}
+
+func (r *TagTranslationRepo) CreateTranslation(ctx context.Context, data *contentV1.TagTranslation) (*contentV1.TagTranslation, error) {
+
+	_ = r.PrepareTranslation(ctx, data)
+
+	builder := r.newCreateBuilder(r.entClient.Client().TagTranslation, data)
+
+	entity, err := builder.Save(ctx)
+	if err != nil {
+		r.log.Errorf("create tag translation failed: %s", err.Error())
+		return nil, contentV1.ErrorInternalServerError("create tag translation failed")
+	}
+
+	return r.mapper.ToDTO(entity), nil
+}
+
+func (r *TagTranslationRepo) UpdateTranslation(ctx context.Context, id uint32, data *contentV1.TagTranslation, updateMask *fieldmaskpb.FieldMask) (*contentV1.TagTranslation, error) {
+	if data == nil {
+		return nil, nil
+	}
+
+	builder := r.entClient.Client().TagTranslation.UpdateOneID(id)
+
+	dto, err := r.repository.UpdateOne(ctx, builder, data, updateMask,
+		func(dto *contentV1.TagTranslation) {
+			builder.
+				SetNillableTagID(data.TagId).
+				SetNillableLanguageCode(data.LanguageCode).
+				SetNillableName(data.Name).
+				SetNillableSlug(data.Slug).
+				SetNillableDescription(data.Description).
+				SetNillableCoverImage(data.CoverImage).
+				SetNillableTemplate(data.Template).
+				SetNillableFullPath(data.FullPath).
+				SetNillableMetaKeywords(data.MetaKeywords).
+				SetNillableMetaDescription(data.MetaDescription).
+				SetNillableSeoTitle(data.SeoTitle).
+				SetNillableCanonicalURL(data.CanonicalUrl).
+				SetNillableUpdatedBy(data.UpdatedBy).
+				SetUpdatedAt(time.Now())
+		},
+		func(s *sql.Selector) {
+			s.Where(sql.EQ(tagtranslation.FieldID, id))
+		},
+	)
+	if err != nil {
+		r.log.Errorf("update tag translation failed: %s", err.Error())
+		return nil, contentV1.ErrorInternalServerError("update tag translation failed")
+	}
+
+	return dto, nil
 }
 
 func (r *TagTranslationRepo) CountByBaseSlug(ctx context.Context, baseSlug string) (int64, error) {
@@ -177,4 +241,91 @@ func (r *TagTranslationRepo) ListAvailedLanguages(ctx context.Context, tagId uin
 	}
 
 	return entities, nil
+}
+
+func (r *TagTranslationRepo) GetTranslation(ctx context.Context, tagId uint32, languageCode string) (*contentV1.TagTranslation, error) {
+	entity, err := r.entClient.Client().TagTranslation.Query().
+		Where(
+			tagtranslation.TagIDEQ(tagId),
+			tagtranslation.LanguageCodeEQ(languageCode),
+		).
+		Only(ctx)
+	if err != nil {
+		r.log.Errorf("query tag translation by tag id and language code failed: %s", err.Error())
+		return nil, contentV1.ErrorInternalServerError("query tag translation by tag id and language code failed")
+	}
+
+	return r.mapper.ToDTO(entity), nil
+}
+
+func (r *TagTranslationRepo) DeleteTranslation(ctx context.Context, req *contentV1.DeleteTagTranslationRequest) error {
+	if req.QueryBy == nil {
+		return contentV1.ErrorBadRequest("invalid parameter: query_by is required")
+	}
+
+	switch req.QueryBy.(type) {
+	case *contentV1.DeleteTagTranslationRequest_Id:
+		if req.GetId() == 0 {
+			return contentV1.ErrorBadRequest("invalid parameter: id must be greater than 0")
+		}
+
+	case *contentV1.DeleteTagTranslationRequest_Identifier:
+		if req.GetIdentifier() == nil {
+			return contentV1.ErrorBadRequest("invalid parameter: identifier is required")
+		}
+		if req.GetIdentifier().GetTagId() == 0 {
+			return contentV1.ErrorBadRequest("invalid parameter: tag_id must be greater than 0")
+		}
+		if len(req.GetIdentifier().GetLanguageCode()) == 0 {
+			return contentV1.ErrorBadRequest("invalid parameter: language_code is required")
+		}
+
+	default:
+		return contentV1.ErrorBadRequest("invalid parameter: unsupported query_by type")
+	}
+
+	builder := r.entClient.Client().TagTranslation.Delete()
+
+	_, err := r.repository.Delete(ctx, builder, func(s *sql.Selector) {
+		switch req.QueryBy.(type) {
+		case *contentV1.DeleteTagTranslationRequest_Id:
+			id := req.GetId()
+			s.Where(sql.EQ(tagtranslation.FieldID, id))
+
+		case *contentV1.DeleteTagTranslationRequest_Identifier:
+			identifier := req.GetIdentifier()
+			s.Where(
+				sql.And(
+					sql.EQ(tagtranslation.FieldTagID, identifier.GetTagId()),
+					sql.EQ(tagtranslation.FieldLanguageCode, identifier.GetLanguageCode()),
+				),
+			)
+
+		default:
+			return
+		}
+	})
+	if err != nil {
+		r.log.Errorf("delete tag translation failed: %s", err.Error())
+		return contentV1.ErrorInternalServerError("delete tag translation failed")
+	}
+
+	return nil
+}
+
+func (r *TagTranslationRepo) PrepareTranslation(ctx context.Context, data *contentV1.TagTranslation) error {
+	baseSlug := slug.Generate(data.GetName())
+	slugCount, err := r.CountByBaseSlug(ctx, baseSlug)
+	if err != nil {
+		r.log.Errorf("count slug failed: %s", err.Error())
+		return contentV1.ErrorInternalServerError("count slug failed")
+	}
+
+	if slugCount > 0 {
+		baseSlug = slug.Generate(data.GetName()) + "-" + strconv.Itoa(int(slugCount))
+	}
+
+	data.Slug = trans.Ptr(baseSlug)
+
+	return nil
 }

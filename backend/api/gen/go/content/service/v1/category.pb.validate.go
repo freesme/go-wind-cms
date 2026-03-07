@@ -1345,3 +1345,794 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DeleteCategoryRequestValidationError{}
+
+// Validate checks the field values on CategoryTranslationExistsRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *CategoryTranslationExistsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CategoryTranslationExistsRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// CategoryTranslationExistsRequestMultiError, or nil if none found.
+func (m *CategoryTranslationExistsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CategoryTranslationExistsRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for CategoryId
+
+	// no validation rules for LanguageCode
+
+	if len(errors) > 0 {
+		return CategoryTranslationExistsRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// CategoryTranslationExistsRequestMultiError is an error wrapping multiple
+// validation errors returned by
+// CategoryTranslationExistsRequest.ValidateAll() if the designated
+// constraints aren't met.
+type CategoryTranslationExistsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CategoryTranslationExistsRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CategoryTranslationExistsRequestMultiError) AllErrors() []error { return m }
+
+// CategoryTranslationExistsRequestValidationError is the validation error
+// returned by CategoryTranslationExistsRequest.Validate if the designated
+// constraints aren't met.
+type CategoryTranslationExistsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CategoryTranslationExistsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CategoryTranslationExistsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CategoryTranslationExistsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CategoryTranslationExistsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CategoryTranslationExistsRequestValidationError) ErrorName() string {
+	return "CategoryTranslationExistsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CategoryTranslationExistsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCategoryTranslationExistsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CategoryTranslationExistsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CategoryTranslationExistsRequestValidationError{}
+
+// Validate checks the field values on CategoryTranslationExistsResponse with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *CategoryTranslationExistsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CategoryTranslationExistsResponse
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
+// CategoryTranslationExistsResponseMultiError, or nil if none found.
+func (m *CategoryTranslationExistsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CategoryTranslationExistsResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Exists
+
+	if len(errors) > 0 {
+		return CategoryTranslationExistsResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// CategoryTranslationExistsResponseMultiError is an error wrapping multiple
+// validation errors returned by
+// CategoryTranslationExistsResponse.ValidateAll() if the designated
+// constraints aren't met.
+type CategoryTranslationExistsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CategoryTranslationExistsResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CategoryTranslationExistsResponseMultiError) AllErrors() []error { return m }
+
+// CategoryTranslationExistsResponseValidationError is the validation error
+// returned by CategoryTranslationExistsResponse.Validate if the designated
+// constraints aren't met.
+type CategoryTranslationExistsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CategoryTranslationExistsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CategoryTranslationExistsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CategoryTranslationExistsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CategoryTranslationExistsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CategoryTranslationExistsResponseValidationError) ErrorName() string {
+	return "CategoryTranslationExistsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CategoryTranslationExistsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCategoryTranslationExistsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CategoryTranslationExistsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CategoryTranslationExistsResponseValidationError{}
+
+// Validate checks the field values on CreateCategoryTranslationRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *CreateCategoryTranslationRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreateCategoryTranslationRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// CreateCategoryTranslationRequestMultiError, or nil if none found.
+func (m *CreateCategoryTranslationRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateCategoryTranslationRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for CategoryId
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateCategoryTranslationRequestValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateCategoryTranslationRequestValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateCategoryTranslationRequestValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return CreateCategoryTranslationRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreateCategoryTranslationRequestMultiError is an error wrapping multiple
+// validation errors returned by
+// CreateCategoryTranslationRequest.ValidateAll() if the designated
+// constraints aren't met.
+type CreateCategoryTranslationRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateCategoryTranslationRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateCategoryTranslationRequestMultiError) AllErrors() []error { return m }
+
+// CreateCategoryTranslationRequestValidationError is the validation error
+// returned by CreateCategoryTranslationRequest.Validate if the designated
+// constraints aren't met.
+type CreateCategoryTranslationRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateCategoryTranslationRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateCategoryTranslationRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateCategoryTranslationRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateCategoryTranslationRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateCategoryTranslationRequestValidationError) ErrorName() string {
+	return "CreateCategoryTranslationRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateCategoryTranslationRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateCategoryTranslationRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateCategoryTranslationRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateCategoryTranslationRequestValidationError{}
+
+// Validate checks the field values on UpdateCategoryTranslationRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *UpdateCategoryTranslationRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UpdateCategoryTranslationRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// UpdateCategoryTranslationRequestMultiError, or nil if none found.
+func (m *UpdateCategoryTranslationRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdateCategoryTranslationRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdateCategoryTranslationRequestValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdateCategoryTranslationRequestValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateCategoryTranslationRequestValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdateMask()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdateCategoryTranslationRequestValidationError{
+					field:  "UpdateMask",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdateCategoryTranslationRequestValidationError{
+					field:  "UpdateMask",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdateMask()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateCategoryTranslationRequestValidationError{
+				field:  "UpdateMask",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.AllowMissing != nil {
+		// no validation rules for AllowMissing
+	}
+
+	if len(errors) > 0 {
+		return UpdateCategoryTranslationRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// UpdateCategoryTranslationRequestMultiError is an error wrapping multiple
+// validation errors returned by
+// UpdateCategoryTranslationRequest.ValidateAll() if the designated
+// constraints aren't met.
+type UpdateCategoryTranslationRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateCategoryTranslationRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateCategoryTranslationRequestMultiError) AllErrors() []error { return m }
+
+// UpdateCategoryTranslationRequestValidationError is the validation error
+// returned by UpdateCategoryTranslationRequest.Validate if the designated
+// constraints aren't met.
+type UpdateCategoryTranslationRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateCategoryTranslationRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateCategoryTranslationRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateCategoryTranslationRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateCategoryTranslationRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateCategoryTranslationRequestValidationError) ErrorName() string {
+	return "UpdateCategoryTranslationRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateCategoryTranslationRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateCategoryTranslationRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateCategoryTranslationRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateCategoryTranslationRequestValidationError{}
+
+// Validate checks the field values on CategoryTranslationIdentifier with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CategoryTranslationIdentifier) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CategoryTranslationIdentifier with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// CategoryTranslationIdentifierMultiError, or nil if none found.
+func (m *CategoryTranslationIdentifier) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CategoryTranslationIdentifier) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for CategoryId
+
+	// no validation rules for LanguageCode
+
+	if len(errors) > 0 {
+		return CategoryTranslationIdentifierMultiError(errors)
+	}
+
+	return nil
+}
+
+// CategoryTranslationIdentifierMultiError is an error wrapping multiple
+// validation errors returned by CategoryTranslationIdentifier.ValidateAll()
+// if the designated constraints aren't met.
+type CategoryTranslationIdentifierMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CategoryTranslationIdentifierMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CategoryTranslationIdentifierMultiError) AllErrors() []error { return m }
+
+// CategoryTranslationIdentifierValidationError is the validation error
+// returned by CategoryTranslationIdentifier.Validate if the designated
+// constraints aren't met.
+type CategoryTranslationIdentifierValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CategoryTranslationIdentifierValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CategoryTranslationIdentifierValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CategoryTranslationIdentifierValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CategoryTranslationIdentifierValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CategoryTranslationIdentifierValidationError) ErrorName() string {
+	return "CategoryTranslationIdentifierValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CategoryTranslationIdentifierValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCategoryTranslationIdentifier.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CategoryTranslationIdentifierValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CategoryTranslationIdentifierValidationError{}
+
+// Validate checks the field values on DeleteCategoryTranslationRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *DeleteCategoryTranslationRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DeleteCategoryTranslationRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// DeleteCategoryTranslationRequestMultiError, or nil if none found.
+func (m *DeleteCategoryTranslationRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DeleteCategoryTranslationRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	switch v := m.QueryBy.(type) {
+	case *DeleteCategoryTranslationRequest_Id:
+		if v == nil {
+			err := DeleteCategoryTranslationRequestValidationError{
+				field:  "QueryBy",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		// no validation rules for Id
+	case *DeleteCategoryTranslationRequest_Identifier:
+		if v == nil {
+			err := DeleteCategoryTranslationRequestValidationError{
+				field:  "QueryBy",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if all {
+			switch v := interface{}(m.GetIdentifier()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, DeleteCategoryTranslationRequestValidationError{
+						field:  "Identifier",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, DeleteCategoryTranslationRequestValidationError{
+						field:  "Identifier",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetIdentifier()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return DeleteCategoryTranslationRequestValidationError{
+					field:  "Identifier",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		_ = v // ensures v is used
+	}
+
+	if len(errors) > 0 {
+		return DeleteCategoryTranslationRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// DeleteCategoryTranslationRequestMultiError is an error wrapping multiple
+// validation errors returned by
+// DeleteCategoryTranslationRequest.ValidateAll() if the designated
+// constraints aren't met.
+type DeleteCategoryTranslationRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeleteCategoryTranslationRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeleteCategoryTranslationRequestMultiError) AllErrors() []error { return m }
+
+// DeleteCategoryTranslationRequestValidationError is the validation error
+// returned by DeleteCategoryTranslationRequest.Validate if the designated
+// constraints aren't met.
+type DeleteCategoryTranslationRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeleteCategoryTranslationRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeleteCategoryTranslationRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeleteCategoryTranslationRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeleteCategoryTranslationRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeleteCategoryTranslationRequestValidationError) ErrorName() string {
+	return "DeleteCategoryTranslationRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DeleteCategoryTranslationRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeleteCategoryTranslationRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeleteCategoryTranslationRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeleteCategoryTranslationRequestValidationError{}

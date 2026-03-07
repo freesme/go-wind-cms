@@ -21,11 +21,16 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	PageService_List_FullMethodName   = "/content.service.v1.PageService/List"
-	PageService_Get_FullMethodName    = "/content.service.v1.PageService/Get"
-	PageService_Create_FullMethodName = "/content.service.v1.PageService/Create"
-	PageService_Update_FullMethodName = "/content.service.v1.PageService/Update"
-	PageService_Delete_FullMethodName = "/content.service.v1.PageService/Delete"
+	PageService_List_FullMethodName              = "/content.service.v1.PageService/List"
+	PageService_Get_FullMethodName               = "/content.service.v1.PageService/Get"
+	PageService_Create_FullMethodName            = "/content.service.v1.PageService/Create"
+	PageService_Update_FullMethodName            = "/content.service.v1.PageService/Update"
+	PageService_Delete_FullMethodName            = "/content.service.v1.PageService/Delete"
+	PageService_TranslationExists_FullMethodName = "/content.service.v1.PageService/TranslationExists"
+	PageService_GetTranslation_FullMethodName    = "/content.service.v1.PageService/GetTranslation"
+	PageService_CreateTranslation_FullMethodName = "/content.service.v1.PageService/CreateTranslation"
+	PageService_UpdateTranslation_FullMethodName = "/content.service.v1.PageService/UpdateTranslation"
+	PageService_DeleteTranslation_FullMethodName = "/content.service.v1.PageService/DeleteTranslation"
 )
 
 // PageServiceClient is the client API for PageService service.
@@ -44,6 +49,16 @@ type PageServiceClient interface {
 	Update(ctx context.Context, in *UpdatePageRequest, opts ...grpc.CallOption) (*Page, error)
 	// 删除页面
 	Delete(ctx context.Context, in *DeletePageRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// 检查翻译是否存在
+	TranslationExists(ctx context.Context, in *PageTranslationExistsRequest, opts ...grpc.CallOption) (*PageTranslationExistsResponse, error)
+	// 获取翻译数据
+	GetTranslation(ctx context.Context, in *GetPageRequest, opts ...grpc.CallOption) (*PageTranslation, error)
+	// 创建翻译
+	CreateTranslation(ctx context.Context, in *CreatePageTranslationRequest, opts ...grpc.CallOption) (*PageTranslation, error)
+	// 更新翻译
+	UpdateTranslation(ctx context.Context, in *UpdatePageTranslationRequest, opts ...grpc.CallOption) (*PageTranslation, error)
+	// 删除翻译
+	DeleteTranslation(ctx context.Context, in *DeletePageTranslationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type pageServiceClient struct {
@@ -104,6 +119,56 @@ func (c *pageServiceClient) Delete(ctx context.Context, in *DeletePageRequest, o
 	return out, nil
 }
 
+func (c *pageServiceClient) TranslationExists(ctx context.Context, in *PageTranslationExistsRequest, opts ...grpc.CallOption) (*PageTranslationExistsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PageTranslationExistsResponse)
+	err := c.cc.Invoke(ctx, PageService_TranslationExists_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *pageServiceClient) GetTranslation(ctx context.Context, in *GetPageRequest, opts ...grpc.CallOption) (*PageTranslation, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PageTranslation)
+	err := c.cc.Invoke(ctx, PageService_GetTranslation_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *pageServiceClient) CreateTranslation(ctx context.Context, in *CreatePageTranslationRequest, opts ...grpc.CallOption) (*PageTranslation, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PageTranslation)
+	err := c.cc.Invoke(ctx, PageService_CreateTranslation_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *pageServiceClient) UpdateTranslation(ctx context.Context, in *UpdatePageTranslationRequest, opts ...grpc.CallOption) (*PageTranslation, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PageTranslation)
+	err := c.cc.Invoke(ctx, PageService_UpdateTranslation_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *pageServiceClient) DeleteTranslation(ctx context.Context, in *DeletePageTranslationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, PageService_DeleteTranslation_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PageServiceServer is the server API for PageService service.
 // All implementations must embed UnimplementedPageServiceServer
 // for forward compatibility.
@@ -120,6 +185,16 @@ type PageServiceServer interface {
 	Update(context.Context, *UpdatePageRequest) (*Page, error)
 	// 删除页面
 	Delete(context.Context, *DeletePageRequest) (*emptypb.Empty, error)
+	// 检查翻译是否存在
+	TranslationExists(context.Context, *PageTranslationExistsRequest) (*PageTranslationExistsResponse, error)
+	// 获取翻译数据
+	GetTranslation(context.Context, *GetPageRequest) (*PageTranslation, error)
+	// 创建翻译
+	CreateTranslation(context.Context, *CreatePageTranslationRequest) (*PageTranslation, error)
+	// 更新翻译
+	UpdateTranslation(context.Context, *UpdatePageTranslationRequest) (*PageTranslation, error)
+	// 删除翻译
+	DeleteTranslation(context.Context, *DeletePageTranslationRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedPageServiceServer()
 }
 
@@ -144,6 +219,21 @@ func (UnimplementedPageServiceServer) Update(context.Context, *UpdatePageRequest
 }
 func (UnimplementedPageServiceServer) Delete(context.Context, *DeletePageRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedPageServiceServer) TranslationExists(context.Context, *PageTranslationExistsRequest) (*PageTranslationExistsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method TranslationExists not implemented")
+}
+func (UnimplementedPageServiceServer) GetTranslation(context.Context, *GetPageRequest) (*PageTranslation, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetTranslation not implemented")
+}
+func (UnimplementedPageServiceServer) CreateTranslation(context.Context, *CreatePageTranslationRequest) (*PageTranslation, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateTranslation not implemented")
+}
+func (UnimplementedPageServiceServer) UpdateTranslation(context.Context, *UpdatePageTranslationRequest) (*PageTranslation, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateTranslation not implemented")
+}
+func (UnimplementedPageServiceServer) DeleteTranslation(context.Context, *DeletePageTranslationRequest) (*emptypb.Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteTranslation not implemented")
 }
 func (UnimplementedPageServiceServer) mustEmbedUnimplementedPageServiceServer() {}
 func (UnimplementedPageServiceServer) testEmbeddedByValue()                     {}
@@ -256,6 +346,96 @@ func _PageService_Delete_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PageService_TranslationExists_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PageTranslationExistsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PageServiceServer).TranslationExists(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PageService_TranslationExists_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PageServiceServer).TranslationExists(ctx, req.(*PageTranslationExistsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PageService_GetTranslation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PageServiceServer).GetTranslation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PageService_GetTranslation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PageServiceServer).GetTranslation(ctx, req.(*GetPageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PageService_CreateTranslation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreatePageTranslationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PageServiceServer).CreateTranslation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PageService_CreateTranslation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PageServiceServer).CreateTranslation(ctx, req.(*CreatePageTranslationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PageService_UpdateTranslation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePageTranslationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PageServiceServer).UpdateTranslation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PageService_UpdateTranslation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PageServiceServer).UpdateTranslation(ctx, req.(*UpdatePageTranslationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PageService_DeleteTranslation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeletePageTranslationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PageServiceServer).DeleteTranslation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PageService_DeleteTranslation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PageServiceServer).DeleteTranslation(ctx, req.(*DeletePageTranslationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PageService_ServiceDesc is the grpc.ServiceDesc for PageService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -282,6 +462,26 @@ var PageService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Delete",
 			Handler:    _PageService_Delete_Handler,
+		},
+		{
+			MethodName: "TranslationExists",
+			Handler:    _PageService_TranslationExists_Handler,
+		},
+		{
+			MethodName: "GetTranslation",
+			Handler:    _PageService_GetTranslation_Handler,
+		},
+		{
+			MethodName: "CreateTranslation",
+			Handler:    _PageService_CreateTranslation_Handler,
+		},
+		{
+			MethodName: "UpdateTranslation",
+			Handler:    _PageService_UpdateTranslation_Handler,
+		},
+		{
+			MethodName: "DeleteTranslation",
+			Handler:    _PageService_DeleteTranslation_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

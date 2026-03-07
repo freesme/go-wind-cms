@@ -101,6 +101,61 @@ func (s *redactedCategoryServiceServer) Delete(ctx context.Context, in *DeleteCa
 	return res, err
 }
 
+// TranslationExists is the redacted wrapper for the actual CategoryServiceServer.TranslationExists method
+// Unary RPC
+func (s *redactedCategoryServiceServer) TranslationExists(ctx context.Context, in *CategoryTranslationExistsRequest) (*CategoryTranslationExistsResponse, error) {
+	res, err := s.srv.TranslationExists(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// GetTranslation is the redacted wrapper for the actual CategoryServiceServer.GetTranslation method
+// Unary RPC
+func (s *redactedCategoryServiceServer) GetTranslation(ctx context.Context, in *GetCategoryRequest) (*CategoryTranslation, error) {
+	res, err := s.srv.GetTranslation(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// CreateTranslation is the redacted wrapper for the actual CategoryServiceServer.CreateTranslation method
+// Unary RPC
+func (s *redactedCategoryServiceServer) CreateTranslation(ctx context.Context, in *CreateCategoryTranslationRequest) (*CategoryTranslation, error) {
+	res, err := s.srv.CreateTranslation(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// UpdateTranslation is the redacted wrapper for the actual CategoryServiceServer.UpdateTranslation method
+// Unary RPC
+func (s *redactedCategoryServiceServer) UpdateTranslation(ctx context.Context, in *UpdateCategoryTranslationRequest) (*CategoryTranslation, error) {
+	res, err := s.srv.UpdateTranslation(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// DeleteTranslation is the redacted wrapper for the actual CategoryServiceServer.DeleteTranslation method
+// Unary RPC
+func (s *redactedCategoryServiceServer) DeleteTranslation(ctx context.Context, in *DeleteCategoryTranslationRequest) (*emptypb.Empty, error) {
+	res, err := s.srv.DeleteTranslation(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Redact method implementation for Category
 func (x *Category) Redact() string {
 	if x == nil {
@@ -249,6 +304,76 @@ func (x *UpdateCategoryRequest) Redact() string {
 
 // Redact method implementation for DeleteCategoryRequest
 func (x *DeleteCategoryRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+	return x.String()
+}
+
+// Redact method implementation for CategoryTranslationExistsRequest
+func (x *CategoryTranslationExistsRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: CategoryId
+
+	// Safe field: LanguageCode
+	return x.String()
+}
+
+// Redact method implementation for CategoryTranslationExistsResponse
+func (x *CategoryTranslationExistsResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Exists
+	return x.String()
+}
+
+// Redact method implementation for CreateCategoryTranslationRequest
+func (x *CreateCategoryTranslationRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: CategoryId
+
+	// Safe field: Data
+	return x.String()
+}
+
+// Redact method implementation for UpdateCategoryTranslationRequest
+func (x *UpdateCategoryTranslationRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Id
+
+	// Safe field: Data
+
+	// Safe field: UpdateMask
+
+	// Safe field: AllowMissing
+	return x.String()
+}
+
+// Redact method implementation for CategoryTranslationIdentifier
+func (x *CategoryTranslationIdentifier) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: CategoryId
+
+	// Safe field: LanguageCode
+	return x.String()
+}
+
+// Redact method implementation for DeleteCategoryTranslationRequest
+func (x *DeleteCategoryTranslationRequest) Redact() string {
 	if x == nil {
 		return ""
 	}

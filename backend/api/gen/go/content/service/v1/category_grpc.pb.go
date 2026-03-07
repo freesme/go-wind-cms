@@ -21,11 +21,16 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CategoryService_List_FullMethodName   = "/content.service.v1.CategoryService/List"
-	CategoryService_Get_FullMethodName    = "/content.service.v1.CategoryService/Get"
-	CategoryService_Create_FullMethodName = "/content.service.v1.CategoryService/Create"
-	CategoryService_Update_FullMethodName = "/content.service.v1.CategoryService/Update"
-	CategoryService_Delete_FullMethodName = "/content.service.v1.CategoryService/Delete"
+	CategoryService_List_FullMethodName              = "/content.service.v1.CategoryService/List"
+	CategoryService_Get_FullMethodName               = "/content.service.v1.CategoryService/Get"
+	CategoryService_Create_FullMethodName            = "/content.service.v1.CategoryService/Create"
+	CategoryService_Update_FullMethodName            = "/content.service.v1.CategoryService/Update"
+	CategoryService_Delete_FullMethodName            = "/content.service.v1.CategoryService/Delete"
+	CategoryService_TranslationExists_FullMethodName = "/content.service.v1.CategoryService/TranslationExists"
+	CategoryService_GetTranslation_FullMethodName    = "/content.service.v1.CategoryService/GetTranslation"
+	CategoryService_CreateTranslation_FullMethodName = "/content.service.v1.CategoryService/CreateTranslation"
+	CategoryService_UpdateTranslation_FullMethodName = "/content.service.v1.CategoryService/UpdateTranslation"
+	CategoryService_DeleteTranslation_FullMethodName = "/content.service.v1.CategoryService/DeleteTranslation"
 )
 
 // CategoryServiceClient is the client API for CategoryService service.
@@ -44,6 +49,16 @@ type CategoryServiceClient interface {
 	Update(ctx context.Context, in *UpdateCategoryRequest, opts ...grpc.CallOption) (*Category, error)
 	// 删除类别
 	Delete(ctx context.Context, in *DeleteCategoryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// 检查翻译是否存在
+	TranslationExists(ctx context.Context, in *CategoryTranslationExistsRequest, opts ...grpc.CallOption) (*CategoryTranslationExistsResponse, error)
+	// 获取翻译数据
+	GetTranslation(ctx context.Context, in *GetCategoryRequest, opts ...grpc.CallOption) (*CategoryTranslation, error)
+	// 创建翻译
+	CreateTranslation(ctx context.Context, in *CreateCategoryTranslationRequest, opts ...grpc.CallOption) (*CategoryTranslation, error)
+	// 更新翻译
+	UpdateTranslation(ctx context.Context, in *UpdateCategoryTranslationRequest, opts ...grpc.CallOption) (*CategoryTranslation, error)
+	// 删除翻译
+	DeleteTranslation(ctx context.Context, in *DeleteCategoryTranslationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type categoryServiceClient struct {
@@ -104,6 +119,56 @@ func (c *categoryServiceClient) Delete(ctx context.Context, in *DeleteCategoryRe
 	return out, nil
 }
 
+func (c *categoryServiceClient) TranslationExists(ctx context.Context, in *CategoryTranslationExistsRequest, opts ...grpc.CallOption) (*CategoryTranslationExistsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CategoryTranslationExistsResponse)
+	err := c.cc.Invoke(ctx, CategoryService_TranslationExists_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *categoryServiceClient) GetTranslation(ctx context.Context, in *GetCategoryRequest, opts ...grpc.CallOption) (*CategoryTranslation, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CategoryTranslation)
+	err := c.cc.Invoke(ctx, CategoryService_GetTranslation_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *categoryServiceClient) CreateTranslation(ctx context.Context, in *CreateCategoryTranslationRequest, opts ...grpc.CallOption) (*CategoryTranslation, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CategoryTranslation)
+	err := c.cc.Invoke(ctx, CategoryService_CreateTranslation_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *categoryServiceClient) UpdateTranslation(ctx context.Context, in *UpdateCategoryTranslationRequest, opts ...grpc.CallOption) (*CategoryTranslation, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CategoryTranslation)
+	err := c.cc.Invoke(ctx, CategoryService_UpdateTranslation_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *categoryServiceClient) DeleteTranslation(ctx context.Context, in *DeleteCategoryTranslationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, CategoryService_DeleteTranslation_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CategoryServiceServer is the server API for CategoryService service.
 // All implementations must embed UnimplementedCategoryServiceServer
 // for forward compatibility.
@@ -120,6 +185,16 @@ type CategoryServiceServer interface {
 	Update(context.Context, *UpdateCategoryRequest) (*Category, error)
 	// 删除类别
 	Delete(context.Context, *DeleteCategoryRequest) (*emptypb.Empty, error)
+	// 检查翻译是否存在
+	TranslationExists(context.Context, *CategoryTranslationExistsRequest) (*CategoryTranslationExistsResponse, error)
+	// 获取翻译数据
+	GetTranslation(context.Context, *GetCategoryRequest) (*CategoryTranslation, error)
+	// 创建翻译
+	CreateTranslation(context.Context, *CreateCategoryTranslationRequest) (*CategoryTranslation, error)
+	// 更新翻译
+	UpdateTranslation(context.Context, *UpdateCategoryTranslationRequest) (*CategoryTranslation, error)
+	// 删除翻译
+	DeleteTranslation(context.Context, *DeleteCategoryTranslationRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedCategoryServiceServer()
 }
 
@@ -144,6 +219,21 @@ func (UnimplementedCategoryServiceServer) Update(context.Context, *UpdateCategor
 }
 func (UnimplementedCategoryServiceServer) Delete(context.Context, *DeleteCategoryRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedCategoryServiceServer) TranslationExists(context.Context, *CategoryTranslationExistsRequest) (*CategoryTranslationExistsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method TranslationExists not implemented")
+}
+func (UnimplementedCategoryServiceServer) GetTranslation(context.Context, *GetCategoryRequest) (*CategoryTranslation, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetTranslation not implemented")
+}
+func (UnimplementedCategoryServiceServer) CreateTranslation(context.Context, *CreateCategoryTranslationRequest) (*CategoryTranslation, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateTranslation not implemented")
+}
+func (UnimplementedCategoryServiceServer) UpdateTranslation(context.Context, *UpdateCategoryTranslationRequest) (*CategoryTranslation, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateTranslation not implemented")
+}
+func (UnimplementedCategoryServiceServer) DeleteTranslation(context.Context, *DeleteCategoryTranslationRequest) (*emptypb.Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteTranslation not implemented")
 }
 func (UnimplementedCategoryServiceServer) mustEmbedUnimplementedCategoryServiceServer() {}
 func (UnimplementedCategoryServiceServer) testEmbeddedByValue()                         {}
@@ -256,6 +346,96 @@ func _CategoryService_Delete_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CategoryService_TranslationExists_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CategoryTranslationExistsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CategoryServiceServer).TranslationExists(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CategoryService_TranslationExists_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CategoryServiceServer).TranslationExists(ctx, req.(*CategoryTranslationExistsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CategoryService_GetTranslation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCategoryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CategoryServiceServer).GetTranslation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CategoryService_GetTranslation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CategoryServiceServer).GetTranslation(ctx, req.(*GetCategoryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CategoryService_CreateTranslation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateCategoryTranslationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CategoryServiceServer).CreateTranslation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CategoryService_CreateTranslation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CategoryServiceServer).CreateTranslation(ctx, req.(*CreateCategoryTranslationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CategoryService_UpdateTranslation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateCategoryTranslationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CategoryServiceServer).UpdateTranslation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CategoryService_UpdateTranslation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CategoryServiceServer).UpdateTranslation(ctx, req.(*UpdateCategoryTranslationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CategoryService_DeleteTranslation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteCategoryTranslationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CategoryServiceServer).DeleteTranslation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CategoryService_DeleteTranslation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CategoryServiceServer).DeleteTranslation(ctx, req.(*DeleteCategoryTranslationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // CategoryService_ServiceDesc is the grpc.ServiceDesc for CategoryService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -282,6 +462,26 @@ var CategoryService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Delete",
 			Handler:    _CategoryService_Delete_Handler,
+		},
+		{
+			MethodName: "TranslationExists",
+			Handler:    _CategoryService_TranslationExists_Handler,
+		},
+		{
+			MethodName: "GetTranslation",
+			Handler:    _CategoryService_GetTranslation_Handler,
+		},
+		{
+			MethodName: "CreateTranslation",
+			Handler:    _CategoryService_CreateTranslation_Handler,
+		},
+		{
+			MethodName: "UpdateTranslation",
+			Handler:    _CategoryService_UpdateTranslation_Handler,
+		},
+		{
+			MethodName: "DeleteTranslation",
+			Handler:    _CategoryService_DeleteTranslation_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

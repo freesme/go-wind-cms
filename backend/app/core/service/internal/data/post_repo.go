@@ -520,7 +520,7 @@ func (r *PostRepo) CreateTranslation(ctx context.Context, req *contentV1.CreateP
 
 	req.Data.PostId = trans.Ptr(req.GetPostId())
 
-	return r.postTranslationRepo.Create(ctx, req.Data)
+	return r.postTranslationRepo.CreateTranslation(ctx, req.Data)
 }
 
 func (r *PostRepo) UpdateTranslation(ctx context.Context, req *contentV1.UpdatePostTranslationRequest) (*contentV1.PostTranslation, error) {
@@ -549,7 +549,7 @@ func (r *PostRepo) UpdateTranslation(ctx context.Context, req *contentV1.UpdateP
 		return nil, contentV1.ErrorFileNotFound("translation not found")
 	}
 
-	return r.postTranslationRepo.Update(ctx, req.GetId(), req.Data, req.GetUpdateMask())
+	return r.postTranslationRepo.UpdateTranslation(ctx, req.GetId(), req.Data, req.GetUpdateMask())
 }
 
 func (r *PostRepo) GetTranslation(ctx context.Context, req *contentV1.GetPostRequest) (*contentV1.PostTranslation, error) {

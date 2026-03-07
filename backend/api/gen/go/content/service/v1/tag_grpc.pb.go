@@ -21,11 +21,16 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TagService_List_FullMethodName   = "/content.service.v1.TagService/List"
-	TagService_Get_FullMethodName    = "/content.service.v1.TagService/Get"
-	TagService_Create_FullMethodName = "/content.service.v1.TagService/Create"
-	TagService_Update_FullMethodName = "/content.service.v1.TagService/Update"
-	TagService_Delete_FullMethodName = "/content.service.v1.TagService/Delete"
+	TagService_List_FullMethodName              = "/content.service.v1.TagService/List"
+	TagService_Get_FullMethodName               = "/content.service.v1.TagService/Get"
+	TagService_Create_FullMethodName            = "/content.service.v1.TagService/Create"
+	TagService_Update_FullMethodName            = "/content.service.v1.TagService/Update"
+	TagService_Delete_FullMethodName            = "/content.service.v1.TagService/Delete"
+	TagService_TranslationExists_FullMethodName = "/content.service.v1.TagService/TranslationExists"
+	TagService_GetTranslation_FullMethodName    = "/content.service.v1.TagService/GetTranslation"
+	TagService_CreateTranslation_FullMethodName = "/content.service.v1.TagService/CreateTranslation"
+	TagService_UpdateTranslation_FullMethodName = "/content.service.v1.TagService/UpdateTranslation"
+	TagService_DeleteTranslation_FullMethodName = "/content.service.v1.TagService/DeleteTranslation"
 )
 
 // TagServiceClient is the client API for TagService service.
@@ -44,6 +49,16 @@ type TagServiceClient interface {
 	Update(ctx context.Context, in *UpdateTagRequest, opts ...grpc.CallOption) (*Tag, error)
 	// 删除标签
 	Delete(ctx context.Context, in *DeleteTagRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// 检查翻译是否存在
+	TranslationExists(ctx context.Context, in *TagTranslationExistsRequest, opts ...grpc.CallOption) (*TagTranslationExistsResponse, error)
+	// 获取翻译数据
+	GetTranslation(ctx context.Context, in *GetTagRequest, opts ...grpc.CallOption) (*TagTranslation, error)
+	// 创建翻译
+	CreateTranslation(ctx context.Context, in *CreateTagTranslationRequest, opts ...grpc.CallOption) (*TagTranslation, error)
+	// 更新翻译
+	UpdateTranslation(ctx context.Context, in *UpdateTagTranslationRequest, opts ...grpc.CallOption) (*TagTranslation, error)
+	// 删除翻译
+	DeleteTranslation(ctx context.Context, in *DeleteTagTranslationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type tagServiceClient struct {
@@ -104,6 +119,56 @@ func (c *tagServiceClient) Delete(ctx context.Context, in *DeleteTagRequest, opt
 	return out, nil
 }
 
+func (c *tagServiceClient) TranslationExists(ctx context.Context, in *TagTranslationExistsRequest, opts ...grpc.CallOption) (*TagTranslationExistsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(TagTranslationExistsResponse)
+	err := c.cc.Invoke(ctx, TagService_TranslationExists_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tagServiceClient) GetTranslation(ctx context.Context, in *GetTagRequest, opts ...grpc.CallOption) (*TagTranslation, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(TagTranslation)
+	err := c.cc.Invoke(ctx, TagService_GetTranslation_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tagServiceClient) CreateTranslation(ctx context.Context, in *CreateTagTranslationRequest, opts ...grpc.CallOption) (*TagTranslation, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(TagTranslation)
+	err := c.cc.Invoke(ctx, TagService_CreateTranslation_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tagServiceClient) UpdateTranslation(ctx context.Context, in *UpdateTagTranslationRequest, opts ...grpc.CallOption) (*TagTranslation, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(TagTranslation)
+	err := c.cc.Invoke(ctx, TagService_UpdateTranslation_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tagServiceClient) DeleteTranslation(ctx context.Context, in *DeleteTagTranslationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, TagService_DeleteTranslation_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TagServiceServer is the server API for TagService service.
 // All implementations must embed UnimplementedTagServiceServer
 // for forward compatibility.
@@ -120,6 +185,16 @@ type TagServiceServer interface {
 	Update(context.Context, *UpdateTagRequest) (*Tag, error)
 	// 删除标签
 	Delete(context.Context, *DeleteTagRequest) (*emptypb.Empty, error)
+	// 检查翻译是否存在
+	TranslationExists(context.Context, *TagTranslationExistsRequest) (*TagTranslationExistsResponse, error)
+	// 获取翻译数据
+	GetTranslation(context.Context, *GetTagRequest) (*TagTranslation, error)
+	// 创建翻译
+	CreateTranslation(context.Context, *CreateTagTranslationRequest) (*TagTranslation, error)
+	// 更新翻译
+	UpdateTranslation(context.Context, *UpdateTagTranslationRequest) (*TagTranslation, error)
+	// 删除翻译
+	DeleteTranslation(context.Context, *DeleteTagTranslationRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedTagServiceServer()
 }
 
@@ -144,6 +219,21 @@ func (UnimplementedTagServiceServer) Update(context.Context, *UpdateTagRequest) 
 }
 func (UnimplementedTagServiceServer) Delete(context.Context, *DeleteTagRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedTagServiceServer) TranslationExists(context.Context, *TagTranslationExistsRequest) (*TagTranslationExistsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method TranslationExists not implemented")
+}
+func (UnimplementedTagServiceServer) GetTranslation(context.Context, *GetTagRequest) (*TagTranslation, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetTranslation not implemented")
+}
+func (UnimplementedTagServiceServer) CreateTranslation(context.Context, *CreateTagTranslationRequest) (*TagTranslation, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateTranslation not implemented")
+}
+func (UnimplementedTagServiceServer) UpdateTranslation(context.Context, *UpdateTagTranslationRequest) (*TagTranslation, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateTranslation not implemented")
+}
+func (UnimplementedTagServiceServer) DeleteTranslation(context.Context, *DeleteTagTranslationRequest) (*emptypb.Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteTranslation not implemented")
 }
 func (UnimplementedTagServiceServer) mustEmbedUnimplementedTagServiceServer() {}
 func (UnimplementedTagServiceServer) testEmbeddedByValue()                    {}
@@ -256,6 +346,96 @@ func _TagService_Delete_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TagService_TranslationExists_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TagTranslationExistsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TagServiceServer).TranslationExists(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TagService_TranslationExists_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TagServiceServer).TranslationExists(ctx, req.(*TagTranslationExistsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TagService_GetTranslation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTagRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TagServiceServer).GetTranslation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TagService_GetTranslation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TagServiceServer).GetTranslation(ctx, req.(*GetTagRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TagService_CreateTranslation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateTagTranslationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TagServiceServer).CreateTranslation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TagService_CreateTranslation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TagServiceServer).CreateTranslation(ctx, req.(*CreateTagTranslationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TagService_UpdateTranslation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateTagTranslationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TagServiceServer).UpdateTranslation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TagService_UpdateTranslation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TagServiceServer).UpdateTranslation(ctx, req.(*UpdateTagTranslationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TagService_DeleteTranslation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteTagTranslationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TagServiceServer).DeleteTranslation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TagService_DeleteTranslation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TagServiceServer).DeleteTranslation(ctx, req.(*DeleteTagTranslationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TagService_ServiceDesc is the grpc.ServiceDesc for TagService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -282,6 +462,26 @@ var TagService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Delete",
 			Handler:    _TagService_Delete_Handler,
+		},
+		{
+			MethodName: "TranslationExists",
+			Handler:    _TagService_TranslationExists_Handler,
+		},
+		{
+			MethodName: "GetTranslation",
+			Handler:    _TagService_GetTranslation_Handler,
+		},
+		{
+			MethodName: "CreateTranslation",
+			Handler:    _TagService_CreateTranslation_Handler,
+		},
+		{
+			MethodName: "UpdateTranslation",
+			Handler:    _TagService_UpdateTranslation_Handler,
+		},
+		{
+			MethodName: "DeleteTranslation",
+			Handler:    _TagService_DeleteTranslation_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

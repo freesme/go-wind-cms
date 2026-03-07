@@ -1288,3 +1288,783 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DeleteTagRequestValidationError{}
+
+// Validate checks the field values on TagTranslationExistsRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *TagTranslationExistsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on TagTranslationExistsRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// TagTranslationExistsRequestMultiError, or nil if none found.
+func (m *TagTranslationExistsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *TagTranslationExistsRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for TagId
+
+	// no validation rules for LanguageCode
+
+	if len(errors) > 0 {
+		return TagTranslationExistsRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// TagTranslationExistsRequestMultiError is an error wrapping multiple
+// validation errors returned by TagTranslationExistsRequest.ValidateAll() if
+// the designated constraints aren't met.
+type TagTranslationExistsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m TagTranslationExistsRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m TagTranslationExistsRequestMultiError) AllErrors() []error { return m }
+
+// TagTranslationExistsRequestValidationError is the validation error returned
+// by TagTranslationExistsRequest.Validate if the designated constraints
+// aren't met.
+type TagTranslationExistsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e TagTranslationExistsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e TagTranslationExistsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e TagTranslationExistsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e TagTranslationExistsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e TagTranslationExistsRequestValidationError) ErrorName() string {
+	return "TagTranslationExistsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e TagTranslationExistsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sTagTranslationExistsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = TagTranslationExistsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = TagTranslationExistsRequestValidationError{}
+
+// Validate checks the field values on TagTranslationExistsResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *TagTranslationExistsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on TagTranslationExistsResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// TagTranslationExistsResponseMultiError, or nil if none found.
+func (m *TagTranslationExistsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *TagTranslationExistsResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Exists
+
+	if len(errors) > 0 {
+		return TagTranslationExistsResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// TagTranslationExistsResponseMultiError is an error wrapping multiple
+// validation errors returned by TagTranslationExistsResponse.ValidateAll() if
+// the designated constraints aren't met.
+type TagTranslationExistsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m TagTranslationExistsResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m TagTranslationExistsResponseMultiError) AllErrors() []error { return m }
+
+// TagTranslationExistsResponseValidationError is the validation error returned
+// by TagTranslationExistsResponse.Validate if the designated constraints
+// aren't met.
+type TagTranslationExistsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e TagTranslationExistsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e TagTranslationExistsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e TagTranslationExistsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e TagTranslationExistsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e TagTranslationExistsResponseValidationError) ErrorName() string {
+	return "TagTranslationExistsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e TagTranslationExistsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sTagTranslationExistsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = TagTranslationExistsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = TagTranslationExistsResponseValidationError{}
+
+// Validate checks the field values on CreateTagTranslationRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CreateTagTranslationRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreateTagTranslationRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CreateTagTranslationRequestMultiError, or nil if none found.
+func (m *CreateTagTranslationRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateTagTranslationRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for TagId
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateTagTranslationRequestValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateTagTranslationRequestValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateTagTranslationRequestValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return CreateTagTranslationRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreateTagTranslationRequestMultiError is an error wrapping multiple
+// validation errors returned by CreateTagTranslationRequest.ValidateAll() if
+// the designated constraints aren't met.
+type CreateTagTranslationRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateTagTranslationRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateTagTranslationRequestMultiError) AllErrors() []error { return m }
+
+// CreateTagTranslationRequestValidationError is the validation error returned
+// by CreateTagTranslationRequest.Validate if the designated constraints
+// aren't met.
+type CreateTagTranslationRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateTagTranslationRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateTagTranslationRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateTagTranslationRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateTagTranslationRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateTagTranslationRequestValidationError) ErrorName() string {
+	return "CreateTagTranslationRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateTagTranslationRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateTagTranslationRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateTagTranslationRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateTagTranslationRequestValidationError{}
+
+// Validate checks the field values on UpdateTagTranslationRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *UpdateTagTranslationRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UpdateTagTranslationRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// UpdateTagTranslationRequestMultiError, or nil if none found.
+func (m *UpdateTagTranslationRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdateTagTranslationRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdateTagTranslationRequestValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdateTagTranslationRequestValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateTagTranslationRequestValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUpdateMask()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdateTagTranslationRequestValidationError{
+					field:  "UpdateMask",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdateTagTranslationRequestValidationError{
+					field:  "UpdateMask",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdateMask()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateTagTranslationRequestValidationError{
+				field:  "UpdateMask",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.AllowMissing != nil {
+		// no validation rules for AllowMissing
+	}
+
+	if len(errors) > 0 {
+		return UpdateTagTranslationRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// UpdateTagTranslationRequestMultiError is an error wrapping multiple
+// validation errors returned by UpdateTagTranslationRequest.ValidateAll() if
+// the designated constraints aren't met.
+type UpdateTagTranslationRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateTagTranslationRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateTagTranslationRequestMultiError) AllErrors() []error { return m }
+
+// UpdateTagTranslationRequestValidationError is the validation error returned
+// by UpdateTagTranslationRequest.Validate if the designated constraints
+// aren't met.
+type UpdateTagTranslationRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateTagTranslationRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateTagTranslationRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateTagTranslationRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateTagTranslationRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateTagTranslationRequestValidationError) ErrorName() string {
+	return "UpdateTagTranslationRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateTagTranslationRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateTagTranslationRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateTagTranslationRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateTagTranslationRequestValidationError{}
+
+// Validate checks the field values on TagTranslationIdentifier with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *TagTranslationIdentifier) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on TagTranslationIdentifier with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// TagTranslationIdentifierMultiError, or nil if none found.
+func (m *TagTranslationIdentifier) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *TagTranslationIdentifier) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for TagId
+
+	// no validation rules for LanguageCode
+
+	if len(errors) > 0 {
+		return TagTranslationIdentifierMultiError(errors)
+	}
+
+	return nil
+}
+
+// TagTranslationIdentifierMultiError is an error wrapping multiple validation
+// errors returned by TagTranslationIdentifier.ValidateAll() if the designated
+// constraints aren't met.
+type TagTranslationIdentifierMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m TagTranslationIdentifierMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m TagTranslationIdentifierMultiError) AllErrors() []error { return m }
+
+// TagTranslationIdentifierValidationError is the validation error returned by
+// TagTranslationIdentifier.Validate if the designated constraints aren't met.
+type TagTranslationIdentifierValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e TagTranslationIdentifierValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e TagTranslationIdentifierValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e TagTranslationIdentifierValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e TagTranslationIdentifierValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e TagTranslationIdentifierValidationError) ErrorName() string {
+	return "TagTranslationIdentifierValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e TagTranslationIdentifierValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sTagTranslationIdentifier.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = TagTranslationIdentifierValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = TagTranslationIdentifierValidationError{}
+
+// Validate checks the field values on DeleteTagTranslationRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *DeleteTagTranslationRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DeleteTagTranslationRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// DeleteTagTranslationRequestMultiError, or nil if none found.
+func (m *DeleteTagTranslationRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DeleteTagTranslationRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	switch v := m.QueryBy.(type) {
+	case *DeleteTagTranslationRequest_Id:
+		if v == nil {
+			err := DeleteTagTranslationRequestValidationError{
+				field:  "QueryBy",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		// no validation rules for Id
+	case *DeleteTagTranslationRequest_Identifier:
+		if v == nil {
+			err := DeleteTagTranslationRequestValidationError{
+				field:  "QueryBy",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if all {
+			switch v := interface{}(m.GetIdentifier()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, DeleteTagTranslationRequestValidationError{
+						field:  "Identifier",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, DeleteTagTranslationRequestValidationError{
+						field:  "Identifier",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetIdentifier()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return DeleteTagTranslationRequestValidationError{
+					field:  "Identifier",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		_ = v // ensures v is used
+	}
+
+	if len(errors) > 0 {
+		return DeleteTagTranslationRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// DeleteTagTranslationRequestMultiError is an error wrapping multiple
+// validation errors returned by DeleteTagTranslationRequest.ValidateAll() if
+// the designated constraints aren't met.
+type DeleteTagTranslationRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeleteTagTranslationRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeleteTagTranslationRequestMultiError) AllErrors() []error { return m }
+
+// DeleteTagTranslationRequestValidationError is the validation error returned
+// by DeleteTagTranslationRequest.Validate if the designated constraints
+// aren't met.
+type DeleteTagTranslationRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeleteTagTranslationRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeleteTagTranslationRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeleteTagTranslationRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeleteTagTranslationRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeleteTagTranslationRequestValidationError) ErrorName() string {
+	return "DeleteTagTranslationRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DeleteTagTranslationRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeleteTagTranslationRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeleteTagTranslationRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeleteTagTranslationRequestValidationError{}

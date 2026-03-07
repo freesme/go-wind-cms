@@ -24,6 +24,22 @@ service CategoryService {
 
   // 删除类别
   rpc Delete (DeleteCategoryRequest) returns (google.protobuf.Empty) {}
+
+
+  // 检查翻译是否存在
+  rpc TranslationExists(CategoryTranslationExistsRequest) returns (CategoryTranslationExistsResponse) {}
+
+  // 获取翻译数据
+  rpc GetTranslation(GetCategoryRequest) returns (CategoryTranslation) {}
+
+  // 创建翻译
+  rpc CreateTranslation(CreateCategoryTranslationRequest) returns (CategoryTranslation) {}
+
+  // 更新翻译
+  rpc UpdateTranslation(UpdateCategoryTranslationRequest) returns (CategoryTranslation) {}
+
+  // 删除翻译
+  rpc DeleteTranslation(DeleteCategoryTranslationRequest) returns (google.protobuf.Empty) {}
 }
 
 // 类别
@@ -269,5 +285,77 @@ message DeleteCategoryRequest {
       (gnostic.openapi.v3.property) = {description: "ID", read_only: true},
       json_name = "id"
     ]; // ID
+  }
+}
+
+message CategoryTranslationExistsRequest {
+  uint32 category_id = 1 [
+    json_name = "categoryId",
+    (gnostic.openapi.v3.property) = {description: "关联的分类ID"}
+  ]; // 关联的分类ID
+
+  string language_code = 2 [
+    json_name = "languageCode",
+    (gnostic.openapi.v3.property) = {description: "语言代码"}
+  ]; // 语言代码
+}
+message CategoryTranslationExistsResponse {
+  bool exists = 1 [json_name = "exists", (gnostic.openapi.v3.property) = {description: "翻译是否存在"}]; // 翻译是否存在
+}
+
+message CreateCategoryTranslationRequest {
+  uint32 category_id = 1 [
+    json_name = "categoryId",
+    (gnostic.openapi.v3.property) = {description: "关联的分类ID"}
+  ]; // 关联的分类ID
+
+  CategoryTranslation data = 2;
+}
+
+message UpdateCategoryTranslationRequest {
+  uint32 id = 1 [
+    json_name = "id",
+    (gnostic.openapi.v3.property) = {description: "翻译ID"}
+  ]; // 翻译ID
+
+  CategoryTranslation data = 2;
+
+  google.protobuf.FieldMask update_mask = 3 [
+    (gnostic.openapi.v3.property) = {
+      description: "要更新的字段列表",
+      example: {yaml: "id,realname,username"}
+    },
+    json_name = "updateMask"
+  ]; // 要更新的字段列表
+
+  optional bool allow_missing = 4 [
+    (gnostic.openapi.v3.property) = {description: "如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。"},
+    json_name = "allowMissing"
+  ]; // 如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。
+}
+
+message CategoryTranslationIdentifier {
+  uint32 category_id = 1 [
+    json_name = "categoryId",
+    (gnostic.openapi.v3.property) = {description: "关联的分类ID"}
+  ]; // 关联的分类ID
+
+  string language_code = 2 [
+    json_name = "languageCode",
+    (gnostic.openapi.v3.property) = {description: "语言代码"}
+  ]; // 语言代码
+}
+
+message DeleteCategoryTranslationRequest {
+  oneof query_by {
+    uint32 id = 1 [
+      (gnostic.openapi.v3.property) = {description: "ID", read_only: true},
+      json_name = "id"
+    ]; // ID
+
+    CategoryTranslationIdentifier identifier = 2 [
+      json_name = "identifier",
+      (gnostic.openapi.v3.property) = {description: "通过 category_id 和 language_code 组合查询"}
+    ]; // 通过 category_id 和 language_code 组合查询
   }
 }

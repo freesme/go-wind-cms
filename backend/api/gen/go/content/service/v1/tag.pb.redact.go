@@ -101,6 +101,61 @@ func (s *redactedTagServiceServer) Delete(ctx context.Context, in *DeleteTagRequ
 	return res, err
 }
 
+// TranslationExists is the redacted wrapper for the actual TagServiceServer.TranslationExists method
+// Unary RPC
+func (s *redactedTagServiceServer) TranslationExists(ctx context.Context, in *TagTranslationExistsRequest) (*TagTranslationExistsResponse, error) {
+	res, err := s.srv.TranslationExists(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// GetTranslation is the redacted wrapper for the actual TagServiceServer.GetTranslation method
+// Unary RPC
+func (s *redactedTagServiceServer) GetTranslation(ctx context.Context, in *GetTagRequest) (*TagTranslation, error) {
+	res, err := s.srv.GetTranslation(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// CreateTranslation is the redacted wrapper for the actual TagServiceServer.CreateTranslation method
+// Unary RPC
+func (s *redactedTagServiceServer) CreateTranslation(ctx context.Context, in *CreateTagTranslationRequest) (*TagTranslation, error) {
+	res, err := s.srv.CreateTranslation(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// UpdateTranslation is the redacted wrapper for the actual TagServiceServer.UpdateTranslation method
+// Unary RPC
+func (s *redactedTagServiceServer) UpdateTranslation(ctx context.Context, in *UpdateTagTranslationRequest) (*TagTranslation, error) {
+	res, err := s.srv.UpdateTranslation(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// DeleteTranslation is the redacted wrapper for the actual TagServiceServer.DeleteTranslation method
+// Unary RPC
+func (s *redactedTagServiceServer) DeleteTranslation(ctx context.Context, in *DeleteTagTranslationRequest) (*emptypb.Empty, error) {
+	res, err := s.srv.DeleteTranslation(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Redact method implementation for Tag
 func (x *Tag) Redact() string {
 	if x == nil {
@@ -241,6 +296,76 @@ func (x *UpdateTagRequest) Redact() string {
 
 // Redact method implementation for DeleteTagRequest
 func (x *DeleteTagRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+	return x.String()
+}
+
+// Redact method implementation for TagTranslationExistsRequest
+func (x *TagTranslationExistsRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: TagId
+
+	// Safe field: LanguageCode
+	return x.String()
+}
+
+// Redact method implementation for TagTranslationExistsResponse
+func (x *TagTranslationExistsResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Exists
+	return x.String()
+}
+
+// Redact method implementation for CreateTagTranslationRequest
+func (x *CreateTagTranslationRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: TagId
+
+	// Safe field: Data
+	return x.String()
+}
+
+// Redact method implementation for UpdateTagTranslationRequest
+func (x *UpdateTagTranslationRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Id
+
+	// Safe field: Data
+
+	// Safe field: UpdateMask
+
+	// Safe field: AllowMissing
+	return x.String()
+}
+
+// Redact method implementation for TagTranslationIdentifier
+func (x *TagTranslationIdentifier) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: TagId
+
+	// Safe field: LanguageCode
+	return x.String()
+}
+
+// Redact method implementation for DeleteTagTranslationRequest
+func (x *DeleteTagTranslationRequest) Redact() string {
 	if x == nil {
 		return ""
 	}

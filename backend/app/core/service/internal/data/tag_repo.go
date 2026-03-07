@@ -2,13 +2,10 @@ package data
 
 import (
 	"context"
-	"strconv"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/tx7do/go-utils/slug"
-	"github.com/tx7do/go-utils/trans"
 	"github.com/tx7do/kratos-bootstrap/bootstrap"
 
 	paginationV1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
@@ -16,6 +13,7 @@ import (
 
 	"github.com/tx7do/go-utils/copierutil"
 	"github.com/tx7do/go-utils/mapper"
+	"github.com/tx7do/go-utils/trans"
 
 	"go-wind-cms/app/core/service/internal/data/ent"
 	"go-wind-cms/app/core/service/internal/data/ent/predicate"
@@ -242,19 +240,6 @@ func (r *TagRepo) Create(ctx context.Context, req *contentV1.CreateTagRequest) (
 
 		for i := range req.Data.Translations {
 			req.Data.Translations[i].TagId = trans.Ptr(entity.ID)
-
-			baseSlug := slug.Generate(req.Data.Translations[i].GetName())
-			slugCount, err := r.tagTranslationRepo.CountByBaseSlug(ctx, baseSlug)
-			if err != nil {
-				r.log.Errorf("count slug failed: %s", err.Error())
-				return nil, contentV1.ErrorInternalServerError("count slug failed")
-			}
-
-			if slugCount > 0 {
-				baseSlug = slug.Generate(req.Data.Translations[i].GetName()) + "-" + strconv.Itoa(int(slugCount))
-			}
-
-			req.Data.Translations[i].Slug = trans.Ptr(baseSlug)
 		}
 
 		if err = r.tagTranslationRepo.BatchCreate(ctx, tx, req.Data.GetTranslations()); err != nil {
@@ -312,19 +297,6 @@ func (r *TagRepo) Update(ctx context.Context, req *contentV1.UpdateTagRequest) (
 
 		for i := range req.Data.Translations {
 			req.Data.Translations[i].TagId = trans.Ptr(req.GetId())
-
-			baseSlug := slug.Generate(req.Data.Translations[i].GetName())
-			slugCount, err := r.tagTranslationRepo.CountByBaseSlug(ctx, baseSlug)
-			if err != nil {
-				r.log.Errorf("count slug failed: %s", err.Error())
-				return nil, contentV1.ErrorInternalServerError("count slug failed")
-			}
-
-			if slugCount > 0 {
-				baseSlug = slug.Generate(req.Data.Translations[i].GetName()) + "-" + strconv.Itoa(int(slugCount))
-			}
-
-			req.Data.Translations[i].Slug = trans.Ptr(baseSlug)
 		}
 
 		if err = r.tagTranslationRepo.BatchCreate(ctx, tx, req.Data.GetTranslations()); err != nil {
@@ -392,4 +364,75 @@ func (r *TagRepo) Delete(ctx context.Context, req *contentV1.DeleteTagRequest) (
 	}
 
 	return err
+}
+
+func (r *TagRepo) TranslationExists(ctx context.Context, tagId uint32, languageCode string) (bool, error) {
+	return r.tagTranslationRepo.TranslationExists(ctx, tagId, languageCode)
+}
+
+func (r *TagRepo) CreateTranslation(ctx context.Context, req *contentV1.CreateTagTranslationRequest) (*contentV1.TagTranslation, error) {
+	if req == nil || req.Data == nil {
+		return nil, contentV1.ErrorBadRequest("invalid parameter")
+	}
+
+	if len(req.Data.GetLanguageCode()) == 0 {
+		return nil, contentV1.ErrorBadRequest("language code is required")
+	}
+
+	if req.GetTagId() == 0 {
+		return nil, contentV1.ErrorBadRequest("post id is required")
+	}
+
+	req.Data.TagId = trans.Ptr(req.GetTagId())
+
+	return r.tagTranslationRepo.CreateTranslation(ctx, req.Data)
+}
+
+func (r *TagRepo) UpdateTranslation(ctx context.Context, req *contentV1.UpdateTagTranslationRequest) (*contentV1.TagTranslation, error) {
+	if req == nil || req.Data == nil {
+		return nil, contentV1.ErrorBadRequest("invalid parameter")
+	}
+
+	if len(req.Data.GetLanguageCode()) == 0 {
+		return nil, contentV1.ErrorBadRequest("language code is required")
+	}
+
+	if req.Data.GetTagId() == 0 {
+		return nil, contentV1.ErrorBadRequest("post id is required")
+	}
+
+	if exist, err := r.TranslationExists(ctx, req.Data.GetTagId(), req.Data.GetLanguageCode()); err != nil {
+		return nil, err
+	} else if !exist {
+		if req.GetAllowMissing() {
+			return r.CreateTranslation(ctx, &contentV1.CreateTagTranslationRequest{
+				Data:  req.Data,
+				TagId: req.Data.GetTagId(),
+			})
+		}
+
+		return nil, contentV1.ErrorFileNotFound("translation not found")
+	}
+
+	return r.tagTranslationRepo.UpdateTranslation(ctx, req.GetId(), req.Data, req.GetUpdateMask())
+}
+
+func (r *TagRepo) GetTranslation(ctx context.Context, req *contentV1.GetTagRequest) (*contentV1.TagTranslation, error) {
+	if req == nil {
+		return nil, contentV1.ErrorBadRequest("invalid parameter")
+	}
+
+	return r.tagTranslationRepo.GetTranslation(ctx, req.GetId(), req.GetLocale())
+}
+
+func (r *TagRepo) ListTranslations(ctx context.Context, tagID uint32) ([]*contentV1.TagTranslation, error) {
+	return r.tagTranslationRepo.ListTranslations(ctx, tagID)
+}
+
+func (r *TagRepo) DeleteTranslation(ctx context.Context, req *contentV1.DeleteTagTranslationRequest) error {
+	return r.tagTranslationRepo.DeleteTranslation(ctx, req)
+}
+
+func (r *TagRepo) CleanTranslations(ctx context.Context, tx *ent.Tx, tagID uint32) error {
+	return r.tagTranslationRepo.CleanTranslations(ctx, tx, tagID)
 }

@@ -49,9 +49,9 @@ func (PermissionAuditLog) Fields() []ent.Field {
 			NamedValues(
 				"Grant", "GRANT",
 				"Revoke", "REVOKE",
-				"Update", "UPDATE",
+				"UpdateTranslation", "UPDATE",
 				"Reset", "RESET",
-				"Create", "CREATE",
+				"CreateTranslation", "CREATE",
 				"Delete", "DELETE",
 				"Assign", "ASSIGN",
 				"Unassign", "UNASSIGN",

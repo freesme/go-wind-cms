@@ -101,6 +101,61 @@ func (s *redactedPageServiceServer) Delete(ctx context.Context, in *DeletePageRe
 	return res, err
 }
 
+// TranslationExists is the redacted wrapper for the actual PageServiceServer.TranslationExists method
+// Unary RPC
+func (s *redactedPageServiceServer) TranslationExists(ctx context.Context, in *PageTranslationExistsRequest) (*PageTranslationExistsResponse, error) {
+	res, err := s.srv.TranslationExists(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// GetTranslation is the redacted wrapper for the actual PageServiceServer.GetTranslation method
+// Unary RPC
+func (s *redactedPageServiceServer) GetTranslation(ctx context.Context, in *GetPageRequest) (*PageTranslation, error) {
+	res, err := s.srv.GetTranslation(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// CreateTranslation is the redacted wrapper for the actual PageServiceServer.CreateTranslation method
+// Unary RPC
+func (s *redactedPageServiceServer) CreateTranslation(ctx context.Context, in *CreatePageTranslationRequest) (*PageTranslation, error) {
+	res, err := s.srv.CreateTranslation(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// UpdateTranslation is the redacted wrapper for the actual PageServiceServer.UpdateTranslation method
+// Unary RPC
+func (s *redactedPageServiceServer) UpdateTranslation(ctx context.Context, in *UpdatePageTranslationRequest) (*PageTranslation, error) {
+	res, err := s.srv.UpdateTranslation(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
+// DeleteTranslation is the redacted wrapper for the actual PageServiceServer.DeleteTranslation method
+// Unary RPC
+func (s *redactedPageServiceServer) DeleteTranslation(ctx context.Context, in *DeletePageTranslationRequest) (*emptypb.Empty, error) {
+	res, err := s.srv.DeleteTranslation(ctx, in)
+	if !s.bypass.CheckInternal(ctx) {
+		// Apply redaction to the response
+		redact.Apply(res)
+	}
+	return res, err
+}
+
 // Redact method implementation for Page
 func (x *Page) Redact() string {
 	if x == nil {
@@ -269,6 +324,76 @@ func (x *UpdatePageRequest) Redact() string {
 
 // Redact method implementation for DeletePageRequest
 func (x *DeletePageRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+	return x.String()
+}
+
+// Redact method implementation for PageTranslationExistsRequest
+func (x *PageTranslationExistsRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: PageId
+
+	// Safe field: LanguageCode
+	return x.String()
+}
+
+// Redact method implementation for PageTranslationExistsResponse
+func (x *PageTranslationExistsResponse) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Exists
+	return x.String()
+}
+
+// Redact method implementation for CreatePageTranslationRequest
+func (x *CreatePageTranslationRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: PageId
+
+	// Safe field: Data
+	return x.String()
+}
+
+// Redact method implementation for UpdatePageTranslationRequest
+func (x *UpdatePageTranslationRequest) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: Id
+
+	// Safe field: Data
+
+	// Safe field: UpdateMask
+
+	// Safe field: AllowMissing
+	return x.String()
+}
+
+// Redact method implementation for PageTranslationIdentifier
+func (x *PageTranslationIdentifier) Redact() string {
+	if x == nil {
+		return ""
+	}
+
+	// Safe field: PageId
+
+	// Safe field: LanguageCode
+	return x.String()
+}
+
+// Redact method implementation for DeletePageTranslationRequest
+func (x *DeletePageTranslationRequest) Redact() string {
 	if x == nil {
 		return ""
 	}

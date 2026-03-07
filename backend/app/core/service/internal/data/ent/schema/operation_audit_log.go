@@ -56,8 +56,8 @@ func (OperationAuditLog) Fields() []ent.Field {
 		field.Enum("action").
 			Comment("动作").
 			NamedValues(
-				"Create", "CREATE",
-				"Update", "UPDATE",
+				"CreateTranslation", "CREATE",
+				"UpdateTranslation", "UPDATE",
 				"Delete", "DELETE",
 				"Read", "READ",
 				"Assign", "ASSIGN",

@@ -51,6 +51,7 @@ type PostServiceClient interface {
 	Delete(ctx context.Context, in *DeletePostRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 检查翻译是否存在
 	TranslationExists(ctx context.Context, in *PostTranslationExistsRequest, opts ...grpc.CallOption) (*PostTranslationExistsResponse, error)
+	// 获取翻译数据
 	GetTranslation(ctx context.Context, in *GetPostRequest, opts ...grpc.CallOption) (*PostTranslation, error)
 	// 创建翻译
 	CreateTranslation(ctx context.Context, in *CreatePostTranslationRequest, opts ...grpc.CallOption) (*PostTranslation, error)
@@ -186,6 +187,7 @@ type PostServiceServer interface {
 	Delete(context.Context, *DeletePostRequest) (*emptypb.Empty, error)
 	// 检查翻译是否存在
 	TranslationExists(context.Context, *PostTranslationExistsRequest) (*PostTranslationExistsResponse, error)
+	// 获取翻译数据
 	GetTranslation(context.Context, *GetPostRequest) (*PostTranslation, error)
 	// 创建翻译
 	CreateTranslation(context.Context, *CreatePostTranslationRequest) (*PostTranslation, error)

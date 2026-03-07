@@ -2,13 +2,10 @@ package data
 
 import (
 	"context"
-	"strconv"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/tx7do/go-utils/slug"
-	"github.com/tx7do/go-utils/trans"
 	"github.com/tx7do/kratos-bootstrap/bootstrap"
 
 	paginationV1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
@@ -16,6 +13,7 @@ import (
 
 	"github.com/tx7do/go-utils/copierutil"
 	"github.com/tx7do/go-utils/mapper"
+	"github.com/tx7do/go-utils/trans"
 
 	"go-wind-cms/app/core/service/internal/data/ent"
 	"go-wind-cms/app/core/service/internal/data/ent/category"
@@ -246,19 +244,6 @@ func (r *CategoryRepo) Create(ctx context.Context, req *contentV1.CreateCategory
 
 		for i := range req.Data.Translations {
 			req.Data.Translations[i].CategoryId = trans.Ptr(entity.ID)
-
-			baseSlug := slug.Generate(req.Data.Translations[i].GetName())
-			slugCount, err := r.categoryTranslationRepo.CountByBaseSlug(ctx, baseSlug)
-			if err != nil {
-				r.log.Errorf("count slug failed: %s", err.Error())
-				return nil, contentV1.ErrorInternalServerError("count slug failed")
-			}
-
-			if slugCount > 0 {
-				baseSlug = slug.Generate(req.Data.Translations[i].GetName()) + "-" + strconv.Itoa(int(slugCount))
-			}
-
-			req.Data.Translations[i].Slug = trans.Ptr(baseSlug)
 		}
 
 		if err = r.categoryTranslationRepo.BatchCreate(ctx, tx, req.Data.GetTranslations()); err != nil {
@@ -316,19 +301,6 @@ func (r *CategoryRepo) Update(ctx context.Context, req *contentV1.UpdateCategory
 
 		for i := range req.Data.Translations {
 			req.Data.Translations[i].CategoryId = trans.Ptr(req.GetId())
-
-			baseSlug := slug.Generate(req.Data.Translations[i].GetName())
-			slugCount, err := r.categoryTranslationRepo.CountByBaseSlug(ctx, baseSlug)
-			if err != nil {
-				r.log.Errorf("count slug failed: %s", err.Error())
-				return nil, contentV1.ErrorInternalServerError("count slug failed")
-			}
-
-			if slugCount > 0 {
-				baseSlug = slug.Generate(req.Data.Translations[i].GetName()) + "-" + strconv.Itoa(int(slugCount))
-			}
-
-			req.Data.Translations[i].Slug = trans.Ptr(baseSlug)
 		}
 
 		if err = r.categoryTranslationRepo.BatchCreate(ctx, tx, req.Data.GetTranslations()); err != nil {
@@ -402,4 +374,75 @@ func (r *CategoryRepo) Delete(ctx context.Context, req *contentV1.DeleteCategory
 	}
 
 	return err
+}
+
+func (r *CategoryRepo) TranslationExists(ctx context.Context, categoryId uint32, languageCode string) (bool, error) {
+	return r.categoryTranslationRepo.TranslationExists(ctx, categoryId, languageCode)
+}
+
+func (r *CategoryRepo) CreateTranslation(ctx context.Context, req *contentV1.CreateCategoryTranslationRequest) (*contentV1.CategoryTranslation, error) {
+	if req == nil || req.Data == nil {
+		return nil, contentV1.ErrorBadRequest("invalid parameter")
+	}
+
+	if len(req.Data.GetLanguageCode()) == 0 {
+		return nil, contentV1.ErrorBadRequest("language code is required")
+	}
+
+	if req.GetCategoryId() == 0 {
+		return nil, contentV1.ErrorBadRequest("post id is required")
+	}
+
+	req.Data.CategoryId = trans.Ptr(req.GetCategoryId())
+
+	return r.categoryTranslationRepo.CreateTranslation(ctx, req.Data)
+}
+
+func (r *CategoryRepo) UpdateTranslation(ctx context.Context, req *contentV1.UpdateCategoryTranslationRequest) (*contentV1.CategoryTranslation, error) {
+	if req == nil || req.Data == nil {
+		return nil, contentV1.ErrorBadRequest("invalid parameter")
+	}
+
+	if len(req.Data.GetLanguageCode()) == 0 {
+		return nil, contentV1.ErrorBadRequest("language code is required")
+	}
+
+	if req.Data.GetCategoryId() == 0 {
+		return nil, contentV1.ErrorBadRequest("post id is required")
+	}
+
+	if exist, err := r.TranslationExists(ctx, req.Data.GetCategoryId(), req.Data.GetLanguageCode()); err != nil {
+		return nil, err
+	} else if !exist {
+		if req.GetAllowMissing() {
+			return r.CreateTranslation(ctx, &contentV1.CreateCategoryTranslationRequest{
+				Data:       req.Data,
+				CategoryId: req.Data.GetCategoryId(),
+			})
+		}
+
+		return nil, contentV1.ErrorFileNotFound("translation not found")
+	}
+
+	return r.categoryTranslationRepo.UpdateTranslation(ctx, req.GetId(), req.Data, req.GetUpdateMask())
+}
+
+func (r *CategoryRepo) GetTranslation(ctx context.Context, req *contentV1.GetCategoryRequest) (*contentV1.CategoryTranslation, error) {
+	if req == nil {
+		return nil, contentV1.ErrorBadRequest("invalid parameter")
+	}
+
+	return r.categoryTranslationRepo.GetTranslation(ctx, req.GetId(), req.GetLocale())
+}
+
+func (r *CategoryRepo) ListTranslations(ctx context.Context, categoryID uint32) ([]*contentV1.CategoryTranslation, error) {
+	return r.categoryTranslationRepo.ListTranslations(ctx, categoryID)
+}
+
+func (r *CategoryRepo) DeleteTranslation(ctx context.Context, req *contentV1.DeleteCategoryTranslationRequest) error {
+	return r.categoryTranslationRepo.DeleteTranslation(ctx, req)
+}
+
+func (r *CategoryRepo) CleanTranslations(ctx context.Context, tx *ent.Tx, categoryID uint32) error {
+	return r.categoryTranslationRepo.CleanTranslations(ctx, tx, categoryID)
 }

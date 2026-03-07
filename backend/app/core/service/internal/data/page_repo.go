@@ -6,12 +6,14 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/tx7do/kratos-bootstrap/bootstrap"
+
 	paginationV1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
 	entCrud "github.com/tx7do/go-crud/entgo"
+
 	"github.com/tx7do/go-utils/copierutil"
 	"github.com/tx7do/go-utils/mapper"
 	"github.com/tx7do/go-utils/trans"
-	"github.com/tx7do/kratos-bootstrap/bootstrap"
 
 	"go-wind-cms/app/core/service/internal/data/ent"
 	"go-wind-cms/app/core/service/internal/data/ent/page"
@@ -305,8 +307,6 @@ func (r *PageRepo) Update(ctx context.Context, req *contentV1.UpdatePageRequest)
 
 		for i := range req.Data.Translations {
 			req.Data.Translations[i].PageId = trans.Ptr(req.GetId())
-
-			_ = r.pageTranslationRepo.PrepareTranslation(ctx, req.Data.Translations[i])
 		}
 
 		if err = r.pageTranslationRepo.BatchCreate(ctx, tx, req.Data.GetTranslations()); err != nil {
@@ -388,4 +388,75 @@ func (r *PageRepo) Delete(ctx context.Context, req *contentV1.DeletePageRequest)
 	}
 
 	return err
+}
+
+func (r *PageRepo) TranslationExists(ctx context.Context, pageId uint32, languageCode string) (bool, error) {
+	return r.pageTranslationRepo.TranslationExists(ctx, pageId, languageCode)
+}
+
+func (r *PageRepo) CreateTranslation(ctx context.Context, req *contentV1.CreatePageTranslationRequest) (*contentV1.PageTranslation, error) {
+	if req == nil || req.Data == nil {
+		return nil, contentV1.ErrorBadRequest("invalid parameter")
+	}
+
+	if len(req.Data.GetLanguageCode()) == 0 {
+		return nil, contentV1.ErrorBadRequest("language code is required")
+	}
+
+	if req.GetPageId() == 0 {
+		return nil, contentV1.ErrorBadRequest("post id is required")
+	}
+
+	req.Data.PageId = trans.Ptr(req.GetPageId())
+
+	return r.pageTranslationRepo.CreateTranslation(ctx, req.Data)
+}
+
+func (r *PageRepo) UpdateTranslation(ctx context.Context, req *contentV1.UpdatePageTranslationRequest) (*contentV1.PageTranslation, error) {
+	if req == nil || req.Data == nil {
+		return nil, contentV1.ErrorBadRequest("invalid parameter")
+	}
+
+	if len(req.Data.GetLanguageCode()) == 0 {
+		return nil, contentV1.ErrorBadRequest("language code is required")
+	}
+
+	if req.Data.GetPageId() == 0 {
+		return nil, contentV1.ErrorBadRequest("post id is required")
+	}
+
+	if exist, err := r.TranslationExists(ctx, req.Data.GetPageId(), req.Data.GetLanguageCode()); err != nil {
+		return nil, err
+	} else if !exist {
+		if req.GetAllowMissing() {
+			return r.CreateTranslation(ctx, &contentV1.CreatePageTranslationRequest{
+				Data:   req.Data,
+				PageId: req.Data.GetPageId(),
+			})
+		}
+
+		return nil, contentV1.ErrorFileNotFound("translation not found")
+	}
+
+	return r.pageTranslationRepo.UpdateTranslation(ctx, req.GetId(), req.Data, req.GetUpdateMask())
+}
+
+func (r *PageRepo) GetTranslation(ctx context.Context, req *contentV1.GetPageRequest) (*contentV1.PageTranslation, error) {
+	if req == nil {
+		return nil, contentV1.ErrorBadRequest("invalid parameter")
+	}
+
+	return r.pageTranslationRepo.GetTranslation(ctx, req.GetId(), req.GetLocale())
+}
+
+func (r *PageRepo) ListTranslations(ctx context.Context, pageID uint32) ([]*contentV1.PageTranslation, error) {
+	return r.pageTranslationRepo.ListTranslations(ctx, pageID)
+}
+
+func (r *PageRepo) DeleteTranslation(ctx context.Context, req *contentV1.DeletePageTranslationRequest) error {
+	return r.pageTranslationRepo.DeleteTranslation(ctx, req)
+}
+
+func (r *PageRepo) CleanTranslations(ctx context.Context, tx *ent.Tx, pageID uint32) error {
+	return r.pageTranslationRepo.CleanTranslations(ctx, tx, pageID)
 }

@@ -50,3 +50,34 @@ func (s *TagService) Delete(ctx context.Context, req *contentV1.DeleteTagRequest
 	}
 	return &emptypb.Empty{}, nil
 }
+
+func (s *TagService) TranslationExists(ctx context.Context, req *contentV1.TagTranslationExistsRequest) (*contentV1.TagTranslationExistsResponse, error) {
+	exists, err := s.tagRepo.TranslationExists(ctx, req.GetTagId(), req.GetLanguageCode())
+	if err != nil {
+		return nil, err
+	}
+
+	return &contentV1.TagTranslationExistsResponse{
+		Exists: exists,
+	}, nil
+}
+
+func (s *TagService) GetTranslation(ctx context.Context, req *contentV1.GetTagRequest) (*contentV1.TagTranslation, error) {
+	return s.tagRepo.GetTranslation(ctx, req)
+}
+
+func (s *TagService) CreateTranslation(ctx context.Context, req *contentV1.CreateTagTranslationRequest) (*contentV1.TagTranslation, error) {
+	return s.tagRepo.CreateTranslation(ctx, req)
+}
+
+func (s *TagService) UpdateTranslation(ctx context.Context, req *contentV1.UpdateTagTranslationRequest) (*contentV1.TagTranslation, error) {
+	return s.tagRepo.UpdateTranslation(ctx, req)
+}
+
+func (s *TagService) DeleteTranslation(ctx context.Context, req *contentV1.DeleteTagTranslationRequest) (*emptypb.Empty, error) {
+	err := s.tagRepo.DeleteTranslation(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &emptypb.Empty{}, nil
+}

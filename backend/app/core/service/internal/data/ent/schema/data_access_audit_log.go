@@ -85,7 +85,7 @@ func (DataAccessAuditLog) Fields() []ent.Field {
 			NamedValues(
 				"Select", "SELECT",
 				"Insert", "INSERT",
-				"Update", "UPDATE",
+				"UpdateTranslation", "UPDATE",
 				"Delete", "DELETE",
 				"View", "VIEW",
 				"BulkRead", "BULK_READ",

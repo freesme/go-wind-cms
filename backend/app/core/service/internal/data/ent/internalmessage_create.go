@@ -365,16 +365,16 @@ func (_c *InternalMessageCreate) createSpec() (*InternalMessage, *sqlgraph.Creat
 // OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
 // of the `INSERT` statement. For example:
 //
-//	client.InternalMessage.Create().
+//	client.InternalMessage.CreateTranslation().
 //		SetCreatedAt(v).
 //		OnConflict(
-//			// Update the row with the new values
+//			// UpdateTranslation the row with the new values
 //			// the was proposed for insertion.
 //			sql.ResolveWithNewValues(),
 //		).
 //		// Override some of the fields with custom
 //		// update values.
-//		Update(func(u *ent.InternalMessageUpsert) {
+//		UpdateTranslation(func(u *ent.InternalMessageUpsert) {
 //			SetCreatedAt(v+v).
 //		}).
 //		Exec(ctx)
@@ -388,7 +388,7 @@ func (_c *InternalMessageCreate) OnConflict(opts ...sql.ConflictOption) *Interna
 // OnConflictColumns calls `OnConflict` and configures the columns
 // as conflict target. Using this option is equivalent to using:
 //
-//	client.InternalMessage.Create().
+//	client.InternalMessage.CreateTranslation().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
 func (_c *InternalMessageCreate) OnConflictColumns(columns ...string) *InternalMessageUpsertOne {
@@ -636,7 +636,7 @@ func (u *InternalMessageUpsert) ClearType() *InternalMessageUpsert {
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
-//	client.InternalMessage.Create().
+//	client.InternalMessage.CreateTranslation().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
 //			sql.ResolveWith(func(u *sql.UpdateSet) {
@@ -663,7 +663,7 @@ func (u *InternalMessageUpsertOne) UpdateNewValues() *InternalMessageUpsertOne {
 // Ignore sets each column to itself in case of conflict.
 // Using this option is equivalent to using:
 //
-//	client.InternalMessage.Create().
+//	client.InternalMessage.CreateTranslation().
 //	    OnConflict(sql.ResolveWithIgnore()).
 //	    Exec(ctx)
 func (u *InternalMessageUpsertOne) Ignore() *InternalMessageUpsertOne {
@@ -1074,13 +1074,13 @@ func (_c *InternalMessageCreateBulk) ExecX(ctx context.Context) {
 //
 //	client.InternalMessage.CreateBulk(builders...).
 //		OnConflict(
-//			// Update the row with the new values
+//			// UpdateTranslation the row with the new values
 //			// the was proposed for insertion.
 //			sql.ResolveWithNewValues(),
 //		).
 //		// Override some of the fields with custom
 //		// update values.
-//		Update(func(u *ent.InternalMessageUpsert) {
+//		UpdateTranslation(func(u *ent.InternalMessageUpsert) {
 //			SetCreatedAt(v+v).
 //		}).
 //		Exec(ctx)
@@ -1094,7 +1094,7 @@ func (_c *InternalMessageCreateBulk) OnConflict(opts ...sql.ConflictOption) *Int
 // OnConflictColumns calls `OnConflict` and configures the columns
 // as conflict target. Using this option is equivalent to using:
 //
-//	client.InternalMessage.Create().
+//	client.InternalMessage.CreateTranslation().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
 func (_c *InternalMessageCreateBulk) OnConflictColumns(columns ...string) *InternalMessageUpsertBulk {
@@ -1113,7 +1113,7 @@ type InternalMessageUpsertBulk struct {
 // UpdateNewValues updates the mutable fields using the new values that
 // were set on create. Using this option is equivalent to using:
 //
-//	client.InternalMessage.Create().
+//	client.InternalMessage.CreateTranslation().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
 //			sql.ResolveWith(func(u *sql.UpdateSet) {
@@ -1142,7 +1142,7 @@ func (u *InternalMessageUpsertBulk) UpdateNewValues() *InternalMessageUpsertBulk
 // Ignore sets each column to itself in case of conflict.
 // Using this option is equivalent to using:
 //
-//	client.InternalMessage.Create().
+//	client.InternalMessage.CreateTranslation().
 //		OnConflict(sql.ResolveWithIgnore()).
 //		Exec(ctx)
 func (u *InternalMessageUpsertBulk) Ignore() *InternalMessageUpsertBulk {

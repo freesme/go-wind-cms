@@ -67,7 +67,7 @@ func TestFilterReuseMask(t *testing.T) {
 			Username: trans.String("name 2"),
 		},
 	}
-	// Create a mask only once and reuse it.
+	// CreateTranslation a mask only once and reuse it.
 	mask := fieldmaskutil.NestedMaskFromPaths([]string{"userName", "realName", "positionId"})
 	for _, u := range users {
 		mask.Filter(u)

@@ -212,12 +212,12 @@ func (a *Authenticator) CreateUserToken(
 
 	tokenPayload.Jti = trans.Ptr(jti)
 
-	// Create Access Token
+	// CreateTranslation Access Token
 	if accessToken, err = a.newAccessToken(clientType, tokenPayload); accessToken == "" || err != nil {
 		return "", "", authenticationV1.ErrorServiceUnavailable("create access token failed")
 	}
 
-	// Create Refresh Token
+	// CreateTranslation Refresh Token
 	if refreshToken, err = a.newRefreshToken(); refreshToken == "" || err != nil {
 		return "", "", authenticationV1.ErrorServiceUnavailable("create refresh token failed")
 	}

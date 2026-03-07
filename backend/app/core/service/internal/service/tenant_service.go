@@ -212,7 +212,7 @@ func (s *TenantService) CreateTenantWithAdminUser(ctx context.Context, req *iden
 		}
 	}()
 
-	// Create tenant
+	// CreateTranslation tenant
 	var tenant *identityV1.Tenant
 	if tenant, err = s.tenantRepo.CreateWithTx(ctx, tx, req.Tenant); err != nil {
 		s.log.Errorf("create tenant err: %v", err)
@@ -228,7 +228,7 @@ func (s *TenantService) CreateTenantWithAdminUser(ctx context.Context, req *iden
 		return nil, err
 	}
 
-	// Create tenant admin user
+	// CreateTranslation tenant admin user
 	var adminUser *identityV1.User
 	req.User.RoleId = role.Id
 	//req.User.Status = identityV1.User_NORMAL.Enum()
@@ -237,7 +237,7 @@ func (s *TenantService) CreateTenantWithAdminUser(ctx context.Context, req *iden
 		return nil, err
 	}
 
-	// Create user credential
+	// CreateTranslation user credential
 	if err = s.userCredentialsRepo.CreateWithTx(ctx, tx, &authenticationV1.UserCredential{
 		UserId:         adminUser.Id,
 		TenantId:       tenant.Id,

@@ -50,3 +50,34 @@ func (s *PageService) Delete(ctx context.Context, req *contentV1.DeletePageReque
 	}
 	return &emptypb.Empty{}, nil
 }
+
+func (s *PageService) TranslationExists(ctx context.Context, req *contentV1.PageTranslationExistsRequest) (*contentV1.PageTranslationExistsResponse, error) {
+	exists, err := s.pageRepo.TranslationExists(ctx, req.GetPageId(), req.GetLanguageCode())
+	if err != nil {
+		return nil, err
+	}
+
+	return &contentV1.PageTranslationExistsResponse{
+		Exists: exists,
+	}, nil
+}
+
+func (s *PageService) GetTranslation(ctx context.Context, req *contentV1.GetPageRequest) (*contentV1.PageTranslation, error) {
+	return s.pageRepo.GetTranslation(ctx, req)
+}
+
+func (s *PageService) CreateTranslation(ctx context.Context, req *contentV1.CreatePageTranslationRequest) (*contentV1.PageTranslation, error) {
+	return s.pageRepo.CreateTranslation(ctx, req)
+}
+
+func (s *PageService) UpdateTranslation(ctx context.Context, req *contentV1.UpdatePageTranslationRequest) (*contentV1.PageTranslation, error) {
+	return s.pageRepo.UpdateTranslation(ctx, req)
+}
+
+func (s *PageService) DeleteTranslation(ctx context.Context, req *contentV1.DeletePageTranslationRequest) (*emptypb.Empty, error) {
+	err := s.pageRepo.DeleteTranslation(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &emptypb.Empty{}, nil
+}

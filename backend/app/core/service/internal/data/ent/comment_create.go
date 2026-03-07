@@ -667,16 +667,16 @@ func (_c *CommentCreate) createSpec() (*Comment, *sqlgraph.CreateSpec) {
 // OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
 // of the `INSERT` statement. For example:
 //
-//	client.Comment.Create().
+//	client.Comment.CreateTranslation().
 //		SetCreatedAt(v).
 //		OnConflict(
-//			// Update the row with the new values
+//			// UpdateTranslation the row with the new values
 //			// the was proposed for insertion.
 //			sql.ResolveWithNewValues(),
 //		).
 //		// Override some of the fields with custom
 //		// update values.
-//		Update(func(u *ent.CommentUpsert) {
+//		UpdateTranslation(func(u *ent.CommentUpsert) {
 //			SetCreatedAt(v+v).
 //		}).
 //		Exec(ctx)
@@ -690,7 +690,7 @@ func (_c *CommentCreate) OnConflict(opts ...sql.ConflictOption) *CommentUpsertOn
 // OnConflictColumns calls `OnConflict` and configures the columns
 // as conflict target. Using this option is equivalent to using:
 //
-//	client.Comment.Create().
+//	client.Comment.CreateTranslation().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
 func (_c *CommentCreate) OnConflictColumns(columns ...string) *CommentUpsertOne {
@@ -1220,7 +1220,7 @@ func (u *CommentUpsert) ClearReplyToID() *CommentUpsert {
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
-//	client.Comment.Create().
+//	client.Comment.CreateTranslation().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
 //			sql.ResolveWith(func(u *sql.UpdateSet) {
@@ -1244,7 +1244,7 @@ func (u *CommentUpsertOne) UpdateNewValues() *CommentUpsertOne {
 // Ignore sets each column to itself in case of conflict.
 // Using this option is equivalent to using:
 //
-//	client.Comment.Create().
+//	client.Comment.CreateTranslation().
 //	    OnConflict(sql.ResolveWithIgnore()).
 //	    Exec(ctx)
 func (u *CommentUpsertOne) Ignore() *CommentUpsertOne {
@@ -1984,13 +1984,13 @@ func (_c *CommentCreateBulk) ExecX(ctx context.Context) {
 //
 //	client.Comment.CreateBulk(builders...).
 //		OnConflict(
-//			// Update the row with the new values
+//			// UpdateTranslation the row with the new values
 //			// the was proposed for insertion.
 //			sql.ResolveWithNewValues(),
 //		).
 //		// Override some of the fields with custom
 //		// update values.
-//		Update(func(u *ent.CommentUpsert) {
+//		UpdateTranslation(func(u *ent.CommentUpsert) {
 //			SetCreatedAt(v+v).
 //		}).
 //		Exec(ctx)
@@ -2004,7 +2004,7 @@ func (_c *CommentCreateBulk) OnConflict(opts ...sql.ConflictOption) *CommentUpse
 // OnConflictColumns calls `OnConflict` and configures the columns
 // as conflict target. Using this option is equivalent to using:
 //
-//	client.Comment.Create().
+//	client.Comment.CreateTranslation().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
 func (_c *CommentCreateBulk) OnConflictColumns(columns ...string) *CommentUpsertBulk {
@@ -2023,7 +2023,7 @@ type CommentUpsertBulk struct {
 // UpdateNewValues updates the mutable fields using the new values that
 // were set on create. Using this option is equivalent to using:
 //
-//	client.Comment.Create().
+//	client.Comment.CreateTranslation().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
 //			sql.ResolveWith(func(u *sql.UpdateSet) {
@@ -2049,7 +2049,7 @@ func (u *CommentUpsertBulk) UpdateNewValues() *CommentUpsertBulk {
 // Ignore sets each column to itself in case of conflict.
 // Using this option is equivalent to using:
 //
-//	client.Comment.Create().
+//	client.Comment.CreateTranslation().
 //		OnConflict(sql.ResolveWithIgnore()).
 //		Exec(ctx)
 func (u *CommentUpsertBulk) Ignore() *CommentUpsertBulk {

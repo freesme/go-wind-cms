@@ -24,6 +24,22 @@ service TagService {
 
   // 删除标签
   rpc Delete (DeleteTagRequest) returns (google.protobuf.Empty) {}
+
+
+  // 检查翻译是否存在
+  rpc TranslationExists(TagTranslationExistsRequest) returns (TagTranslationExistsResponse) {}
+
+  // 获取翻译数据
+  rpc GetTranslation(GetTagRequest) returns (TagTranslation) {}
+
+  // 创建翻译
+  rpc CreateTranslation(CreateTagTranslationRequest) returns (TagTranslation) {}
+
+  // 更新翻译
+  rpc UpdateTranslation(UpdateTagTranslationRequest) returns (TagTranslation) {}
+
+  // 删除翻译
+  rpc DeleteTranslation(DeleteTagTranslationRequest) returns (google.protobuf.Empty) {}
 }
 
 // 标签
@@ -257,5 +273,77 @@ message DeleteTagRequest {
       (gnostic.openapi.v3.property) = {description: "ID", read_only: true},
       json_name = "id"
     ]; // ID
+  }
+}
+
+message TagTranslationExistsRequest {
+  uint32 tag_id = 1 [
+    json_name = "tagId",
+    (gnostic.openapi.v3.property) = {description: "关联的标签ID"}
+  ]; // 关联的标签ID
+
+  string language_code = 2 [
+    json_name = "languageCode",
+    (gnostic.openapi.v3.property) = {description: "语言代码"}
+  ]; // 语言代码
+}
+message TagTranslationExistsResponse {
+  bool exists = 1 [json_name = "exists", (gnostic.openapi.v3.property) = {description: "翻译是否存在"}]; // 翻译是否存在
+}
+
+message CreateTagTranslationRequest {
+  uint32 tag_id = 1 [
+    json_name = "tagId",
+    (gnostic.openapi.v3.property) = {description: "关联的标签ID"}
+  ]; // 关联的标签ID
+
+  TagTranslation data = 2;
+}
+
+message UpdateTagTranslationRequest {
+  uint32 id = 1 [
+    json_name = "id",
+    (gnostic.openapi.v3.property) = {description: "翻译ID"}
+  ]; // 翻译ID
+
+  TagTranslation data = 2;
+
+  google.protobuf.FieldMask update_mask = 3 [
+    (gnostic.openapi.v3.property) = {
+      description: "要更新的字段列表",
+      example: {yaml: "id,realname,username"}
+    },
+    json_name = "updateMask"
+  ]; // 要更新的字段列表
+
+  optional bool allow_missing = 4 [
+    (gnostic.openapi.v3.property) = {description: "如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。"},
+    json_name = "allowMissing"
+  ]; // 如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。
+}
+
+message TagTranslationIdentifier {
+  uint32 tag_id = 1 [
+    json_name = "tagId",
+    (gnostic.openapi.v3.property) = {description: "关联的标签ID"}
+  ]; // 关联的标签ID
+
+  string language_code = 2 [
+    json_name = "languageCode",
+    (gnostic.openapi.v3.property) = {description: "语言代码"}
+  ]; // 语言代码
+}
+
+message DeleteTagTranslationRequest {
+  oneof query_by {
+    uint32 id = 1 [
+      (gnostic.openapi.v3.property) = {description: "ID", read_only: true},
+      json_name = "id"
+    ]; // ID
+
+    TagTranslationIdentifier identifier = 2 [
+      json_name = "identifier",
+      (gnostic.openapi.v3.property) = {description: "通过 tag_id 和 language_code 组合唯一确定一条翻译记录（优先级高于 ID）"}
+    ]; // 通过 tag_id 和 language_code 组合唯一确定一条翻译记录（优先级高于 ID）
   }
 }

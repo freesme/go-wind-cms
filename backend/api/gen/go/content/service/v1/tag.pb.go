@@ -775,6 +775,356 @@ type DeleteTagRequest_Id struct {
 
 func (*DeleteTagRequest_Id) isDeleteTagRequest_QueryBy() {}
 
+type TagTranslationExistsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TagId         uint32                 `protobuf:"varint,1,opt,name=tag_id,json=tagId,proto3" json:"tag_id,omitempty"`                     // 关联的标签ID
+	LanguageCode  string                 `protobuf:"bytes,2,opt,name=language_code,json=languageCode,proto3" json:"language_code,omitempty"` // 语言代码
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TagTranslationExistsRequest) Reset() {
+	*x = TagTranslationExistsRequest{}
+	mi := &file_content_service_v1_tag_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TagTranslationExistsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TagTranslationExistsRequest) ProtoMessage() {}
+
+func (x *TagTranslationExistsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_content_service_v1_tag_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TagTranslationExistsRequest.ProtoReflect.Descriptor instead.
+func (*TagTranslationExistsRequest) Descriptor() ([]byte, []int) {
+	return file_content_service_v1_tag_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *TagTranslationExistsRequest) GetTagId() uint32 {
+	if x != nil {
+		return x.TagId
+	}
+	return 0
+}
+
+func (x *TagTranslationExistsRequest) GetLanguageCode() string {
+	if x != nil {
+		return x.LanguageCode
+	}
+	return ""
+}
+
+type TagTranslationExistsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Exists        bool                   `protobuf:"varint,1,opt,name=exists,proto3" json:"exists,omitempty"` // 翻译是否存在
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TagTranslationExistsResponse) Reset() {
+	*x = TagTranslationExistsResponse{}
+	mi := &file_content_service_v1_tag_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TagTranslationExistsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TagTranslationExistsResponse) ProtoMessage() {}
+
+func (x *TagTranslationExistsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_content_service_v1_tag_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TagTranslationExistsResponse.ProtoReflect.Descriptor instead.
+func (*TagTranslationExistsResponse) Descriptor() ([]byte, []int) {
+	return file_content_service_v1_tag_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *TagTranslationExistsResponse) GetExists() bool {
+	if x != nil {
+		return x.Exists
+	}
+	return false
+}
+
+type CreateTagTranslationRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TagId         uint32                 `protobuf:"varint,1,opt,name=tag_id,json=tagId,proto3" json:"tag_id,omitempty"` // 关联的标签ID
+	Data          *TagTranslation        `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateTagTranslationRequest) Reset() {
+	*x = CreateTagTranslationRequest{}
+	mi := &file_content_service_v1_tag_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateTagTranslationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateTagTranslationRequest) ProtoMessage() {}
+
+func (x *CreateTagTranslationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_content_service_v1_tag_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateTagTranslationRequest.ProtoReflect.Descriptor instead.
+func (*CreateTagTranslationRequest) Descriptor() ([]byte, []int) {
+	return file_content_service_v1_tag_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *CreateTagTranslationRequest) GetTagId() uint32 {
+	if x != nil {
+		return x.TagId
+	}
+	return 0
+}
+
+func (x *CreateTagTranslationRequest) GetData() *TagTranslation {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type UpdateTagTranslationRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` // 翻译ID
+	Data          *TagTranslation        `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	UpdateMask    *fieldmaskpb.FieldMask `protobuf:"bytes,3,opt,name=update_mask,json=updateMask,proto3" json:"update_mask,omitempty"`              // 要更新的字段列表
+	AllowMissing  *bool                  `protobuf:"varint,4,opt,name=allow_missing,json=allowMissing,proto3,oneof" json:"allow_missing,omitempty"` // 如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateTagTranslationRequest) Reset() {
+	*x = UpdateTagTranslationRequest{}
+	mi := &file_content_service_v1_tag_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateTagTranslationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateTagTranslationRequest) ProtoMessage() {}
+
+func (x *UpdateTagTranslationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_content_service_v1_tag_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateTagTranslationRequest.ProtoReflect.Descriptor instead.
+func (*UpdateTagTranslationRequest) Descriptor() ([]byte, []int) {
+	return file_content_service_v1_tag_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *UpdateTagTranslationRequest) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UpdateTagTranslationRequest) GetData() *TagTranslation {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *UpdateTagTranslationRequest) GetUpdateMask() *fieldmaskpb.FieldMask {
+	if x != nil {
+		return x.UpdateMask
+	}
+	return nil
+}
+
+func (x *UpdateTagTranslationRequest) GetAllowMissing() bool {
+	if x != nil && x.AllowMissing != nil {
+		return *x.AllowMissing
+	}
+	return false
+}
+
+type TagTranslationIdentifier struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TagId         uint32                 `protobuf:"varint,1,opt,name=tag_id,json=tagId,proto3" json:"tag_id,omitempty"`                     // 关联的标签ID
+	LanguageCode  string                 `protobuf:"bytes,2,opt,name=language_code,json=languageCode,proto3" json:"language_code,omitempty"` // 语言代码
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TagTranslationIdentifier) Reset() {
+	*x = TagTranslationIdentifier{}
+	mi := &file_content_service_v1_tag_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TagTranslationIdentifier) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TagTranslationIdentifier) ProtoMessage() {}
+
+func (x *TagTranslationIdentifier) ProtoReflect() protoreflect.Message {
+	mi := &file_content_service_v1_tag_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TagTranslationIdentifier.ProtoReflect.Descriptor instead.
+func (*TagTranslationIdentifier) Descriptor() ([]byte, []int) {
+	return file_content_service_v1_tag_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *TagTranslationIdentifier) GetTagId() uint32 {
+	if x != nil {
+		return x.TagId
+	}
+	return 0
+}
+
+func (x *TagTranslationIdentifier) GetLanguageCode() string {
+	if x != nil {
+		return x.LanguageCode
+	}
+	return ""
+}
+
+type DeleteTagTranslationRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to QueryBy:
+	//
+	//	*DeleteTagTranslationRequest_Id
+	//	*DeleteTagTranslationRequest_Identifier
+	QueryBy       isDeleteTagTranslationRequest_QueryBy `protobuf_oneof:"query_by"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteTagTranslationRequest) Reset() {
+	*x = DeleteTagTranslationRequest{}
+	mi := &file_content_service_v1_tag_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteTagTranslationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteTagTranslationRequest) ProtoMessage() {}
+
+func (x *DeleteTagTranslationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_content_service_v1_tag_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteTagTranslationRequest.ProtoReflect.Descriptor instead.
+func (*DeleteTagTranslationRequest) Descriptor() ([]byte, []int) {
+	return file_content_service_v1_tag_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *DeleteTagTranslationRequest) GetQueryBy() isDeleteTagTranslationRequest_QueryBy {
+	if x != nil {
+		return x.QueryBy
+	}
+	return nil
+}
+
+func (x *DeleteTagTranslationRequest) GetId() uint32 {
+	if x != nil {
+		if x, ok := x.QueryBy.(*DeleteTagTranslationRequest_Id); ok {
+			return x.Id
+		}
+	}
+	return 0
+}
+
+func (x *DeleteTagTranslationRequest) GetIdentifier() *TagTranslationIdentifier {
+	if x != nil {
+		if x, ok := x.QueryBy.(*DeleteTagTranslationRequest_Identifier); ok {
+			return x.Identifier
+		}
+	}
+	return nil
+}
+
+type isDeleteTagTranslationRequest_QueryBy interface {
+	isDeleteTagTranslationRequest_QueryBy()
+}
+
+type DeleteTagTranslationRequest_Id struct {
+	Id uint32 `protobuf:"varint,1,opt,name=id,proto3,oneof"` // ID
+}
+
+type DeleteTagTranslationRequest_Identifier struct {
+	Identifier *TagTranslationIdentifier `protobuf:"bytes,2,opt,name=identifier,proto3,oneof"` // 通过 tag_id 和 language_code 组合唯一确定一条翻译记录（优先级高于 ID）
+}
+
+func (*DeleteTagTranslationRequest_Id) isDeleteTagTranslationRequest_QueryBy() {}
+
+func (*DeleteTagTranslationRequest_Identifier) isDeleteTagTranslationRequest_QueryBy() {}
+
 var File_content_service_v1_tag_proto protoreflect.FileDescriptor
 
 const file_content_service_v1_tag_proto_rawDesc = "" +
@@ -909,14 +1259,45 @@ const file_content_service_v1_tag_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\rB\n" +
 	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02idB\n" +
 	"\n" +
-	"\bquery_by2\xfb\x02\n" +
+	"\bquery_by\"\x86\x01\n" +
+	"\x1bTagTranslationExistsRequest\x12.\n" +
+	"\x06tag_id\x18\x01 \x01(\rB\x17\xbaG\x14\x92\x02\x11关联的标签IDR\x05tagId\x127\n" +
+	"\rlanguage_code\x18\x02 \x01(\tB\x12\xbaG\x0f\x92\x02\f语言代码R\flanguageCode\"P\n" +
+	"\x1cTagTranslationExistsResponse\x120\n" +
+	"\x06exists\x18\x01 \x01(\bB\x18\xbaG\x15\x92\x02\x12翻译是否存在R\x06exists\"\x85\x01\n" +
+	"\x1bCreateTagTranslationRequest\x12.\n" +
+	"\x06tag_id\x18\x01 \x01(\rB\x17\xbaG\x14\x92\x02\x11关联的标签IDR\x05tagId\x126\n" +
+	"\x04data\x18\x02 \x01(\v2\".content.service.v1.TagTranslationR\x04data\"\xb3\x03\n" +
+	"\x1bUpdateTagTranslationRequest\x12\x1e\n" +
+	"\x02id\x18\x01 \x01(\rB\x0e\xbaG\v\x92\x02\b翻译IDR\x02id\x126\n" +
+	"\x04data\x18\x02 \x01(\v2\".content.service.v1.TagTranslationR\x04data\x12s\n" +
+	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskB6\xbaG3:\x16\x12\x14id,realname,username\x92\x02\x18要更新的字段列表R\n" +
+	"updateMask\x12\xb4\x01\n" +
+	"\rallow_missing\x18\x04 \x01(\bB\x89\x01\xbaG\x85\x01\x92\x02\x81\x01如果设置为true的时候，资源不存在则会新增(插入)，并且在这种情况下`updateMask`字段将会被忽略。H\x00R\fallowMissing\x88\x01\x01B\x10\n" +
+	"\x0e_allow_missing\"\x83\x01\n" +
+	"\x18TagTranslationIdentifier\x12.\n" +
+	"\x06tag_id\x18\x01 \x01(\rB\x17\xbaG\x14\x92\x02\x11关联的标签IDR\x05tagId\x127\n" +
+	"\rlanguage_code\x18\x02 \x01(\tB\x12\xbaG\x0f\x92\x02\f语言代码R\flanguageCode\"\xfc\x01\n" +
+	"\x1bDeleteTagTranslationRequest\x12\x1c\n" +
+	"\x02id\x18\x01 \x01(\rB\n" +
+	"\xbaG\a\x18\x01\x92\x02\x02IDH\x00R\x02id\x12\xb2\x01\n" +
+	"\n" +
+	"identifier\x18\x02 \x01(\v2,.content.service.v1.TagTranslationIdentifierBb\xbaG_\x92\x02\\通过 tag_id 和 language_code 组合唯一确定一条翻译记录（优先级高于 ID）H\x00R\n" +
+	"identifierB\n" +
+	"\n" +
+	"\bquery_by2\x88\a\n" +
 	"\n" +
 	"TagService\x12H\n" +
 	"\x04List\x12\x19.pagination.PagingRequest\x1a#.content.service.v1.ListTagResponse\"\x00\x12C\n" +
 	"\x03Get\x12!.content.service.v1.GetTagRequest\x1a\x17.content.service.v1.Tag\"\x00\x12I\n" +
 	"\x06Create\x12$.content.service.v1.CreateTagRequest\x1a\x17.content.service.v1.Tag\"\x00\x12I\n" +
 	"\x06Update\x12$.content.service.v1.UpdateTagRequest\x1a\x17.content.service.v1.Tag\"\x00\x12H\n" +
-	"\x06Delete\x12$.content.service.v1.DeleteTagRequest\x1a\x16.google.protobuf.Empty\"\x00B\xc1\x01\n" +
+	"\x06Delete\x12$.content.service.v1.DeleteTagRequest\x1a\x16.google.protobuf.Empty\"\x00\x12x\n" +
+	"\x11TranslationExists\x12/.content.service.v1.TagTranslationExistsRequest\x1a0.content.service.v1.TagTranslationExistsResponse\"\x00\x12Y\n" +
+	"\x0eGetTranslation\x12!.content.service.v1.GetTagRequest\x1a\".content.service.v1.TagTranslation\"\x00\x12j\n" +
+	"\x11CreateTranslation\x12/.content.service.v1.CreateTagTranslationRequest\x1a\".content.service.v1.TagTranslation\"\x00\x12j\n" +
+	"\x11UpdateTranslation\x12/.content.service.v1.UpdateTagTranslationRequest\x1a\".content.service.v1.TagTranslation\"\x00\x12^\n" +
+	"\x11DeleteTranslation\x12/.content.service.v1.DeleteTagTranslationRequest\x1a\x16.google.protobuf.Empty\"\x00B\xc1\x01\n" +
 	"\x16com.content.service.v1B\bTagProtoP\x01Z3go-wind-cms/api/gen/go/content/service/v1;contentpb\xa2\x02\x03CSX\xaa\x02\x12Content.Service.V1\xca\x02\x12Content\\Service\\V1\xe2\x02\x1eContent\\Service\\V1\\GPBMetadata\xea\x02\x14Content::Service::V1b\x06proto3"
 
 var (
@@ -932,50 +1313,70 @@ func file_content_service_v1_tag_proto_rawDescGZIP() []byte {
 }
 
 var file_content_service_v1_tag_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_content_service_v1_tag_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_content_service_v1_tag_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_content_service_v1_tag_proto_goTypes = []any{
-	(Tag_TagStatus)(0),            // 0: content.service.v1.Tag.TagStatus
-	(*Tag)(nil),                   // 1: content.service.v1.Tag
-	(*TagTranslation)(nil),        // 2: content.service.v1.TagTranslation
-	(*ListTagResponse)(nil),       // 3: content.service.v1.ListTagResponse
-	(*GetTagRequest)(nil),         // 4: content.service.v1.GetTagRequest
-	(*CreateTagRequest)(nil),      // 5: content.service.v1.CreateTagRequest
-	(*UpdateTagRequest)(nil),      // 6: content.service.v1.UpdateTagRequest
-	(*DeleteTagRequest)(nil),      // 7: content.service.v1.DeleteTagRequest
-	(*timestamppb.Timestamp)(nil), // 8: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil), // 9: google.protobuf.FieldMask
-	(*v1.PagingRequest)(nil),      // 10: pagination.PagingRequest
-	(*emptypb.Empty)(nil),         // 11: google.protobuf.Empty
+	(Tag_TagStatus)(0),                   // 0: content.service.v1.Tag.TagStatus
+	(*Tag)(nil),                          // 1: content.service.v1.Tag
+	(*TagTranslation)(nil),               // 2: content.service.v1.TagTranslation
+	(*ListTagResponse)(nil),              // 3: content.service.v1.ListTagResponse
+	(*GetTagRequest)(nil),                // 4: content.service.v1.GetTagRequest
+	(*CreateTagRequest)(nil),             // 5: content.service.v1.CreateTagRequest
+	(*UpdateTagRequest)(nil),             // 6: content.service.v1.UpdateTagRequest
+	(*DeleteTagRequest)(nil),             // 7: content.service.v1.DeleteTagRequest
+	(*TagTranslationExistsRequest)(nil),  // 8: content.service.v1.TagTranslationExistsRequest
+	(*TagTranslationExistsResponse)(nil), // 9: content.service.v1.TagTranslationExistsResponse
+	(*CreateTagTranslationRequest)(nil),  // 10: content.service.v1.CreateTagTranslationRequest
+	(*UpdateTagTranslationRequest)(nil),  // 11: content.service.v1.UpdateTagTranslationRequest
+	(*TagTranslationIdentifier)(nil),     // 12: content.service.v1.TagTranslationIdentifier
+	(*DeleteTagTranslationRequest)(nil),  // 13: content.service.v1.DeleteTagTranslationRequest
+	(*timestamppb.Timestamp)(nil),        // 14: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil),        // 15: google.protobuf.FieldMask
+	(*v1.PagingRequest)(nil),             // 16: pagination.PagingRequest
+	(*emptypb.Empty)(nil),                // 17: google.protobuf.Empty
 }
 var file_content_service_v1_tag_proto_depIdxs = []int32{
 	0,  // 0: content.service.v1.Tag.status:type_name -> content.service.v1.Tag.TagStatus
 	2,  // 1: content.service.v1.Tag.translations:type_name -> content.service.v1.TagTranslation
-	8,  // 2: content.service.v1.Tag.created_at:type_name -> google.protobuf.Timestamp
-	8,  // 3: content.service.v1.Tag.updated_at:type_name -> google.protobuf.Timestamp
-	8,  // 4: content.service.v1.Tag.deleted_at:type_name -> google.protobuf.Timestamp
-	8,  // 5: content.service.v1.TagTranslation.created_at:type_name -> google.protobuf.Timestamp
-	8,  // 6: content.service.v1.TagTranslation.updated_at:type_name -> google.protobuf.Timestamp
-	8,  // 7: content.service.v1.TagTranslation.deleted_at:type_name -> google.protobuf.Timestamp
+	14, // 2: content.service.v1.Tag.created_at:type_name -> google.protobuf.Timestamp
+	14, // 3: content.service.v1.Tag.updated_at:type_name -> google.protobuf.Timestamp
+	14, // 4: content.service.v1.Tag.deleted_at:type_name -> google.protobuf.Timestamp
+	14, // 5: content.service.v1.TagTranslation.created_at:type_name -> google.protobuf.Timestamp
+	14, // 6: content.service.v1.TagTranslation.updated_at:type_name -> google.protobuf.Timestamp
+	14, // 7: content.service.v1.TagTranslation.deleted_at:type_name -> google.protobuf.Timestamp
 	1,  // 8: content.service.v1.ListTagResponse.items:type_name -> content.service.v1.Tag
-	9,  // 9: content.service.v1.GetTagRequest.view_mask:type_name -> google.protobuf.FieldMask
+	15, // 9: content.service.v1.GetTagRequest.view_mask:type_name -> google.protobuf.FieldMask
 	1,  // 10: content.service.v1.CreateTagRequest.data:type_name -> content.service.v1.Tag
 	1,  // 11: content.service.v1.UpdateTagRequest.data:type_name -> content.service.v1.Tag
-	9,  // 12: content.service.v1.UpdateTagRequest.update_mask:type_name -> google.protobuf.FieldMask
-	10, // 13: content.service.v1.TagService.List:input_type -> pagination.PagingRequest
-	4,  // 14: content.service.v1.TagService.Get:input_type -> content.service.v1.GetTagRequest
-	5,  // 15: content.service.v1.TagService.Create:input_type -> content.service.v1.CreateTagRequest
-	6,  // 16: content.service.v1.TagService.Update:input_type -> content.service.v1.UpdateTagRequest
-	7,  // 17: content.service.v1.TagService.Delete:input_type -> content.service.v1.DeleteTagRequest
-	3,  // 18: content.service.v1.TagService.List:output_type -> content.service.v1.ListTagResponse
-	1,  // 19: content.service.v1.TagService.Get:output_type -> content.service.v1.Tag
-	1,  // 20: content.service.v1.TagService.Create:output_type -> content.service.v1.Tag
-	1,  // 21: content.service.v1.TagService.Update:output_type -> content.service.v1.Tag
-	11, // 22: content.service.v1.TagService.Delete:output_type -> google.protobuf.Empty
-	18, // [18:23] is the sub-list for method output_type
-	13, // [13:18] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	15, // 12: content.service.v1.UpdateTagRequest.update_mask:type_name -> google.protobuf.FieldMask
+	2,  // 13: content.service.v1.CreateTagTranslationRequest.data:type_name -> content.service.v1.TagTranslation
+	2,  // 14: content.service.v1.UpdateTagTranslationRequest.data:type_name -> content.service.v1.TagTranslation
+	15, // 15: content.service.v1.UpdateTagTranslationRequest.update_mask:type_name -> google.protobuf.FieldMask
+	12, // 16: content.service.v1.DeleteTagTranslationRequest.identifier:type_name -> content.service.v1.TagTranslationIdentifier
+	16, // 17: content.service.v1.TagService.List:input_type -> pagination.PagingRequest
+	4,  // 18: content.service.v1.TagService.Get:input_type -> content.service.v1.GetTagRequest
+	5,  // 19: content.service.v1.TagService.Create:input_type -> content.service.v1.CreateTagRequest
+	6,  // 20: content.service.v1.TagService.Update:input_type -> content.service.v1.UpdateTagRequest
+	7,  // 21: content.service.v1.TagService.Delete:input_type -> content.service.v1.DeleteTagRequest
+	8,  // 22: content.service.v1.TagService.TranslationExists:input_type -> content.service.v1.TagTranslationExistsRequest
+	4,  // 23: content.service.v1.TagService.GetTranslation:input_type -> content.service.v1.GetTagRequest
+	10, // 24: content.service.v1.TagService.CreateTranslation:input_type -> content.service.v1.CreateTagTranslationRequest
+	11, // 25: content.service.v1.TagService.UpdateTranslation:input_type -> content.service.v1.UpdateTagTranslationRequest
+	13, // 26: content.service.v1.TagService.DeleteTranslation:input_type -> content.service.v1.DeleteTagTranslationRequest
+	3,  // 27: content.service.v1.TagService.List:output_type -> content.service.v1.ListTagResponse
+	1,  // 28: content.service.v1.TagService.Get:output_type -> content.service.v1.Tag
+	1,  // 29: content.service.v1.TagService.Create:output_type -> content.service.v1.Tag
+	1,  // 30: content.service.v1.TagService.Update:output_type -> content.service.v1.Tag
+	17, // 31: content.service.v1.TagService.Delete:output_type -> google.protobuf.Empty
+	9,  // 32: content.service.v1.TagService.TranslationExists:output_type -> content.service.v1.TagTranslationExistsResponse
+	2,  // 33: content.service.v1.TagService.GetTranslation:output_type -> content.service.v1.TagTranslation
+	2,  // 34: content.service.v1.TagService.CreateTranslation:output_type -> content.service.v1.TagTranslation
+	2,  // 35: content.service.v1.TagService.UpdateTranslation:output_type -> content.service.v1.TagTranslation
+	17, // 36: content.service.v1.TagService.DeleteTranslation:output_type -> google.protobuf.Empty
+	27, // [27:37] is the sub-list for method output_type
+	17, // [17:27] is the sub-list for method input_type
+	17, // [17:17] is the sub-list for extension type_name
+	17, // [17:17] is the sub-list for extension extendee
+	0,  // [0:17] is the sub-list for field type_name
 }
 
 func init() { file_content_service_v1_tag_proto_init() }
@@ -993,13 +1394,18 @@ func file_content_service_v1_tag_proto_init() {
 	file_content_service_v1_tag_proto_msgTypes[6].OneofWrappers = []any{
 		(*DeleteTagRequest_Id)(nil),
 	}
+	file_content_service_v1_tag_proto_msgTypes[10].OneofWrappers = []any{}
+	file_content_service_v1_tag_proto_msgTypes[12].OneofWrappers = []any{
+		(*DeleteTagTranslationRequest_Id)(nil),
+		(*DeleteTagTranslationRequest_Identifier)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_content_service_v1_tag_proto_rawDesc), len(file_content_service_v1_tag_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   7,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
