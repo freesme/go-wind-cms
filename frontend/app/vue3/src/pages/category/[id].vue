@@ -4,7 +4,7 @@ import {ref, onMounted, computed} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import {useMessage} from 'naive-ui'
 
-import {usePostStore, useCategoryStore} from '@/stores/modules/app'
+import {usePostStore, useCategoryStore} from '@/stores'
 import {$t} from '@/locales'
 import type {
   contentservicev1_Category,

@@ -7,7 +7,7 @@ import {
 } from '@/api/generated/app/service/v1';
 import {type Paging, requestClientRequestHandler} from "@/transport/rpc/request";
 import {makeOrderBy, makeQueryString, makeUpdateMask} from "@/transport/rpc";
-import {useUserStore} from "@/stores";
+import {useUserStore} from '@/stores';
 import {$t, currentLocaleLanguageCode} from "@/locales";
 
 export const usePostStore = defineStore('post', () => {

@@ -3,7 +3,7 @@ import {definePage} from 'unplugin-vue-router/runtime'
 import {useRouter} from 'vue-router'
 import {ref, onMounted, computed, onUnmounted} from 'vue'
 
-import {usePostStore, useCategoryStore, useTagStore} from '@/stores/modules/app'
+import {usePostStore, useCategoryStore, useTagStore} from '@/stores'
 import {$t, i18n} from '@/locales'
 import {XIcon} from "@/plugins/xicon";
 import {formatDate} from "@/utils/date";

@@ -4,7 +4,7 @@ import {
   createCommentServiceClient,
 } from '@/api/generated/app/service/v1';
 import {type Paging, requestClientRequestHandler} from "@/transport/rpc/request";
-import {useUserStore} from "@/stores";
+import {useUserStore} from '@/stores';
 import {makeOrderBy, makeQueryString, makeUpdateMask} from "@/transport/rpc";
 
 export const useCommentStore = defineStore('comment', () => {

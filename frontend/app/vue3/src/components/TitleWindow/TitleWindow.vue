@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {ArrowForward} from "@vicons/ionicons5";
 
-import {useNavbarStore} from "@/stores";
+import {useNavbarStore} from '@/stores';
 
 export interface Props {
   title?: string;

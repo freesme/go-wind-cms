@@ -4,7 +4,7 @@ import {computed, nextTick, onBeforeUnmount, onMounted, ref, watch} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import {useMessage} from 'naive-ui'
 
-import {usePostStore} from '@/stores/modules/app'
+import {usePostStore} from '@/stores'
 import {$t} from '@/locales'
 import {useLanguageChangeEffect} from '@/hooks/useLanguageChangeEffect';
 

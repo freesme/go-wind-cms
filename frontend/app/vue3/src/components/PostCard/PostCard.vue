@@ -2,7 +2,7 @@
 import {useRouter} from 'vue-router'
 
 import {formatDate} from "@/utils/date";
-import {usePostStore} from "@/stores";
+import {usePostStore} from '@/stores';
 import type {contentservicev1_Post} from "@/api/generated/app/service/v1";
 
 interface Props {

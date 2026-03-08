@@ -7,7 +7,7 @@ import type {Props} from "./types";
 import type {
   contentservicev1_Category,
 } from "@/api/generated/app/service/v1";
-import {useCategoryStore} from "@/stores";
+import {useCategoryStore} from '@/stores';
 
 
 withDefaults(defineProps<Props>(), {

@@ -1,7 +1,7 @@
 /**
  * 该文件可自行根据业务逻辑进行调整
  */
-import {useAuthStore, useAccessStore} from "@/stores";
+import {useAuthStore, useAccessStore} from '@/stores';
 import {useAppConfig} from "@/hooks/use-app-config";
 import {preferences} from "@/preferences";
 import {

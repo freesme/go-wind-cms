@@ -2,7 +2,7 @@
 import {h, ref, onMounted} from 'vue';
 import {useRouter} from 'vue-router';
 
-import {useNavbarStore, useNavigationStore} from "@/stores";
+import {useNavbarStore, useNavigationStore} from '@/stores';
 import {XIcon} from "@/plugins/xicon";
 import {useLanguageChangeEffect} from '@/hooks/useLanguageChangeEffect';
 import type {

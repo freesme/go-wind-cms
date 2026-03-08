@@ -3,7 +3,7 @@ import {computed, onMounted, ref} from 'vue'
 import {useMessage} from 'naive-ui'
 
 import {$t} from '@/locales'
-import {useCommentStore} from '@/stores/modules/app'
+import {useCommentStore} from '@/stores'
 import type {
   commentservicev1_Comment,
   commentservicev1_Comment_ContentType

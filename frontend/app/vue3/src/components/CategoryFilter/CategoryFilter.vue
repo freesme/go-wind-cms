@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {$t} from '@/locales'
-import {useCategoryStore} from '@/stores/modules/app'
+import {useCategoryStore} from '@/stores'
 
 interface Props {
   categories: any[]
@@ -11,7 +11,7 @@ interface Emits {
   (e: 'category-change', categoryId: number | null): void
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 const emit = defineEmits<Emits>()
 const categoryStore = useCategoryStore()
 

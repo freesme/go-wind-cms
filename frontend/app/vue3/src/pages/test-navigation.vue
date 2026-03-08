@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useNavigationStore } from '@/stores/modules/app'
+import { useNavigationStore } from '@/stores'
 
 const navigationStore = useNavigationStore()
 const result = ref<any>(null)

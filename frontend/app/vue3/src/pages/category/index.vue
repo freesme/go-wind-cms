@@ -2,7 +2,7 @@
 import {definePage} from 'unplugin-vue-router/runtime'
 import {ref, onMounted} from 'vue'
 
-import {useCategoryStore} from '@/stores/modules/app'
+import {useCategoryStore} from '@/stores'
 import {$t} from '@/locales'
 import {useLanguageChangeEffect} from '@/hooks/useLanguageChangeEffect';
 import {CategoryTree} from '@/components/CategoryTree'

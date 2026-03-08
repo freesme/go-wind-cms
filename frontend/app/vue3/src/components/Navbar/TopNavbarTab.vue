@@ -4,7 +4,7 @@ import {$t} from "@/locales";
 
 import type {TopNavBarTabItem} from "./types";
 import {navigateTo} from "@/router";
-import {useNavbarStore} from "@/stores";
+import {useNavbarStore} from '@/stores';
 
 const navbarStore = useNavbarStore();
 
