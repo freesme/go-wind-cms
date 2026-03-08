@@ -98,7 +98,9 @@ async function loadCategories() {
   try {
     const res = await categoryStore.listCategory(
       {page: 1, pageSize: 8},
-      {status: 'CATEGORY_STATUS_ACTIVE'}
+      {status: 'CATEGORY_STATUS_ACTIVE'},
+      'id,status,sort_order,icon,code,post_count,direct_post_count,parent_id,created_at,translations.id,translations.category_id,translations.name,translations.language_code,translations.description',
+      ['-sortOrder', '-postCount']
     )
     categories.value = res.items || []
   } catch (error) {

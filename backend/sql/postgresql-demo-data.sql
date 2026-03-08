@@ -1445,212 +1445,121 @@ Sorry, the page you are looking for does not exist or has been deleted.
 );
 
 
--- ----------------------------
--- 插入 categories 表（分类主表）测试数据
--- ----------------------------
+-- ==================== categories 表（分类主表）====================
+-- 注意：按 parentId 顺序插入（先父后子），确保外键约束有效
 INSERT INTO public.categories (
-    created_at, updated_at, sort_order, path, status,
+    id, created_at, updated_at, sort_order, path, status,
     depth, is_nav, icon, post_count, direct_post_count,
-    custom_fields, parent_id
+    custom_fields, parent_id, created_by, updated_by
 ) VALUES
--- 分类1：博客（一级、显示在导航、已发布）
-(
-    NOW() - INTERVAL '30 days', NOW(),
-    1, '/blog', 'CATEGORY_STATUS_ACTIVE',
-    0, true, 'icon-blog', 128, 128,
-    '{"show_banner": "true", "banner_image": "/images/category/blog-banner.jpg", "layout": "list"}'::jsonb,
-    NULL
-),
--- 分类2：技术文档（一级、显示在导航、已发布）
-(
-    NOW() - INTERVAL '28 days', NOW(),
-    2, '/docs', 'CATEGORY_STATUS_ACTIVE',
-    0, true, 'icon-docs', 89, 0,
-    '{"sidebar_type": "collapsible", "edit_link": "https://github.com/gowind/docs/edit/main"}'::jsonb,
-    NULL
-),
--- 分类3：产品中心（一级、显示在导航、已发布）
-(
-    NOW() - INTERVAL '25 days', NOW(),
-    3, '/products', 'CATEGORY_STATUS_ACTIVE',
-    0, true, 'icon-product', 45, 45,
-    '{"show_filter": "true", "filter_fields": "price, type", "default_sort": "newest"}'::jsonb,
-    NULL
-),
--- 分类4：安装部署（二级、不显示在导航、已发布，父ID=2）
-(
-    NOW() - INTERVAL '22 days', NOW(),
-    1, '/docs/deployment', 'CATEGORY_STATUS_ACTIVE',
-    1, false, 'icon-deploy', 32, 32,
-    '{"difficulty": "beginner", "estimated_time": "10分钟"}'::jsonb,
-    2
-),
--- 分类5：环境配置（三级、不显示在导航、已发布，父ID=4）
-(
-    NOW() - INTERVAL '20 days', NOW(),
-    1, '/docs/deployment/env', 'CATEGORY_STATUS_ACTIVE',
-    2, false, 'icon-env', 18, 18,
-    '{"os_support": "Linux, Windows, macOS", "min_requirements": "2GB RAM, 1 CPU"}'::jsonb,
-    4
-),
--- 分类6：功能教程（二级、不显示在导航、已发布，父ID=2）
-(
-    NOW() - INTERVAL '18 days', NOW(),
-    2, '/docs/tutorials', 'CATEGORY_STATUS_ACTIVE',
-    1, false, 'icon-tutorial', 35, 35,
-    '{"video_support": "true", "tutorial_level": "beginner, intermediate"}'::jsonb,
-    2
-),
--- 分类7：常见问题（二级、不显示在导航、草稿，父ID=2）
-(
-    NOW() - INTERVAL '15 days', NOW(),
-    3, '/docs/faq', 'CATEGORY_STATUS_HIDDEN',
-    1, false, 'icon-faq', 0, 0,
-    '{"show_search": "true", "hot_tags": "installation configuration performance"}'::jsonb,
-    2
-),
--- 分类8：废弃分类（一级、不显示在导航、已归档）
-(
-    NOW() - INTERVAL '10 days', NOW(),
-    4, '/old-category', 'CATEGORY_STATUS_ARCHIVED',
-    0, false, 'icon-archive', 0, 0,
-    '{"archive_reason": "内容合并至技术文档", "archive_time": "2024-03-01"}'::jsonb,
-    NULL
-),
--- 分类9：行业资讯（一级、显示在导航、已发布）
-(
-    NOW() - INTERVAL '8 days', NOW(),
-    5, '/news', 'CATEGORY_STATUS_ACTIVE',
-    0, true, 'icon-news', 67, 67,
-    '{"show_date": "true", "author_display": "true", "comment_support": "true"}'::jsonb,
-    NULL
-);
+-- ========== 一级分类 ==========
+-- 技术分享
+(1, NOW() - INTERVAL '30 days', NOW() - INTERVAL '15 days', 1, '/tech', 'CATEGORY_STATUS_ACTIVE', 0, true, 'carbon:document', 45, 15, '{}'::jsonb, NULL, 1, 1),
+-- 生活随笔
+(2, NOW() - INTERVAL '25 days', NOW() - INTERVAL '12 days', 2, '/life', 'CATEGORY_STATUS_ACTIVE', 0, true, 'carbon:blog', 30, 12, '{}'::jsonb, NULL, 1, 1),
+-- 产品设计
+(3, NOW() - INTERVAL '20 days', NOW() - INTERVAL '10 days', 3, '/design', 'CATEGORY_STATUS_ACTIVE', 0, true, 'carbon:chart-line', 25, 8, '{}'::jsonb, NULL, 1, 1),
+-- 创业思考
+(4, NOW() - INTERVAL '15 days', NOW() - INTERVAL '8 days', 4, '/startup', 'CATEGORY_STATUS_ACTIVE', 0, true, 'carbon:idea', 18, 10, '{}'::jsonb, NULL, 1, 1),
 
--- ----------------------------
--- 插入 category_translations 表（分类多语言翻译）测试数据
--- 关联上述分类，覆盖 zh-CN/en-US 双语言，真实换行符
--- ----------------------------
+-- ========== 二级分类（父ID=1：技术分享） ==========
+-- 前端开发
+(11, NOW() - INTERVAL '25 days', NOW() - INTERVAL '10 days', 1, '/tech/frontend', 'CATEGORY_STATUS_ACTIVE', 1, false, 'carbon:code', 20, 20, '{}'::jsonb, 1, 1, 1),
+-- 后端开发
+(12, NOW() - INTERVAL '24 days', NOW() - INTERVAL '9 days', 2, '/tech/backend', 'CATEGORY_STATUS_ACTIVE', 1, false, 'carbon:cloud', 15, 15, '{}'::jsonb, 1, 1, 1),
+-- 移动开发
+(13, NOW() - INTERVAL '23 days', NOW() - INTERVAL '8 days', 3, '/tech/mobile', 'CATEGORY_STATUS_ACTIVE', 1, false, 'carbon:mobile', 10, 10, '{}'::jsonb, 1, 1, 1),
+
+-- ========== 二级分类（父ID=2：生活随笔） ==========
+-- 旅行游记
+(21, NOW() - INTERVAL '20 days', NOW() - INTERVAL '7 days', 1, '/life/travel', 'CATEGORY_STATUS_ACTIVE', 1, false, 'carbon:map', 10, 10, '{}'::jsonb, 2, 1, 1),
+-- 美食探店
+(22, NOW() - INTERVAL '19 days', NOW() - INTERVAL '6 days', 2, '/life/food', 'CATEGORY_STATUS_ACTIVE', 1, false, 'carbon:favorite', 8, 8, '{}'::jsonb, 2, 1, 1),
+
+-- ========== 二级分类（父ID=3：产品设计） ==========
+-- UI 设计
+(31, NOW() - INTERVAL '18 days', NOW() - INTERVAL '5 days', 1, '/design/ui-design', 'CATEGORY_STATUS_ACTIVE', 1, false, 'carbon:color-switch', 10, 10, '{}'::jsonb, 3, 1, 1),
+-- UX 设计
+(32, NOW() - INTERVAL '17 days', NOW() - INTERVAL '4 days', 2, '/design/ux-design', 'CATEGORY_STATUS_ACTIVE', 1, false, 'carbon:user-profile', 7, 7, '{}'::jsonb, 3, 1, 1),
+
+-- ========== 二级分类（父ID=4：创业思考） ==========
+-- 团队管理
+(41, NOW() - INTERVAL '14 days', NOW() - INTERVAL '3 days', 1, '/startup/team-management', 'CATEGORY_STATUS_ACTIVE', 1, false, 'carbon:group', 5, 5, '{}'::jsonb, 4, 1, 1),
+-- 产品思考
+(42, NOW() - INTERVAL '13 days', NOW() - INTERVAL '2 days', 2, '/startup/product-thinking', 'CATEGORY_STATUS_ACTIVE', 1, false, 'carbon:product', 3, 3, '{}'::jsonb, 4, 1, 1);
+
+-- ==================== category_translations 表（分类翻译）====================
+-- 注意：按 category_id 顺序插入，确保外键约束有效
 INSERT INTO public.category_translations (
-    created_at, updated_at, category_id, language_code,
+    id, created_at, updated_at, category_id, language_code,
     name, slug, description, thumbnail, cover_image,
-    template, full_path, meta_keywords, meta_description, seo_title
+    template, full_path, meta_keywords, meta_description, seo_title,
+    created_by, updated_by
 ) VALUES
--- ========== 分类1（博客） - 中文翻译 ==========
-(
-    NOW() - INTERVAL '30 days', NOW(), 1, 'zh-CN',
-    '博客', 'blog',
-    'GoWind CMS 官方博客，分享产品更新、技术实践、行业动态等内容。
+-- ========== 分类1（技术分享）- 中文 ==========
+(1, NOW() - INTERVAL '30 days', NOW() - INTERVAL '15 days', 1, 'zh-CN', '技术分享', 'tech', '分享最新的技术文章和教程', 'https://picsum.photos/400/300?random=1', 'https://picsum.photos/1200/400?random=1', NULL, '/tech', '技术分享,教程,开发', '分享最新的技术文章和教程', '技术分享 | GoWind CMS', 1, 1),
+-- ========== 分类1（技术分享）- 英文 ==========
+(101, NOW() - INTERVAL '30 days', NOW() - INTERVAL '15 days', 1, 'en-US', 'Tech Sharing', 'tech', 'Share the latest technical articles and tutorials', 'https://picsum.photos/400/300?random=1', 'https://picsum.photos/1200/400?random=1', NULL, '/en/tech', 'Tech Sharing,Tutorials,Development', 'Share the latest technical articles and tutorials', 'Tech Sharing | GoWind CMS', 1, 1),
 
-内容涵盖：
-- Go 语言开发技巧
-- CMS 产品使用经验
-- 开源项目维护心得',
-    '/images/thumbnails/category-blog-zh.jpg',
-    '/images/covers/category-blog-zh.jpg',
-    'category-blog', '/blog',
-    'GoWind,博客,技术实践,产品更新',
-    'GoWind CMS 官方博客，分享产品更新、技术实践、行业动态等内容。',
-    '博客 | GoWind CMS'
-),
--- ========== 分类1（博客） - 英文翻译 ==========
-(
-    NOW() - INTERVAL '30 days', NOW(), 1, 'en-US',
-    'Blog', 'blog',
-    'GoWind CMS official blog, sharing product updates, technical practices, industry trends and other content.
+-- ========== 分类2（生活随笔）- 中文 ==========
+(2, NOW() - INTERVAL '25 days', NOW() - INTERVAL '12 days', 2, 'zh-CN', '生活随笔', 'life', '记录生活中的点点滴滴', 'https://picsum.photos/400/300?random=2', 'https://picsum.photos/1200/400?random=2', NULL, '/life', '生活随笔,记录,日常', '记录生活中的点点滴滴', '生活随笔 | GoWind CMS', 1, 1),
+-- ========== 分类2（生活随笔）- 英文 ==========
+(102, NOW() - INTERVAL '25 days', NOW() - INTERVAL '12 days', 2, 'en-US', 'Life Notes', 'life', 'Record moments and thoughts from daily life', 'https://picsum.photos/400/300?random=2', 'https://picsum.photos/1200/400?random=2', NULL, '/en/life', 'Life Notes,Records,Daily', 'Record moments and thoughts from daily life', 'Life Notes | GoWind CMS', 1, 1),
 
-Content includes:
-- Go language development skills
-- CMS product usage experience
-- Open source project maintenance experience',
-    '/images/thumbnails/category-blog-en.jpg',
-    '/images/covers/category-blog-en.jpg',
-    'category-blog', '/en/blog',
-    'GoWind,Blog,Technical Practices,Product Updates',
-    'GoWind CMS official blog, sharing product updates, technical practices, industry trends and other content.',
-    'Blog | GoWind CMS'
-),
--- ========== 分类2（技术文档） - 中文翻译 ==========
-(
-    NOW() - INTERVAL '28 days', NOW(), 2, 'zh-CN',
-    '技术文档', 'docs',
-    'GoWind CMS 完整技术文档，包含安装部署、功能教程、API 参考等内容，帮助开发者快速上手。
+-- ========== 分类3（产品设计）- 中文 ==========
+(3, NOW() - INTERVAL '20 days', NOW() - INTERVAL '10 days', 3, 'zh-CN', '产品设计', 'design', '产品设计理念与实践', 'https://picsum.photos/400/300?random=3', 'https://picsum.photos/1200/400?random=3', NULL, '/design', '产品设计,理念,实践', '产品设计理念与实践', '产品设计 | GoWind CMS', 1, 1),
+-- ========== 分类3（产品设计）- 英文 ==========
+(103, NOW() - INTERVAL '20 days', NOW() - INTERVAL '10 days', 3, 'en-US', 'Product Design', 'design', 'Product design concepts and practices', 'https://picsum.photos/400/300?random=3', 'https://picsum.photos/1200/400?random=3', NULL, '/en/design', 'Product Design,Concepts,Practices', 'Product design concepts and practices', 'Product Design | GoWind CMS', 1, 1),
 
-核心板块：
-- 安装部署：环境配置、快速开始
-- 功能教程：核心功能、高级用法
-- API 参考：接口文档、调用示例',
-    '/images/thumbnails/category-docs-zh.jpg',
-    '/images/covers/category-docs-zh.jpg',
-    'category-docs', '/docs',
-    'GoWind,技术文档,安装部署,API参考',
-    'GoWind CMS 完整技术文档，包含安装部署、功能教程、API 参考等内容，帮助开发者快速上手。',
-    '技术文档 | GoWind CMS'
-),
--- ========== 分类2（技术文档） - 英文翻译 ==========
-(
-    NOW() - INTERVAL '28 days', NOW(), 2, 'en-US',
-    'Documentation', 'docs',
-    'Complete technical documentation for GoWind CMS, including installation and deployment, feature tutorials, API references, etc., to help developers get started quickly.
+-- ========== 分类4（创业思考）- 中文 ==========
+(4, NOW() - INTERVAL '15 days', NOW() - INTERVAL '8 days', 4, 'zh-CN', '创业思考', 'startup', '创业路上的思考与总结', 'https://picsum.photos/400/300?random=4', 'https://picsum.photos/1200/400?random=4', NULL, '/startup', '创业思考,总结,经验', '创业路上的思考与总结', '创业思考 | GoWind CMS', 1, 1),
+-- ========== 分类4（创业思考）- 英文 ==========
+(104, NOW() - INTERVAL '15 days', NOW() - INTERVAL '8 days', 4, 'en-US', 'Startup Insights', 'startup', 'Reflections and summaries from startup journey', 'https://picsum.photos/400/300?random=4', 'https://picsum.photos/1200/400?random=4', NULL, '/en/startup', 'Startup Insights,Reflections,Journey', 'Reflections and summaries from startup journey', 'Startup Insights | GoWind CMS', 1, 1),
 
-Core sections:
-- Installation & Deployment: Environment configuration, quick start
-- Feature Tutorials: Core features, advanced usage
-- API Reference: Interface documentation, call examples',
-    '/images/thumbnails/category-docs-en.jpg',
-    '/images/covers/category-docs-en.jpg',
-    'category-docs', '/en/docs',
-    'GoWind,Documentation,Installation,API Reference',
-    'Complete technical documentation for GoWind CMS, including installation and deployment, feature tutorials, API references, etc., to help developers get started quickly.',
-    'Documentation | GoWind CMS'
-),
--- ========== 分类4（安装部署） - 中文翻译 ==========
-(
-    NOW() - INTERVAL '22 days', NOW(), 4, 'zh-CN',
-    '安装部署', 'deployment',
-    'GoWind CMS 安装部署相关文档，包含环境配置、快速安装、Docker 部署等内容，适配不同操作系统。',
-    '/images/thumbnails/category-deploy-zh.jpg',
-    '/images/covers/category-deploy-zh.jpg',
-    'category-docs-child', '/docs/deployment',
-    'GoWind,安装部署,环境配置,Docker部署',
-    'GoWind CMS 安装部署相关文档，包含环境配置、快速安装、Docker 部署等内容，适配不同操作系统。',
-    '安装部署 | GoWind CMS 技术文档'
-),
--- ========== 分类5（环境配置） - 中文翻译 ==========
-(
-    NOW() - INTERVAL '20 days', NOW(), 5, 'zh-CN',
-    '环境配置', 'env',
-    'GoWind CMS 环境配置详细教程，包含 Linux/Windows/macOS 系统的环境搭建、依赖安装、端口配置等。',
-    '/images/thumbnails/category-env-zh.jpg',
-    '/images/covers/category-env-zh.jpg',
-    'category-docs-grandchild', '/docs/deployment/env',
-    'GoWind,环境配置,依赖安装,端口配置',
-    'GoWind CMS 环境配置详细教程，包含 Linux/Windows/macOS 系统的环境搭建、依赖安装、端口配置等。',
-    '环境配置 | GoWind CMS 安装部署'
-),
--- ========== 分类3（产品中心） - 中文翻译 ==========
-(
-    NOW() - INTERVAL '25 days', NOW(), 3, 'zh-CN',
-    '产品中心', 'products',
-    'GoWind 旗下全系列产品，包含开源版、企业版、云服务等，满足不同规模用户的内容管理需求。',
-    '/images/thumbnails/category-product-zh.jpg',
-    '/images/covers/category-product-zh.jpg',
-    'category-product', '/products',
-    'GoWind,产品中心,开源版,企业版,云服务',
-    'GoWind 旗下全系列产品，包含开源版、企业版、云服务等，满足不同规模用户的内容管理需求。',
-    '产品中心 | GoWind CMS'
-),
--- ========== 分类9（行业资讯） - 中文翻译 ==========
-(
-    NOW() - INTERVAL '8 days', NOW(), 9, 'zh-CN',
-    '行业资讯', 'news',
-    'CMS 行业最新资讯、政策解读、市场分析，帮助您把握行业发展趋势。',
-    '/images/thumbnails/category-news-zh.jpg',
-    '/images/covers/category-news-zh.jpg',
-    'category-news', '/news',
-    'GoWind,行业资讯,CMS行业,市场分析',
-    'CMS 行业最新资讯、政策解读、市场分析，帮助您把握行业发展趋势。',
-    '行业资讯 | GoWind CMS'
-);
+-- ========== 分类11（前端开发）- 中文 ==========
+(11, NOW() - INTERVAL '25 days', NOW() - INTERVAL '10 days', 11, 'zh-CN', '前端开发', 'frontend', '前端开发技术和框架', 'https://picsum.photos/400/300?random=11', 'https://picsum.photos/1200/400?random=11', NULL, '/tech/frontend', '前端开发,框架,技术', '前端开发技术和框架', '前端开发 | 技术分享', 1, 1),
+-- ========== 分类11（前端开发）- 英文 ==========
+(111, NOW() - INTERVAL '25 days', NOW() - INTERVAL '10 days', 11, 'en-US', 'Frontend Development', 'frontend', 'Frontend development technologies and frameworks', 'https://picsum.photos/400/300?random=11', 'https://picsum.photos/1200/400?random=11', NULL, '/en/tech/frontend', 'Frontend Development,Frameworks,Technologies', 'Frontend development technologies and frameworks', 'Frontend Development | Tech Sharing', 1, 1),
+
+-- ========== 分类12（后端开发）- 中文 ==========
+(12, NOW() - INTERVAL '24 days', NOW() - INTERVAL '9 days', 12, 'zh-CN', '后端开发', 'backend', '后端开发技术和架构', 'https://picsum.photos/400/300?random=12', 'https://picsum.photos/1200/400?random=12', NULL, '/tech/backend', '后端开发,架构,技术', '后端开发技术和架构', '后端开发 | 技术分享', 1, 1),
+-- ========== 分类12（后端开发）- 英文 ==========
+(112, NOW() - INTERVAL '24 days', NOW() - INTERVAL '9 days', 12, 'en-US', 'Backend Development', 'backend', 'Backend development technologies and architecture', 'https://picsum.photos/400/300?random=12', 'https://picsum.photos/1200/400?random=12', NULL, '/en/tech/backend', 'Backend Development,Architecture,Technologies', 'Backend development technologies and architecture', 'Backend Development | Tech Sharing', 1, 1),
+
+-- ========== 分类13（移动开发）- 中文 ==========
+(13, NOW() - INTERVAL '23 days', NOW() - INTERVAL '8 days', 13, 'zh-CN', '移动开发', 'mobile', '移动端开发技术', 'https://picsum.photos/400/300?random=13', 'https://picsum.photos/1200/400?random=13', NULL, '/tech/mobile', '移动开发,技术,移动端', '移动端开发技术', '移动开发 | 技术分享', 1, 1),
+-- ========== 分类13（移动开发）- 英文 ==========
+(113, NOW() - INTERVAL '23 days', NOW() - INTERVAL '8 days', 13, 'en-US', 'Mobile Development', 'mobile', 'Mobile development technologies', 'https://picsum.photos/400/300?random=13', 'https://picsum.photos/1200/400?random=13', NULL, '/en/tech/mobile', 'Mobile Development,Technologies', 'Mobile development technologies', 'Mobile Development | Tech Sharing', 1, 1),
+
+-- ========== 分类21（旅行游记）- 中文 ==========
+(21, NOW() - INTERVAL '20 days', NOW() - INTERVAL '7 days', 21, 'zh-CN', '旅行游记', 'travel', '旅行见闻和游记', 'https://picsum.photos/400/300?random=21', 'https://picsum.photos/1200/400?random=21', NULL, '/life/travel', '旅行游记,见闻,游记', '旅行见闻和游记', '旅行游记 | 生活随笔', 1, 1),
+-- ========== 分类21（旅行游记）- 英文 ==========
+(121, NOW() - INTERVAL '20 days', NOW() - INTERVAL '7 days', 21, 'en-US', 'Travel', 'travel', 'Travel experiences and journals', 'https://picsum.photos/400/300?random=21', 'https://picsum.photos/1200/400?random=21', NULL, '/en/life/travel', 'Travel,Experiences,Journals', 'Travel experiences and journals', 'Travel | Life Notes', 1, 1),
+
+-- ========== 分类22（美食探店）- 中文 ==========
+(22, NOW() - INTERVAL '19 days', NOW() - INTERVAL '6 days', 22, 'zh-CN', '美食探店', 'food', '探索城市美食', 'https://picsum.photos/400/300?random=22', 'https://picsum.photos/1200/400?random=22', NULL, '/life/food', '美食探店,城市美食,探索', '探索城市美食', '美食探店 | 生活随笔', 1, 1),
+-- ========== 分类22（美食探店）- 英文 ==========
+(122, NOW() - INTERVAL '19 days', NOW() - INTERVAL '6 days', 22, 'en-US', 'Food Exploration', 'food', 'Explore city delicacies', 'https://picsum.photos/400/300?random=22', 'https://picsum.photos/1200/400?random=22', NULL, '/en/life/food', 'Food Exploration,Delicacies,City', 'Explore city delicacies', 'Food Exploration | Life Notes', 1, 1),
+
+-- ========== 分类31（UI 设计）- 中文 ==========
+(31, NOW() - INTERVAL '18 days', NOW() - INTERVAL '5 days', 31, 'zh-CN', 'UI 设计', 'ui-design', '用户界面设计', 'https://picsum.photos/400/300?random=31', 'https://picsum.photos/1200/400?random=31', NULL, '/design/ui-design', 'UI设计,用户界面,设计', '用户界面设计', 'UI 设计 | 产品设计', 1, 1),
+-- ========== 分类31（UI 设计）- 英文 ==========
+(131, NOW() - INTERVAL '18 days', NOW() - INTERVAL '5 days', 31, 'en-US', 'UI Design', 'ui-design', 'User Interface Design', 'https://picsum.photos/400/300?random=31', 'https://picsum.photos/1200/400?random=31', NULL, '/en/design/ui-design', 'UI Design,User Interface', 'User Interface Design', 'UI Design | Product Design', 1, 1),
+
+-- ========== 分类32（UX 设计）- 中文 ==========
+(32, NOW() - INTERVAL '17 days', NOW() - INTERVAL '4 days', 32, 'zh-CN', 'UX 设计', 'ux-design', '用户体验设计', 'https://picsum.photos/400/300?random=32', 'https://picsum.photos/1200/400?random=32', NULL, '/design/ux-design', 'UX设计,用户体验,设计', '用户体验设计', 'UX 设计 | 产品设计', 1, 1),
+-- ========== 分类32（UX 设计）- 英文 ==========
+(132, NOW() - INTERVAL '17 days', NOW() - INTERVAL '4 days', 32, 'en-US', 'UX Design', 'ux-design', 'User Experience Design', 'https://picsum.photos/400/300?random=32', 'https://picsum.photos/1200/400?random=32', NULL, '/en/design/ux-design', 'UX Design,User Experience', 'User Experience Design', 'UX Design | Product Design', 1, 1),
+
+-- ========== 分类41（团队管理）- 中文 ==========
+(41, NOW() - INTERVAL '14 days', NOW() - INTERVAL '3 days', 41, 'zh-CN', '团队管理', 'team-management', '团队建设和管理经验', 'https://picsum.photos/400/300?random=41', 'https://picsum.photos/1200/400?random=41', NULL, '/startup/team-management', '团队管理,建设,经验', '团队建设和管理经验', '团队管理 | 创业思考', 1, 1),
+-- ========== 分类41（团队管理）- 英文 ==========
+(141, NOW() - INTERVAL '14 days', NOW() - INTERVAL '3 days', 41, 'en-US', 'Team Management', 'team-management', 'Team building and management experience', 'https://picsum.photos/400/300?random=41', 'https://picsum.photos/1200/400?random=41', NULL, '/en/startup/team-management', 'Team Management,Building,Experience', 'Team building and management experience', 'Team Management | Startup Insights', 1, 1),
+
+-- ========== 分类42（产品思考）- 中文 ==========
+(42, NOW() - INTERVAL '13 days', NOW() - INTERVAL '2 days', 42, 'zh-CN', '产品思考', 'product-thinking', '产品规划和思考', 'https://picsum.photos/400/300?random=42', 'https://picsum.photos/1200/400?random=42', NULL, '/startup/product-thinking', '产品思考,规划,产品', '产品规划和思考', '产品思考 | 创业思考', 1, 1),
+-- ========== 分类42（产品思考）- 英文 ==========
+(142, NOW() - INTERVAL '13 days', NOW() - INTERVAL '2 days', 42, 'en-US', 'Product Thinking', 'product-thinking', 'Product planning and thinking', 'https://picsum.photos/400/300?random=42', 'https://picsum.photos/1200/400?random=42', NULL, '/en/startup/product-thinking', 'Product Thinking,Planning', 'Product planning and thinking', 'Product Thinking | Startup Insights', 1, 1);
 
 
 -- ----------------------------

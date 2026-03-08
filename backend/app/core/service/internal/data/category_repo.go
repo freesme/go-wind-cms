@@ -2,11 +2,14 @@ package data
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/tx7do/go-crud/pagination"
 	"github.com/tx7do/kratos-bootstrap/bootstrap"
+	"google.golang.org/protobuf/types/known/fieldmaskpb"
 
 	paginationV1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
 	entCrud "github.com/tx7do/go-crud/entgo"
@@ -103,12 +106,77 @@ func (r *CategoryRepo) IsExist(ctx context.Context, id uint32) (bool, error) {
 	return exist, nil
 }
 
+func FilterViewMask(excludeFields []string, mask *fieldmaskpb.FieldMask) *fieldmaskpb.FieldMask {
+	if mask == nil {
+		return nil
+	}
+	if len(excludeFields) == 0 {
+		return mask
+	}
+
+	excludeMap := make(map[string]struct{})
+	for _, field := range excludeFields {
+		excludeMap[field] = struct{}{}
+	}
+
+	var paths []string
+	for _, path := range mask.Paths {
+		path = strings.TrimSpace(path)
+		if _, exist := excludeMap[path]; !exist {
+			paths = append(paths, path)
+		}
+	}
+
+	if len(paths) == 0 {
+		return nil
+	}
+
+	return &fieldmaskpb.FieldMask{Paths: paths}
+}
+
 func (r *CategoryRepo) List(ctx context.Context, req *paginationV1.PagingRequest) (*contentV1.ListCategoryResponse, error) {
 	if req == nil {
 		return nil, contentV1.ErrorBadRequest("invalid parameter")
 	}
 
 	builder := r.entClient.Client().Category.Query()
+
+	filterExpr, err := r.repository.ConvertFilterByPagingRequest(req)
+	if err != nil {
+		r.log.Errorf("convert filter by paging request failed: %s", err.Error())
+		return nil, err
+	}
+
+	needQueryTranslation := false
+	translationMaskFields := make([]string, 0)
+	excludeFields := []string{"translations", "available_languages"}
+	if req.FieldMask != nil && len(req.FieldMask.Paths) > 0 {
+		for _, path := range req.FieldMask.Paths {
+			if path == "translations" || strings.HasPrefix(path, "translations.") {
+				needQueryTranslation = true
+			}
+			if strings.HasPrefix(path, "translations.") {
+				path = strings.TrimSpace(path)
+				excludeFields = append(excludeFields, path)
+
+				path = strings.TrimPrefix(path, "translations.")
+				if len(path) > 0 {
+					translationMaskFields = append(translationMaskFields, path)
+				}
+			}
+		}
+	} else {
+		needQueryTranslation = true
+	}
+	req.FieldMask = FilterViewMask(excludeFields, req.FieldMask)
+
+	r.log.Debugf("********************************** excludeFields: %v", excludeFields)
+	r.log.Debugf("**********************************%v", req.FieldMask.GetPaths())
+
+	excludeConditions := pagination.FilterFields(filterExpr, []string{
+		"locale",
+	})
+	req.FilteringType = &paginationV1.PagingRequest_FilterExpr{FilterExpr: filterExpr}
 
 	ret, err := r.repository.ListWithPaging(ctx, builder, builder.Clone(), req)
 	if err != nil {
@@ -118,14 +186,30 @@ func (r *CategoryRepo) List(ctx context.Context, req *paginationV1.PagingRequest
 		return &contentV1.ListCategoryResponse{Total: 0, Items: nil}, nil
 	}
 
-	//for _, item := range ret.Items {
-	//	translations, err := r.categoryTranslationRepo.ListTranslations(ctx, item.GetId())
-	//	if err != nil {
-	//		r.log.Errorf("query translations failed: %s", err.Error())
-	//		return nil, contentV1.ErrorInternalServerError("query translations failed")
-	//	}
-	//	item.Translations = translations
-	//}
+	if needQueryTranslation {
+		viewMask := &fieldmaskpb.FieldMask{
+			Paths: translationMaskFields,
+		}
+
+		var locale string
+		if len(excludeConditions) > 0 {
+			for _, cond := range excludeConditions {
+				if cond.GetField() == "locale" {
+					locale = cond.GetValue()
+					break
+				}
+			}
+		}
+
+		for _, item := range ret.Items {
+			translations, err := r.categoryTranslationRepo.ListTranslations(ctx, item.GetId(), locale, viewMask)
+			if err != nil {
+				r.log.Errorf("query translations failed: %s", err.Error())
+				return nil, contentV1.ErrorInternalServerError("query translations failed")
+			}
+			item.Translations = translations
+		}
+	}
 
 	for _, item := range ret.Items {
 		languages, err := r.categoryTranslationRepo.ListAvailedLanguages(ctx, item.GetId())
@@ -171,7 +255,7 @@ func (r *CategoryRepo) Get(ctx context.Context, req *contentV1.GetCategoryReques
 
 	dto := r.mapper.ToDTO(entity)
 
-	translations, err := r.categoryTranslationRepo.ListTranslations(ctx, dto.GetId())
+	translations, err := r.categoryTranslationRepo.ListTranslations(ctx, dto.GetId(), req.GetLocale(), nil)
 	if err != nil {
 		r.log.Errorf("query translations failed: %s", err.Error())
 		return nil, contentV1.ErrorInternalServerError("query translations failed")
@@ -436,7 +520,7 @@ func (r *CategoryRepo) GetTranslation(ctx context.Context, req *contentV1.GetCat
 }
 
 func (r *CategoryRepo) ListTranslations(ctx context.Context, categoryID uint32) ([]*contentV1.CategoryTranslation, error) {
-	return r.categoryTranslationRepo.ListTranslations(ctx, categoryID)
+	return r.categoryTranslationRepo.ListTranslations(ctx, categoryID, "", nil)
 }
 
 func (r *CategoryRepo) DeleteTranslation(ctx context.Context, req *contentV1.DeleteCategoryTranslationRequest) error {

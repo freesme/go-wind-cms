@@ -3,16 +3,15 @@ package service
 import (
 	"context"
 	"fmt"
-	"strconv"
 
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/tx7do/kratos-bootstrap/bootstrap"
+	"google.golang.org/protobuf/types/known/emptypb"
+
 	paginationV1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
-	paginationFilter "github.com/tx7do/go-crud/pagination/filter"
 	"github.com/tx7do/go-utils/aggregator"
 	"github.com/tx7do/go-utils/sliceutil"
 	"github.com/tx7do/go-utils/trans"
-	"github.com/tx7do/kratos-bootstrap/bootstrap"
-	"google.golang.org/protobuf/types/known/emptypb"
 
 	"go-wind-cms/app/core/service/internal/data"
 
@@ -288,38 +287,6 @@ func (s *UserService) enrichRelations(ctx context.Context, users []*identityV1.U
 	return nil
 }
 
-// FilterFields 过滤掉不需要的字段条件
-func FilterFields(filterExpr *paginationV1.FilterExpr, excludeFields []string) []*paginationV1.FilterCondition {
-	if filterExpr == nil || len(filterExpr.Conditions) == 0 {
-		return []*paginationV1.FilterCondition{}
-	}
-
-	exclude := make(map[string]struct{}, len(excludeFields))
-	for _, f := range excludeFields {
-		if f == "" {
-			continue
-		}
-		exclude[f] = struct{}{}
-	}
-
-	includeConditions := make([]*paginationV1.FilterCondition, 0, len(filterExpr.Conditions))
-	excludeConditions := make([]*paginationV1.FilterCondition, 0, len(filterExpr.Conditions))
-	for _, cond := range filterExpr.Conditions {
-		if cond == nil || cond.Field == "" {
-			continue
-		}
-		if _, skip := exclude[cond.Field]; skip {
-			excludeConditions = append(excludeConditions, cond)
-			continue
-		}
-		includeConditions = append(includeConditions, cond)
-	}
-
-	filterExpr.Conditions = includeConditions
-
-	return excludeConditions
-}
-
 func (s *UserService) queryUserIDsByRelationIDs(ctx context.Context, roleIDs []uint32, orgUnitIDs []uint32, positionIDs []uint32) ([]uint32, error) {
 	if len(roleIDs) == 0 && len(orgUnitIDs) == 0 && len(positionIDs) == 0 {
 		return nil, nil
@@ -398,118 +365,16 @@ func (s *UserService) queryUserIDsByRelationIDsUserTenantRelationOneToOne(ctx co
 }
 
 func (s *UserService) List(ctx context.Context, req *paginationV1.PagingRequest) (*identityV1.ListUserResponse, error) {
-	filterExpr, err := paginationFilter.ConvertFilterByPagingRequest(req)
-	if err != nil {
-		s.log.Errorf("convert filter by paging request failed: %s", err.Error())
-		return nil, err
+	if req == nil {
+		s.log.Errorf("invalid parameter: nil request")
+		return nil, identityV1.ErrorBadRequest("invalid parameter")
 	}
-
-	excludeConditions := FilterFields(filterExpr, []string{
-		"org_unit_id", "org_unit_ids",
-		"position_id", "position_ids",
-		"role_id", "role_ids",
-	})
-
-	var orgUnitIDs []uint32
-	var positionIDs []uint32
-	var roleIDs []uint32
-	for _, cond := range excludeConditions {
-		//r.log.Debugf("excluding filter condition: field=%s operator=%s value=%v", cond.GetField(), cond.GetOp(), cond.GetValue())
-
-		var val uint64
-		switch cond.GetField() {
-		case "org_unit_id":
-			if val, err = strconv.ParseUint(cond.GetValue(), 10, 64); err == nil {
-				orgUnitIDs = append(orgUnitIDs, uint32(val))
-			} else {
-				s.log.Errorf("parse org_unit_id value failed: %s", err.Error())
-			}
-		case "org_unit_ids":
-			for _, v := range cond.GetValues() {
-				if val, err = strconv.ParseUint(v, 10, 64); err == nil {
-					orgUnitIDs = append(orgUnitIDs, uint32(val))
-				} else {
-					s.log.Errorf("parse org_unit_ids value failed: %s", err.Error())
-				}
-			}
-
-		case "position_id":
-			if val, err = strconv.ParseUint(cond.GetValue(), 10, 64); err == nil {
-				positionIDs = append(positionIDs, uint32(val))
-			} else {
-				s.log.Errorf("parse position_id value failed: %s", err.Error())
-			}
-		case "position_ids":
-			for _, v := range cond.GetValues() {
-				if val, err = strconv.ParseUint(v, 10, 64); err == nil {
-					positionIDs = append(positionIDs, uint32(val))
-				} else {
-					s.log.Errorf("parse position_ids value failed: %s", err.Error())
-				}
-			}
-
-		case "role_id":
-			if val, err = strconv.ParseUint(cond.GetValue(), 10, 64); err == nil {
-				roleIDs = append(roleIDs, uint32(val))
-			} else {
-				s.log.Errorf("parse role_id value failed: %s", err.Error())
-			}
-		case "role_ids":
-			for _, v := range cond.GetValues() {
-				if val, err = strconv.ParseUint(v, 10, 64); err == nil {
-					roleIDs = append(roleIDs, uint32(val))
-				} else {
-					s.log.Errorf("parse role_ids value failed: %s", err.Error())
-				}
-			}
-		}
-	}
-
-	var mergedUserIDs []uint32
-	mergedUserIDs, err = s.queryUserIDsByRelationIDs(ctx, roleIDs, orgUnitIDs, positionIDs)
-	if err != nil {
-		s.log.Errorf("query user ids by relation ids failed: %s", err.Error())
-		return nil, err
-	}
-
-	hasRelationFilter := len(roleIDs) > 0 || len(orgUnitIDs) > 0 || len(positionIDs) > 0
-	if hasRelationFilter && len(mergedUserIDs) == 0 {
-		// 如果有关系过滤条件但没有匹配的用户ID，直接返回空结果
-		return &identityV1.ListUserResponse{Total: 0, Items: nil}, nil
-	}
-
-	if len(mergedUserIDs) > 0 {
-		filterExpr.Conditions = append(filterExpr.Conditions, &paginationV1.FilterCondition{
-			Field: "id",
-			Op:    paginationV1.Operator_IN,
-			Values: func() []string {
-				values := make([]string, 0, len(mergedUserIDs))
-				for _, d := range mergedUserIDs {
-					values = append(values, strconv.FormatUint(uint64(d), 10))
-				}
-				return values
-			}(),
-		})
-	}
-
-	req.FilteringType = &paginationV1.PagingRequest_FilterExpr{FilterExpr: filterExpr}
 
 	resp, err := s.userRepo.List(ctx, req)
 	if err != nil {
+		s.log.Errorf("userRepo.List failed: %s", err.Error())
 		return nil, err
 	}
-
-	for _, user := range resp.Items {
-		roleIds, err := s.userRepo.ListRoleIDsByUserID(ctx, user.GetId())
-		if err != nil {
-			s.log.Errorf("list user role ids failed [%s]", err.Error())
-			return nil, identityV1.ErrorInternalServerError("list user role ids failed")
-		}
-
-		user.RoleIds = roleIds
-	}
-
-	_ = s.enrichRelations(ctx, resp.Items)
 
 	return resp, nil
 }

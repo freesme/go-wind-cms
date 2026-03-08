@@ -80,17 +80,34 @@ func (r *CategoryTranslationRepo) CleanTranslations(
 	return nil
 }
 
-func (r *CategoryTranslationRepo) ListTranslations(ctx context.Context, categoryID uint32) ([]*contentV1.CategoryTranslation, error) {
-	q := r.entClient.Client().CategoryTranslation.Query().
+func (r *CategoryTranslationRepo) ListTranslations(ctx context.Context, categoryID uint32, locale string, viewMask *fieldmaskpb.FieldMask) ([]*contentV1.CategoryTranslation, error) {
+	builder := r.entClient.Client().CategoryTranslation.Query().
 		Where(
 			categorytranslation.CategoryIDEQ(categoryID),
 		)
 
-	entities, err := q.
+	if len(locale) > 0 {
+		builder.Where(
+			categorytranslation.LanguageCodeEQ(locale),
+		)
+	}
+
+	if viewMask != nil {
+		selectSelector, err := r.repository.BuildSelector(viewMask.GetPaths())
+		if err != nil {
+			r.log.Errorf("build category translation selector failed: %s", err.Error())
+			return nil, contentV1.ErrorInternalServerError("build category translation selector failed")
+		}
+		if selectSelector != nil {
+			builder.Modify(selectSelector)
+		}
+	}
+
+	entities, err := builder.
 		All(ctx)
 	if err != nil {
-		r.log.Errorf("query translations by category id failed: %s", err.Error())
-		return nil, contentV1.ErrorInternalServerError("query translations by category id failed")
+		r.log.Errorf("query translations list failed: %s", err.Error())
+		return nil, contentV1.ErrorInternalServerError("query translations list failed")
 	}
 
 	var dtos []*contentV1.CategoryTranslation
