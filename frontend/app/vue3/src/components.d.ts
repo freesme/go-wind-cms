@@ -8,7 +8,9 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ApplicationProvider: typeof import('./components/ApplicationProvider/ApplicationProvider.vue')['default']
+    CategoryCard: typeof import('./components/CategoryCard/CategoryCard.vue')['default']
     CategoryFilter: typeof import('./components/CategoryFilter/CategoryFilter.vue')['default']
+    CategoryList: typeof import('./components/CategoryList/CategoryList.vue')['default']
     CategoryTree: typeof import('./components/CategoryTree/CategoryTree.vue')['default']
     CodeEditor: typeof import('./components/ContentEditor/CodeEditor.vue')['default']
     CommentSection: typeof import('./components/CommentSection/CommentSection.vue')['default']

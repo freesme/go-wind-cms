@@ -10,6 +10,7 @@ import type {
   contentservicev1_Category,
 } from "@/api/generated/app/service/v1";
 import {useLanguageChangeEffect} from '@/hooks/useLanguageChangeEffect';
+import {CategoryList} from '@/components/CategoryList';
 
 definePage({
   name: 'category-detail',
@@ -122,43 +123,14 @@ useLanguageChangeEffect(async () => {
         </n-button>
       </div>
 
-      <!-- Sub Categories Navigation -->
-      <section v-if="childCategories.length > 0" class="sub-categories-section">
-        <div class="section-header">
-          <h2>
-            <span class="i-carbon:folder-details"/>
-            {{ $t('page.categories.sub_categories') }}
-          </h2>
-        </div>
-        <div class="sub-categories-grid">
-          <div
-            v-for="childCategory in childCategories"
-            :key="childCategory.id"
-            class="sub-category-card"
-            @click="handleViewChildCategory(childCategory.id)"
-          >
-            <div class="sub-category-image">
-              <img
-                :src="categoryStore.getCategoryThumbnail(childCategory)"
-                :alt="categoryStore.getCategoryName(childCategory)"
-              />
-              <div class="image-overlay"/>
-            </div>
-            <div class="sub-category-content">
-              <h3>{{ categoryStore.getCategoryName(childCategory) }}</h3>
-              <p>{{ categoryStore.getCategoryDescription(childCategory) }}</p>
-              <div class="sub-category-meta">
-                <span class="meta-icon">
-                  <span class="i-carbon:document"/>
-                </span>
-                <span class="meta-text">{{
-                    childCategory.postCount || 0
-                  }} {{ $t('page.posts.articles') }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <!-- Sub Categories List -->
+      <CategoryList
+        v-if="childCategories.length > 0"
+        :categories="childCategories"
+        :loading="false"
+        :show-skeleton="false"
+        @category-click="handleViewChildCategory"
+      />
 
       <!-- Posts List with Pagination -->
       <PostListWithPagination
@@ -340,111 +312,6 @@ useLanguageChangeEffect(async () => {
       }
     }
   }
-
-  .sub-categories-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-  }
-
-  .sub-category-card {
-    background: var(--color-bg);
-    border-radius: 12px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid var(--color-border);
-
-    &:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-      border-color: var(--color-brand);
-
-      .sub-category-image {
-        .image-overlay {
-          opacity: 0.5;
-        }
-
-        img {
-          transform: scale(1.08);
-        }
-      }
-
-      h3 {
-        color: var(--color-brand);
-      }
-    }
-
-    .sub-category-image {
-      position: relative;
-      width: 100%;
-      height: 160px;
-      overflow: hidden;
-      background: var(--color-bg);
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      .image-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.15);
-        transition: opacity 0.3s;
-        opacity: 0;
-      }
-    }
-
-    .sub-category-content {
-      padding: 16px;
-
-      h3 {
-        font-size: 16px;
-        font-weight: 700;
-        margin: 0 0 8px 0;
-        color: var(--color-text-primary);
-        line-height: 1.4;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        transition: color 0.3s;
-      }
-
-      p {
-        color: var(--color-text-secondary);
-        font-size: 13px;
-        line-height: 1.6;
-        margin: 0 0 12px 0;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
-
-      .sub-category-meta {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 12px;
-        color: var(--color-text-secondary);
-        font-weight: 500;
-
-        .meta-icon {
-          display: flex;
-          align-items: center;
-          font-size: 14px;
-          opacity: 0.8;
-        }
-      }
-    }
-  }
 }
 
 // Filter Controls
@@ -537,11 +404,6 @@ useLanguageChangeEffect(async () => {
         font-size: 22px;
       }
     }
-
-    .sub-categories-grid {
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 16px;
-    }
   }
 
   .filter-controls {
@@ -582,11 +444,6 @@ useLanguageChangeEffect(async () => {
       h2 {
         font-size: 20px;
       }
-    }
-
-    .sub-categories-grid {
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 14px;
     }
   }
 
@@ -722,11 +579,6 @@ useLanguageChangeEffect(async () => {
         font-size: 18px;
       }
     }
-
-    .sub-categories-grid {
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
   }
 
   .filter-controls {
@@ -821,10 +673,6 @@ useLanguageChangeEffect(async () => {
       h2 {
         font-size: 17px;
       }
-    }
-
-    .sub-category-card {
-      border-radius: 12px;
     }
   }
 
