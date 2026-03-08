@@ -102,7 +102,7 @@ const categories = [
     status: 'CATEGORY_STATUS_ACTIVE',
     sortOrder: 2,
     isNav: false,
-    icon: 'carbon:server',
+    icon: 'carbon:cloud',
     postCount: 15,
     directPostCount: 15,
     translations: [
@@ -294,7 +294,7 @@ const categories = [
     status: 'CATEGORY_STATUS_ACTIVE',
     sortOrder: 1,
     isNav: false,
-    icon: 'carbon:palette',
+    icon: 'carbon:color-switch',
     postCount: 10,
     directPostCount: 10,
     translations: [

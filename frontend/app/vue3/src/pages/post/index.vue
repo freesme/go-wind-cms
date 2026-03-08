@@ -56,6 +56,7 @@ onMounted(async () => {
       <CategoryFilter
         :categories="categories"
         :selected-category="selectedCategoryId"
+        :tree-mode="true"
         @category-change="handleCategoryChange"
       />
       <PostListWithPagination
