@@ -6,6 +6,7 @@ import {usePostStore} from '@/stores'
 import {useLanguageChangeEffect} from '@/hooks/useLanguageChangeEffect';
 import PostCard from '@/components/PostCard';
 import type {contentservicev1_Post} from "@/api/generated/app/service/v1";
+import {scrollToTop} from "@/utils";
 
 interface Props {
   initialPageSize?: number
@@ -64,7 +65,7 @@ function handlePageChange(page: number) {
   pagination.value.page = page
   emit('page-change', page)
   loadPosts()
-  window.scrollTo({top: 0, behavior: 'smooth'})
+  scrollToTop()
 }
 
 function handlePageSizeChange(pageSize: number) {

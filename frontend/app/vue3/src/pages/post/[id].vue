@@ -13,6 +13,7 @@ import CommentSection from '@/components/CommentSection'
 
 import type {contentservicev1_Post} from "@/api/generated/app/service/v1"
 import {formatDate} from "@/utils/date";
+import {scrollToTop} from "@/utils";
 
 // --- 常量定义 ---
 const SCROLL_THRESHOLD = 500
@@ -125,14 +126,6 @@ async function loadAllData() {
   ]);
 }
 
-
-
-// --- 交互逻辑 ---
-function handleViewRelatedPost(id: number) {
-  router.push(`/post/${id}`)
-  window.scrollTo({top: 0, behavior: 'smooth'})
-}
-
 function handleBack() {
   const from = route.query.from as string
   const categoryId = route.query.categoryId as string
@@ -185,10 +178,6 @@ function copyToClipboard(text: string) {
   }).catch(() => {
     message.error($t('page.post_detail.copy_failed'))
   })
-}
-
-function scrollToTop() {
-  window.scrollTo({top: 0, behavior: 'smooth'})
 }
 
 // --- 目录与滚动 ---
@@ -290,6 +279,23 @@ watch(() => displayContent.value, () => {
   generateTableOfContents()
 })
 
+watch(
+  () => route.params.id,
+  async () => {
+    await loadAllData()
+    // 重新生成目录
+    setTimeout(() => {
+      generateTableOfContents()
+      if (window.location.hash) {
+        const id = window.location.hash.slice(1)
+        setTimeout(() => {
+          scrollToHeading(id)
+        }, 300)
+      }
+    }, 500)
+  }
+)
+
 // 监听语言切换，自动重新加载数据
 useLanguageChangeEffect(loadAllData, {
   immediate: false,    // 已经在 onMounted 中加载，不需要立即执行
@@ -302,35 +308,35 @@ useLanguageChangeEffect(loadAllData, {
     <!-- Loading State - Skeleton Screen -->
     <div v-if="loading" class="post-loading">
       <div class="back-navigation">
-        <n-skeleton :width="100" size="medium" />
+        <n-skeleton :width="100" size="medium"/>
       </div>
       <article class="post-article">
         <div class="post-banner">
-          <n-skeleton height="300px" />
+          <n-skeleton height="300px"/>
         </div>
         <div class="post-wrapper">
           <aside class="toc-sidebar">
             <div class="toc-container">
-              <n-skeleton :width="200" size="large" style="margin-bottom: 16px;" />
-              <n-skeleton :width="180" size="medium" style="margin-bottom: 8px;" />
-              <n-skeleton :width="160" size="medium" style="margin-bottom: 8px;" />
-              <n-skeleton :width="140" size="medium" style="margin-bottom: 8px;" />
-              <n-skeleton :width="120" size="medium" />
+              <n-skeleton :width="200" size="large" style="margin-bottom: 16px;"/>
+              <n-skeleton :width="180" size="medium" style="margin-bottom: 8px;"/>
+              <n-skeleton :width="160" size="medium" style="margin-bottom: 8px;"/>
+              <n-skeleton :width="140" size="medium" style="margin-bottom: 8px;"/>
+              <n-skeleton :width="120" size="medium"/>
             </div>
           </aside>
           <div class="article-content">
             <header class="post-header">
-              <n-skeleton :width="'80%'" size="huge" style="margin-bottom: 16px;" />
-              <n-skeleton :width="'60%'" size="large" style="margin-bottom: 24px;" />
+              <n-skeleton :width="'80%'" size="huge" style="margin-bottom: 16px;"/>
+              <n-skeleton :width="'60%'" size="large" style="margin-bottom: 24px;"/>
               <div class="post-meta">
-                <n-skeleton :width="100" size="medium" />
-                <n-skeleton :width="100" size="medium" />
-                <n-skeleton :width="100" size="medium" />
-                <n-skeleton :width="100" size="medium" />
+                <n-skeleton :width="100" size="medium"/>
+                <n-skeleton :width="100" size="medium"/>
+                <n-skeleton :width="100" size="medium"/>
+                <n-skeleton :width="100" size="medium"/>
               </div>
             </header>
             <div class="post-content">
-              <n-skeleton text :repeat="8" />
+              <n-skeleton text :repeat="8"/>
             </div>
           </div>
         </div>
@@ -339,172 +345,172 @@ useLanguageChangeEffect(loadAllData, {
 
     <!-- Loaded State -->
     <div v-else-if="post" class="post-container">
-        <!-- Back Button -->
-        <div class="back-navigation">
-          <n-button text @click="handleBack()" aria-label="Back">
-            <template #icon>
-              <span class="i-carbon:arrow-left"/>
-            </template>
-            {{ $t('page.post_detail.back') }}
-          </n-button>
+      <!-- Back Button -->
+      <div class="back-navigation">
+        <n-button text @click="handleBack()" aria-label="Back">
+          <template #icon>
+            <span class="i-carbon:arrow-left"/>
+          </template>
+          {{ $t('page.post_detail.back') }}
+        </n-button>
+      </div>
+
+      <!-- Post Article -->
+      <article class="post-article">
+        <!-- Post Thumbnail Banner -->
+        <div v-if="displayThumbnail" class="post-banner">
+          <img
+            :src="displayThumbnail"
+            :alt="displayTitle"
+            loading="lazy"
+          />
+          <div class="banner-overlay"/>
         </div>
 
-        <!-- Post Article -->
-        <article class="post-article">
-          <!-- Post Thumbnail Banner -->
-          <div v-if="displayThumbnail" class="post-banner">
-            <img
-              :src="displayThumbnail"
-              :alt="displayTitle"
-              loading="lazy"
-            />
-            <div class="banner-overlay"/>
-          </div>
-
-          <div class="post-wrapper" :class="{ 'toc-collapsed': !isTocExpanded }">
-            <!-- Table of Contents Sidebar -->
-            <aside v-if="tableOfContents.length > 0 && isTocExpanded" class="toc-sidebar">
-              <div class="toc-container">
-                <div class="toc-header">
-                  <h3 class="toc-title">
-                    <span class="i-carbon:list"/>
-                    {{ $t('page.post_detail.table_of_contents') }}
-                  </h3>
-                  <n-button
-                    text
-                    size="small"
-                    @click="isTocExpanded = false"
-                    class="toc-collapse-btn"
-                    aria-label="Collapse TOC"
-                  >
-                    <span class="i-carbon:chevron-left"/>
-                  </n-button>
-                </div>
-                <nav class="toc-list">
-                  <a
-                    v-for="item in tableOfContents"
-                    :key="item.id"
-                    href="javascript:void(0)"
-                    :class="['toc-item', `level-${item.level}`, { active: activeHeading === item.id }]"
-                    @click.prevent="scrollToHeading(item.id)"
-                  >
-                    {{ item.text }}
-                  </a>
-                </nav>
-              </div>
-            </aside>
-
-            <div class="article-content">
-              <!-- TOC Expand Trigger (when collapsed) -->
-              <div v-if="tableOfContents.length > 0 && !isTocExpanded" class="toc-expand-trigger">
+        <div class="post-wrapper" :class="{ 'toc-collapsed': !isTocExpanded }">
+          <!-- Table of Contents Sidebar -->
+          <aside v-if="tableOfContents.length > 0 && isTocExpanded" class="toc-sidebar">
+            <div class="toc-container">
+              <div class="toc-header">
+                <h3 class="toc-title">
+                  <span class="i-carbon:list"/>
+                  {{ $t('page.post_detail.table_of_contents') }}
+                </h3>
                 <n-button
                   text
-                  @click="isTocExpanded = true"
-                  aria-label="Expand TOC"
+                  size="small"
+                  @click="isTocExpanded = false"
+                  class="toc-collapse-btn"
+                  aria-label="Collapse TOC"
                 >
-                  <template #icon>
-                    <span class="i-carbon:list"/>
-                  </template>
-                  {{ $t('page.post_detail.table_of_contents') }}
-                  <span class="i-carbon:chevron-right"/>
+                  <span class="i-carbon:chevron-left"/>
                 </n-button>
               </div>
+              <nav class="toc-list">
+                <a
+                  v-for="item in tableOfContents"
+                  :key="item.id"
+                  href="javascript:void(0)"
+                  :class="['toc-item', `level-${item.level}`, { active: activeHeading === item.id }]"
+                  @click.prevent="scrollToHeading(item.id)"
+                >
+                  {{ item.text }}
+                </a>
+              </nav>
+            </div>
+          </aside>
 
-              <!-- Post Header -->
-              <header class="post-header">
-                <h1 class="post-title">{{ displayTitle }}</h1>
-                <div class="post-meta">
-                  <div class="meta-item">
-                    <span class="i-carbon:user-avatar"/>
-                    <span>{{ post.authorName }}</span>
-                  </div>
-                  <div class="meta-item">
-                    <span class="i-carbon:calendar"/>
-                    <span>{{ formatDate(post.createdAt) }}</span>
-                  </div>
-                  <div class="meta-item">
-                    <span class="i-carbon:view"/>
-                    <span>{{ post.visits || 0 }}</span>
-                  </div>
-                  <div class="meta-item">
-                    <span class="i-carbon:thumbs-up"/>
-                    <span>{{ post.likes || 0 }}</span>
-                  </div>
+          <div class="article-content">
+            <!-- TOC Expand Trigger (when collapsed) -->
+            <div v-if="tableOfContents.length > 0 && !isTocExpanded" class="toc-expand-trigger">
+              <n-button
+                text
+                @click="isTocExpanded = true"
+                aria-label="Expand TOC"
+              >
+                <template #icon>
+                  <span class="i-carbon:list"/>
+                </template>
+                {{ $t('page.post_detail.table_of_contents') }}
+                <span class="i-carbon:chevron-right"/>
+              </n-button>
+            </div>
+
+            <!-- Post Header -->
+            <header class="post-header">
+              <h1 class="post-title">{{ displayTitle }}</h1>
+              <div class="post-meta">
+                <div class="meta-item">
+                  <span class="i-carbon:user-avatar"/>
+                  <span>{{ post.authorName }}</span>
                 </div>
-              </header>
-
-              <!-- Post Content -->
-              <div class="post-content">
-                <ContentViewer :content="displayContent" type="markdown"/>
+                <div class="meta-item">
+                  <span class="i-carbon:calendar"/>
+                  <span>{{ formatDate(post.createdAt) }}</span>
+                </div>
+                <div class="meta-item">
+                  <span class="i-carbon:view"/>
+                  <span>{{ post.visits || 0 }}</span>
+                </div>
+                <div class="meta-item">
+                  <span class="i-carbon:thumbs-up"/>
+                  <span>{{ post.likes || 0 }}</span>
+                </div>
               </div>
+            </header>
 
-              <!-- Post Actions -->
-              <footer class="post-actions">
-                <n-space size="large">
-                  <n-button
-                    size="large"
-                    circle
-                    :type="isLiked ? 'primary' : 'default'"
-                    @click="handleLike"
-                    :aria-label="$t('page.post_detail.likes')"
-                  >
-                    <template #icon>
-                      <span :class="isLiked ? 'i-carbon:thumbs-up-filled' : 'i-carbon:thumbs-up'"/>
-                    </template>
-                  </n-button>
-                  <n-button
-                    size="large"
-                    circle
-                    :type="isBookmarked ? 'primary' : 'default'"
-                    @click="handleBookmark"
-                    :aria-label="$t('page.post_detail.bookmark')"
-                  >
-                    <template #icon>
+            <!-- Post Content -->
+            <div class="post-content">
+              <ContentViewer :content="displayContent" type="markdown"/>
+            </div>
+
+            <!-- Post Actions -->
+            <footer class="post-actions">
+              <n-space size="large">
+                <n-button
+                  size="large"
+                  circle
+                  :type="isLiked ? 'primary' : 'default'"
+                  @click="handleLike"
+                  :aria-label="$t('page.post_detail.likes')"
+                >
+                  <template #icon>
+                    <span :class="isLiked ? 'i-carbon:thumbs-up-filled' : 'i-carbon:thumbs-up'"/>
+                  </template>
+                </n-button>
+                <n-button
+                  size="large"
+                  circle
+                  :type="isBookmarked ? 'primary' : 'default'"
+                  @click="handleBookmark"
+                  :aria-label="$t('page.post_detail.bookmark')"
+                >
+                  <template #icon>
                       <span
                         :class="isBookmarked ? 'i-carbon:bookmark-filled' : 'i-carbon:bookmark'"/>
-                    </template>
-                  </n-button>
-                  <n-button
-                    size="large"
-                    circle
-                    @click="handleShare"
-                    :aria-label="$t('page.post_detail.share')"
-                  >
-                    <template #icon>
-                      <span class="i-carbon:share"/>
-                    </template>
-                  </n-button>
-                </n-space>
-              </footer>
-            </div>
+                  </template>
+                </n-button>
+                <n-button
+                  size="large"
+                  circle
+                  @click="handleShare"
+                  :aria-label="$t('page.post_detail.share')"
+                >
+                  <template #icon>
+                    <span class="i-carbon:share"/>
+                  </template>
+                </n-button>
+              </n-space>
+            </footer>
           </div>
-        </article>
+        </div>
+      </article>
 
-        <!-- Comments Section -->
-        <CommentSection
-          :object-id="postId"
-          content-type="CONTENT_TYPE_POST"
-          @update:comments="() => {}"
+      <!-- Comments Section -->
+      <CommentSection
+        :object-id="postId"
+        content-type="CONTENT_TYPE_POST"
+        @update:comments="() => {}"
+      />
+
+      <!-- Related Posts -->
+      <section v-if="relatedPosts.length > 0" class="related-section">
+        <div class="section-header">
+          <h2>
+            <span class="i-carbon:book"/>
+            {{ $t('page.post_detail.related_posts') }}
+          </h2>
+        </div>
+        <PostList
+          :posts="relatedPosts"
+          :loading="false"
+          :show-skeleton="false"
+          :from="'category'"
+          :category-id="post?.categoryIds?.[0]"
         />
-
-        <!-- Related Posts -->
-        <section v-if="relatedPosts.length > 0" class="related-section">
-          <div class="section-header">
-            <h2>
-              <span class="i-carbon:book"/>
-              {{ $t('page.post_detail.related_posts') }}
-            </h2>
-          </div>
-          <PostList
-            :posts="relatedPosts"
-            :loading="false"
-            :show-skeleton="false"
-            :from="'category'"
-            :category-id="post?.categoryIds?.[0]"
-          />
-        </section>
-      </div>
-      <n-empty v-else :description="$t('page.post_detail.post_not_found')"/>
+      </section>
+    </div>
+    <n-empty v-else :description="$t('page.post_detail.post_not_found')"/>
 
     <!-- Back to Top Button -->
     <transition name="fade">
@@ -705,14 +711,12 @@ useLanguageChangeEffect(loadAllData, {
   flex: 0 0 200px;
   width: 200px;
   padding: 40px 16px;
-  background:
-    var(--color-surface),
-    linear-gradient(135deg, rgba(168, 85, 247, 0.06), rgba(102, 126, 234, 0.04)); // 渐变紫色调，增强层次
+  background: var(--color-surface),
+  linear-gradient(135deg, rgba(168, 85, 247, 0.06), rgba(102, 126, 234, 0.04)); // 渐变紫色调，增强层次
   backdrop-filter: blur(10px);
-  box-shadow:
-    2px 0 16px rgba(0, 0, 0, 0.1),
-    -2px 0 12px rgba(0, 0, 0, 0.06),
-    inset 0 0 0 1px rgba(168, 85, 247, 0.12); // 增强边框和阴影，提升层次感
+  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.1),
+  -2px 0 12px rgba(0, 0, 0, 0.06),
+  inset 0 0 0 1px rgba(168, 85, 247, 0.12); // 增强边框和阴影，提升层次感
   max-height: calc(100vh - 120px);
   position: sticky;
   top: 60px; // 距离顶部 60px 开始固定
@@ -837,8 +841,8 @@ useLanguageChangeEffect(loadAllData, {
   padding-top: 56.25%; // 16:9 比例（优化过的）
   overflow: hidden;
   background: linear-gradient(135deg,
-    var(--color-bg) 0%,
-    var(--color-surface) 100%); // 使用 CSS 变量支持明暗主题
+  var(--color-bg) 0%,
+  var(--color-surface) 100%); // 使用 CSS 变量支持明暗主题
 
   img {
     position: absolute;
@@ -888,9 +892,9 @@ useLanguageChangeEffect(loadAllData, {
     right: 0;
     height: 12px;
     background: linear-gradient(to bottom,
-      rgba(0, 0, 0, 0.08),
-      rgba(0, 0, 0, 0.04) 50%,
-      transparent);
+    rgba(0, 0, 0, 0.08),
+    rgba(0, 0, 0, 0.04) 50%,
+    transparent);
     pointer-events: none;
   }
 }
@@ -1304,10 +1308,10 @@ useLanguageChangeEffect(loadAllData, {
         right: 0;
         height: 120px;
         background: linear-gradient(to bottom,
-          transparent 0%,
-          rgba(0, 0, 0, 0.15) 30%,
-          rgba(0, 0, 0, 0.4) 70%,
-          rgba(0, 0, 0, 0.6) 100%);
+        transparent 0%,
+        rgba(0, 0, 0, 0.15) 30%,
+        rgba(0, 0, 0, 0.4) 70%,
+        rgba(0, 0, 0, 0.6) 100%);
         pointer-events: none;
       }
     }
@@ -1509,17 +1513,17 @@ useLanguageChangeEffect(loadAllData, {
   // ✅ 新增：移动端相关文章列表适配
   .related-section {
     padding: 32px 24px !important; // 减小内边距
-    
+
     :deep(.posts-grid) {
       grid-template-columns: 1fr;
       gap: 28px; // 调整卡片间距
-      
+
       // 确保卡片在移动端宽度适中
       > * {
         max-width: 100%;
       }
     }
-    
+
     .section-header {
       h2 {
         font-size: 24px; // 稍微减小标题字体

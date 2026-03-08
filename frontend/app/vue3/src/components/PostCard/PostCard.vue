@@ -4,6 +4,7 @@ import {useRouter} from 'vue-router'
 import {formatDate} from "@/utils/date";
 import {usePostStore} from '@/stores';
 import type {contentservicev1_Post} from "@/api/generated/app/service/v1";
+import {scrollToTop} from "@/utils";
 
 interface Props {
   post: contentservicev1_Post
@@ -29,6 +30,8 @@ function handleViewPost() {
     path: `/post/${props.post.id}`,
     query
   })
+
+  scrollToTop()
 }
 </script>
 
