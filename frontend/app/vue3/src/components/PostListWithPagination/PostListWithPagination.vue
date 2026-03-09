@@ -11,14 +11,23 @@ import {scrollToTop} from "@/utils";
 interface Props {
   initialPageSize?: number
   pageSizes?: number[]
-  categoryId?: number | null
+
   from?: string
+
+  categoryId?: number | null
+  tagId?: number | null
+
+  categoryIds?: number[] | null
+  tagIds?: number[] | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   initialPageSize: 12,
   pageSizes: () => [12, 24, 36, 48],
   categoryId: null,
+  tagId: null,
+  categoryIds: null,
+  tagIds: null,
   from: 'category'
 })
 
@@ -48,7 +57,16 @@ async function loadPosts() {
     const filters: any = {status: 'POST_STATUS_PUBLISHED'}
 
     if (props.categoryId) {
-      filters.category_ids__in = `[${props.categoryId}]`
+      filters.category_ids__in = [props.categoryId]
+    }
+    if (props.tagId) {
+      filters.tag_ids__in = [props.tagId]
+    }
+    if (props.categoryIds) {
+      filters.category_ids__in = props.categoryIds
+    }
+    if (props.tagIds) {
+      filters.tag_ids__in = props.tagIds
     }
 
     const res = await postStore.listPost(pagination.value, filters)

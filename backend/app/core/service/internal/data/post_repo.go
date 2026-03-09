@@ -2,18 +2,19 @@ package data
 
 import (
 	"context"
+	"strconv"
 	"strings"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/tx7do/go-crud/pagination"
-	paginationFilter "github.com/tx7do/go-crud/pagination/filter"
 	"github.com/tx7do/kratos-bootstrap/bootstrap"
 	"google.golang.org/protobuf/types/known/fieldmaskpb"
 
 	paginationV1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
 	entCrud "github.com/tx7do/go-crud/entgo"
+	"github.com/tx7do/go-crud/pagination"
+	paginationFilter "github.com/tx7do/go-crud/pagination/filter"
 
 	"github.com/tx7do/go-utils/copierutil"
 	"github.com/tx7do/go-utils/mapper"
@@ -22,6 +23,8 @@ import (
 
 	"go-wind-cms/app/core/service/internal/data/ent"
 	"go-wind-cms/app/core/service/internal/data/ent/post"
+	"go-wind-cms/app/core/service/internal/data/ent/postcategory"
+	"go-wind-cms/app/core/service/internal/data/ent/posttag"
 	"go-wind-cms/app/core/service/internal/data/ent/predicate"
 
 	contentV1 "go-wind-cms/api/gen/go/content/service/v1"
@@ -151,13 +154,14 @@ func (r *PostRepo) prepareTranslationMaskFields(req *paginationV1.PagingRequest)
 		}
 
 		req.FieldMask = FilterViewMask(excludeFields, req.FieldMask)
-
 	} else {
 		needQueryTranslation = true
 	}
 
 	excludeConditions = pagination.FilterFields(filterExpr, []string{
 		"locale",
+		"tag_ids",
+		"category_ids",
 	})
 	req.FilteringType = &paginationV1.PagingRequest_FilterExpr{FilterExpr: filterExpr}
 
@@ -169,11 +173,108 @@ func (r *PostRepo) List(ctx context.Context, req *paginationV1.PagingRequest) (*
 		return nil, contentV1.ErrorBadRequest("invalid parameter")
 	}
 
-	builder := r.entClient.Client().Post.Query()
+	builder := r.entClient.Client().Debug().Post.Query()
 
 	excludeConditions, translationMaskFields, needQueryTranslation, err := r.prepareTranslationMaskFields(req)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(excludeConditions) > 0 {
+		var postIDs []uint32
+
+		var tagIDs []uint32
+		var categoryIDs []uint32
+		for _, cond := range excludeConditions {
+			//r.log.Debugf("exclude condition: %s %v", cond.GetField(), cond.GetValues())
+
+			var val uint64
+			switch cond.GetField() {
+			case "tag_ids":
+				for _, v := range cond.GetValues() {
+					if val, err = strconv.ParseUint(v, 10, 64); err == nil {
+						tagIDs = append(tagIDs, uint32(val))
+					} else {
+						r.log.Errorf("parse tag_ids value failed: %s", err.Error())
+					}
+				}
+
+			case "category_ids":
+				for _, v := range cond.GetValues() {
+					if val, err = strconv.ParseUint(v, 10, 64); err == nil {
+						categoryIDs = append(categoryIDs, uint32(val))
+					} else {
+						r.log.Errorf("parse category_ids value failed: %s", err.Error())
+					}
+				}
+			}
+		}
+
+		if len(tagIDs) > 0 {
+			var tempIDs []uint32
+			tempIDs, err = r.postTagRepo.ListPostIDsByTagIDs(ctx, tagIDs)
+			if err != nil {
+				r.log.Errorf("query post IDs by tag IDs failed: %s", err.Error())
+				return nil, contentV1.ErrorInternalServerError("query post IDs by tag IDs failed")
+			}
+			postIDs = append(postIDs, tempIDs...)
+		}
+
+		if len(categoryIDs) > 0 {
+			var tempIDs []uint32
+			tempIDs, err = r.postCategoryRepo.ListPostIDsByCategoryIDs(ctx, categoryIDs)
+			if err != nil {
+				r.log.Errorf("query post IDs by category IDs failed: %s", err.Error())
+				return nil, contentV1.ErrorInternalServerError("query post IDs by category IDs failed")
+			}
+			postIDs = append(postIDs, tempIDs...)
+		}
+
+		builder.Modify(func(s *sql.Selector) {
+			if len(tagIDs) > 0 {
+				s.Join(
+					sql.Table(posttag.Table).
+						As("t1"),
+				).
+					On("\"t1\".post_id", "\"posts\".id")
+
+				var ids = make([]any, 0, len(tagIDs))
+				for _, id := range tagIDs {
+					ids = append(ids, id)
+				}
+				s.Where(
+					sql.In("\"t1\".tag_id", ids...),
+				)
+			}
+
+			if len(categoryIDs) > 0 {
+				s.Join(
+					sql.Table(postcategory.Table).
+						As("t1"),
+				).
+					On("\"t1\".post_id", "\"posts\".id")
+
+				var ids = make([]any, 0, len(categoryIDs))
+				for _, id := range categoryIDs {
+					ids = append(ids, id)
+				}
+				s.Where(
+					sql.In("\"t1\".category_id", ids...),
+				)
+			}
+		})
+	}
+
+	if req.FieldMask != nil && len(req.FieldMask.Paths) > 0 {
+		whereSelectors, err := r.repository.BuildSelectorWithTable(post.Table, req.FieldMask.Paths)
+		if err != nil {
+			r.log.Errorf("build selector with table failed: %s", err.Error())
+			return nil, err
+		}
+
+		builder.Modify(whereSelectors)
+
+		req.FieldMask = nil
 	}
 
 	ret, err := r.repository.ListWithPaging(ctx, builder, builder.Clone(), req)

@@ -96,6 +96,29 @@ func (r *PostCategoryRepo) ListCategoryIDs(ctx context.Context, postID uint32) (
 	return categoryIDs, nil
 }
 
+func (r *PostCategoryRepo) ListCategoryIDsByPostIDs(ctx context.Context, postIDs []uint32) ([]uint32, error) {
+	if len(postIDs) == 0 {
+		return nil, nil
+	}
+
+	categories, err := r.entClient.Client().PostCategory.Query().
+		Where(postcategory.PostIDIn(postIDs...)).
+		All(ctx)
+	if err != nil {
+		r.log.Errorf("failed to query post-category by post IDs: %v", err)
+		return nil, err
+	}
+
+	categoryIDs := make([]uint32, 0, len(categories))
+	for _, c := range categories {
+		if c == nil || c.CategoryID == nil {
+			continue
+		}
+		categoryIDs = append(categoryIDs, *c.CategoryID)
+	}
+	return categoryIDs, nil
+}
+
 // ListPostIDs 列出指定分类关联的所有帖子ID，通常在查询分类详情时调用
 func (r *PostCategoryRepo) ListPostIDs(ctx context.Context, categoryID uint32) ([]uint32, error) {
 	if categoryID == 0 {
@@ -107,6 +130,29 @@ func (r *PostCategoryRepo) ListPostIDs(ctx context.Context, categoryID uint32) (
 		All(ctx)
 	if err != nil {
 		r.log.Errorf("failed to query post-category by category ID: %v", err)
+		return nil, err
+	}
+
+	postIDs := make([]uint32, 0, len(posts))
+	for _, p := range posts {
+		if p.PostID == nil {
+			continue
+		}
+		postIDs = append(postIDs, *p.PostID)
+	}
+	return postIDs, nil
+}
+
+func (r *PostCategoryRepo) ListPostIDsByCategoryIDs(ctx context.Context, categoryIDs []uint32) ([]uint32, error) {
+	if len(categoryIDs) == 0 {
+		return nil, nil
+	}
+
+	posts, err := r.entClient.Client().PostCategory.Query().
+		Where(postcategory.CategoryIDIn(categoryIDs...)).
+		All(ctx)
+	if err != nil {
+		r.log.Errorf("failed to query post-category by category IDs: %v", err)
 		return nil, err
 	}
 

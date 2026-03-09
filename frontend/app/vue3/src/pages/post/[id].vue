@@ -478,7 +478,7 @@ useLanguageChangeEffect(loadAllData, {
           </h2>
         </div>
         <PostList
-          :query-params="{status: 'POST_STATUS_PUBLISHED', categoryIds__in: post?.categoryIds}"
+          :query-params="{status: 'POST_STATUS_PUBLISHED', category_ids__in: post?.categoryIds}"
           :field-mask="'id,status,sort_order,is_featured,visits,likes,comment_count,author_name,available_languages,created_at,translations.id,translations.post_id,translations.language_code,translations.title,translations.summary,translations.thumbnail'"
           :order-by="['-sortOrder']"
           :page="1"

@@ -125,6 +125,32 @@ func (r *PostTagRepo) ListTagIDs(ctx context.Context, postID uint32) ([]uint32, 
 	return tagIDs, nil
 }
 
+func (r *PostTagRepo) ListTagIDsByPostIDs(ctx context.Context, postIDs []uint32) ([]uint32, error) {
+	if len(postIDs) == 0 {
+		return nil, nil
+	}
+
+	tags, err := r.entClient.Client().PostTag.Query().
+		Where(
+			posttag.PostIDIn(postIDs...),
+		).
+		All(ctx)
+	if err != nil {
+		r.log.Errorf("failed to query post-tag by post IDs: %v", err)
+		return nil, err
+	}
+
+	tagIDs := make([]uint32, 0, len(tags))
+	for _, tag := range tags {
+		if tag == nil || tag.TagID == nil {
+			continue
+		}
+
+		tagIDs = append(tagIDs, *tag.TagID)
+	}
+	return tagIDs, nil
+}
+
 // ListPostIDs 列出指定标签关联的所有帖子ID，通常在查询标签详情时调用
 func (r *PostTagRepo) ListPostIDs(ctx context.Context, tagID uint32) ([]uint32, error) {
 	if tagID == 0 {
@@ -138,6 +164,32 @@ func (r *PostTagRepo) ListPostIDs(ctx context.Context, tagID uint32) ([]uint32, 
 		All(ctx)
 	if err != nil {
 		r.log.Errorf("failed to query post-tag by tag ID: %v", err)
+		return nil, err
+	}
+
+	postIDs := make([]uint32, 0, len(posts))
+	for _, post := range posts {
+		if post.PostID == nil {
+			continue
+		}
+
+		postIDs = append(postIDs, *post.PostID)
+	}
+	return postIDs, nil
+}
+
+func (r *PostTagRepo) ListPostIDsByTagIDs(ctx context.Context, tagIDs []uint32) ([]uint32, error) {
+	if len(tagIDs) == 0 {
+		return nil, nil
+	}
+
+	posts, err := r.entClient.Client().PostTag.Query().
+		Where(
+			posttag.TagIDIn(tagIDs...),
+		).
+		All(ctx)
+	if err != nil {
+		r.log.Errorf("failed to query post-tag by tag IDs: %v", err)
 		return nil, err
 	}
 
