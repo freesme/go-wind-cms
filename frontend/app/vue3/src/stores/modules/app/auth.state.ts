@@ -94,19 +94,20 @@ export const useAuthStore = defineStore('auth', () => {
       await authnService.Logout({})
     } catch {
       // 不做任何处理
-    }
-    resetAllStores()
-    accessStore.setLoginExpired(false)
+    } finally {
+      resetAllStores()
+      accessStore.setLoginExpired(false)
 
-    // 回登录页带上当前路由地址
-    await router.replace({
-      path: LOGIN_PATH,
-      query: redirect
-        ? {
-          redirect: encodeURIComponent(router.currentRoute.value.fullPath),
-        }
-        : {},
-    })
+      // 回登录页带上当前路由地址
+      await router.replace({
+        path: LOGIN_PATH,
+        query: redirect
+          ? {
+            redirect: encodeURIComponent(router.currentRoute.value.fullPath),
+          }
+          : {},
+      })
+    }
   }
 
   /**

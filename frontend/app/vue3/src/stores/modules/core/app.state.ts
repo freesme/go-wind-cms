@@ -17,9 +17,13 @@ export const useAppStore = defineStore('app', () => {
     mode.value = val
   }
 
+  function $reset() {
+  }
+
   return {
     mode,
     switchMode,
+    $reset
   }
 }, {
   persist: true,

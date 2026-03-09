@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia'
+import {defineStore} from 'pinia'
 import {ref} from 'vue'
-import type { RouteRecordName } from 'vue-router'
-import type { EnhancedRouteLocation } from '@/router/types'
+import type {RouteRecordName} from 'vue-router'
+import type {EnhancedRouteLocation} from '@/router/types'
 
 export const useRouteCacheStore = defineStore('route-cache', () => {
   const routeCaches = ref<RouteRecordName[]>([])
@@ -14,9 +14,13 @@ export const useRouteCacheStore = defineStore('route-cache', () => {
       routeCaches.value.push(route.name)
   }
 
+  function $reset() {
+  }
+
   return {
     routeCaches,
     addRoute,
+    $reset,
   }
 })
 

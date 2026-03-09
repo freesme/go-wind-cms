@@ -182,6 +182,9 @@ export const useLanguageChangeStore = defineStore('language-change', () => {
     languageChangeCallbacks.value.clear();
   }
 
+  function $reset() {
+  }
+
   return {
     currentLanguage,
     isSwitching,
@@ -190,5 +193,6 @@ export const useLanguageChangeStore = defineStore('language-change', () => {
     initializeLanguageWatcher,
     getCurrentLanguage,
     clearAllCallbacks,
+    $reset
   };
 });
