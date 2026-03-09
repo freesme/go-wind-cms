@@ -25,15 +25,19 @@ const message = useMessage()
 
 const loading = ref(false)
 const tags = ref<contentservicev1_Tag[]>([])
+const page = ref(1)
+const pageSize = ref(20)
+const total = ref(0)
 
 async function loadTags() {
   loading.value = true
   try {
     const res = await tagStore.listTag(
-      undefined,
+      {page: page.value, pageSize: pageSize.value},
       {status: 'TAG_STATUS_ACTIVE'}
     )
     tags.value = res.items || []
+    total.value = res.total || 0
   } catch (error) {
     console.error('Load tags failed:', error)
     message.error($t('page.post_detail.load_failed'))
@@ -44,6 +48,17 @@ async function loadTags() {
 
 function handleTagClick(id: number) {
   router.push(`/tag/${id}`)
+}
+
+function handlePageChange(newPage: number) {
+  page.value = newPage
+  loadTags()
+}
+
+function handlePageSizeChange(newSize: number) {
+  pageSize.value = newSize
+  page.value = 1
+  loadTags()
 }
 
 onMounted(async () => {
@@ -85,7 +100,7 @@ useLanguageChangeEffect(async () => {
       </div>
 
       <!-- Tags List -->
-      <div v-else-if="tags.length > 0" class="tags-grid">
+      <div v-else-if="tags.length > 0 || total > 0" class="tags-grid">
         <div
           v-for="tag in tags"
           :key="tag.id"
@@ -114,12 +129,26 @@ useLanguageChangeEffect(async () => {
             </div>
           </div>
         </div>
+        <div v-if="tags.length === 0 && total > 0" class="empty-page">
+          <n-empty :description="$t('page.tags.no_tags_in_page')" />
+        </div>
       </div>
-
       <!-- Empty State -->
       <div v-else class="empty-state">
         <n-empty :description="$t('page.tags.no_tags')"/>
       </div>
+      <n-pagination
+        v-if="total > pageSize"
+        :page="page"
+        :page-size="pageSize"
+        :page-count="Math.ceil(total / pageSize)"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-slot="7"
+        :show-size-picker="true"
+        @update:page="handlePageChange"
+        @update:page-size="handlePageSizeChange"
+        style="margin: 32px auto 0; display: flex; justify-content: center;"
+      />
     </div>
   </div>
 </template>

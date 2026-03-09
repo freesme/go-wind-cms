@@ -45,7 +45,10 @@ async function loadCategory() {
 
   loading.value = true
   try {
-    const categoryData = await categoryStore.getCategory(categoryId.value)
+    const categoryData = await categoryStore.getCategory(
+      categoryId.value,
+      'id,status,sort_order,icon,code,post_count,direct_post_count,parent_id,created_at,children,translations.id,translations.category_id,translations.name,translations.language_code,translations.description,translations.thumbnail,translations.cover_image',
+    )
     category.value = categoryData
     // 提取子分类 - 使用新的数组引用确保响应式更新
     if (categoryData?.children && categoryData.children.length > 0) {

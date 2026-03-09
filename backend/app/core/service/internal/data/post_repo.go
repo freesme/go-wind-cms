@@ -149,10 +149,12 @@ func (r *PostRepo) prepareTranslationMaskFields(req *paginationV1.PagingRequest)
 				}
 			}
 		}
+
+		req.FieldMask = FilterViewMask(excludeFields, req.FieldMask)
+
 	} else {
 		needQueryTranslation = true
 	}
-	req.FieldMask = FilterViewMask(excludeFields, req.FieldMask)
 
 	excludeConditions = pagination.FilterFields(filterExpr, []string{
 		"locale",

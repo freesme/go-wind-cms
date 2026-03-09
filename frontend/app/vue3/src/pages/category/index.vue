@@ -26,7 +26,9 @@ async function loadCategories() {
   try {
     const res = await categoryStore.listCategory(
       undefined,
-      {status: 'CATEGORY_STATUS_ACTIVE'}
+      {status: 'CATEGORY_STATUS_ACTIVE'},
+      'id,status,sort_order,icon,code,post_count,direct_post_count,parent_id,created_at,children,translations.id,translations.category_id,translations.name,translations.language_code,translations.description,translations.thumbnail,translations.cover_image',
+      ['-sortOrder']
     )
     categories.value = res.items || []
   } catch (error) {

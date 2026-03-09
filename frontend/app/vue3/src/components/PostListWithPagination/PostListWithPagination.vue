@@ -48,7 +48,7 @@ async function loadPosts() {
     const filters: any = {status: 'POST_STATUS_PUBLISHED'}
 
     if (props.categoryId) {
-      filters.categoryIds = [props.categoryId]
+      filters.category_ids__in = `[${props.categoryId}]`
     }
 
     const res = await postStore.listPost(pagination.value, filters)

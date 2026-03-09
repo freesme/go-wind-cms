@@ -159,6 +159,7 @@ func (r *CategoryRepo) prepareTranslationMaskFields(req *paginationV1.PagingRequ
 			}
 			if strings.HasPrefix(path, "translations.") {
 				excludeFields = append(excludeFields, path)
+
 				path = strings.TrimPrefix(path, "translations.")
 				if len(path) > 0 {
 					translationMaskFields = append(translationMaskFields, path)
@@ -169,10 +170,12 @@ func (r *CategoryRepo) prepareTranslationMaskFields(req *paginationV1.PagingRequ
 				excludeFields = append(excludeFields, path)
 			}
 		}
+
+		req.FieldMask = FilterViewMask(excludeFields, req.FieldMask)
+
 	} else {
 		needQueryTranslation = true
 	}
-	req.FieldMask = FilterViewMask(excludeFields, req.FieldMask)
 
 	excludeConditions = pagination.FilterFields(filterExpr, []string{
 		"locale",
@@ -263,50 +266,149 @@ func (r *CategoryRepo) List(ctx context.Context, req *paginationV1.PagingRequest
 	}, nil
 }
 
+// 递归查询子节点
+func (r *CategoryRepo) getCategoryWithChildren(ctx context.Context, id uint32, locale string, viewMask *fieldmaskpb.FieldMask, translationMaskFields []string) (*contentV1.Category, error) {
+	entity, err := r.entClient.Client().Category.Query().Where(category.IDEQ(id)).Only(ctx)
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return nil, contentV1.ErrorFileNotFound("category not found")
+		}
+		r.log.Errorf("query category failed: %s", err.Error())
+		return nil, contentV1.ErrorInternalServerError("query category failed")
+	}
+	dto := r.mapper.ToDTO(entity)
+
+	// 查询子节点
+	childrenEntities, err := r.entClient.Client().Category.Query().Where(category.ParentIDEQ(id)).All(ctx)
+	if err != nil {
+		r.log.Errorf("query children failed: %s", err.Error())
+		return nil, contentV1.ErrorInternalServerError("query children failed")
+	}
+	for _, child := range childrenEntities {
+		childDTO, err := r.getCategoryWithChildren(ctx, child.ID, locale, viewMask, translationMaskFields)
+		if err != nil {
+			return nil, err
+		}
+		dto.Children = append(dto.Children, childDTO)
+	}
+
+	// 查询翻译和可用语言（可复用原有逻辑）
+	translations, err := r.categoryTranslationRepo.ListTranslations(
+		ctx,
+		dto.GetId(),
+		locale,
+		&fieldmaskpb.FieldMask{Paths: translationMaskFields},
+	)
+	if err == nil {
+		dto.Translations = translations
+	}
+	languages, err := r.categoryTranslationRepo.ListAvailedLanguages(ctx, dto.GetId())
+	if err == nil {
+		dto.AvailableLanguages = languages
+	}
+
+	return dto, nil
+}
+
 func (r *CategoryRepo) Get(ctx context.Context, req *contentV1.GetCategoryRequest) (*contentV1.Category, error) {
 	if req == nil {
 		return nil, contentV1.ErrorBadRequest("invalid parameter")
 	}
 
-	builder := r.entClient.Client().Category.Query()
+	treeTravel := false
+	var translationMaskFields []string
+	excludeFields := []string{"translations", "available_languages"}
+	if req.ViewMask != nil && len(req.ViewMask.Paths) > 0 {
+		for _, path := range req.ViewMask.Paths {
+			path = strings.TrimSpace(path)
 
+			if strings.HasPrefix(path, "translations.") {
+				excludeFields = append(excludeFields, path)
+
+				path = strings.TrimPrefix(path, "translations.")
+				if len(path) > 0 {
+					translationMaskFields = append(translationMaskFields, path)
+				}
+			}
+			if path == "children" {
+				treeTravel = true
+				excludeFields = append(excludeFields, path)
+			}
+		}
+		req.ViewMask = FilterViewMask(excludeFields, req.ViewMask)
+	}
+
+	if !treeTravel {
+		var dto *contentV1.Category
+
+		switch req.QueryBy.(type) {
+		case *contentV1.GetCategoryRequest_Id:
+			entity, err := r.entClient.Client().Category.Query().Where(category.IDEQ(req.GetId())).Only(ctx)
+			if err != nil {
+				if ent.IsNotFound(err) {
+					return nil, contentV1.ErrorFileNotFound("category not found")
+				}
+				r.log.Errorf("query category failed: %s", err.Error())
+				return nil, contentV1.ErrorInternalServerError("query category failed")
+			}
+			dto = r.mapper.ToDTO(entity)
+
+		case *contentV1.GetCategoryRequest_Code:
+			entity, err := r.entClient.Client().Category.Query().Where(category.CodeEQ(req.GetCode())).Only(ctx)
+			if err != nil {
+				if ent.IsNotFound(err) {
+					return nil, contentV1.ErrorFileNotFound("category not found")
+				}
+				r.log.Errorf("query category failed: %s", err.Error())
+				return nil, contentV1.ErrorInternalServerError("query category failed")
+			}
+			dto = r.mapper.ToDTO(entity)
+
+		default:
+			return nil, contentV1.ErrorBadRequest("invalid query_by value")
+		}
+
+		translations, err := r.categoryTranslationRepo.ListTranslations(
+			ctx,
+			dto.GetId(),
+			req.GetLocale(),
+			&fieldmaskpb.FieldMask{Paths: translationMaskFields},
+		)
+		if err != nil {
+			r.log.Errorf("query translations failed: %s", err.Error())
+			return nil, contentV1.ErrorInternalServerError("query translations failed")
+		}
+		dto.Translations = translations
+
+		languages, err := r.categoryTranslationRepo.ListAvailedLanguages(ctx, dto.GetId())
+		if err != nil {
+			r.log.Errorf("query availed languages failed: %s", err.Error())
+			return nil, contentV1.ErrorInternalServerError("query availed languages failed")
+		}
+		dto.AvailableLanguages = languages
+
+		return dto, nil
+	}
+
+	var id uint32
 	switch req.QueryBy.(type) {
 	case *contentV1.GetCategoryRequest_Id:
-		builder.Where(category.IDEQ(req.GetId()))
+		id = req.GetId()
 	case *contentV1.GetCategoryRequest_Code:
-		builder.Where(category.CodeEQ(req.GetCode()))
+		entity, err := r.entClient.Client().Category.Query().Where(category.CodeEQ(req.GetCode())).Only(ctx)
+		if err != nil {
+			if ent.IsNotFound(err) {
+				return nil, contentV1.ErrorFileNotFound("category not found")
+			}
+			r.log.Errorf("query category failed: %s", err.Error())
+			return nil, contentV1.ErrorInternalServerError("query category failed")
+		}
+		id = entity.ID
 	default:
 		return nil, contentV1.ErrorBadRequest("invalid query_by value")
 	}
 
-	entity, err := builder.Only(ctx)
-	if err != nil {
-		if ent.IsNotFound(err) {
-			return nil, contentV1.ErrorFileNotFound("category not found")
-		}
-
-		r.log.Errorf("query category failed: %s", err.Error())
-
-		return nil, contentV1.ErrorInternalServerError("query category failed")
-	}
-
-	dto := r.mapper.ToDTO(entity)
-
-	translations, err := r.categoryTranslationRepo.ListTranslations(ctx, dto.GetId(), req.GetLocale(), nil)
-	if err != nil {
-		r.log.Errorf("query translations failed: %s", err.Error())
-		return nil, contentV1.ErrorInternalServerError("query translations failed")
-	}
-	dto.Translations = translations
-
-	languages, err := r.categoryTranslationRepo.ListAvailedLanguages(ctx, dto.GetId())
-	if err != nil {
-		r.log.Errorf("query availed languages failed: %s", err.Error())
-		return nil, contentV1.ErrorInternalServerError("query availed languages failed")
-	}
-	dto.AvailableLanguages = languages
-
-	return dto, nil
+	return r.getCategoryWithChildren(ctx, id, req.GetLocale(), req.GetViewMask(), translationMaskFields)
 }
 
 func (r *CategoryRepo) Create(ctx context.Context, req *contentV1.CreateCategoryRequest) (dto *contentV1.Category, err error) {

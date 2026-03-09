@@ -45,8 +45,13 @@ export const useCategoryStore = defineStore('category', () => {
   /**
    * 获取分类
    */
-  async function getCategory(id: number) {
-    return await service.Get({id});
+  async function getCategory(id: number, fieldMask?: null | string) {
+    const locale = currentLocaleLanguageCode();
+    return await service.Get({
+      id,
+      locale,
+      viewMask: fieldMask
+    });
   }
 
   /**
