@@ -1,6 +1,7 @@
 import {ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {defineStore} from 'pinia'
+import CryptoJS from 'crypto-js';
 
 import {DEFAULT_HOME_PATH, LOGIN_PATH} from '@/constants'
 import type {Recordable} from '@/typings/helper'
@@ -47,7 +48,9 @@ export const useAuthStore = defineStore('auth', () => {
 
       const {access_token} = await authnService.Login({
         username: params.username,
-        password: params.password,
+        email: params.email,
+        mobile: params.mobile,
+        password: encryptPassword(params.password),
         grant_type: 'password',
       })
 
@@ -142,6 +145,35 @@ export const useAuthStore = defineStore('auth', () => {
    */
   async function fetchUserInfo() {
     return (await userProfileService.GetUser({})) as unknown as UserInfo;
+  }
+
+  /**
+   * 加密数据
+   * @param data 待加密数据
+   * @param key 密钥
+   * @param iv 初始向量
+   */
+  function encryptData(data: string, key: string, iv: string): string {
+    const keyHex = CryptoJS.enc.Utf8.parse(key);
+    const ivHex = CryptoJS.enc.Utf8.parse(iv);
+    const encrypted = CryptoJS.AES.encrypt(data, keyHex, {
+      iv: ivHex,
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7,
+    });
+    return encrypted.toString();
+  }
+
+  /**
+   * 加密密码
+   * @param password 明文密码
+   */
+  function encryptPassword(password: string): string {
+    const key = import.meta.env.VITE_AES_KEY;
+    if (!key) {
+      throw new Error('VITE_AES_KEY is not set in environment');
+    }
+    return encryptData(password, key, key);
   }
 
   function $reset() {

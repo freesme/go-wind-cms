@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { definePage } from 'unplugin-vue-router/runtime'
-import { ref, onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { useUserProfileStore } from '@/stores/modules/app/user-profile.state'
-import { usePostStore } from '@/stores/modules/app/post.state'
-import { $t } from '@/locales'
+import {definePage} from 'unplugin-vue-router/runtime'
+import {ref, onMounted, computed} from 'vue'
+import {useRouter} from 'vue-router'
+
+import {useUserProfileStore} from '@/stores/modules/app/user-profile.state'
+import {usePostStore} from '@/stores/modules/app/post.state'
+import {$t} from '@/locales'
 import type {contentservicev1_Post, identityservicev1_User} from '@/api/generated/app/service/v1'
 import {useLanguageChangeEffect} from '@/hooks/useLanguageChangeEffect';
 
@@ -116,12 +117,13 @@ async function loadUserProfile() {
     const result = await userProfileStore.getMe()
     user.value = result || null
 
-    // 如果当前 tab 是 posts，自动加载帖子列表
+    // 如果成功获取用户信息且当前 tab 是 posts，自动加载帖子列表
     if (user.value && activeTab.value === 'posts') {
       await loadUserPosts()
     }
   } catch (error) {
     console.error('Load user profile failed:', error)
+    user.value = null // 确保失败时设置为 null
   } finally {
     loading.value = false
   }
@@ -134,10 +136,10 @@ async function loadUserPosts() {
   postsLoading.value = true
   try {
     const result = await postStore.listPost(
-      { page: 1, pageSize: 10 },
-      { authorId: user.value.id }, // 使用作者ID进行过滤
+      {page: 1, pageSize: 10},
+      {author_id: user.value.id}, // 使用作者ID进行过滤
       null,
-      ['createdAt desc'] // 按创建时间倒序
+      ['-createdAt'] // 按创建时间倒序
     )
 
     if (result) {
@@ -194,17 +196,17 @@ useLanguageChangeEffect(async () => {
     <!-- Loading Skeleton -->
     <div v-if="loading" class="profile-loading">
       <div class="profile-header">
-        <n-skeleton height="200px" />
+        <n-skeleton height="200px"/>
       </div>
       <div class="profile-main">
         <aside class="profile-sidebar">
           <div class="info-card">
-            <n-skeleton text :repeat="8" />
+            <n-skeleton text :repeat="8"/>
           </div>
         </aside>
         <main class="profile-content-area">
           <div class="content-card">
-            <n-skeleton text :repeat="10" />
+            <n-skeleton text :repeat="10"/>
           </div>
         </main>
       </div>
@@ -212,208 +214,209 @@ useLanguageChangeEffect(async () => {
 
     <!-- Loaded Content -->
     <template v-else>
-        <!-- 顶部背景和基本信息 -->
-        <div class="profile-header">
-          <div class="header-bg"></div>
-          <div class="profile-content">
-            <!-- 用户基本信息 -->
-            <div class="user-basic-info">
-              <div class="avatar-section">
-                <div class="avatar-wrapper">
-                  <n-avatar
-                    :size="100"
-                    :src="user.avatar || undefined"
-                    class="user-avatar"
-                  >
-                    {{ user.nickname?.charAt(0) || user.username?.charAt(0) || 'U' }}
-                  </n-avatar>
-                </div>
-              </div>
-
-              <div class="info-section">
-                <div class="user-header">
-                  <div class="user-title">
-                    <h1 class="user-name">{{ user.nickname || user.username }}</h1>
-                    <n-tag v-if="user.gender" size="small" :type="genderType">
-                      {{ formatGender(user.gender) }}
-                    </n-tag>
-                  </div>
-                  <n-button type="primary" @click="handleEdit">
-                    {{ $t('page.user.edit_profile') }}
-                  </n-button>
-                </div>
-
-                <p v-if="user.description" class="user-bio">{{ user.description }}</p>
-
-                <div class="user-meta">
-                  <span v-if="user.region" class="meta-item">
-                    {{ user.region }}
-                  </span>
-                  <span v-if="user.tenantName" class="meta-item">
-                    {{ user.tenantName }}
-                  </span>
-                  <span v-if="user.positionNames?.length" class="meta-item">
-                    {{ user.positionNames.join(', ') }}
-                  </span>
-                </div>
+      <!-- 顶部背景和基本信息 -->
+      <div class="profile-header">
+        <div class="header-bg"></div>
+        <div class="profile-content">
+          <!-- 用户基本信息 -->
+          <div class="user-basic-info">
+            <div class="avatar-section">
+              <div class="avatar-wrapper">
+                <n-avatar
+                  :size="100"
+                  :src="user?.avatar || undefined"
+                  class="user-avatar"
+                >
+                  {{ user?.nickname?.charAt(0) || user?.username?.charAt(0) || 'U' }}
+                </n-avatar>
               </div>
             </div>
 
-            <!-- 统计数据 -->
-            <div class="user-stats">
-              <div class="stat-item">
-                <div class="stat-value">{{ stats.following }}</div>
-                <div class="stat-label">{{ $t('page.user.following') }}</div>
+            <div class="info-section">
+              <div class="user-header">
+                <div class="user-title">
+                  <h1 class="user-name">{{ user?.nickname || user?.username }}</h1>
+                  <n-tag v-if="user?.gender" size="small" :type="genderType">
+                    {{ formatGender(user?.gender) }}
+                  </n-tag>
+                </div>
+                <n-button type="primary" @click="handleEdit">
+                  {{ $t('page.user.edit_profile') }}
+                </n-button>
               </div>
-              <div class="stat-item">
-                <div class="stat-value">{{ stats.followers }}</div>
-                <div class="stat-label">{{ $t('page.user.followers') }}</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-value">{{ stats.posts }}</div>
-                <div class="stat-label">{{ $t('page.user.posts') }}</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-value">{{ stats.likes }}</div>
-                <div class="stat-label">{{ $t('page.user.likes_received') }}</div>
+
+              <p v-if="user?.description" class="user-bio">{{ user?.description }}</p>
+
+              <div class="user-meta">
+                  <span v-if="user?.region" class="meta-item">
+                    {{ user?.region }}
+                  </span>
+                <span v-if="user?.tenantName" class="meta-item">
+                    {{ user?.tenantName }}
+                  </span>
+                <span v-if="user?.positionNames?.length" class="meta-item">
+                    {{ user?.positionNames.join(', ') }}
+                  </span>
               </div>
             </div>
           </div>
+
+          <!-- 统计数据 -->
+          <div class="user-stats">
+            <div class="stat-item">
+              <div class="stat-value">{{ stats.following }}</div>
+              <div class="stat-label">{{ $t('page.user.following') }}</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">{{ stats.followers }}</div>
+              <div class="stat-label">{{ $t('page.user.followers') }}</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">{{ stats.posts }}</div>
+              <div class="stat-label">{{ $t('page.user.posts') }}</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">{{ stats.likes }}</div>
+              <div class="stat-label">{{ $t('page.user.likes_received') }}</div>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <!-- 内容区域 -->
-        <div class="profile-main">
-          <!-- 左侧面板 -->
-          <aside class="profile-sidebar">
-            <div class="info-card">
-              <div class="card-section">
-                <h3 class="section-title">{{ $t('page.user.basic_info') }}</h3>
-                <div class="info-list">
-                  <div v-if="user.username" class="info-row">
-                    <span class="info-key">{{ $t('page.user.username') }}:</span>
-                    <span class="info-val">{{ user.username }}</span>
-                  </div>
-                  <div v-if="user.realname" class="info-row">
-                    <span class="info-key">{{ $t('page.user.realname') }}:</span>
-                    <span class="info-val">{{ user.realname }}</span>
-                  </div>
-                  <div v-if="user.email" class="info-row">
-                    <span class="info-key">{{ $t('page.user.email') }}:</span>
-                    <span class="info-val">{{ user.email }}</span>
-                  </div>
-                  <div v-if="user.mobile" class="info-row">
-                    <span class="info-key">{{ $t('page.user.mobile') }}:</span>
-                    <span class="info-val">{{ user.mobile }}</span>
-                  </div>
+      <!-- 内容区域 -->
+      <div class="profile-main">
+        <!-- 左侧面板 -->
+        <aside class="profile-sidebar">
+          <div class="info-card">
+            <div class="card-section">
+              <h3 class="section-title">{{ $t('page.user.basic_info') }}</h3>
+              <div class="info-list">
+                <div v-if="user?.username" class="info-row">
+                  <span class="info-key">{{ $t('page.user.username') }}:</span>
+                  <span class="info-val">{{ user.username }}</span>
                 </div>
-              </div>
-
-              <div class="divider"></div>
-
-              <div class="card-section">
-                <h3 class="section-title">{{ $t('page.user.account_info') }}</h3>
-                <div class="info-list">
-                  <div class="info-row">
-                    <span class="info-key">{{ $t('page.user.status') }}:</span>
-                    <n-tag :type="statusType" size="small">
-                      {{ formatStatus(user.status) }}
-                    </n-tag>
-                  </div>
-                  <div v-if="user.roleNames?.length" class="info-row">
-                    <span class="info-key">{{ $t('page.user.roles') }}:</span>
-                    <span class="info-val">{{ user.roleNames.join(', ') }}</span>
-                  </div>
-                  <div v-if="user.createdAt" class="info-row">
-                    <span class="info-key">{{ $t('page.user.created_at') }}:</span>
-                    <span class="info-val">{{ formatDateTime(user.createdAt) }}</span>
-                  </div>
-                  <div v-if="user.lastLoginAt" class="info-row">
-                    <span class="info-key">{{ $t('page.user.last_login_at') }}:</span>
-                    <span class="info-val">{{ formatDateTime(user.lastLoginAt) }}</span>
-                  </div>
+                <div v-if="user?.realname" class="info-row">
+                  <span class="info-key">{{ $t('page.user.realname') }}:</span>
+                  <span class="info-val">{{ user.realname }}</span>
+                </div>
+                <div v-if="user?.email" class="info-row">
+                  <span class="info-key">{{ $t('page.user.email') }}:</span>
+                  <span class="info-val">{{ user.email }}</span>
+                </div>
+                <div v-if="user?.mobile" class="info-row">
+                  <span class="info-key">{{ $t('page.user.mobile') }}:</span>
+                  <span class="info-val">{{ user.mobile }}</span>
                 </div>
               </div>
             </div>
-          </aside>
 
-          <!-- 主内容区 -->
-          <main class="profile-content-area">
-            <div class="content-card">
-              <n-tabs v-model:value="activeTab" type="line" animated @update:value="handleTabChange">
-                <n-tab-pane name="posts" :tab="$t('page.user.tab_posts')">
-                  <!-- Posts Loading Skeleton -->
-                  <div v-if="postsLoading" class="posts-list-loading">
-                    <n-skeleton text :repeat="5" />
-                  </div>
-                  <!-- Posts Loaded -->
-                  <div v-else>
-                    <div v-if="posts.length > 0" class="posts-list">
-                      <div v-for="post in posts" :key="post.id" class="post-item">
-                        <div class="post-content">
-                          <h3 class="post-title">{{ postStore.getPostTitle(post) }}</h3>
-                          <p class="post-summary">{{ postStore.getPostSummary(post) }}</p>
-                          <div class="post-meta">
+            <div class="divider"></div>
+
+            <div class="card-section">
+              <h3 class="section-title">{{ $t('page.user.account_info') }}</h3>
+              <div class="info-list">
+                <div class="info-row">
+                  <span class="info-key">{{ $t('page.user.status') }}:</span>
+                  <n-tag :type="statusType" size="small">
+                    {{ formatStatus(user?.status) }}
+                  </n-tag>
+                </div>
+                <div v-if="user?.roleNames?.length" class="info-row">
+                  <span class="info-key">{{ $t('page.user.roles') }}:</span>
+                  <span class="info-val">{{ user.roleNames.join(', ') }}</span>
+                </div>
+                <div v-if="user?.createdAt" class="info-row">
+                  <span class="info-key">{{ $t('page.user.created_at') }}:</span>
+                  <span class="info-val">{{ formatDateTime(user.createdAt) }}</span>
+                </div>
+                <div v-if="user?.lastLoginAt" class="info-row">
+                  <span class="info-key">{{ $t('page.user.last_login_at') }}:</span>
+                  <span class="info-val">{{ formatDateTime(user.lastLoginAt) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="profile-content-area">
+          <div class="content-card">
+            <n-tabs v-model:value="activeTab" type="line" animated @update:value="handleTabChange">
+              <n-tab-pane name="posts" :tab="$t('page.user.tab_posts')">
+                <!-- Posts Loading Skeleton -->
+                <div v-if="postsLoading" class="posts-list-loading">
+                  <n-skeleton text :repeat="5"/>
+                </div>
+                <!-- Posts Loaded -->
+                <div v-else>
+                  <div v-if="posts.length > 0" class="posts-list">
+                    <div v-for="post in posts" :key="post.id" class="post-item">
+                      <div class="post-content">
+                        <h3 class="post-title">{{ postStore.getPostTitle(post) }}</h3>
+                        <p class="post-summary">{{ postStore.getPostSummary(post) }}</p>
+                        <div class="post-meta">
                             <span class="meta-info">
-                              <span class="i-carbon:view" />
+                              <span class="i-carbon:view"/>
                               {{ post.visits || 0 }} {{ $t('page.user.views') }}
                             </span>
-                            <span class="meta-info">
-                              <span class="i-carbon:thumbs-up" />
+                          <span class="meta-info">
+                              <span class="i-carbon:thumbs-up"/>
                               {{ post.likes || 0 }} {{ $t('page.user.likes') }}
                             </span>
-                            <span class="meta-info">
-                              <span class="i-carbon:chat" />
+                          <span class="meta-info">
+                              <span class="i-carbon:chat"/>
                               {{ post.commentCount || 0 }} {{ $t('page.user.comments') }}
                             </span>
-                            <span class="meta-info">
-                              <span class="i-carbon:time" />
+                          <span class="meta-info">
+                              <span class="i-carbon:time"/>
                               {{ formatDateTime(post.createdAt) }}
                             </span>
-                          </div>
                         </div>
-                        <n-button text @click="handleViewPost(post.id)">
-                          {{ $t('page.user.view_post') }} →
-                        </n-button>
                       </div>
+                      <n-button text @click="handleViewPost(post.id)">
+                        {{ $t('page.user.view_post') }} →
+                      </n-button>
                     </div>
-                    <n-empty v-else :description="$t('page.user.no_posts')">
-                      <template #icon>
-                        <span class="i-carbon:document" />
-                      </template>
-                    </n-empty>
                   </div>
-                </n-tab-pane>
-                <n-tab-pane name="activities" :tab="$t('page.user.tab_activities')">
-                  <n-empty :description="$t('page.user.no_activities')">
+                  <n-empty v-else :description="$t('page.user.no_posts')">
                     <template #icon>
-                      <span class="i-carbon:activity" />
+                      <span class="i-carbon:document"/>
                     </template>
                   </n-empty>
-                </n-tab-pane>
-                <n-tab-pane name="collections" :tab="$t('page.user.tab_collections')">
-                  <n-empty :description="$t('page.user.no_collections')">
-                    <template #icon>
-                      <span class="i-carbon:bookmark" />
-                    </template>
-                  </n-empty>
-                </n-tab-pane>
-              </n-tabs>
-            </div>
-          </main>
-        </div>
-      </template>
+                </div>
+              </n-tab-pane>
+              <n-tab-pane name="activities" :tab="$t('page.user.tab_activities')">
+                <n-empty :description="$t('page.user.no_activities')">
+                  <template #icon>
+                    <span class="i-carbon:activity"/>
+                  </template>
+                </n-empty>
+              </n-tab-pane>
+              <n-tab-pane name="collections" :tab="$t('page.user.tab_collections')">
+                <n-empty :description="$t('page.user.no_collections')">
+                  <template #icon>
+                    <span class="i-carbon:bookmark"/>
+                  </template>
+                </n-empty>
+              </n-tab-pane>
+            </n-tabs>
+          </div>
+        </main>
+      </div>
+    </template>
 
-      <template v-else>
-        <div class="empty-state">
-          <n-empty :description="$t('page.user.please_login')">
-            <template #extra>
-              <n-button type="primary" size="large" @click="router.push('/login')">
-                {{ $t('authentication.login.title') }}
-              </n-button>
-            </template>
-          </n-empty>
-        </div>
-      </template>
+    <!-- User Not Logged In -->
+    <template v-if="!user">
+      <div class="empty-state">
+        <n-empty :description="$t('page.user.please_login')">
+          <template #extra>
+            <n-button type="primary" size="large" @click="router.push('/login')">
+              {{ $t('authentication.login.title') }}
+            </n-button>
+          </template>
+        </n-empty>
+      </div>
+    </template>
   </div>
 </template>
 

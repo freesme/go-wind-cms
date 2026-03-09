@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import {ref} from 'vue';
 import {$t} from '@/locales';
+import {useAuthStore} from "@/stores";
+
+const authStore = useAuthStore();
 
 const email = ref('');
 const password = ref('');
@@ -13,6 +16,11 @@ function handleLogin() {
     email: email.value,
     password: password.value,
     rememberMe: rememberMe.value,
+  });
+
+  authStore.authLogin({
+    email: email.value,
+    password: password.value
   });
 }
 
