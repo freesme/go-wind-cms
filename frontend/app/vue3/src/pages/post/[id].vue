@@ -90,7 +90,7 @@ async function loadPost() {
   try {
     post.value = await postStore.getPost(postId.value)
     // SEO 优化
-    document.title = `${displayTitle.value} - ${import.meta.env.VITE_APP_TITLE || 'GoWind CMS'}`
+    document.title = `${displayTitle.value} - ${import.meta.env.VITE_APP_TITLE || 'GoWind Content Hub'}`
     // 可以在 onBeforeUnmount 中恢复原标题，但通常单页应用不需要
   } catch (error) {
     console.error('Load post failed:', error)

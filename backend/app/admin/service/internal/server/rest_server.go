@@ -195,7 +195,7 @@ func NewRestServer(
 	if cfg.GetServer().GetRest().GetEnableSwagger() {
 		swaggerUI.RegisterSwaggerUIServerWithOption(
 			srv,
-			swaggerUI.WithTitle("CMS Admin Service"),
+			swaggerUI.WithTitle("GoWind Content Hub Admin API"),
 			swaggerUI.WithMemoryData(assets.OpenApiData, "yaml"),
 		)
 	}

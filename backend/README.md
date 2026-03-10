@@ -1,6 +1,7 @@
-# GoWind CMS Backend
+# GoWind Content Hub Backend
 
-一个Golang的Headless CMS。
+GoWind（风行内容中台）— 企业级无头内容中枢（Headless Content Hub），基于 Go + Vue3 + TypeScript 构建，采用 API
+优先、前后端分离架构，提供多语言原生支持、多端内容分发、精细化权限管控，为出海企业、多终端项目提供高可用、可扩展的解决方案。
 
 - 后端基于 [golang](https://go.dev/) + [微服务框架 go-kratos](https://go-kratos.dev/)
 - 前端基于 [Vue.js 3](https://vuejs.org/) + [TypeScript](https://www.typescriptlang.org/)

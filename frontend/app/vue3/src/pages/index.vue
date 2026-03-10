@@ -189,11 +189,11 @@ onUnmounted(() => {
           <div class="code-snippet snippet-2">
             <div class="code-line"><span class="code-tag">&lt;template&gt;</span></div>
             <div class="code-line"><span class="code-tag">&lt;div</span> <span class="code-attr">class</span>=<span
-              class="code-string">"cms"</span><span class="code-tag">&gt;</span></div>
+              class="code-string">"hch"</span><span class="code-tag">&gt;</span></div>
             <div class="code-line"><span class="code-tag">&lt;/div&gt;</span></div>
           </div>
           <div class="code-snippet snippet-3">
-            <div class="code-line"><span class="code-comment">// CMS API</span></div>
+            <div class="code-line"><span class="code-comment">// Content Hub API</span></div>
             <div class="code-line"><span class="code-keyword">const</span> api = <span
               class="code-string">'v1'</span></div>
           </div>

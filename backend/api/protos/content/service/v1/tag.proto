@@ -77,7 +77,6 @@ message Tag {
     }
   ]; // 标签图标（可选，支持图标名称如 'fas fa-code' 或 SVG URL）
 
-  // 注：大多数 CMS 不需要标签分组，但某些场景（如多租户/大型站点）可能需要
   optional string group = 5 [
     json_name = "group",
     (gnostic.openapi.v3.property) = {

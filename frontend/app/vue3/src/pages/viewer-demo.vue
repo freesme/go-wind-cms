@@ -375,7 +375,7 @@ classDiagram
 
 \`\`\`mermaid
 gantt
-    title CMS Platform Development
+    title Content Hub Development
     dateFormat YYYY-MM-DD
 
     section Planning

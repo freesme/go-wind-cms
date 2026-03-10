@@ -1,7 +1,7 @@
 /**
  * ContentViewer Component - Real-world Usage Examples
  *
- * Examples for using ContentViewer in a CMS frontend application
+ * Examples for using ContentViewer in a Content Hub frontend application
  */
 
 // ============================================================
