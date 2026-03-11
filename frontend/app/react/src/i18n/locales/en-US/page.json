@@ -66,7 +66,8 @@
     "explore_all": "Explore all tags",
     "total_tags": "tags",
     "no_tags": "No tags",
-    "tag_untitled": "Untitled Tag"
+    "tag_untitled": "Untitled Tag",
+    "popular_tags": "Popular Tags"
   },
   "post_detail": {
     "untitled": "Untitled",
