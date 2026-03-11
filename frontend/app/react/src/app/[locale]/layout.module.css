@@ -12,8 +12,13 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    min-height: calc(100vh - var(--layout-header-height, 64px) - var(--layout-footer-height, 200px));
+    min-height: 100vh;
+    padding-top: var(--layout-header-height, 64px);
     background: var(--color-bg, #f8fafc);
+
+    &.noHeader {
+        padding-top: 0;
+    }
 }
 
 /* 暗黑模式适配 */
