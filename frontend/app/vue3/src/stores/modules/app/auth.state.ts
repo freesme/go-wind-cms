@@ -15,7 +15,7 @@ import {
   createAuthenticationServiceClient,
   createUserProfileServiceClient
 } from "@/api/generated/app/service/v1";
-import {requestClientRequestHandler} from "@/transport/rpc/request";
+import {requestClientRequestHandler} from "@/transport/rest/request";
 
 export const useAuthStore = defineStore('auth', () => {
   const accessStore = useAccessStore()

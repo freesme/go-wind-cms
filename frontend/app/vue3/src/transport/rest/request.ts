@@ -4,11 +4,13 @@
 import {useAuthStore, useAccessStore} from '@/stores';
 import {useAppConfig} from "@/hooks/use-app-config";
 import {preferences} from "@/preferences";
+
+import type {HttpResponse} from "./types";
 import {
   authenticateResponseInterceptor,
-  errorMessageResponseInterceptor, type HttpResponse,
-  RequestClient
-} from "@/request";
+  errorMessageResponseInterceptor
+} from "./preset-interceptors";
+import {RequestClient} from "./request-client";
 
 
 const {apiURL} = useAppConfig(import.meta.env, import.meta.env.PROD);
@@ -97,7 +99,7 @@ function createRequestClient(baseURL: string) {
       const responseData = error?.response?.data ?? {};
       const errorMessage = responseData?.error ?? responseData?.message ?? '';
       // 如果没有错误信息，则会根据状态码进行提示
-       window.$message.error(errorMessage || msg);
+      window.$message.error(errorMessage || msg);
     }),
   );
 
@@ -124,7 +126,7 @@ export type Paging =
 /**
  * 通用请求处理器
  */
-export function requestClientRequestHandler({ path, method, body }: Request) {
+export function requestClientRequestHandler({path, method, body}: Request) {
   return requestClient.request(path, {
     method,
     data: body,

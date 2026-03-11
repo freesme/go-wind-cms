@@ -3,8 +3,8 @@ import {defineStore} from 'pinia';
 import {
   createNavigationServiceClient, type siteservicev1_NavigationItem
 } from '@/api/generated/app/service/v1';
-import {type Paging, requestClientRequestHandler} from "@/transport/rpc/request";
-import {makeOrderBy, makeQueryString, makeUpdateMask} from "@/transport/rpc";
+import {type Paging, requestClientRequestHandler} from "@/transport/rest/request";
+import {makeOrderBy, makeQueryString, makeUpdateMask} from "@/transport/rest";
 import {useUserStore} from '@/stores';
 import {currentLocaleLanguageCode} from "@/locales";
 
@@ -33,7 +33,7 @@ export const useNavigationStore = defineStore('navigation', () => {
     return await service.List({
       fieldMask,
       orderBy: makeOrderBy(orderBy),
-      query: makeQueryString(formValues, userStore.isTenantUser()),
+      query: makeQueryString(formValues, userStore.isTenantUser),
       page: paging?.page,
       pageSize: paging?.pageSize,
       noPaging,

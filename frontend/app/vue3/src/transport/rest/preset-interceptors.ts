@@ -1,17 +1,17 @@
-import type { RequestClient } from '@/request';
-import type { MakeErrorMessageFn, ResponseInterceptorConfig } from './types';
-
 import axios from 'axios';
 
 import {$t} from '@/locales';
 
+import type {MakeErrorMessageFn, ResponseInterceptorConfig} from './types';
+import type {RequestClient} from "./request-client";
+
 export const authenticateResponseInterceptor = ({
-  client,
-  doReAuthenticate,
-  doRefreshToken,
-  enableRefreshToken,
-  formatToken,
-}: {
+                                                  client,
+                                                  doReAuthenticate,
+                                                  doRefreshToken,
+                                                  enableRefreshToken,
+                                                  formatToken,
+                                                }: {
   client: RequestClient;
   doReAuthenticate: () => Promise<void>;
   doRefreshToken: () => Promise<string>;
@@ -20,7 +20,7 @@ export const authenticateResponseInterceptor = ({
 }): ResponseInterceptorConfig => {
   return {
     rejected: async (error) => {
-      const { config, response } = error;
+      const {config, response} = error;
       // 如果不是 401 错误，直接抛出异常
       if (response?.status !== 401) {
         throw error;
@@ -36,7 +36,7 @@ export const authenticateResponseInterceptor = ({
         return new Promise((resolve) => {
           client.refreshTokenQueue.push((newToken: string) => {
             config.headers.Authorization = formatToken(newToken);
-            resolve(client.request(config.url, { ...config }));
+            resolve(client.request(config.url, {...config}));
           });
         });
       }
@@ -54,7 +54,7 @@ export const authenticateResponseInterceptor = ({
         // 清空队列
         client.refreshTokenQueue = [];
 
-        return client.request(error.config.url, { ...error.config });
+        return client.request(error.config.url, {...error.config});
       } catch (refreshError) {
         // 如果刷新 token 失败，处理错误（如强制登出或跳转登录页面）
         client.refreshTokenQueue.forEach((callback) => callback(''));

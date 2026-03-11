@@ -1,7 +1,7 @@
-import type { AxiosRequestConfig } from 'axios';
+import type {AxiosRequestConfig} from 'axios';
 
-import type { RequestClient } from '../request-client';
-import type { RequestResponse } from '../types';
+import type {RequestResponse} from '../types';
+import {RequestClient} from "../request-client";
 
 class FileDownloader {
   private client: RequestClient;
@@ -19,13 +19,11 @@ class FileDownloader {
       responseType: 'blob',
     };
 
-    const response = await this.client.get<RequestResponse<Blob>>(
+    return await this.client.get<RequestResponse<Blob>>(
       url,
       finalConfig,
     );
-
-    return response;
   }
 }
 
-export { FileDownloader };
+export {FileDownloader};

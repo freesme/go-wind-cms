@@ -5,9 +5,9 @@ import {
   type contentservicev1_PageTranslation,
   createPageServiceClient,
 } from '@/api/generated/app/service/v1';
-import {type Paging, requestClientRequestHandler} from "@/transport/rpc/request";
+import {type Paging, requestClientRequestHandler} from "@/transport/rest/request";
 import {useUserStore} from '@/stores';
-import {makeOrderBy, makeQueryString, makeUpdateMask} from "@/transport/rpc";
+import {makeOrderBy, makeQueryString, makeUpdateMask} from "@/transport/rest";
 import {currentLocaleLanguageCode} from "@/locales";
 
 export const usePageStore = defineStore('page', () => {
@@ -35,7 +35,7 @@ export const usePageStore = defineStore('page', () => {
     return await service.List({
       fieldMask,
       orderBy: makeOrderBy(orderBy),
-      query: makeQueryString(formValues, userStore.isTenantUser()),
+      query: makeQueryString(formValues, userStore.isTenantUser),
       page: paging?.page,
       pageSize: paging?.pageSize,
       noPaging,

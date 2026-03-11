@@ -3,9 +3,9 @@ import {defineStore} from 'pinia';
 import {
   createCommentServiceClient,
 } from '@/api/generated/app/service/v1';
-import {type Paging, requestClientRequestHandler} from "@/transport/rpc/request";
+import {type Paging, requestClientRequestHandler} from "@/transport/rest/request";
 import {useUserStore} from '@/stores';
-import {makeOrderBy, makeQueryString, makeUpdateMask} from "@/transport/rpc";
+import {makeOrderBy, makeQueryString, makeUpdateMask} from "@/transport/rest";
 
 export const useCommentStore = defineStore('comment', () => {
   const service = createCommentServiceClient(requestClientRequestHandler);
@@ -26,7 +26,7 @@ export const useCommentStore = defineStore('comment', () => {
     return await service.List({
       fieldMask,
       orderBy: makeOrderBy(orderBy),
-      query: makeQueryString(formValues, userStore.isTenantUser()),
+      query: makeQueryString(formValues, userStore.isTenantUser),
       page: paging?.page,
       pageSize: paging?.pageSize,
       noPaging,

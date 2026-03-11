@@ -1,6 +1,6 @@
-import type { AxiosRequestConfig, AxiosResponse } from 'axios';
+import type {AxiosRequestConfig, AxiosResponse} from 'axios';
 
-import type { RequestClient } from '../request-client';
+import {RequestClient} from "../request-client";
 
 class FileUploader {
   private client: RequestClient;
@@ -32,4 +32,4 @@ class FileUploader {
   }
 }
 
-export { FileUploader };
+export {FileUploader};
