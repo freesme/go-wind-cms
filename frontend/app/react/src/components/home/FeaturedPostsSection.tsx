@@ -23,7 +23,7 @@ export default function FeaturedPostsSection() {
                     <XIcon name="carbon:star-filled" size={28} style={{color: '#6366f1', marginRight: '8px'}} />
                     {t('featured_posts')}
                 </h2>
-                <Button type="primary" onClick={() => window.location.href = '/post'}>
+                <Button type="text" onClick={() => window.location.href = '/post'}>
                     {t('view_all')} →
                 </Button>
             </div>

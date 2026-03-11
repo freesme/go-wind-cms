@@ -103,7 +103,7 @@ export default function CategoryListSection({
                         <XIcon name="carbon:folder-details" size={28} style={{color: '#6366f1', marginRight: '8px'}}/>
                         {t('categories')}
                     </h2>
-                    <Button type="primary" onClick={() => window.location.href = '/category'}>
+                    <Button type="text" onClick={() => window.location.href = '/category'}>
                         {t('view_all')} →
                     </Button>
                 </div>

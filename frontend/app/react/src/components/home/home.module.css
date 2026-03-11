@@ -404,14 +404,14 @@ html.dark .homePage {
 /* View All Button Style */
 .sectionHeader button,
 .sectionHeader .ant-btn-text {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #6366f1;
-    background: transparent;
-    border: none;
-    box-shadow: none;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: #6366f1 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
     cursor: pointer;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1rem !important;
     border-radius: 8px;
     transition: all 0.3s;
     display: flex;
@@ -421,19 +421,19 @@ html.dark .homePage {
 
 .sectionHeader button:hover,
 .sectionHeader .ant-btn-text:hover {
-    background: rgba(99, 102, 241, 0.08);
-    color: #4f46e5;
+    background: rgba(99, 102, 241, 0.08) !important;
+    color: #4f46e5 !important;
 }
 
 html.dark .sectionHeader button,
 html.dark .sectionHeader .ant-btn-text {
-    color: #a5b4fc;
+    color: #a5b4fc !important;
 }
 
 html.dark .sectionHeader button:hover,
 html.dark .sectionHeader .ant-btn-text:hover {
-    background: rgba(99, 102, 241, 0.12);
-    color: #c7d2fe;
+    background: rgba(99, 102, 241, 0.12) !important;
+    color: #c7d2fe !important;
 }
 
 .sectionTitle {
@@ -860,7 +860,6 @@ html.dark .tagItem:hover .tagLabel {
     }
 }
 
-/* ========== Categories Section ========== */
 /* ========== Categories Section ========== */
 .categoriesSection {
     padding: 3rem 0;
