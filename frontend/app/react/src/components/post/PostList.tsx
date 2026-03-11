@@ -49,9 +49,14 @@ const PostList: React.FC<PostListProps> = ({
         setLoading(true);
         try {
             const res = await postStore.listPost({
-                page: currentPage,
-                pageSize: currentPageSize,
-            }, queryParams, fieldMask, orderBy);
+                paging: {
+                    page: currentPage,
+                    pageSize: currentPageSize,
+                },
+                formValues: queryParams,
+                fieldMask: fieldMask,
+                orderBy: orderBy
+            });
             setPosts(res.items || []);
             setTotal(res.total || 0);
         } catch (error) {

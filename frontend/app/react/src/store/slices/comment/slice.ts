@@ -4,6 +4,8 @@ import {requestClientRequestHandler} from '@/transport/rest';
 import {
     commentservicev1_Comment,
 } from '@/api/generated/app/service/v1';
+import {currentLocaleLanguageCode} from "@/i18n";
+import {makeOrderBy, makeQueryString} from "@/transport/rest/utils";
 
 const commentService = createCommentServiceClient(requestClientRequestHandler);
 
@@ -24,16 +26,30 @@ const initialState: CommentState = {
 export const listComment = createAsyncThunk(
     'comment/listComment',
     async (
-        params: { objectId?: number; page?: number; pageSize?: number },
+        params: {
+            paging?: { page?: number; pageSize?: number };
+            formValues?: object | undefined;
+            fieldMask?: string | undefined;
+            orderBy?: string[] | undefined;
+        },
         {rejectWithValue}
     ) => {
         try {
-            // objectId 作为 query，分页参数单独传递
+            const locale = currentLocaleLanguageCode();
+            const formValues = {...(params.formValues || {}), locale};
+            const noPaging =
+                params.paging?.page === undefined && params.paging?.pageSize === undefined;
             return await commentService.List({
-                query: params.objectId ? `objectId=${params.objectId}` : undefined,
-                page: params.page,
-                pageSize: params.pageSize,
-                sorting: undefined,
+                fieldMask: params.fieldMask,
+                orderBy: makeOrderBy(params.orderBy),
+                sorting: Array.isArray(params.orderBy) ? params.orderBy.map(o => ({
+                    field: o,
+                    direction: 'ASC'
+                })) : undefined,
+                query: makeQueryString(formValues, false),
+                page: params.paging?.page,
+                pageSize: params.paging?.pageSize,
+                noPaging,
             });
         } catch (error) {
             return rejectWithValue(error);

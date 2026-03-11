@@ -52,12 +52,12 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
                 query.parentId = parentId;
             }
 
-            const res = await categoryStore.listCategory(
-                undefined,
-                query,
-                'id,status,sort_order,icon,code,post_count,direct_post_count,parent_id,created_at,children,translations.id,translations.category_id,translations.name,translations.language_code,translations.description',
-                ['-sortOrder']
-            );
+            const res = await categoryStore.listCategory({
+                paging: undefined,
+                formValues: query,
+                fieldMask: 'id,status,sort_order,icon,code,post_count,direct_post_count,parent_id,created_at,children,translations.id,translations.category_id,translations.name,translations.language_code,translations.description',
+                orderBy: ['-sortOrder']
+            });
 
             const items = res.items || [];
             setInternalCategories(items);

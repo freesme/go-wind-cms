@@ -1,4 +1,4 @@
- import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import {createPageServiceClient} from '@/api/generated/app/service/v1';
 import {requestClientRequestHandler} from '@/transport/rest';
 import {
@@ -6,6 +6,7 @@ import {
     contentservicev1_PageTranslation,
 } from '@/api/generated/app/service/v1';
 import {currentLocaleLanguageCode} from '@/i18n';
+import {makeOrderBy, makeQueryString} from "@/transport/rest/utils";
 
 const pageService = createPageServiceClient(requestClientRequestHandler);
 
@@ -26,15 +27,30 @@ const initialState: PageState = {
 export const listPage = createAsyncThunk(
     'page/listPage',
     async (
-        params: { page?: number; pageSize?: number; query?: string },
+        params: {
+            paging?: { page?: number; pageSize?: number };
+            formValues?: object | undefined;
+            fieldMask?: string | undefined;
+            orderBy?: string[] | undefined;
+        },
         {rejectWithValue}
     ) => {
         try {
+            const locale = currentLocaleLanguageCode();
+            const formValues = {...(params.formValues || {}), locale};
+            const noPaging =
+                params.paging?.page === undefined && params.paging?.pageSize === undefined;
             return await pageService.List({
-                query: params.query,
-                page: params.page,
-                pageSize: params.pageSize,
-                sorting: undefined,
+                fieldMask: params.fieldMask,
+                orderBy: makeOrderBy(params.orderBy),
+                sorting: Array.isArray(params.orderBy) ? params.orderBy.map(o => ({
+                    field: o,
+                    direction: 'ASC'
+                })) : undefined,
+                query: makeQueryString(formValues, false),
+                page: params.paging?.page,
+                pageSize: params.paging?.pageSize,
+                noPaging,
             });
         } catch (error) {
             return rejectWithValue(error);

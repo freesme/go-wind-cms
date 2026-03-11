@@ -37,11 +37,13 @@ export default function PopularTagsSection() {
 
         setLoading(true);
         try {
-            const res = await tagStore.listTag(
-                {page: 1, pageSize: 6},
-                {status: 'TAG_STATUS_ACTIVE', isFeatured: true},
+            const res = await tagStore.listTag({
+                paging: {page: 1, pageSize: 6},
+                formValues: {status: 'TAG_STATUS_ACTIVE', isFeatured: true},
+                fieldMask: null,
+                orderBy: null,
                 signal
-            );
+            });
 
             if (signal.aborted) return;
 
@@ -87,7 +89,7 @@ export default function PopularTagsSection() {
         <section className={styles.popularSection}>
             <div className={styles.sectionHeader}>
                 <h2 className={styles.sectionTitle}>
-                    <XIcon name="carbon:fire" size={28} style={{color: '#6366f1', marginRight: '8px'}} />
+                    <XIcon name="carbon:fire" size={28} style={{color: '#6366f1', marginRight: '8px'}}/>
                     {t('popular_tags')}
                 </h2>
                 <Button text type="primary" onClick={() => window.location.href = '/tag'}>
@@ -99,7 +101,7 @@ export default function PopularTagsSection() {
                     <div className={styles.tagsGrid}>
                         {Array.from({length: 6}).map((_, i) => (
                             <div key={i} className={styles.tagItem}>
-                                <Skeleton.Button style={{width: '60px', height: '28px'}}/>
+                                <Skeleton.Button style={{width: '100%', height: '44px'}} active/>
                             </div>
                         ))}
                     </div>
