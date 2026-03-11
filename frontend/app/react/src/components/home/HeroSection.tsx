@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button} from 'antd';
 import {useTranslations} from 'next-intl';
+
 import styles from './home.module.css';
 
 export default function HeroSection() {

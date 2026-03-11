@@ -61,7 +61,7 @@ html.dark .homePage {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: 
+    background-image:
         linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
     background-size: 50px 50px;
@@ -879,8 +879,28 @@ html.dark .tagItem:hover .tagLabel {
     padding: 0 2rem;
 }
 
+.categoryCardSkeleton {
+    /* skeleton loading card style for CategoryListSection */
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    background: #ffffff;
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    color: #1e293b;
+    border-radius: 16px;
+    cursor: pointer;
+    position: relative;
+    min-height: 200px;
+    height: 100%;
+    transition: all 0.3s;
+    overflow: visible;
+}
+
+/* Note: Dark mode styles for .homeCategoryCard are defined in HomeCategoryCard.module.css */
+
 .categoriesCarousel {
-    display: none;
+    display: none;  /* PC 端默认隐藏 */
 }
 
 .carouselContainer {
@@ -904,201 +924,6 @@ html.dark .tagItem:hover .tagLabel {
     flex-direction: column;
 }
 
-/* ========== Category Card - Light Mode (Default) ========== */
-.categoryCard {
-    display: flex;
-    flex-direction: column;
-    padding: 1.5rem;
-    background: #ffffff;
-    border: 1px solid rgba(99, 102, 241, 0.1);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    color: #1e293b;
-    border-radius: 16px;
-    cursor: pointer;
-    position: relative;
-    min-height: 200px;
-    height: 100%;
-    transition: all 0.3s;
-    overflow: visible;
-}
-
-.categoryCard::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 3px;
-    height: 20px;
-    background: #6366f1;
-    border-radius: 0 3px 3px 0;
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.categoryCardBg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, transparent 100%);
-    opacity: 0;
-    transition: opacity 0.3s;
-    border-radius: 16px;
-}
-
-.categoryCardContent {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.categoryCardHeader {
-    display: flex;
-    gap: 1.25rem;
-    margin-bottom: 1.25rem;
-}
-
-.categoryIcon {
-    font-size: 2.5rem;
-    width: 70px;
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(99, 102, 241, 0.08);
-    color: #6366f1;
-    border-radius: 14px;
-    margin-bottom: 1rem;
-    transition: all 0.3s;
-}
-
-.categoryInfo {
-    flex: 1;
-    width: 100%;
-}
-
-.categoryInfo h3 {
-    font-size: 1.15rem;
-    font-weight: 800;
-    margin: 0 0 0.5rem 0;
-    color: #1e293b;
-    letter-spacing: 0.3px;
-    word-break: break-word;
-    line-height: 1.4;
-    transition: color 0.3s;
-}
-
-.postCount {
-    font-size: 0.95rem;
-    color: #6366f1;
-    font-weight: 600;
-    display: inline-block;
-    padding: 0.35rem 0.75rem;
-    background: rgba(99, 102, 241, 0.08);
-    border-radius: 8px;
-    transition: all 0.3s;
-    margin-bottom: 0.75rem;
-}
-
-.categoryBadge {
-    margin-top: auto;
-    padding: 0.5rem 0.875rem;
-    background: rgba(99, 102, 241, 0.08);
-    color: #6366f1;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    width: fit-content;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.3s;
-    position: relative;
-}
-
-.categoryCard:hover {
-    background: #f8fafc;
-    border-color: rgba(99, 102, 241, 0.3);
-    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.15);
-}
-
-.categoryCard:hover::before {
-    opacity: 1;
-}
-
-.categoryCard:hover .categoryCardBg {
-    opacity: 0;
-}
-
-.categoryCard:hover .categoryIcon {
-    background: #6366f1;
-    color: #fff;
-}
-
-.categoryCard:hover .postCount,
-.categoryCard:hover .categoryBadge {
-    background: rgba(99, 102, 241, 0.15);
-    color: #4f46e5;
-}
-
-/* ========== Category Card - Dark Mode ========== */
-html.dark .categoriesSection {
-    background: transparent;
-}
-
-html.dark .categoryCard,
-html.dark .categoryCard,
-html.dark .categoryCard {
-    background: #1e293b !important;
-    border: 1px solid rgba(99, 102, 241, 0.15) !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
-    color: #e0e7ef !important;
-}
-
-html.dark .categoryCard::before {
-    background: #6366f1;
-}
-
-html.dark .categoryCard .categoryIcon {
-    background: rgba(99, 102, 241, 0.12) !important;
-    color: #a5b4fc !important;
-}
-
-html.dark .categoryCard .categoryInfo h3 {
-    color: #e0e7ef !important;
-}
-
-html.dark .categoryCard .postCount {
-    color: #a5b4fc !important;
-    background: rgba(99, 102, 241, 0.12) !important;
-}
-
-html.dark .categoryCard .categoryBadge {
-    color: #a5b4fc !important;
-    background: rgba(99, 102, 241, 0.12) !important;
-}
-
-html.dark .categoryCard:hover {
-    background: #23263a !important;
-    border-color: rgba(99, 102, 241, 0.3) !important;
-    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.25) !important;
-}
-
-html.dark .categoryCard:hover .categoryIcon {
-    background: #6366f1 !important;
-    color: #fff !important;
-}
-
-html.dark .categoryCard:hover .postCount,
-html.dark .categoryCard:hover .categoryBadge {
-    background: rgba(99, 102, 241, 0.2) !important;
-    color: #c7d2fe !important;
-}
-
 /* Mobile Responsive */
 @media (max-width: 900px) {
     .categoriesGrid {
@@ -1111,4 +936,16 @@ html.dark .categoryCard:hover .categoryBadge {
         margin: 0 auto;
         padding: 0 0.5rem 2rem 0.5rem;
     }
+}
+
+html.dark {
+    --color-bg: #1e293b;
+    --color-border: rgba(99, 102, 241, 0.15);
+    --color-text-primary: #e0e7ef;
+    --color-text-secondary: #a5b4fc;
+    --color-brand: #6366f1;
+    --color-surface: #23263a;
+    --color-card-border: rgba(99, 102, 241, 0.3);
+    --color-card-shadow: rgba(99, 102, 241, 0.25);
+    --color-hover-shadow: rgba(99, 102, 241, 0.25);
 }

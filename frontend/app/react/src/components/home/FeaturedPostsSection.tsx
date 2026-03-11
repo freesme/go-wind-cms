@@ -1,6 +1,7 @@
 import React, {useRef} from 'react';
 import {Button} from 'antd';
 import {useTranslations} from 'next-intl';
+
 import {XIcon} from '@/plugins/xicon';
 import PostList from '@/components/post/PostList';
 

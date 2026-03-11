@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useCallback, useRef} from 'react';
 import {Skeleton, Button} from 'antd';
 import {useTranslations} from 'next-intl';
-import {XIcon} from '@/plugins/xicon';
 
+import {XIcon} from '@/plugins/xicon';
 import {useTagStore} from '@/store/slices/tag/hooks';
 import {contentservicev1_Tag} from '@/api/generated/app/service/v1';
 

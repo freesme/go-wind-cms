@@ -1,9 +1,12 @@
 import React, {useState, useEffect, useCallback, useRef, useMemo} from 'react';
 import {Skeleton, Carousel, Button} from 'antd';
 import {useTranslations} from 'next-intl';
+
 import {useCategoryStore} from '@/store/slices/category/hooks';
 import {contentservicev1_Category} from '@/api/generated/app/service/v1';
 import {XIcon} from '@/plugins/xicon';
+import HomeCategoryCard from './HomeCategoryCard';
+
 import styles from './home.module.css';
 
 interface CategoryListSectionProps {
@@ -113,7 +116,7 @@ export default function CategoryListSection({
             {loading ? (
                 <div className={`${styles.categoriesGrid} desktop-grid`}>
                     {Array.from({length: skeletonCount}).map((_, i) => (
-                        <div key={i} className={styles.categoryCard}>
+                        <div key={i} className={styles.categoryCardSkeleton}>
                             <Skeleton.Button style={{width: '100%', height: '140px'}}/>
                         </div>
                     ))}
@@ -123,33 +126,11 @@ export default function CategoryListSection({
                     {/* Desktop Grid - 始终渲染，由 CSS 控制显示 */}
                     <div className={`${styles.categoriesGrid} desktop-grid`}>
                         {categories.map((category) => (
-                            <div
+                            <HomeCategoryCard
                                 key={category.id}
-                                className={`${styles.categoryCard} scroll-reveal-item`}
-                                onClick={() => handleViewCategory(category.id)}
-                            >
-                                <div className={styles.categoryCardBg}/>
-                                <div className={styles.categoryCardContent}>
-                                    <div className={styles.categoryCardHeader}>
-                                        <div className={styles.categoryIcon}>
-                                            <XIcon
-                                                name={getIconName(category.icon)}
-                                                size={48}
-                                            />
-                                        </div>
-                                        <div className={styles.categoryInfo}>
-                                            <h3>{categoryStore.getCategoryName(category)}</h3>
-                                            <span className={styles.postCount}>
-                                                {t('article_count', {count: category.postCount || 0})}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className={styles.categoryBadge}>
-                                        <XIcon name="carbon:time" size={14}/>
-                                        <span>{t('updated_days_ago', {days: 3})}</span>
-                                    </div>
-                                </div>
-                            </div>
+                                category={category}
+                                onClick={handleViewCategory}
+                            />
                         ))}
                     </div>
 
@@ -171,29 +152,10 @@ export default function CategoryListSection({
                                     className={styles.carouselItem}
                                     onClick={() => handleViewCategory(category.id)}
                                 >
-                                    <div className={`${styles.categoryCard} ${styles.carouselCard}`}>
-                                        <div className={styles.categoryCardBg}/>
-                                        <div className={styles.categoryCardContent}>
-                                            <div className={styles.categoryCardHeader}>
-                                                <div className={styles.categoryIcon}>
-                                                    <XIcon
-                                                        name={getIconName(category.icon)}
-                                                        size={48}
-                                                    />
-                                                </div>
-                                                <div className={styles.categoryInfo}>
-                                                    <h3>{categoryStore.getCategoryName(category)}</h3>
-                                                    <span className={styles.postCount}>
-                                                        {t('article_count', {count: category.postCount || 0})}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div className={styles.categoryBadge}>
-                                                <XIcon name="carbon:time" size={14}/>
-                                                <span>{t('updated_days_ago', {days: 3})}</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <HomeCategoryCard
+                                        category={category}
+                                        onClick={handleViewCategory}
+                                    />
                                 </div>
                             ))}
                         </Carousel>
