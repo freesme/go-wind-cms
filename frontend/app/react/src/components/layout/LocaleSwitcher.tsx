@@ -1,7 +1,9 @@
 import React from 'react';
-import {useI18n} from '@/i18n';
 import {Dropdown, Button} from 'antd';
 import {GlobalOutlined} from '@ant-design/icons';
+
+import {useI18n} from '@/i18n';
+
 import styles from './LocaleSwitcher.module.css';
 
 /**
@@ -29,7 +31,7 @@ export const LocaleSwitcher: React.FC = () => {
         {key: 'en-US', label: 'English'},
     ];
 
-    const handleLanguageChange = ({key}: {key: string}) => {
+    const handleLanguageChange = ({key}: { key: string }) => {
         changeLocale(key);
     };
 
@@ -42,9 +44,9 @@ export const LocaleSwitcher: React.FC = () => {
             }}
             trigger={['click']}
         >
-            <Button 
-                type="text" 
-                icon={<GlobalOutlined />}
+            <Button
+                type="text"
+                icon={<GlobalOutlined/>}
                 className={styles.langSwitcher}
                 aria-label="Language switcher"
             >

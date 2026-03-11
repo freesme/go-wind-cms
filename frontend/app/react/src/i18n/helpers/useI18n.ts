@@ -2,6 +2,7 @@
 
 import {useTranslations, useLocale} from 'next-intl';
 import {useRouter} from 'next/navigation';
+
 import {useLanguageStore} from '@/store/core/language/hooks';
 
 /**
@@ -18,13 +19,13 @@ export function useI18n(namespace: string = 'common') {
     const changeLocale = (targetLocale: string) => {
         if (typeof window !== 'undefined') {
             const currentPath = window.location.pathname;
-            
+
             // 移除旧的 locale 前缀
             const pathWithoutLocale = currentPath.replace(/^\/[a-zA-Z]+(-[a-zA-Z]+)?/, '');
-            
+
             // 更新 Redux store
             languageStore.setLocale(targetLocale);
-            
+
             // 添加新的 locale 前缀并跳转
             const newPath = `/${targetLocale}${pathWithoutLocale}`;
             router.push(newPath);

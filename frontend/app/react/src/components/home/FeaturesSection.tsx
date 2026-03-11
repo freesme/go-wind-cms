@@ -1,6 +1,7 @@
 import React from 'react';
 import {useTranslations} from 'next-intl';
 import styles from './home.module.css';
+import {XIcon} from '@/plugins/xicon';
 
 interface Feature {
     icon?: string;
@@ -47,13 +48,17 @@ export default function FeaturesSection() {
 
     return (
         <section className={styles.featuresSection}>
-            <h2 className={styles.sectionTitle}>{t('platform_features')}</h2>
+            <div className={styles.sectionHeader}>
+                <h2 className={styles.sectionTitle}>
+                    <XIcon name="carbon:rocket" size={28} style={{color: '#6366f1', marginRight: '8px'}} />
+                    {t('platform_features')}
+                </h2>
+            </div>
             <div className={styles.featuresGrid}>
                 {features.map((feature, index) => (
                     <div key={index} className={styles.featureCard}>
                         <div className={styles.featureIcon}>
-                            {/* TODO: 使用图标库 */}
-                            <span>{feature.icon}</span>
+                            <XIcon name={feature.icon || ''} size={48} />
                         </div>
                         <h3 className={styles.featureTitle}>{feature.title}</h3>
                         <p className={styles.featureDescription}>{feature.description}</p>
