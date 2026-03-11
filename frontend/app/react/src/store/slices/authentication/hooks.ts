@@ -16,10 +16,9 @@ import {requestClientRequestHandler} from '@/transport/rest';
  */
 function encryptPassword(password: string): string {
  // TODO: 实现 AES 加密逻辑
- // 参考 Vue 版本：使用 crypto-js 库
  // const key = import.meta.env.VITE_AES_KEY;
  // return encryptData(password, key, key);
- 
+
  // 暂时返回明文，后续需要实现加密
  console.warn('密码未加密，需要实现 AES 加密逻辑');
  return password;

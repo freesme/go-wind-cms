@@ -4,6 +4,7 @@ import {NextIntlClientProvider} from "next-intl";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ReduxProvider from "@/store/ReduxProvider";
+import styles from './layout.module.css';
 
 interface ClientLocaleLayoutProps {
   messages: Record<string, unknown>;
@@ -15,9 +16,9 @@ const ClientLocaleLayout: React.FC<ClientLocaleLayoutProps> = ({messages, locale
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
       <ReduxProvider>
-        <div style={{display: 'flex', flexDirection: 'column', minHeight: '100vh'}}>
+        <div className={styles.appContainer}>
           <Header/>
-          <main style={{flex: 1}}>
+          <main className={styles.content}>
             {children}
           </main>
           <Footer/>
@@ -28,4 +29,3 @@ const ClientLocaleLayout: React.FC<ClientLocaleLayoutProps> = ({messages, locale
 };
 
 export default ClientLocaleLayout;
-

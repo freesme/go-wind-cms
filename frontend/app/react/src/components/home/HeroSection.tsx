@@ -39,7 +39,7 @@ export default function HeroSection() {
                         <div className={styles.codeLine}>
                             <span className={styles.codeTag}>&lt;div</span>{' '}
                             <span className={styles.codeAttr}>class</span>=
-                            <span className={styles.codeString}>&quot;cms&quot;</span>
+                            <span className={styles.codeString}>&quot;content-hub&quot;</span>
                             <span className={styles.codeTag}>&gt;</span>
                         </div>
                         <div className={styles.codeLine}>
@@ -48,7 +48,7 @@ export default function HeroSection() {
                     </div>
                     <div className={`${styles.codeSnippet} ${styles.snippet3}`}>
                         <div className={styles.codeLine}>
-                            <span className={styles.codeComment}>{'// CMS API'}</span>
+                            <span className={styles.codeComment}>{'// Content Hub API'}</span>
                         </div>
                         <div className={styles.codeLine}>
                             <span className={styles.codeKeyword}>const</span> api ={' '}

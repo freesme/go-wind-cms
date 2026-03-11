@@ -12,7 +12,7 @@ interface Feature {
 export default function FeaturesSection() {
     const t = useTranslations('page.home');
 
-    // 特性列表（从 Vue3 版本参考）
+    // 特性列表
     const features: Feature[] = [
         {
             icon: 'carbon:document',
