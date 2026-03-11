@@ -1,9 +1,11 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import {createPageServiceClient} from '@/api/generated/app/service/v1';
 import {requestClientRequestHandler} from '@/transport/rest';
 import {
     contentservicev1_Page,
+    contentservicev1_PageTranslation,
 } from '@/api/generated/app/service/v1';
+import {currentLocaleLanguageCode} from '@/i18n';
 
 const pageService = createPageServiceClient(requestClientRequestHandler);
 
@@ -93,6 +95,23 @@ export const deletePage = createAsyncThunk(
         }
     }
 );
+
+/**
+ * 获取页面的翻译
+ * @param page 页面对象
+ * @returns 当前语言的翻译，如果找不到则返回第一个翻译或 null
+ */
+export function getTranslation(page: contentservicev1_Page) {
+    if (!page?.translations || page.translations.length === 0) return null;
+
+    const locale = currentLocaleLanguageCode();
+    // 优先查找当前语言的翻译
+    const translation = page.translations?.find(
+        (t: contentservicev1_PageTranslation) => t.languageCode === locale
+    );
+    // 如果找不到，回退到第一个翻译
+    return translation || page.translations?.[0];
+}
 
 const pageSlice = createSlice({
     name: 'page',

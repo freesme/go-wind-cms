@@ -131,6 +131,9 @@ export const deleteCategory = createAsyncThunk(
     }
 );
 
+/**
+ * 获取分类的翻译
+ */
 export function getTranslation(category: contentservicev1_Category) {
     if (!category?.translations || category.translations.length === 0) return null;
     const locale = currentLocaleLanguageCode();
@@ -140,16 +143,27 @@ export function getTranslation(category: contentservicev1_Category) {
     return translation || category.translations?.[0];
 }
 
+/**
+ * 获取分类名称（支持国际化）
+ * @param category 分类对象
+ * @param t 可选的翻译函数，如果在组件外部调用且需要国际化支持，请传入 t('page.categories')
+ */
 export function getCategoryName(category: contentservicev1_Category, t?: (key: string) => string) {
     const translation = getTranslation(category);
-    return translation?.name || (t ? t('category_untitled') : '');
+    return translation?.name || (t ? t('category_untitled') : '未命名分类');
 }
 
+/**
+ * 获取分类描述
+ */
 export function getCategoryDescription(category: contentservicev1_Category) {
     const translation = getTranslation(category);
     return translation?.description || '';
 }
 
+/**
+ * 获取分类缩略图
+ */
 export function getCategoryThumbnail(category: contentservicev1_Category) {
     const translation = getTranslation(category);
     return translation?.thumbnail || '/placeholder.jpg';

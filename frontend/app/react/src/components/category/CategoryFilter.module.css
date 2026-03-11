@@ -1,0 +1,110 @@
+/* ========== Category Filter Component ========== */
+.categoryFilter {
+    margin-bottom: 48px;
+
+    .categoryTabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 24px;
+        background: var(--color-surface);
+        border-radius: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .loading {
+        padding: 40px 20px;
+        text-align: center;
+        color: var(--color-text-secondary);
+    }
+}
+
+/* 悬浮菜单样式 */
+.categoryItemWrapper {
+    position: relative;
+    display: inline-block;
+
+    .categorySubmenu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1000;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        min-width: min-content;
+        max-width: 280px;
+        padding: 8px;
+        margin-top: 8px;
+        background: var(--color-surface);
+        border-radius: 12px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(10px);
+        animation: slideDown 0.2s ease-out;
+    }
+}
+
+/* 下滑动画 */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .categoryFilter {
+        margin-bottom: 32px;
+
+        .categoryTabs {
+            padding: 16px;
+            gap: 8px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+
+            scrollbar-width: thin;
+            scrollbar-color: rgba(102, 126, 234, 0.2) transparent;
+
+            &::-webkit-scrollbar {
+                height: 3px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: rgba(102, 126, 234, 0.2);
+                border-radius: 10px;
+            }
+        }
+    }
+}
+
+@media (max-width: 640px) {
+    .categoryFilter {
+        .categoryTabs {
+            padding: 12px;
+            gap: 8px;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .categoryFilter {
+        margin-bottom: 24px;
+
+        .categoryTabs {
+            padding: 10px;
+            gap: 6px;
+        }
+    }
+}

@@ -3,8 +3,10 @@
 import React, {useState, useEffect} from 'react';
 import {Pagination, Empty, Skeleton} from 'antd';
 import {useTranslations} from 'next-intl';
+
 import {usePostStore} from '@/store/slices/post/hooks';
 import type {contentservicev1_Post} from '@/api/generated/app/service/v1';
+
 import PostCard from '../post/PostCard';
 import styles from './PostList.module.css';
 

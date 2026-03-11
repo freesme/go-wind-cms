@@ -4,6 +4,7 @@ import {createNavigationServiceClient} from '@/api/generated/app/service/v1';
 import {requestClientRequestHandler} from '@/transport/rest';
 import {
     siteservicev1_Navigation,
+    siteservicev1_NavigationItem,
 } from '@/api/generated/app/service/v1';
 
 const navigationService = createNavigationServiceClient(requestClientRequestHandler);
@@ -94,6 +95,23 @@ export const deleteNavigation = createAsyncThunk(
         }
     }
 );
+
+/**
+ * 递归查找导航项
+ * @param items 导航项列表
+ * @param key 要查找的 ID
+ * @returns 找到的导航项，未找到返回 null
+ */
+export function findNavItem(items: siteservicev1_NavigationItem[], key: number): siteservicev1_NavigationItem | null {
+    for (const item of items) {
+        if (item.id === key) return item;
+        if (item.children) {
+            const found = findNavItem(item.children, key);
+            if (found) return found;
+        }
+    }
+    return null;
+}
 
 const navigationSlice = createSlice({
     name: 'navigation',

@@ -8,6 +8,7 @@ import {
     deleteTag,
     clearTagDetail,
     resetTag,
+    getTranslation,
 } from './slice';
 import {createAbortableCalls} from "@/store/async-thunk";
 
@@ -45,5 +46,6 @@ export function useTagStore() {
         deleteTag: cancellableDeleteTag,
         clearTagDetail: () => dispatch(clearTagDetail()),
         resetTag: () => dispatch(resetTag()),
+        getTranslation,
     };
 }

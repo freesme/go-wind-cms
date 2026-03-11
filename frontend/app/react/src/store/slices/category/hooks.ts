@@ -8,6 +8,10 @@ import {
     deleteCategory,
     clearCategoryDetail,
     resetCategory,
+    getTranslation,
+    getCategoryName,
+    getCategoryDescription,
+    getCategoryThumbnail,
 } from './slice';
 import {createAbortableCalls} from "@/store/async-thunk";
 
@@ -45,5 +49,10 @@ export function useCategoryStore() {
         deleteCategory: cancellableDeleteCategory,
         clearCategoryDetail: () => dispatch(clearCategoryDetail()),
         resetCategory: () => dispatch(resetCategory()),
+        // 辅助函数
+        getTranslation,
+        getCategoryName,
+        getCategoryDescription,
+        getCategoryThumbnail,
     };
 }

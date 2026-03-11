@@ -1,0 +1,304 @@
+/* ========== Comment Section Component ========== */
+.commentsSection {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+    background: var(--color-surface);
+    border-radius: 20px;
+    padding: 56px 72px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06),
+    0 8px 48px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Section Header */
+.sectionHeader {
+    margin-bottom: 40px;
+    position: relative;
+
+    h2 {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-size: 30px;
+        font-weight: 700;
+        margin: 0;
+        color: var(--color-text-primary);
+        letter-spacing: -0.3px;
+    }
+}
+
+/* Comment Form */
+.commentForm {
+    background: linear-gradient(135deg,
+    var(--color-surface) 0%,
+    rgba(168, 85, 247, 0.02) 100%);
+    border-radius: 20px;
+    padding: 48px;
+    margin-bottom: 48px;
+    border: 1px solid rgba(168, 85, 247, 0.12);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08),
+    0 2px 16px rgba(168, 85, 247, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+        border-color: var(--color-brand);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1),
+        0 4px 20px rgba(168, 85, 247, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+    }
+
+    .formHeader {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 32px;
+        padding-bottom: 24px;
+        border-bottom: 2px solid rgba(168, 85, 247, 0.08);
+
+        .formIcon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg,
+            var(--color-brand) 0%,
+            #a855f7 100%);
+            border-radius: 14px;
+            box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3);
+            color: #fff;
+        }
+
+        h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+            color: var(--color-text-primary);
+            letter-spacing: -0.3px;
+            flex: 1;
+        }
+    }
+}
+
+/* Form Actions */
+.formActions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+
+    .formTip {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: var(--color-text-secondary);
+        padding: 8px 14px;
+        background: rgba(168, 85, 247, 0.05);
+        border-radius: 10px;
+        border: 1px solid rgba(168, 85, 247, 0.08);
+    }
+}
+
+/* Comments List */
+.commentsList {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 64px;
+        width: 2px;
+        height: 100%;
+        background: linear-gradient(180deg,
+        rgba(168, 85, 247, 0.2) 0%,
+        rgba(168, 85, 247, 0.05) 100%);
+        z-index: 0;
+    }
+}
+
+/* Load More Button */
+.loadMoreContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(168, 85, 247, 0.08);
+}
+
+/* No More Text */
+.noMoreText {
+    text-align: center;
+    padding: 20px;
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .commentsSection {
+        padding: 40px 24px !important;
+        border-radius: 16px !important;
+    }
+
+    .sectionHeader {
+        margin-bottom: 32px;
+
+        h2 {
+            font-size: 24px;
+        }
+    }
+
+    .commentForm {
+        padding: 32px 24px !important;
+        margin-bottom: 36px !important;
+        border-radius: 16px !important;
+
+        .formHeader {
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+
+            .formIcon {
+                width: 40px;
+                height: 40px;
+                border-radius: 12px;
+            }
+
+            h3 {
+                font-size: 20px;
+            }
+        }
+    }
+
+    .formActions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+
+        .formTip {
+            justify-content: center;
+            font-size: 12px;
+            padding: 6px 12px;
+        }
+    }
+
+    .commentsList {
+        &::before {
+            left: 56px;
+        }
+    }
+
+    .loadMoreContainer {
+        margin-top: 28px;
+        padding-top: 20px;
+    }
+
+    .noMoreText {
+        padding: 16px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 640px) {
+    .commentsSection {
+        padding: 32px 20px !important;
+        border-radius: 14px !important;
+    }
+
+    .sectionHeader {
+        margin-bottom: 28px;
+
+        h2 {
+            font-size: 22px;
+            gap: 10px;
+        }
+    }
+
+    .commentForm {
+        padding: 28px 20px !important;
+        margin-bottom: 32px !important;
+        border-radius: 14px !important;
+
+        .formHeader {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+
+            .formIcon {
+                width: 36px;
+                height: 36px;
+                border-radius: 10px;
+            }
+
+            h3 {
+                font-size: 18px;
+            }
+        }
+    }
+
+    .loadMoreContainer {
+        margin-top: 24px;
+        padding-top: 16px;
+    }
+
+    .noMoreText {
+        padding: 14px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .commentsSection {
+        padding: 28px 16px !important;
+        border-radius: 12px !important;
+    }
+
+    .sectionHeader {
+        margin-bottom: 24px;
+
+        h2 {
+            font-size: 20px;
+        }
+    }
+
+    .commentForm {
+        padding: 24px 16px !important;
+        margin-bottom: 28px !important;
+
+        .formHeader {
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+
+            .formIcon {
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+            }
+
+            h3 {
+                font-size: 17px;
+            }
+        }
+    }
+
+    .loadMoreContainer {
+        margin-top: 20px;
+        padding-top: 12px;
+    }
+
+    .noMoreText {
+        padding: 12px;
+        font-size: 11px;
+    }
+}

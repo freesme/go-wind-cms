@@ -3,7 +3,9 @@ import {createTagServiceClient} from '@/api/generated/app/service/v1';
 import {requestClientRequestHandler} from '@/transport/rest';
 import {
     contentservicev1_Tag,
+    contentservicev1_TagTranslation,
 } from '@/api/generated/app/service/v1';
+import {currentLocaleLanguageCode} from '@/i18n';
 
 const tagService = createTagServiceClient(requestClientRequestHandler);
 
@@ -93,6 +95,23 @@ export const deleteTag = createAsyncThunk(
         }
     }
 );
+
+/**
+ * 获取标签的翻译
+ * @param tag 标签对象
+ * @returns 当前语言的翻译，如果找不到则返回第一个翻译或 null
+ */
+export function getTranslation(tag: contentservicev1_Tag) {
+    if (!tag?.translations || tag.translations.length === 0) return null;
+
+    const locale = currentLocaleLanguageCode();
+    // 优先查找当前语言的翻译
+    const translation = tag.translations?.find(
+        (t: contentservicev1_TagTranslation) => t.languageCode === locale
+    );
+    // 如果找不到，回退到第一个翻译
+    return translation || tag.translations?.[0];
+}
 
 const tagSlice = createSlice({
     name: 'tag',

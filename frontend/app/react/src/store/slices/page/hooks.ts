@@ -8,6 +8,7 @@ import {
     deletePage,
     clearPageDetail,
     resetPage,
+    getTranslation,
 } from './slice';
 import {createAbortableCalls} from "@/store/async-thunk";
 
@@ -45,5 +46,6 @@ export function usePageStore() {
         deletePage: cancellableDeletePage,
         clearPageDetail: () => dispatch(clearPageDetail()),
         resetPage: () => dispatch(resetPage()),
+        getTranslation,
     };
 }

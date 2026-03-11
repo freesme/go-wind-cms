@@ -8,31 +8,13 @@ import {
     deleteNavigation,
     clearNavigationDetail,
     resetNavigation,
+    findNavItem,
 } from './slice';
-import type {siteservicev1_NavigationItem} from '@/api/generated/app/service/v1';
 import {createAbortableCalls} from "@/store/async-thunk";
 
 export function useNavigationStore() {
     const navigation = useSelector((state: RootState) => state.navigation);
     const dispatch = useDispatch<AppDispatch>();
-
-    /**
-     * 递归查找导航项
-     */
-    const findNavItem = (items: siteservicev1_NavigationItem[], id: number): siteservicev1_NavigationItem | undefined => {
-        for (const item of items) {
-            if (item.id === id) {
-                return item;
-            }
-            if (item.children && item.children.length > 0) {
-                const found = findNavItem(item.children, id);
-                if (found) {
-                    return found;
-                }
-            }
-        }
-        return undefined;
-    };
 
     // 创建带取消功能的 API 调用
     const {
