@@ -8,7 +8,7 @@ import styles from './home.module.css';
 
 export default function FeaturedPostsSection() {
     const t = useTranslations('page.home');
-    
+
     const scrollToCategories = () => {
         const section = document.querySelector('.categories-section');
         if (section) {
@@ -23,7 +23,7 @@ export default function FeaturedPostsSection() {
                     <XIcon name="carbon:star-filled" size={28} style={{color: '#6366f1', marginRight: '8px'}} />
                     {t('featured_posts')}
                 </h2>
-                <Button text type="primary" onClick={() => window.location.href = '/post'}>
+                <Button type="primary" onClick={() => window.location.href = '/post'}>
                     {t('view_all')} →
                 </Button>
             </div>

@@ -18,25 +18,25 @@ interface CategoryListSectionProps {
 }
 
 export default function CategoryListSection({
-    skeletonCount = 8,
-    showCarousel = false,
-    pageSize = 8,
-    page = 1,
-    filter = {status: 'CATEGORY_STATUS_ACTIVE'} as Record<string, unknown>,
-    orderBy = ['-sortOrder', '-postCount'],
-    fieldMask = 'id,status,sortOrder,icon,code,postCount,directPostCount,parent_id,createdAt,translations.id,translations.categoryId,translations.name,translations.languageCode,translations.description',
-    showHeader = true
-}: CategoryListSectionProps) {
+                                                skeletonCount = 8,
+                                                showCarousel = false,
+                                                pageSize = 8,
+                                                page = 1,
+                                                filter = {status: 'CATEGORY_STATUS_ACTIVE'} as Record<string, unknown>,
+                                                orderBy = ['-sortOrder', '-postCount'],
+                                                fieldMask = 'id,status,sortOrder,icon,code,postCount,directPostCount,parent_id,createdAt,translations.id,translations.categoryId,translations.name,translations.languageCode,translations.description',
+                                                showHeader = true
+                                            }: CategoryListSectionProps) {
     const t = useTranslations('page.home');
     const categoryStore = useCategoryStore();
-    
+
     // 使用 useMemo 稳定对象引用
     const stableFilter = useMemo(() => filter, [JSON.stringify(filter)]);
     const stableOrderBy = useMemo(() => orderBy, [JSON.stringify(orderBy)]);
-    
+
     const [categories, setCategories] = useState<contentservicev1_Category[]>([]);
     const [loading, setLoading] = useState(false);
-    
+
     // 用于取消异步操作
     const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -45,11 +45,11 @@ export default function CategoryListSection({
         if (abortControllerRef.current) {
             abortControllerRef.current.abort();
         }
-        
+
         // 创建新的 AbortController
         abortControllerRef.current = new AbortController();
         const signal = abortControllerRef.current.signal;
-        
+
         setLoading(true);
         try {
             const res = await categoryStore.listCategory({
@@ -59,9 +59,9 @@ export default function CategoryListSection({
                 orderBy: stableOrderBy,
                 signal,
             });
-            
+
             if (signal.aborted) return;
-            
+
             setCategories(res.items || []);
         } catch (error) {
             if (signal.aborted) return;
@@ -76,7 +76,7 @@ export default function CategoryListSection({
 
     useEffect(() => {
         loadCategories();
-        
+
         // 组件卸载时取消请求
         return () => {
             if (abortControllerRef.current) {
@@ -100,21 +100,21 @@ export default function CategoryListSection({
             {showHeader && (
                 <div className={styles.sectionHeader}>
                     <h2 className={styles.sectionTitle}>
-                        <XIcon name="carbon:folder-details" size={28} style={{color: '#6366f1', marginRight: '8px'}} />
+                        <XIcon name="carbon:folder-details" size={28} style={{color: '#6366f1', marginRight: '8px'}}/>
                         {t('categories')}
                     </h2>
-                    <Button text onClick={() => window.location.href = '/category'}>
+                    <Button type="primary" onClick={() => window.location.href = '/category'}>
                         {t('view_all')} →
                     </Button>
                 </div>
             )}
-            
+
             {/* Loading Skeleton */}
             {loading ? (
                 <div className={`${styles.categoriesGrid} desktop-grid`}>
                     {Array.from({length: skeletonCount}).map((_, i) => (
                         <div key={i} className={styles.categoryCard}>
-                            <Skeleton.Button style={{width: '100%', height: '140px'}} />
+                            <Skeleton.Button style={{width: '100%', height: '140px'}}/>
                         </div>
                     ))}
                 </div>
@@ -128,7 +128,7 @@ export default function CategoryListSection({
                                 className={`${styles.categoryCard} scroll-reveal-item`}
                                 onClick={() => handleViewCategory(category.id)}
                             >
-                                <div className={styles.categoryCardBg} />
+                                <div className={styles.categoryCardBg}/>
                                 <div className={styles.categoryCardContent}>
                                     <div className={styles.categoryCardHeader}>
                                         <div className={styles.categoryIcon}>
@@ -145,7 +145,7 @@ export default function CategoryListSection({
                                         </div>
                                     </div>
                                     <div className={styles.categoryBadge}>
-                                        <XIcon name="carbon:time" size={14} />
+                                        <XIcon name="carbon:time" size={14}/>
                                         <span>{t('updated_days_ago', {days: 3})}</span>
                                     </div>
                                 </div>
@@ -172,7 +172,7 @@ export default function CategoryListSection({
                                     onClick={() => handleViewCategory(category.id)}
                                 >
                                     <div className={`${styles.categoryCard} ${styles.carouselCard}`}>
-                                        <div className={styles.categoryCardBg} />
+                                        <div className={styles.categoryCardBg}/>
                                         <div className={styles.categoryCardContent}>
                                             <div className={styles.categoryCardHeader}>
                                                 <div className={styles.categoryIcon}>
@@ -189,7 +189,7 @@ export default function CategoryListSection({
                                                 </div>
                                             </div>
                                             <div className={styles.categoryBadge}>
-                                                <XIcon name="carbon:time" size={14} />
+                                                <XIcon name="carbon:time" size={14}/>
                                                 <span>{t('updated_days_ago', {days: 3})}</span>
                                             </div>
                                         </div>

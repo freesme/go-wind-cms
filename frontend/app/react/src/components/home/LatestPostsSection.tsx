@@ -14,7 +14,7 @@ export default function LatestPostsSection() {
                     <XIcon name="carbon:document" size={28} style={{color: '#6366f1', marginRight: '8px'}} />
                     {t('latest_posts')}
                 </h2>
-                <Button text type="primary" onClick={() => window.location.href = '/post'}>
+                <Button type="primary" onClick={() => window.location.href = '/post'}>
                     {t('view_all')} →
                 </Button>
             </div>

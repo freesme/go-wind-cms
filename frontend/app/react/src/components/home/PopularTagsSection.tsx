@@ -92,7 +92,7 @@ export default function PopularTagsSection() {
                     <XIcon name="carbon:fire" size={28} style={{color: '#6366f1', marginRight: '8px'}}/>
                     {t('popular_tags')}
                 </h2>
-                <Button text type="primary" onClick={() => window.location.href = '/tag'}>
+                <Button type="primary" onClick={() => window.location.href = '/tag'}>
                     {t('view_all')} →
                 </Button>
             </div>

@@ -401,6 +401,41 @@ html.dark .homePage {
     padding: 0 2rem;
 }
 
+/* View All Button Style */
+.sectionHeader button,
+.sectionHeader .ant-btn-text {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #6366f1;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.sectionHeader button:hover,
+.sectionHeader .ant-btn-text:hover {
+    background: rgba(99, 102, 241, 0.08);
+    color: #4f46e5;
+}
+
+html.dark .sectionHeader button,
+html.dark .sectionHeader .ant-btn-text {
+    color: #a5b4fc;
+}
+
+html.dark .sectionHeader button:hover,
+html.dark .sectionHeader .ant-btn-text:hover {
+    background: rgba(99, 102, 241, 0.12);
+    color: #c7d2fe;
+}
+
 .sectionTitle {
     font-size: 2.25rem;
     font-weight: 800;
@@ -826,6 +861,7 @@ html.dark .tagItem:hover .tagLabel {
 }
 
 /* ========== Categories Section ========== */
+/* ========== Categories Section ========== */
 .categoriesSection {
     padding: 3rem 0;
     background: transparent;
@@ -869,14 +905,15 @@ html.dark .tagItem:hover .tagLabel {
     flex-direction: column;
 }
 
+/* ========== Category Card - Light Mode (Default) ========== */
 .categoryCard {
     display: flex;
     flex-direction: column;
     padding: 1.5rem;
-    background: #1e293b;
+    background: #ffffff;
     border: 1px solid rgba(99, 102, 241, 0.1);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    color: #e0e7ef;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    color: #1e293b;
     border-radius: 16px;
     cursor: pointer;
     position: relative;
@@ -933,7 +970,7 @@ html.dark .tagItem:hover .tagLabel {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(99, 102, 241, 0.1);
+    background: rgba(99, 102, 241, 0.08);
     color: #6366f1;
     border-radius: 14px;
     margin-bottom: 1rem;
@@ -958,11 +995,11 @@ html.dark .tagItem:hover .tagLabel {
 
 .postCount {
     font-size: 0.95rem;
-    color: #a5b4fc;
+    color: #6366f1;
     font-weight: 600;
     display: inline-block;
     padding: 0.35rem 0.75rem;
-    background: rgba(99, 102, 241, 0.1);
+    background: rgba(99, 102, 241, 0.08);
     border-radius: 8px;
     transition: all 0.3s;
     margin-bottom: 0.75rem;
@@ -971,8 +1008,8 @@ html.dark .tagItem:hover .tagLabel {
 .categoryBadge {
     margin-top: auto;
     padding: 0.5rem 0.875rem;
-    background: rgba(99, 102, 241, 0.1);
-    color: #a5b4fc;
+    background: rgba(99, 102, 241, 0.08);
+    color: #6366f1;
     border-radius: 8px;
     font-size: 0.8rem;
     font-weight: 600;
@@ -985,7 +1022,7 @@ html.dark .tagItem:hover .tagLabel {
 }
 
 .categoryCard:hover {
-    background: #23263a;
+    background: #f8fafc;
     border-color: rgba(99, 102, 241, 0.3);
     box-shadow: 0 8px 24px rgba(99, 102, 241, 0.15);
 }
@@ -1003,23 +1040,64 @@ html.dark .tagItem:hover .tagLabel {
     color: #fff;
 }
 
-.categoryCard:hover .postCount {
-    background: rgba(99, 102, 241, 0.2);
-    color: #c7d2fe;
-}
-
+.categoryCard:hover .postCount,
 .categoryCard:hover .categoryBadge {
-    background: rgba(99, 102, 241, 0.2);
-    color: #c7d2fe;
+    background: rgba(99, 102, 241, 0.15);
+    color: #4f46e5;
 }
 
-/* Dark Mode overrides */
+/* ========== Category Card - Dark Mode ========== */
 html.dark .categoriesSection {
     background: transparent;
 }
 
+html.dark .categoryCard,
+html.dark .categoryCard,
 html.dark .categoryCard {
-    background: #1e293b;
+    background: #1e293b !important;
+    border: 1px solid rgba(99, 102, 241, 0.15) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+    color: #e0e7ef !important;
+}
+
+html.dark .categoryCard::before {
+    background: #6366f1;
+}
+
+html.dark .categoryCard .categoryIcon {
+    background: rgba(99, 102, 241, 0.12) !important;
+    color: #a5b4fc !important;
+}
+
+html.dark .categoryCard .categoryInfo h3 {
+    color: #e0e7ef !important;
+}
+
+html.dark .categoryCard .postCount {
+    color: #a5b4fc !important;
+    background: rgba(99, 102, 241, 0.12) !important;
+}
+
+html.dark .categoryCard .categoryBadge {
+    color: #a5b4fc !important;
+    background: rgba(99, 102, 241, 0.12) !important;
+}
+
+html.dark .categoryCard:hover {
+    background: #23263a !important;
+    border-color: rgba(99, 102, 241, 0.3) !important;
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.25) !important;
+}
+
+html.dark .categoryCard:hover .categoryIcon {
+    background: #6366f1 !important;
+    color: #fff !important;
+}
+
+html.dark .categoryCard:hover .postCount,
+html.dark .categoryCard:hover .categoryBadge {
+    background: rgba(99, 102, 241, 0.2) !important;
+    color: #c7d2fe !important;
 }
 
 /* Mobile Responsive */
