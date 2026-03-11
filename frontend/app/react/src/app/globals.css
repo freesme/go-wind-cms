@@ -39,6 +39,7 @@ body {
 
     /* Header 颜色 */
     --header-color: rgba(255, 255, 255, 0.95);
+    --header-bg: #ffffff;
     
     /* Header 控件颜色 - 亮色模式 */
     --header-control-bg: rgba(0, 0, 0, 0.02);
@@ -46,6 +47,19 @@ body {
     --header-control-text: rgba(0, 0, 0, 0.85);
     --header-control-text-muted: rgba(0, 0, 0, 0.45);
     --header-control-border: rgba(0, 0, 0, 0.06);
+    
+    /* 布局辅助变量 */
+    --layout-max-width: 1200px;
+    
+    /* 间距变量 */
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    
+    /* 圆角变量 */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
 }
 
 /* 暗黑模式 */
@@ -59,6 +73,7 @@ html.dark {
     --color-card-shadow: rgba(0, 0, 0, 0.2);
     --color-hover-shadow: rgba(0, 0, 0, 0.3);
     --header-color: rgba(30, 41, 59, 0.95);
+    --header-bg: #0f172a;
     
     /* Header 控件颜色 - 暗黑模式 */
     --header-control-bg: rgba(255, 255, 255, 0.05);

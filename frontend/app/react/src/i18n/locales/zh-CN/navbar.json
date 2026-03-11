@@ -6,8 +6,8 @@
     "register": "注册",
     "login": "登录",
     "search_placeholder": "请输入关键字搜索",
-    "dark_mode": "暗黑",
-    "light_mode": "亮色",
+    "dark_mode": "暗",
+    "light_mode": "亮",
     "system_mode": "系统",
     "language": "语言"
   }

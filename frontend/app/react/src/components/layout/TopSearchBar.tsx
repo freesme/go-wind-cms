@@ -206,29 +206,35 @@ export default function TopSearchBar({logoSrc = '/logo.png', onLogoClick}: Omit<
                         trigger={['hover']}
                     >
                         <Button
-                            shape="round"
+                            shape="circle"
                             className={styles.langBtn}
                             aria-label="Language"
-                            icon={<GlobalOutlined/>}
-                        >
-                            <span className={styles.langText}>
-                                {languageStore.language.locale === 'zh-CN' ? '中文' : 'EN'}
-                            </span>
-                        </Button>
+                            icon={
+                                <>
+                                    <GlobalOutlined className={styles.langIcon} />
+                                    <span className={styles.langText}>
+                                        {languageStore.language.locale === 'zh-CN' ? '中' : 'EN'}
+                                    </span>
+                                </>
+                            }
+                        />
                     </Dropdown>
 
                     {/* Theme Toggle */}
                     <Button
-                        shape="round"
+                        shape="circle"
                         className={styles.themeBtn}
                         aria-label="Toggle theme"
                         onClick={toggleDarkMode}
-                        icon={themeStore.theme.mode === 'dark' ? <MoonOutlined/> : <SunOutlined/>}
-                    >
-                      <span className={styles.themeText}>
-                       {themeStore.theme.mode === 'dark' ? t('dark_mode') : t('light_mode')}
-                      </span>
-                    </Button>
+                        icon={
+                            <>
+                                {themeStore.theme.mode === 'dark' ? <MoonOutlined /> : <SunOutlined />}
+                                <span className={styles.themeText}>
+                                    {themeStore.theme.mode === 'dark' ? t('dark_mode') : t('light_mode')}
+                                </span>
+                            </>
+                        }
+                    />
                 </Space>
             </div>
         </div>
