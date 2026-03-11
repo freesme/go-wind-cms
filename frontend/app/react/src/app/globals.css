@@ -15,7 +15,12 @@ body {
 :root {
     /* 布局尺寸 */
     --layout-header-height: 64px;
+    --layout-navbar-height: 50px;
     --layout-footer-height: 200px;
+    --layout-topbar-height: 75px;
+    
+    /* 内容区域顶部偏移（用于固定 Header） */
+    --layout-content-offset: calc(var(--layout-topbar-height) + var(--layout-navbar-height));
 
     /* 颜色系统 - 亮色模式 */
     --color-bg: #f8fafc;

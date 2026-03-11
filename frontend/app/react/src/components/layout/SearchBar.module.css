@@ -1,4 +1,4 @@
-.searchBar {
+.searchBarWrapper {
     display: flex;
     align-items: center;
     flex: 1;
@@ -6,34 +6,53 @@
     max-width: 600px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     height: 44px;
+}
 
-    --n-color: rgba(255, 255, 255, 0.08) !important;
-    --n-color-focus: rgba(255, 255, 255, 0.12) !important;
-    --n-text-color: rgba(255, 255, 255, 0.85) !important;
-    --n-placeholder-color: rgba(255, 255, 255, 0.45) !important;
-    --n-border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    --n-border-hover: 1px solid var(--color-brand) !important;
-    --n-border-focus: 1px solid var(--color-brand) !important;
-    --n-border-radius: 8px;
-    --n-box-shadow-focus: 0 0 0 2px rgba(102, 126, 234, 0.2) !important;
+.searchBar :global(.ant-input) {
+    height: 100%;
+    border-radius: 8px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    transition: all 0.3s;
+}
+
+.searchBar :global(.ant-input:hover),
+.searchBar :global(.ant-input:focus) {
+    border-color: var(--color-brand, #667eea) !important;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2) !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+}
+
+.searchBar :global(.ant-input::placeholder) {
+    color: rgba(255, 255, 255, 0.45) !important;
+}
+
+.searchBar :global(.ant-input-prefix .anticon) {
+    color: rgba(255, 255, 255, 0.65) !important;
+    transition: color 0.3s;
+}
+
+.searchBar :global(.ant-input:focus .ant-input-prefix .anticon) {
+    color: var(--color-brand, #667eea) !important;
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
-    .searchBar {
+    .searchBarWrapper {
         margin: 0 12px;
         max-width: 400px;
     }
 }
 
 @media (max-width: 768px) {
-    .searchBar {
+    .searchBarWrapper {
         display: none;
     }
 }
 
 @media (max-width: 480px) {
-    .searchBar {
+    .searchBarWrapper {
         display: none;
     }
 }

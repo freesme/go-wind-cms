@@ -15,26 +15,15 @@ export default function SearchBar() {
     };
 
     return (
-        <Input
-            className={styles.searchBar}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyUp={handleSearch}
-            placeholder={t('search_placeholder')}
-            prefix={<SearchOutlined/>}
-            style={{
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                color: 'rgba(255, 255, 255, 0.85)',
-                height: '36px',
-                borderRadius: '8px',
-            }}
-            styles={{
-                input: {
-                    color: 'rgba(255, 255, 255, 0.85)',
-                    fontSize: '14px',
-                },
-            }}
-        />
+        <div className={styles.searchBarWrapper}>
+            <Input
+                className={styles.searchBar}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyUp={handleSearch}
+                placeholder={t('search_placeholder')}
+                prefix={<SearchOutlined/>}
+            />
+        </div>
     );
 }

@@ -1,35 +1,26 @@
-.headerOuter {
-    background: transparent !important;
-    backdrop-filter: blur(12px);
-    border-bottom: none !important; /* 移除底部边框 */
-    color: rgba(255, 255, 255, 0.85);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+/* ========== Fixed Top Header ========== */
+.fixedTop {
     width: 100%;
+    z-index: 1000;
+    background: var(--header-color, rgba(255, 255, 255, 0.95));
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    display: flex;
+    justify-content: center;
+    /* 硬件加速，提升性能 */
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
-/* 强制覆盖 Ant Design Header 的默认样式 */
-:global(.ant-layout-header) {
-    background: transparent !important;
-}
-
-:global(.ant-layout-header.headerOuter) {
-    background: transparent !important;
-}
-
-:global(.ant-layout) {
-    background: transparent !important;
-}
-
-/* 确保 body 和 html 也是暗色 */
-:global(body) {
-    background: #0a0a0a !important;
-}
-
-:global(html) {
-    background: #0a0a0a !important;
+html.dark .fixedTop {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .headerInner {
@@ -39,21 +30,11 @@
     padding: 0;
     width: min(var(--layout-max-width, 1200px), calc(100% - 48px));
     max-width: var(--layout-max-width, 1200px);
-    margin: 0 auto;
-    background: transparent;
 }
 
-/* 移除所有子元素的边框 */
-.headerInner > * {
-    border: none !important;
-    box-shadow: none !important;
-}
-
-/* TopSearchBar 和 TopNavbar 之间不要有分隔线 */
-.headerInner > :global(.topBar),
-.headerInner > :global(.navbarWrapper) {
-    border: none !important;
-    box-shadow: none !important;
+/* 每行之间添加分割线 */
+.headerInner > :not(:last-child) {
+    border-bottom: 1px solid var(--color-border);
 }
 
 /* TopBar */
@@ -100,7 +81,7 @@
 .siteName {
     font-size: 20px;
     font-weight: 700;
-    color: var(--color-brand, #667eea);
+    color: var(--color-brand, #6366f1);
     white-space: nowrap;
     letter-spacing: 0.8px;
     transition: all 0.3s;

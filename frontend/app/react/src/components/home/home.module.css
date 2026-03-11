@@ -12,7 +12,7 @@ html.dark .homePage {
 /* ========== Hero Section ========== */
 .hero {
     position: relative;
-    padding: 3.5rem 2rem 2.5rem;
+    padding: 8rem 2rem 2.5rem;  /* 增加顶部 padding，避免被 Header 遮挡 */
     text-align: center;
     background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
     color: white;
@@ -574,6 +574,10 @@ html.dark .scrollIndicatorText {
 @media (max-width: 900px) {
     .scrollIndicator {
         display: none;
+    }
+
+    .hero {
+        padding: 7rem 1rem 2rem;  /* 移动端也增加顶部间距 */
     }
 
     .heroTitle {
