@@ -8,13 +8,14 @@ import {useTranslations} from 'next-intl';
 import styles from './Footer.module.css';
 
 export default function Footer() {
-    const t = useTranslations('footer');
+    const t = useTranslations('ui.button');
 
     const footerLinks = [
-        {key: 'about', label: t('about'), href: '/about'},
-        {key: 'privacy', label: t('privacy'), href: '/privacy'},
-        {key: 'terms', label: t('terms'), href: '/terms'},
-        {key: 'contact', label: t('contact'), href: '/contact'},
+        {key: 'about', label: t('about_us'), href: '/about'},
+        {key: 'contact', label: t('contact_us'), href: '/contact'},
+        {key: 'disclaimer', label: t('non_responsibility'), href: '/disclaimer'},
+        {key: 'privacy', label: t('privacy_agreement'), href: '/privacy'},
+        {key: 'terms', label: t('terms_of_service'), href: '/terms'},
     ];
 
     const socialLinks = [
@@ -38,9 +39,9 @@ export default function Footer() {
 
                 <div className={styles.footerMeta}>
                     <div className={styles.copyright}>
-                        © {new Date().getFullYear()} CMS. All rights reserved.
+                        © {new Date().getFullYear()} GoWind Team. All rights reserved.
                     </div>
-                    <Divider type="vertical" className={styles.metaDivider}/>
+                    <Divider orientation="vertical" className={styles.metaDivider}/>
                     <div className={styles.socialList}>
                         {socialLinks.map(social => (
                             <Button

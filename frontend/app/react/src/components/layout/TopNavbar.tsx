@@ -6,6 +6,7 @@ import {XIcon} from '@/plugins/xicon';
 
 import type {siteservicev1_Navigation, siteservicev1_NavigationItem} from '@/api/generated/app/service/v1';
 import {useNavigationStore} from '@/store/slices/navigation/hooks';
+import {useLanguageStore} from '@/store/core/language/hooks';
 
 import type {TopNavBarTabItem} from './types';
 import TopNavbarTab from './TopNavbarTab';
@@ -30,6 +31,7 @@ const rightTabList: TopNavBarTabItem[] = [];
 
 export default function TopNavbar({onClick}: TopNavbarProps) {
     const navigationStore = useNavigationStore();
+    const languageStore = useLanguageStore();
     const [navigationItems, setNavigationItems] = useState<siteservicev1_NavigationItem[]>([]);
     const [activeOverlay, setActiveOverlay] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -64,7 +66,7 @@ export default function TopNavbar({onClick}: TopNavbarProps) {
                 // 调用 API 获取所有导航数据
                 const res = await navigationStore.listNavigation(
                     {page: 1, pageSize: 10}
-                ) as unknown as { items: siteservicev1_Navigation[]; total: number };
+                ) as unknown as {items: siteservicev1_Navigation[]; total: number};
 
                 if (res.items && res.items.length > 0) {
                     res.items.forEach((nav, index) => {
@@ -90,7 +92,7 @@ export default function TopNavbar({onClick}: TopNavbarProps) {
 
         loadNavigation();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // 只在组件挂载时执行一次
+    }, [languageStore.language.locale]); // 当语言变化时重新加载导航数据
 
     // TODO: 后续添加语言切换监听，自动重新加载导航数据
 

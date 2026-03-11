@@ -5,6 +5,7 @@ import {Image, Button, Divider, Space, Dropdown} from 'antd';
 import {
     UserOutlined,
     MoonOutlined,
+    SunOutlined,
     GlobalOutlined,
     HomeOutlined,
     LogoutOutlined
@@ -14,6 +15,9 @@ import {useRouter} from 'next/navigation';
 import styles from './TopSearchBar.module.css';
 
 import SearchBar from './SearchBar';
+import {useThemeStore} from '@/store/core/theme/hooks';
+import {useI18n} from '@/i18n';
+import {useLanguageStore} from "@/store/core/language/hooks";
 
 interface TopSearchBarProps {
     brandTitle: string;
@@ -22,18 +26,21 @@ interface TopSearchBarProps {
 }
 
 export default function TopSearchBar({brandTitle, logoSrc = '/logo.png', onLogoClick}: TopSearchBarProps) {
-   const t = useTranslations('navbar.top');
-   const menuT = useTranslations('menu');
-   const router = useRouter();
+    const t = useTranslations('navbar.top');
+    const menuT = useTranslations('menu');
+    const themeStore = useThemeStore();
+    const languageStore = useLanguageStore();
+    const {changeLocale} = useI18n();
+    const router = useRouter();
 
     // 模拟登录状态（实际应该从 store 获取）
-   const isLogin = false; // TODO: 从 accessStore 获取
+    const isLogin = false; // TODO: 从 accessStore 获取
 
-   const handleClickLogo = () => {
+    const handleClickLogo = () => {
         if (onLogoClick) {
-        onLogoClick();
+            onLogoClick();
         } else {
-           router.push('/');
+            router.push('/');
         }
     };
 
@@ -97,13 +104,12 @@ export default function TopSearchBar({brandTitle, logoSrc = '/logo.png', onLogoC
     ];
 
     const handleLanguageChange = ({key}: { key: string }) => {
-        // TODO: 实现语言切换逻辑
-        console.log('Change language to:', key);
+        changeLocale(key);
     };
 
     const toggleDarkMode = () => {
-        // TODO: 实现主题切换逻辑
-        console.log('Toggle dark mode');
+        const newMode = themeStore.theme.mode === 'dark' ? 'light' : 'dark';
+        themeStore.setMode(newMode);
     };
 
     return (
@@ -186,7 +192,8 @@ export default function TopSearchBar({brandTitle, logoSrc = '/logo.png', onLogoC
                             aria-label="Language"
                             icon={<GlobalOutlined/>}
                         >
-                            <span className={styles.langText}>中文</span>
+                            <span
+                                className={styles.langText}>{languageStore.language.locale?.split('-')[0] === 'zh' ? '中文' : 'EN'}</span>
                         </Button>
                     </Dropdown>
 
@@ -196,9 +203,12 @@ export default function TopSearchBar({brandTitle, logoSrc = '/logo.png', onLogoC
                         className={styles.themeBtn}
                         aria-label="Toggle theme"
                         onClick={toggleDarkMode}
-                        icon={<MoonOutlined/>}
+                        icon={themeStore.theme.mode === 'dark' || themeStore.theme.mode === 'system' ? <SunOutlined/> :
+                            <MoonOutlined/>}
                     >
-                        <span className={styles.themeText}>暗黑</span>
+                      <span className={styles.themeText}>
+                       {themeStore.theme.mode === 'dark' ? t('light_mode') : t('dark_mode')}
+                      </span>
                     </Button>
                 </Space>
             </div>

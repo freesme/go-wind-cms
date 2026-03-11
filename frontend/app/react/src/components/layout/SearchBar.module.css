@@ -1,39 +1,39 @@
 .searchBar {
- display: flex;
- align-items: center;
- flex: 1;
- margin: 0 16px;
- max-width: 600px;
- transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
- height: 44px;
- 
- --n-color: rgba(255, 255, 255, 0.08) !important;
- --n-color-focus: rgba(255, 255, 255, 0.12) !important;
- --n-text-color: rgba(255, 255, 255, 0.85) !important;
- --n-placeholder-color: rgba(255, 255, 255, 0.45) !important;
- --n-border: 1px solid rgba(255, 255, 255, 0.1) !important;
- --n-border-hover: 1px solid var(--color-brand) !important;
- --n-border-focus: 1px solid var(--color-brand) !important;
- --n-border-radius: 8px;
- --n-box-shadow-focus: 0 0 0 2px rgba(102, 126, 234, 0.2) !important;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    margin: 0 16px;
+    max-width: 600px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 44px;
+
+    --n-color: rgba(255, 255, 255, 0.08) !important;
+    --n-color-focus: rgba(255, 255, 255, 0.12) !important;
+    --n-text-color: rgba(255, 255, 255, 0.85) !important;
+    --n-placeholder-color: rgba(255, 255, 255, 0.45) !important;
+    --n-border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    --n-border-hover: 1px solid var(--color-brand) !important;
+    --n-border-focus: 1px solid var(--color-brand) !important;
+    --n-border-radius: 8px;
+    --n-box-shadow-focus: 0 0 0 2px rgba(102, 126, 234, 0.2) !important;
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
- .searchBar {
-   margin: 0 12px;
-   max-width: 400px;
- }
+    .searchBar {
+        margin: 0 12px;
+        max-width: 400px;
+    }
 }
 
 @media (max-width: 768px) {
- .searchBar {
-  display: none;
- }
+    .searchBar {
+        display: none;
+    }
 }
 
 @media (max-width: 480px) {
- .searchBar {
-  display: none;
- }
+    .searchBar {
+        display: none;
+    }
 }
