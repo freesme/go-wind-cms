@@ -66,6 +66,7 @@ export default function TopNavbar({onClick}: TopNavbarProps) {
             try {
                 setIsLoading(true);
                 const res = await navigationStore.listNavigation({
+                    // @ts-expect-error - listNavigation 参数类型推断问题
                     paging: {page: 1, pageSize: 10}
                 }) as unknown as { items: siteservicev1_Navigation[]; total: number };
 
@@ -93,6 +94,7 @@ export default function TopNavbar({onClick}: TopNavbarProps) {
     useLanguageChangeEffect(() => {
         setIsLoading(true);
         navigationStore.listNavigation({
+            // @ts-expect-error - listNavigation 参数类型推断问题
             paging: {page: 1, pageSize: 10}
         })
             .then(res => {
