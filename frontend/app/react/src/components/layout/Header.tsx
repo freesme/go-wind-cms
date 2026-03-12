@@ -13,7 +13,6 @@ import {useI18n} from '@/i18n';
 import {useI18nRouter} from '@/i18n/helpers/useI18nRouter';
 import {useThemeStore} from '@/store/core/theme/hooks';
 
-import SearchBar from './SearchBar';
 import TopNavbar from './TopNavbar';
 
 import styles from './Header.module.css';
@@ -133,10 +132,6 @@ export default function Header() {
                         <div className={styles.navbarMenuWrap}>
                             <TopNavbar/>
                         </div>
-                    </div>
-                    {/* 搜索框 */}
-                    <div className={styles.searchBarWrap}>
-                        <SearchBar/>
                     </div>
                     {/* 功能按钮区 */}
                     <div className={styles.actions}>
