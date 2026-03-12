@@ -8,6 +8,7 @@ import Footer from "@/components/layout/Footer";
 import GlobalLoading from "@/components/layout/GlobalLoading";
 
 import ReduxProvider from "@/store/ReduxProvider";
+import {DEFAULT_TIME_ZONE} from "@/i18n";
 
 import styles from './layout.module.css';
 
@@ -19,7 +20,7 @@ interface ClientLocaleLayoutProps {
 
 const ClientLocaleLayout: React.FC<ClientLocaleLayoutProps> = ({locale, messages, children}) => {
     return (
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider timeZone={DEFAULT_TIME_ZONE} locale={locale} messages={messages}>
             <ReduxProvider>
                 <div className={styles.appContainer}>
                     <Header/>

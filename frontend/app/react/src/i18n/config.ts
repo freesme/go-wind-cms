@@ -28,7 +28,9 @@ import enUS_ui from '../../messages/en-US/ui.json';
 import enUS_comment from '../../messages/en-US/comment.json';
 
 export const locales = ['zh-CN', 'en-US'] as const;
+
 export const DEFAULT_LANGUAGE = 'zh-CN';
+export const DEFAULT_TIME_ZONE = 'Asia/Shanghai';
 
 export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = DEFAULT_LANGUAGE as Locale;
