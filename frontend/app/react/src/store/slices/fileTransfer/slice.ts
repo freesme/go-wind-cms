@@ -1,4 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import type {AxiosProgressEvent} from 'axios';
+
 import {createFileTransferServiceClient} from '@/api/generated/app/service/v1';
 import {requestClientRequestHandler} from '@/transport/rest';
 import {
@@ -49,23 +51,25 @@ export const uploadFileThunk = createAsyncThunk(
             fileDirectory: string;
             fileData: File;
             method?: 'post' | 'put';
-            onUploadProgress?: (progressEvent: ProgressEvent) => void;
+            onUploadProgress?: (progressEvent: AxiosProgressEvent) => void;
         },
         {rejectWithValue}
     ) => {
         try {
             const {bucketName, fileDirectory, fileData, method = 'post', onUploadProgress} = params;
             const storageObject = JSON.stringify({bucketName, fileDirectory});
-            const formData = new FormData();
-            formData.append('file', fileData);
-            formData.append('storageObject', storageObject);
-            formData.append('sourceFileName', fileData.name);
-            formData.append('mime', fileData.type);
-            formData.append('size', String(fileData.size));
-            formData.append('method', method);
+
+            // 使用 requestClient.upload 方法，它会自动处理 FormData
             await requestClient.upload(
                 'app/v1/file/upload',
-                formData,
+                {
+                    file: fileData,
+                    storageObject,
+                    sourceFileName: fileData.name,
+                    mime: fileData.type,
+                    size: String(fileData.size),
+                    method,
+                },
                 {onUploadProgress}
             );
             return {success: true};
@@ -108,6 +112,7 @@ function toBlob(data: unknown, type = 'application/octet-stream'): Blob {
         }
         return new Blob([arr], {type});
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return new Blob([data as any], {type});
 }
 
