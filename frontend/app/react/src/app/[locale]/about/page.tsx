@@ -2,9 +2,11 @@
 
 import {useTranslations} from 'next-intl';
 import {Image, Button} from 'antd';
+
 import XIcon from '@/plugins/xicon';
-import styles from './about.module.css';
+
 import '../../globals.css'; // ✅ 导入全局 CSS，确保 CSS 变量可用
+import styles from './about.module.css';
 
 export default function AboutPage() {
     const t = useTranslations('page.about');
@@ -112,7 +114,7 @@ export default function AboutPage() {
                         {features.map((feature) => (
                             <div key={feature.title} className={styles.featureCard}>
                                 <div className={styles.featureIcon}>
-                                    <XIcon name={feature.icon} size={32} />
+                                    <XIcon name={feature.icon} size={32}/>
                                 </div>
                                 <h3>{feature.title}</h3>
                                 <p>{feature.description}</p>

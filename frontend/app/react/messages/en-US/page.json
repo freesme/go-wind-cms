@@ -187,6 +187,7 @@
       "item_3": "Hours: Mon-Fri 09:00-18:00 (UTC+8)"
     },
     "disclaimer": {
+      "title": "Disclaimer",
       "description": "All content on this site is provided \"as is\" for general informational purposes.",
       "item_1": "We do not guarantee completeness, accuracy, or availability.",
       "item_2": "You are responsible for independent verification before use.",
