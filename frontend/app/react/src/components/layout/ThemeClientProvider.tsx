@@ -22,7 +22,7 @@ export default function ThemeClientProvider({children}: { children: React.ReactN
             const mq = window.matchMedia('(prefers-color-scheme: dark)');
             mqRef.current = mq;
 
-            // ✅ 立即应用当前系统主题
+            //  立即应用当前系统主题
             const currentTheme = mq.matches ? 'dark' : 'light';
             
             // 只有当当前类名与系统主题不一致时才更新

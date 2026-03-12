@@ -12,11 +12,11 @@ import {
 import {useI18n} from '@/i18n';
 import {useI18nRouter} from '@/i18n/helpers/useI18nRouter';
 import {useThemeStore, useThemeMode} from '@/store/core/theme/hooks';
+import {ThemeMode} from "@/store/types";
 
 import TopNavbar from './TopNavbar';
 
 import styles from './Header.module.css';
-
 
 export default function Header() {
     const t = useTranslations('navbar');
@@ -24,7 +24,7 @@ export default function Header() {
     const brandTitle = appT('title');
     const menuT = useTranslations('menu');
     const themeStore = useThemeStore();
-    const currentMode = useThemeMode(); // ✅ 直接从 Redux store 获取，保证 SSR/CSR 一致
+    const currentMode = useThemeMode(); //  直接从 Redux store 获取，保证 SSR/CSR 一致
     const {changeLocale} = useI18n();
     const router = useI18nRouter();
     const isLogin = false; // TODO: 从 accessStore 获取
@@ -124,8 +124,8 @@ export default function Header() {
         },
     ];
 
-    // ✅ 直接使用 currentMode，不需要 mounted 状态
-    const themeIconMap: Record<string, string> = {
+    // 直接使用 currentMode，不需要 mounted 状态
+    const themeIconMap: Record<ThemeMode, string> = {
         dark: '🌙',
         light: '☀️',
         system: '🖥️'

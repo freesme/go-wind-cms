@@ -25,16 +25,16 @@ export default function initThemeScript() {
     let themeToUse: string;
 
     if (storedMode && storedMode !== 'system') {
-        // ✅ 如果有明确的主题偏好（light/dark），直接使用
+        // 如果有明确的主题偏好（light/dark），直接使用
         themeToUse = storedMode;
         console.log('[Init Theme] Using stored mode:', storedMode);
     } else if (storedMode === 'system') {
-        // ✅ 如果用户选择了跟随系统，根据系统主题设置
+        // 如果用户选择了跟随系统，根据系统主题设置
         const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         themeToUse = isDark ? 'dark' : 'light';
         console.log('[Init Theme] Following system theme:', themeToUse);
     } else {
-        // ✅ 如果没有存储，根据系统主题设置
+        // 如果没有存储，根据系统主题设置
         const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         themeToUse = isDark ? 'dark' : 'light';
         console.log('[Init Theme] Using default system theme:', themeToUse);
