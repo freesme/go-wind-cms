@@ -119,8 +119,8 @@ export default function TopNavbar({onClick}: TopNavbarProps) {
     const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
 
     return (
-        <div className={styles.navbarWrapper}>
-            <div className={styles.navbarContent}>
+        <div className={styles.navbarWrapper} style={{width: '100%', minWidth: 0, flex: 1}}>
+            <div className={styles.navbarContent} style={{width: '100%', minWidth: 0, flex: 1}}>
                 {/* 导航菜单 */}
                 {isLoading ? (
                     <div className={styles.loadingState}>
@@ -132,10 +132,7 @@ export default function TopNavbar({onClick}: TopNavbarProps) {
                         className={styles.navbarMenu}
                         theme={isDark ? 'dark' : 'light'}
                         items={menuItems}
-                        style={{
-                            borderBottom: 'none',
-                            boxShadow: 'none',
-                        }}
+                        style={{borderBottom: 'none', boxShadow: 'none', width: '100%', minWidth: 0, flex: 1}}
                         onClick={({key, keyPath}) => {
                             // keyPath: [childKey, parentKey] for submenu
                             let item: siteservicev1_NavigationItem | null;

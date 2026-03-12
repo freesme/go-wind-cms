@@ -53,9 +53,9 @@ html.dark .fixedTop {
 .logoNavSection {
     display: flex;
     align-items: center;
-    gap: 8px;
-    flex: 0 1 auto;
+    flex: 1;
     min-width: 0;
+    gap: 8px;
 }
 
 .logoSection {
@@ -102,6 +102,7 @@ html.dark .fixedTop {
     flex-shrink: 0;
     height: 100%;
     margin-left: auto;
+    gap: 8px;
 }
 
 .actions :global(.ant-space) {
@@ -195,15 +196,17 @@ html.dark .fixedTop {
 .logoNavSection {
     display: flex;
     align-items: center;
+    flex: 1;
+    min-width: 0;
     gap: 8px;
 }
 
 .navbarMenuWrap {
     display: flex;
     align-items: center;
-    margin-left: 8px;
-    flex: 1 1 auto;
+    flex: 1;
     min-width: 0;
+    margin-left: 8px;
     overflow: hidden;
     border: none !important;
     border-bottom: none !important;
