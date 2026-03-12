@@ -50,186 +50,158 @@ export default function Header() {
 
     const userMenuItems = [
         {
+            key: 'login',
+            label: t('user.login'),
+            icon: <UserOutlined/>,
+            onClick: handleClickLogin
+        },
+        {
+            key: 'register',
+            label: t('user.register'),
+            icon: <UserOutlined/>,
+            onClick: handleClickRegister
+        },
+        {
+            type: 'divider' as const
+        },
+        {
             key: 'homepage',
-            icon: <HomeOutlined/>,
             label: menuT('homepage'),
-            onClick: handleClickUserHomepage,
+            icon: <HomeOutlined/>,
+            onClick: handleClickUserHomepage
         },
         {
             key: 'profile',
-            icon: <UserOutlined/>,
             label: menuT('my_profile'),
-            onClick: handleClickSettings,
-        },
-        {
-            type: 'divider' as const,
+            icon: <UserOutlined/>,
+            onClick: handleClickSettings
         },
         {
             key: 'logout',
-            icon: <LogoutOutlined/>,
             label: menuT('logout'),
+            icon: <LogoutOutlined/>,
             danger: true,
-            onClick: handleClickLogout,
+            onClick: handleClickLogout
         },
     ];
-
+    // 占位语言菜单
     const languageMenuItems = [
         {
-            key: 'zh-CN',
+            key: 'zh',
             label: '简体中文',
+            onClick: () => changeLocale('zh-CN')
         },
         {
-            key: 'en-US',
+            key: 'en',
             label: 'English',
-        },
+            onClick: () => changeLocale('en-US')
+        }
     ];
-    const handleLanguageChange = ({key}: { key: string }) => {
+    // 占位语言切换
+    const handleLanguageChange = ({ key }: { key: string }) => {
         changeLocale(key);
     };
-    const toggleDarkMode = () => {
-        let currentEffectiveMode: 'dark' | 'light';
-        if (themeStore.theme.mode === 'system') {
-            currentEffectiveMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        } else {
-            currentEffectiveMode = themeStore.theme.mode;
-        }
-        const newMode: 'dark' | 'light' = currentEffectiveMode === 'dark' ? 'light' : 'dark';
-        themeStore.setMode(newMode);
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('themeMode', newMode);
-        }
-    };
 
-    const themeMenuItems = [
-        {
-            key: 'dark',
-            label: t('theme.dark'),
-            icon: <span>🌙</span>,
-            onClick: () => themeStore.setMode('dark')
-        },
-        {
-            key: 'light',
-            label: t('theme.light'),
-            icon: <span>☀️</span>,
-            onClick: () => themeStore.setMode('light')
-        },
-        {
-            key: 'system',
-            label: t('theme.system'),
-            icon: <span>🖥️</span>,
-            onClick: () => themeStore.setMode('system')
-        },
-    ];
+const themeMenuItems = [
+    {
+        key: 'dark',
+        label: t('theme.dark'),
+        icon: <span>🌙</span>,
+        onClick: () => themeStore.setMode('dark')
+    },
+    {
+        key: 'light',
+        label: t('theme.light'),
+        icon: <span>☀️</span>,
+        onClick: () => themeStore.setMode('light')
+    },
+    {
+        key: 'system',
+        label: t('theme.system'),
+        icon: <span>🖥️</span>,
+        onClick: () => themeStore.setMode('system')
+    },
+];
 
-    return (
-        <div className={styles.fixedTop}>
-            <div className={styles.headerInner}>
-                <div className={styles.topBar}>
-                    {/* Logo + 导航区 */}
-                    <div className={styles.logoNavSection}>
-                        <div
-                            className={styles.logoSection}
-                            role="button"
-                            tabIndex={0}
-                            aria-label="Go to homepage"
-                            onClick={handleClickLogo}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                    handleClickLogo();
-                                }
+return (
+    <div className={styles.fixedTop}>
+        <div className={styles.headerInner}>
+            <div className={styles.topBar}>
+                {/* Logo + 导航区 */}
+                <div className={styles.logoNavSection}>
+                    <div
+                        className={styles.logoSection}
+                        role="button"
+                        tabIndex={0}
+                        aria-label="Go to homepage"
+                        onClick={handleClickLogo}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                handleClickLogo();
+                            }
+                        }}
+                    >
+                        <Image
+                            src={'/logo.png'}
+                            alt="Logo"
+                            width={55}
+                            height={55}
+                            className={styles.logo}
+                            preview={false}
+                        />
+                        <span className={styles.siteName}>{brandTitle}</span>
+                    </div>
+                    {/* 主导航菜单 */}
+                    <div className={styles.navbarMenuWrap}>
+                        <TopNavbar/>
+                    </div>
+                </div>
+                {/* 功能按钮区 */}
+                <div className={styles.actions}>
+                    <Space size="middle">
+                        <Dropdown
+                            menu={{
+                                items: userMenuItems
                             }}
+                            trigger={['click']}
+                            dropdownRender={menu => (
+                                <div className={styles.dropdownMenu}>{menu}</div>
+                            )}
                         >
-                            <Image
-                                src={'/logo.png'}
-                                alt="Logo"
-                                width={55}
-                                height={55}
-                                className={styles.logo}
-                                preview={false}
+                            <Button
+                                type="text"
+                                className={styles.iconBtn}
+                                aria-label="User menu"
+                                icon={<UserOutlined/>}
                             />
-                            <span className={styles.siteName}>{brandTitle}</span>
-                        </div>
-                        {/* 主导航菜单 */}
-                        <div className={styles.navbarMenuWrap}>
-                            <TopNavbar/>
-                        </div>
-                    </div>
-                    {/* 功能按钮区 */}
-                    <div className={styles.actions}>
-                        <Space size="middle">
-                            <Dropdown
-                                menu={{
-                                    items: [
-                                        {
-                                            key: 'login',
-                                            label: t('user.login'),
-                                            icon: <UserOutlined/>,
-                                            onClick: handleClickLogin
-                                        },
-                                        {
-                                            key: 'register',
-                                            label: t('user.register'),
-                                            icon: <UserOutlined/>,
-                                            onClick: handleClickRegister
-                                        },
-                                        {type: 'divider'},
-                                        {
-                                            key: 'homepage',
-                                            label: menuT('homepage'),
-                                            icon: <HomeOutlined/>,
-                                            onClick: handleClickUserHomepage
-                                        },
-                                        {
-                                            key: 'profile',
-                                            label: menuT('my_profile'),
-                                            icon: <UserOutlined/>,
-                                            onClick: handleClickSettings
-                                        },
-                                        {
-                                            key: 'logout',
-                                            label: menuT('logout'),
-                                            icon: <LogoutOutlined/>,
-                                            danger: true,
-                                            onClick: handleClickLogout
-                                        },
-                                    ]
-                                }}
-                                trigger={['click']}
-                            >
-                                <Button
-                                    type="text"
-                                    className={styles.iconBtn}
-                                    aria-label="User menu"
-                                    icon={<UserOutlined/>}
-                                />
-                            </Dropdown>
-                            <Dropdown
-                                menu={{items: languageMenuItems, onClick: handleLanguageChange}}
-                                trigger={['click']}
-                            >
-                                <Button
-                                    type="text"
-                                    className={styles.iconBtn}
-                                    aria-label="Language"
-                                    icon={<span className={styles.langIcon}>{'🌐'}</span>}
-                                />
-                            </Dropdown>
-                            <Dropdown
-                                menu={{items: themeMenuItems}}
-                                trigger={['click']}
-                            >
-                                <Button
-                                    type="text"
-                                    className={styles.iconBtn}
-                                    aria-label="Toggle theme"
-                                    icon={<span
-                                        className={styles.themeIcon}>{themeStore.theme.mode === 'dark' ? '🌙' : themeStore.theme.mode === 'light' ? '☀️' : '🖥️'}</span>}
-                                />
-                            </Dropdown>
-                        </Space>
-                    </div>
+                        </Dropdown>
+                        <Dropdown
+                            menu={{items: languageMenuItems, onClick: handleLanguageChange}}
+                            trigger={['click']}
+                        >
+                            <Button
+                                type="text"
+                                className={styles.iconBtn}
+                                aria-label="Language"
+                                icon={<span className={styles.langIcon}>{'🌐'}</span>}
+                            />
+                        </Dropdown>
+                        <Dropdown
+                            menu={{items: themeMenuItems}}
+                            trigger={['click']}
+                        >
+                            <Button
+                                type="text"
+                                className={styles.iconBtn}
+                                aria-label="Toggle theme"
+                                icon={<span
+                                    className={styles.themeIcon}>{themeStore.theme.mode === 'dark' ? '🌙' : themeStore.theme.mode === 'light' ? '☀️' : '🖥️'}</span>}
+                            />
+                        </Dropdown>
+                    </Space>
                 </div>
             </div>
         </div>
-    );
+    </div>
+);
 }

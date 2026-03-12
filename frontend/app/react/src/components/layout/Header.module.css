@@ -226,6 +226,60 @@ html.dark .fixedTop {
     box-shadow: none !important;
 }
 
+/* ========== Dropdown Menu Custom Styles ========== */
+.dropdownMenu {
+    min-width: 180px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.12), 0 2px 8px rgba(0,0,0,0.08);
+    padding: 8px 0;
+    border: 1px solid rgba(102, 126, 234, 0.12);
+    font-size: 15px;
+    color: #222;
+    transition: background 0.3s, color 0.3s;
+}
+
+.dropdownMenuItem {
+    padding: 10px 24px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+    font-weight: 500;
+    color: #222;
+}
+
+.dropdownMenuItem:hover {
+    background: rgba(102, 126, 234, 0.08);
+    color: #6366f1;
+}
+
+.dropdownMenuDivider {
+    height: 1px;
+    margin: 6px 0;
+    background: rgba(102, 126, 234, 0.12);
+    border: none;
+}
+
+html.dark .dropdownMenu {
+    background: #23263a;
+    color: #e0e7ef;
+    box-shadow: 0 8px 32px rgba(35, 38, 58, 0.32), 0 2px 8px rgba(0,0,0,0.18);
+    border: 1px solid rgba(99, 102, 241, 0.18);
+}
+
+html.dark .dropdownMenuItem {
+    color: #e0e7ef;
+}
+
+html.dark .dropdownMenuItem:hover {
+    background: rgba(99, 102, 241, 0.18);
+    color: #a5b4fc;
+}
+
+html.dark .dropdownMenuDivider {
+    background: rgba(99, 102, 241, 0.18);
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
     .topBar {
