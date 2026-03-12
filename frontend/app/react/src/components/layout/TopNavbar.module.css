@@ -9,11 +9,11 @@
     overflow-x: auto;
     overflow-y: hidden;
     flex-shrink: 0;
-    
+
     /* 平滑滚动 */
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
-    
+
     /* 滚动条样式 */
     scrollbar-width: thin;
     scrollbar-color: rgba(102, 126, 234, 0.3) transparent;
@@ -169,9 +169,12 @@
     background: var(--color-surface, #fff) !important;
     border: 1px solid var(--color-border, #e5e7eb);
     padding: 12px 0 !important;
-    min-width: 180px;
+    min-width: 220px;
+    max-width: 360px;
+    width: max-content !important;
     margin-top: 8px;
     z-index: 9999;
+    overflow: auto !important;
 }
 
 html.dark .navbarMenu :global(.ant-menu-submenu-popup) {
