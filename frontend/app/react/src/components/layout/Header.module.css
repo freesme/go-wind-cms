@@ -205,6 +205,9 @@ html.dark .fixedTop {
     flex: 1 1 auto;
     min-width: 0;
     overflow: hidden;
+    border: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
 }
 
 /* Responsive */

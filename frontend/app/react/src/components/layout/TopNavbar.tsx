@@ -115,6 +115,9 @@ export default function TopNavbar({onClick}: TopNavbarProps) {
 
     const menuItems = getMenuOptions(navigationItems) || [];
 
+    // 根据主题设置 Menu 的 theme
+    const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
+
     return (
         <div className={styles.navbarWrapper}>
             <div className={styles.navbarContent}>
@@ -127,7 +130,12 @@ export default function TopNavbar({onClick}: TopNavbarProps) {
                     <Menu
                         mode="horizontal"
                         className={styles.navbarMenu}
+                        theme={isDark ? 'dark' : 'light'}
                         items={menuItems}
+                        style={{
+                            borderBottom: 'none',
+                            boxShadow: 'none',
+                        }}
                         onClick={({key, keyPath}) => {
                             // keyPath: [childKey, parentKey] for submenu
                             let item: siteservicev1_NavigationItem | null;
