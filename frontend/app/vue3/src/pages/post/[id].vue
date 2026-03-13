@@ -8,10 +8,13 @@ import {usePostStore} from '@/stores'
 import {$t} from '@/locales'
 import {useLanguageChangeEffect} from '@/hooks/useLanguageChangeEffect';
 
-import {ContentViewer} from '@/components/ContentViewer'
+import {type ContentType, ContentViewer} from '@/components/ContentViewer'
 import CommentSection from '@/components/CommentSection'
 
-import type {contentservicev1_Post} from "@/api/generated/app/service/v1"
+import type {
+  contentservicev1_EditorType,
+  contentservicev1_Post
+} from "@/api/generated/app/service/v1"
 import {formatDate} from "@/utils/date";
 import {scrollToTop} from "@/utils";
 
@@ -80,6 +83,19 @@ function throttle(fn: Function, delay: number) {
         timer = null
       }, delay)
     }
+  }
+}
+
+function mapEditorTypeToContentType(editorType: contentservicev1_EditorType | undefined): ContentType {
+  switch (editorType) {
+    case 'EDITOR_TYPE_MARKDOWN':
+      return 'markdown';
+    case 'EDITOR_TYPE_RICH_TEXT':
+      return 'html';
+    case 'EDITOR_TYPE_PLAIN_TEXT':
+      return 'text';
+    default:
+      return 'markdown';
   }
 }
 
@@ -414,7 +430,7 @@ useLanguageChangeEffect(loadPost, {
 
             <!-- Post Content -->
             <div class="post-content">
-              <ContentViewer :content="displayContent" type="markdown"/>
+              <ContentViewer :content="displayContent" :type="mapEditorTypeToContentType(post?.editorType)"/>
             </div>
 
             <!-- Post Actions -->

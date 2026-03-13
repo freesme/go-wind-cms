@@ -7,11 +7,13 @@ import {useTranslations} from 'next-intl';
 import CommentSection from '@/components/comment/CommentSection';
 import ContentViewer from '@/components/content/ContentViewer';
 import PostList from '@/components/post/PostList';
+
 import {usePostStore} from '@/store/slices/post/hooks';
+import {formatDate} from "@/utils";
+import {contentservicev1_Post} from "@/api/generated/app/service/v1";
 
 import '../../../globals.css'; // 导入全局 CSS，确保 CSS 变量可用
 import styles from './post-detail.module.css';
-import {contentservicev1_Post} from "@/api/generated/app/service/v1";
 
 // 常量定义
 const SCROLL_THRESHOLD = 500;
@@ -25,18 +27,6 @@ interface TocItem {
     element: Element;
 }
 
-interface PostData {
-    id: number;
-    title: string;
-    content: string;
-    thumbnail?: string;
-    authorName: string;
-    createdAt: string;
-    visits: number;
-    likes: number;
-    categoryIds: number[];
-}
-
 export default function PostDetailPage() {
     const t = useTranslations('page');
     const params = useParams();
@@ -44,8 +34,11 @@ export default function PostDetailPage() {
     const searchParams = useSearchParams();
     const postStore = usePostStore();
 
-    const [post, setPost] = useState<PostData | null>(null);
-    const [loading, setLoading] = useState(true);
+    // 直接使用 store 中的数据，而不是本地 state
+    const post = postStore.detail as contentservicev1_Post | null;
+
+    const [localLoading, setLocalLoading] = useState(true);
+    const isLoading = localLoading || (postStore.loading && !post);
     const [tableOfContents, setTableOfContents] = useState<TocItem[]>([]);
     const [activeHeading, setActiveHeading] = useState('');
     const [showBackToTop, setShowBackToTop] = useState(false);
@@ -61,10 +54,21 @@ export default function PostDetailPage() {
         return id ? parseInt(id) : null;
     }, [params?.id]);
 
-    // 计算属性
-    const displayTitle = useMemo(() => post?.title || '', [post?.title]);
-    const displayContent = useMemo(() => post?.content || '', [post?.content]);
-    const displayThumbnail = useMemo(() => post?.thumbnail || '', [post?.thumbnail]);
+    // 计算属性 - 使用 postStore 提供的工具函数
+    const displayTitle = useMemo(() => {
+        if (!post) return '';
+        return postStore.getPostTitle(post);
+    }, [post, postStore]);
+
+    const displayContent = useMemo(() => {
+        if (!post) return '';
+        return postStore.getPostContent(post);
+    }, [post, postStore]);
+
+    const displayThumbnail = useMemo(() => {
+        if (!post) return '';
+        return postStore.getPostThumbnail(post);
+    }, [post, postStore]);
 
     // 相关文章数据
     const relatedPostsQuery = useMemo(() => {
@@ -81,34 +85,58 @@ export default function PostDetailPage() {
         async function loadPost() {
             if (!postId) return;
 
-            setLoading(true);
+            setLocalLoading(true);
             try {
-                // 使用 PostStore 获取数据
-                const fetchedPost = await postStore.getPost(postId) as unknown as contentservicev1_Post;
-                setPost(fetchedPost);
+                console.log('[PostDetail] Before getPost call:', {
+                    postId,
+                    currentDetail: postStore.detail
+                });
 
-                // SEO
-                document.title = `${fetchedPost.title} - GoWind Content Hub`;
+                const fetchedPost = (await postStore.getPost({
+                    // @ts-expect-error - listNavigation 参数类型推断问题
+                    id: postId
+                })) as contentservicev1_Post;
+
+                console.log('[PostDetail] API returned:', {
+                    hasFetchedPost: !!fetchedPost,
+                    hasTranslations: !!fetchedPost?.translations?.length,
+                    firstTranslationTitle: fetchedPost?.translations?.[0]?.title,
+                    firstTranslationContentLength: fetchedPost?.translations?.[0]?.content?.length
+                });
+
+                if (fetchedPost) {
+                    // SEO
+                    document.title = `${postStore.getPostTitle(fetchedPost)} - GoWind Content Hub`;
+                }
             } catch (error) {
                 console.error('Load post failed:', error);
             } finally {
-                setLoading(false);
+                setLocalLoading(false);
             }
         }
 
         loadPost();
-    }, [postId, postStore]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [postId]); // 只依赖 postId
 
-    // Generate table of contents
+    // Generate table of contents - 在内容渲染后生成目录
     useEffect(() => {
-        if (!contentRef.current || !post) return;
+        if (!displayContent || !contentRef.current) {
+            console.log('[TOC] Skip generation:', {hasContent: !!displayContent, hasRef: !!contentRef.current});
+            return;
+        }
 
         const timeoutId = setTimeout(() => {
             const contentEl = contentRef.current;
-            if (!contentEl) return;
+            if (!contentEl) {
+                console.log('[TOC] No content element');
+                return;
+            }
 
             const headings = contentEl.querySelectorAll('h2, h3');
             const toc: TocItem[] = [];
+
+            console.log('[TOC] Found headings:', headings.length);
 
             headings.forEach((heading, index) => {
                 const level = heading.tagName === 'H2' ? 2 : 3;
@@ -124,7 +152,7 @@ export default function PostDetailPage() {
             });
 
             setTableOfContents(toc);
-            console.log('Table of contents generated:', toc.length, 'items');
+            console.log('[TOC] Generated:', toc.length, 'items');
 
             // 页面加载时检查 URL hash，自动滚动到对应位置
             if (window.location.hash) {
@@ -133,17 +161,18 @@ export default function PostDetailPage() {
                     scrollToHeading(hashId);
                 }, 300);
             }
-        }, 500);
+        }, 100); // 等待内容完全渲染
 
         return () => clearTimeout(timeoutId);
-    }, [post?.content]);
+    }, [displayContent]); // 依赖计算后的内容
 
     // 监听内容变化，重新生成目录
     useEffect(() => {
-        if (displayContent) {
+        if (displayContent && tableOfContents.length === 0) {
+            // 如果还没有生成目录，立即生成一次
             generateTableOfContents();
         }
-    }, [displayContent]);
+    }, [displayContent, tableOfContents.length]);
 
     // 生成目录函数
     const generateTableOfContents = useCallback(() => {
@@ -232,12 +261,7 @@ export default function PostDetailPage() {
 
     const handleLike = () => {
         setIsLiked(!isLiked);
-        if (!isLiked && post) {
-            setPost({...post, likes: (post.likes || 0) + 1});
-            // TODO: Add toast message
-        } else if (post && post.likes > 0) {
-            setPost({...post, likes: post.likes - 1});
-        }
+        // TODO: Add toast message
     };
 
     const handleBookmark = () => {
@@ -286,7 +310,7 @@ export default function PostDetailPage() {
         window.scrollTo({top: 0, behavior: 'smooth'});
     };
 
-    if (loading) {
+    if (isLoading) {
         return (
             <div className={styles['post-detail-page']}>
                 {/* Loading skeleton */}
@@ -301,20 +325,28 @@ export default function PostDetailPage() {
                         <aside className={styles['toc-sidebar']}>
                             <div className={styles['toc-container']}>
                                 <div className={styles['skeleton-line']} style={{width: '200px', height: '24px'}}></div>
-                                <div className={styles['skeleton-line']} style={{width: '180px', height: '20px', marginTop: '16px'}}></div>
-                                <div className={styles['skeleton-line']} style={{width: '160px', height: '20px', marginTop: '8px'}}></div>
-                                <div className={styles['skeleton-line']} style={{width: '140px', height: '20px', marginTop: '8px'}}></div>
+                                <div className={styles['skeleton-line']}
+                                     style={{width: '180px', height: '20px', marginTop: '16px'}}></div>
+                                <div className={styles['skeleton-line']}
+                                     style={{width: '160px', height: '20px', marginTop: '8px'}}></div>
+                                <div className={styles['skeleton-line']}
+                                     style={{width: '140px', height: '20px', marginTop: '8px'}}></div>
                             </div>
                         </aside>
                         <div className={styles['article-content']}>
                             <header className={styles['post-header']}>
                                 <div className={styles['skeleton-title']} style={{width: '80%', height: '48px'}}></div>
-                                <div className={styles['skeleton-subtitle']} style={{width: '60%', height: '32px', marginTop: '16px'}}></div>
+                                <div className={styles['skeleton-subtitle']}
+                                     style={{width: '60%', height: '32px', marginTop: '16px'}}></div>
                                 <div className={styles['post-meta']}>
-                                    <div className={styles['skeleton-meta']} style={{width: '100px', height: '20px'}}></div>
-                                    <div className={styles['skeleton-meta']} style={{width: '100px', height: '20px'}}></div>
-                                    <div className={styles['skeleton-meta']} style={{width: '100px', height: '20px'}}></div>
-                                    <div className={styles['skeleton-meta']} style={{width: '100px', height: '20px'}}></div>
+                                    <div className={styles['skeleton-meta']}
+                                         style={{width: '100px', height: '20px'}}></div>
+                                    <div className={styles['skeleton-meta']}
+                                         style={{width: '100px', height: '20px'}}></div>
+                                    <div className={styles['skeleton-meta']}
+                                         style={{width: '100px', height: '20px'}}></div>
+                                    <div className={styles['skeleton-meta']}
+                                         style={{width: '100px', height: '20px'}}></div>
                                 </div>
                             </header>
                             <div className={styles['post-content']}>
@@ -327,13 +359,13 @@ export default function PostDetailPage() {
         );
     }
 
-   if (!post) {
-       return (
-           <div className={styles['post-detail-page']}>
-               <div className={styles['empty-state']}>Post not found</div>
-           </div>
-       );
-   }
+    if (!post) {
+        return (
+            <div className={styles['post-detail-page']}>
+                <div className={styles['empty-state']}>Post not found</div>
+            </div>
+        );
+    }
 
     return (
         <div className={styles['post-detail-page']}>
@@ -347,9 +379,9 @@ export default function PostDetailPage() {
             {/* Post Article */}
             <article className={styles['post-article']}>
                 {/* Post Thumbnail Banner */}
-                {post.thumbnail && (
+                {displayThumbnail && (
                     <div className={styles['post-banner']}>
-                        <img src={post.thumbnail} alt={post.title}/>
+                        <img src={displayThumbnail} alt={displayTitle}/>
                         <div className={styles['banner-overlay']}/>
                     </div>
                 )}
@@ -401,13 +433,13 @@ export default function PostDetailPage() {
                     <div className={styles['article-content']}>
                         {/* Post Header */}
                         <header className={styles['post-header']}>
-                            <h1 className={styles['post-title']}>{post.title}</h1>
+                            <h1 className={styles['post-title']}>{displayTitle}</h1>
                             <div className={styles['post-meta']}>
                                 <div className={styles['meta-item']}>
                                     👤 <span>{post.authorName}</span>
                                 </div>
                                 <div className={styles['meta-item']}>
-                                    📅 <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+                                    📅 <span>{formatDate(post.createdAt)}</span>
                                 </div>
                                 <div className={styles['meta-item']}>
                                     👁️ <span>{post.visits || 0}</span>
@@ -420,7 +452,7 @@ export default function PostDetailPage() {
 
                         {/* Post Content */}
                         <div className={styles['post-content']} ref={contentRef}>
-                            <ContentViewer content={post.content} type="markdown"/>
+                            <ContentViewer content={displayContent} type="markdown"/>
                         </div>
 
                         {/* Post Actions */}
@@ -451,7 +483,8 @@ export default function PostDetailPage() {
             <CommentSection
                 objectId={postId}
                 contentType="CONTENT_TYPE_POST"
-                onUpdateComments={() => {}}
+                onUpdateComments={() => {
+                }}
             />
 
             {/* Related Posts */}
