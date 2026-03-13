@@ -2,8 +2,6 @@
 
 import {useState, useMemo} from 'react';
 import {useTranslations} from 'next-intl';
-import {useRouter, usePathname} from 'next/navigation';
-import XIcon from '@/plugins/xicon';
 
 import '../../globals.css'; // 导入全局 CSS，确保 CSS 变量可用
 import styles from './register.module.css';
@@ -12,48 +10,17 @@ import AccountRegisterPage from './components/AccountRegisterPage';
 import EmailRegisterPage from './components/EmailRegisterPage';
 import PhoneRegisterPage from './components/PhoneRegisterPage';
 import OtherRegisterPage from './components/OtherRegisterPage';
-
-// 获取初始主题状态（仅在客户端调用）
-function getInitialTheme(): boolean {
-    if (typeof window === 'undefined') {
-        return false;
-    }
-    return document.documentElement.classList.contains('dark');
-}
+import ControlPanel from '@/components/layout/ControlPanel';
 
 export default function RegisterPage() {
     const t = useTranslations('authentication');
-    const router = useRouter();
-    const pathname = usePathname();
     const [activeTab, setActiveTab] = useState<'account' | 'email' | 'phone' | 'other'>('account');
-    const [isDark, setIsDark] = useState<boolean>(getInitialTheme);
-
-    // 从 URL 中获取当前语言
-    const currentLocale = pathname?.split('/')[1] || 'zh-CN';
 
     // 语言选项
     const languageOptions = useMemo(() => [
         {key: 'zh-CN', label: '中文'},
         {key: 'en-US', label: 'English'}
     ], []);
-
-    // 切换语言
-    const handleSelectLanguage = (key: string) => {
-        // 替换 URL 中的 locale 部分
-        const newPath = pathname?.replace(`/${currentLocale}`, `/${key}`) || `/${key}/register`;
-        router.push(newPath);
-    };
-
-    // 切换主题
-    const handleToggleTheme = () => {
-        const newIsDark = !document.documentElement.classList.contains('dark');
-        setIsDark(newIsDark);
-        if (newIsDark) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    };
 
     // 登录
     const handleLoginClick = () => {
@@ -78,26 +45,7 @@ export default function RegisterPage() {
     return (
         <div className={styles['register-page']}>
             {/* 顶部控制按钮 */}
-            <div className={styles['register-controls']}>
-                <select
-                    className={styles['language-select']}
-                    value={currentLocale}
-                    onChange={(e) => handleSelectLanguage(e.target.value)}
-                >
-                    {languageOptions.map((option) => (
-                        <option key={option.key} value={option.key}>
-                            {option.label}
-                        </option>
-                    ))}
-                </select>
-                <button
-                    className={`${styles['control-btn']} ${styles['theme-toggle']}`}
-                    onClick={handleToggleTheme}
-                    aria-label="Toggle theme"
-                >
-                    <XIcon name={isDark ? 'carbon:sun' : 'carbon:moon'} size={18}/>
-                </button>
-            </div>
+            <ControlPanel/>
 
             {/* 左侧品牌区 */}
             <div className={styles['register-left']}>
