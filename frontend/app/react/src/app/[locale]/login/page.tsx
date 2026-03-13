@@ -5,84 +5,65 @@ import {useTranslations} from 'next-intl';
 
 import {useI18nRouter} from "@/i18n/helpers";
 
-import '../../globals.css'; // 导入全局 CSS，确保 CSS 变量可用
-import styles from './register.module.css';
-
-import AccountRegisterPage from './components/AccountRegisterPage';
-import EmailRegisterPage from './components/EmailRegisterPage';
-import PhoneRegisterPage from './components/PhoneRegisterPage';
-import OtherRegisterPage from './components/OtherRegisterPage';
 import ControlPanel from '@/components/layout/ControlPanel';
 
-export default function RegisterPage() {
+import '../../globals.css'; // 导入全局 CSS，确保 CSS 变量可用
+import styles from './login.module.css';
+
+import AccountLoginPage from './components/AccountLoginPage';
+import EmailLoginPage from './components/EmailLoginPage';
+import PhoneLoginPage from './components/PhoneLoginPage';
+import OtherLoginPage from './components/OtherLoginPage';
+
+export default function LoginPage() {
     const t = useTranslations('authentication');
     const [activeTab, setActiveTab] = useState<'account' | 'email' | 'phone' | 'other'>('account');
 
     const router = useI18nRouter();
 
-    // 登录
-    const handleLoginClick = () => {
-        router.push('/login');
-    };
-
-    // 返回首页
-    const handleBackHome = () => {
-        router.push('/');
-    };
-
-    // 服务条款
-    const handleTermsClick = () => {
-        router.push('/terms');
-    };
-
-    // 隐私政策
-    const handlePrivacyClick = () => {
-        router.push('/privacy');
-    };
-
     return (
-        <div className={styles['register-page']}>
+        <div className={styles['login-page']}>
             {/* 顶部控制按钮 */}
             <ControlPanel/>
 
             {/* 左侧品牌区 */}
-            <div className={styles['register-left']}>
+            <div className={styles['login-left']}>
                 <div className={styles.brand}>
                     <img src="/logo.png" alt={t('login.logo_alt')} className={styles['brand-logo']}/>
                     <h1 className={styles['brand-title']}>{t('login.brand_title')}</h1>
                     <p className={styles['brand-subtitle']}>{t('login.brand_subtitle')}</p>
                 </div>
 
-                <div className={styles['benefits-list']}>
-                    <div className={styles['benefit-item']}>
+                <div className={styles['features-list']}>
+                    <div className={styles['feature-item']}>
                         <span>✓</span>
                         <span>{t('login.feature_projects')}</span>
                     </div>
-                    <div className={styles['benefit-item']}>
+                    <div className={styles['feature-item']}>
                         <span>✓</span>
                         <span>{t('login.feature_isolation')}</span>
                     </div>
-                    <div className={styles['benefit-item']}>
+                    <div className={styles['feature-item']}>
                         <span>✓</span>
                         <span>{t('login.feature_permissions')}</span>
                     </div>
-                    <div className={styles['benefit-item']}>
+                    <div className={styles['feature-item']}>
                         <span>✓</span>
                         <span>{t('login.feature_analytics')}</span>
                     </div>
                 </div>
             </div>
 
-            {/* 右侧注册卡片 */}
-            <div className={styles['register-right']}>
-                <div className={styles['register-card']}>
+            {/* 右侧登录卡片 */}
+            <div className={styles['login-right']}>
+                <div className={styles['login-card']}>
                     <div className={styles['card-header']}>
-                        <h2>{t('register.title')}</h2>
-                        <p>{t('register.register_with')}</p>
+                        <h2>{t('login.title')}</h2>
+                        <p>{t('login.login_with')}</p>
                     </div>
 
                     {/* Tab 切换 */}
-                    <div className={styles['register-tabs']}>
+                    <div className={styles['login-tabs']}>
                         <button
                             className={`${styles.tab} ${activeTab === 'account' ? styles.active : ''}`}
                             onClick={() => setActiveTab('account')}
@@ -109,27 +90,27 @@ export default function RegisterPage() {
                         </button>
                     </div>
 
-                    {/* 注册表单内容 */}
-                    <div className={styles['register-content']}>
-                        {activeTab === 'account' && <AccountRegisterPage/>}
-                        {activeTab === 'email' && <EmailRegisterPage/>}
-                        {activeTab === 'phone' && <PhoneRegisterPage/>}
-                        {activeTab === 'other' && <OtherRegisterPage/>}
+                    {/* 登录表单内容 */}
+                    <div className={styles['login-content']}>
+                        {activeTab === 'account' && <AccountLoginPage/>}
+                        {activeTab === 'email' && <EmailLoginPage/>}
+                        {activeTab === 'phone' && <PhoneLoginPage/>}
+                        {activeTab === 'other' && <OtherLoginPage/>}
                     </div>
 
-                    {/* 登录链接 */}
-                    <div className={styles['login-section']}>
+                    {/* 注册链接 */}
+                    <div className={styles['register-section']}>
                         <p>
-                            {t('register.already_have_account')}
-                            <button className={styles['text-btn']} onClick={handleLoginClick}>
-                                {t('register.login_now')}
+                            {t('login.no_account')}
+                            <button className={styles['text-btn']} onClick={() => router.push('/register')}>
+                                {t('login.register_now')}
                             </button>
                         </p>
                     </div>
 
                     {/* 返回首页 */}
                     <div className={styles['back-home']}>
-                        <button className={styles['text-btn']} onClick={handleBackHome}>
+                        <button className={styles['text-btn']} onClick={() => router.push('/')}>
                             ← {t('login.back_home')}
                         </button>
                     </div>
@@ -138,11 +119,11 @@ export default function RegisterPage() {
                     <div className={styles.terms}>
                         <small>
                             {t('login.terms_prefix')}
-                            <button className={styles['text-btn']} onClick={handleTermsClick}>
+                            <button className={styles['text-btn']} onClick={() => router.push('/terms')}>
                                 {t('login.terms_of_service')}
                             </button>
                             {t('login.terms_and')}
-                            <button className={styles['text-btn']} onClick={handlePrivacyClick}>
+                            <button className={styles['text-btn']} onClick={() => router.push('/privacy')}>
                                 {t('login.privacy_policy')}
                             </button>
                         </small>
