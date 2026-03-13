@@ -19,9 +19,11 @@ interface PostListProps {
     orderBy?: string[];
     page?: number;
     pageSize?: number;
+    initialPageSize?: number; // 初始每页条数
     showSkeleton?: boolean;
     from?: string;
     categoryId?: number;
+    tagId?: number; // 新增 tagId 支持
     columns?: number; // 控制列数
     showPagination?: boolean; // 是否显示分页
     pageSizes?: number[]; // 每页条数选项
@@ -32,13 +34,15 @@ const PostList: React.FC<PostListProps> = ({
                                                fieldMask,
                                                orderBy,
                                                page = 1,
-                                               pageSize = 6,
+                                               pageSize,
+                                               initialPageSize = 10, // 默认 10 条
                                                showSkeleton = true,
                                                from = 'post-list',
                                                categoryId,
+                                               tagId,
                                                columns = 3,
                                                showPagination = false,
-                                               pageSizes = [6, 12, 24, 36]
+                                               pageSizes = [10, 20, 30, 40]
                                            }) => {
     const t = useTranslations('page.posts');
     const postStore = usePostStore();
@@ -46,7 +50,7 @@ const PostList: React.FC<PostListProps> = ({
     const [loading, setLoading] = useState(false);
     const [total, setTotal] = useState(0);
     const [currentPage, setCurrentPage] = useState<number>(page);
-    const [currentPageSize, setCurrentPageSize] = useState<number>(pageSize);
+    const [currentPageSize, setCurrentPageSize] = useState<number>(pageSize ?? initialPageSize);
 
     // 同步外部 page 变化（只在首次渲染或外部 page 真正变化时）
     useEffect(() => {
@@ -71,7 +75,11 @@ const PostList: React.FC<PostListProps> = ({
                     page: page,
                     pageSize: pageSize,
                 },
-                formValues: queryParams,
+                formValues: {
+                    ...queryParams,
+                    ...(categoryId && {category_ids__in: [categoryId]}),
+                    ...(tagId && {tag_ids__in: [tagId]})
+                },
                 fieldMask: fieldMask,
                 orderBy: orderBy
             }) as unknown as contentservicev1_ListPostResponse;

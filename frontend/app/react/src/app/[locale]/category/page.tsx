@@ -7,7 +7,7 @@ import {Skeleton, Empty} from 'antd';
 import {useCategoryStore} from '@/store/slices/category/hooks';
 import CategoryTree from '@/components/category/CategoryTree';
 
-import {contentservicev1_ListCategoryResponse} from "@/api/generated/app/service/v1";
+import {contentservicev1_Category, contentservicev1_ListCategoryResponse} from "@/api/generated/app/service/v1";
 import {useI18nRouter} from "@/i18n/helpers";
 
 import '../../globals.css'; // 导入全局 CSS，确保 CSS 变量可用
@@ -19,7 +19,7 @@ export default function CategoryListPage() {
     const categoryStore = useCategoryStore();
 
     const [loading, setLoading] = useState(false);
-    const [categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState<contentservicev1_Category[]>([]);
 
     async function loadCategories() {
         setLoading(true);

@@ -23,8 +23,8 @@ export default function CategoryDetailPage() {
     const categoryStore = useCategoryStore();
 
     const [_loading, setLoading] = useState(false);
-    const [category, setCategory] = useState(null);
-    const [childCategories, setChildCategories] = useState([]);
+    const [category, setCategory] = useState<contentservicev1_Category | null>(null);
+    const [childCategories, setChildCategories] = useState<contentservicev1_Category[]>([]);
 
     const categoryId = useMemo(() => {
         const id = params?.id;
@@ -43,6 +43,7 @@ export default function CategoryDetailPage() {
         setLoading(true);
         try {
             const categoryData = (await categoryStore.getCategory({
+                // @ts-expect-error - 参数类型推断问题
                 id: categoryId,
                 fieldMask: 'id,status,sort_order,icon,code,post_count,direct_post_count,parent_id,created_at,children,translations.id,translations.category_id,translations.name,translations.language_code,translations.description,translations.thumbnail,translations.cover_image'
             })) as contentservicev1_Category;
