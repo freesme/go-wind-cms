@@ -26,13 +26,13 @@ interface CommentForm {
 interface CommentSectionProps {
     objectId: number | null;
     contentType: commentservicev1_Comment_ContentType | null;
-    onCommentsUpdate?: (comments: commentservicev1_Comment[]) => void;
+    onUpdateComments?: (comments: commentservicev1_Comment[]) => void;
 }
 
 const CommentSection: React.FC<CommentSectionProps> = ({
                                                            objectId,
                                                            contentType,
-                                                           onCommentsUpdate
+                                                           onUpdateComments
                                                        }) => {
     const t = useTranslations('comment');
     const commentStore = useCommentStore();
@@ -102,7 +102,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
             setHasMore(allComments.length < newTotal);
             setCurrentPage(prev => prev + 1);
 
-            onCommentsUpdate?.(allComments);
+            onUpdateComments?.(allComments);
         } catch (error) {
             console.error('Load comments failed:', error);
         } finally {

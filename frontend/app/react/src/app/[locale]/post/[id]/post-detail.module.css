@@ -141,12 +141,18 @@
             flex: 1;
             max-width: 100%;
         }
+
+        /* TOC 收起时隐藏分割线 */
+        &::after {
+            opacity: 0;
+        }
     }
 
+    /* 分割线定位基于 TOC 宽度 */
     &::after {
         content: '';
         position: absolute;
-        left: 200px;
+        left: 200px; /* TOC 宽度 */
         top: 0;
         bottom: 0;
         width: 1px;

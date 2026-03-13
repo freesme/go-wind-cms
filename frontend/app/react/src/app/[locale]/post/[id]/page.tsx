@@ -184,10 +184,17 @@ export default function PostDetailPage() {
             const headings = contentEl.querySelectorAll('h2, h3');
             const toc: TocItem[] = [];
 
+            console.log('[GenerateTOC] Found headings:', headings.length);
+
             headings.forEach((heading, index) => {
                 const level = heading.tagName === 'H2' ? 2 : 3;
                 const id = `heading-${index}`;
-                if (!heading.id) heading.setAttribute('id', id);
+                
+                // 确保 ID 存在
+                if (!heading.id) {
+                    heading.setAttribute('id', id);
+                    console.log(`[GenerateTOC] Set ID "${id}" on ${heading.tagName}:`, heading.textContent);
+                }
 
                 toc.push({
                     id,
@@ -198,7 +205,7 @@ export default function PostDetailPage() {
             });
 
             setTableOfContents(toc);
-            console.log('Table of contents regenerated:', toc.length, 'items');
+            console.log('[GenerateTOC] Generated TOC:', toc);
         }, 500);
     }, []);
 
@@ -273,7 +280,7 @@ export default function PostDetailPage() {
     const handleShare = () => {
         const url = window.location.href;
         if (navigator.share) {
-            navigator.share({title: post?.title, url}).then(() => {
+            navigator.share({title: displayTitle, url}).then(() => {
                 console.log('Shared successfully');
             }).catch(() => {
                 copyToClipboard(url);
@@ -296,14 +303,43 @@ export default function PostDetailPage() {
         const element = tocItem?.element || document.getElementById(id);
 
         if (element) {
-            const offset = 100;
-            const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-            window.scrollTo({
-                top: elementPosition - offset,
-                behavior: 'smooth'
-            });
-            setActiveHeading(id);
-            window.history.pushState({}, '', `#${id}`);
+            console.log('[TOC Scroll] Start', 
+                'ID:', id,
+                '| Element:', element.textContent?.trim()
+            );
+            
+            // 直接使用 scrollIntoView，让浏览器处理滚动
+            // 然后通过计算调整到正确的位置
+            element.scrollIntoView({ behavior: 'auto', block: 'start' });
+            
+            // 等待浏览器完成滚动后，再向下调整 headerOffset 的距离
+            setTimeout(() => {
+                const currentScroll = window.pageYOffset;
+                const headerOffset = 100; // 导航栏高度
+                const targetPosition = currentScroll - headerOffset;
+                
+                console.log('[TOC Scroll] Adjusting:', 
+                    'from:', currentScroll.toFixed(2),
+                    'to:', targetPosition.toFixed(2)
+                );
+                
+                window.scrollTo({
+                    top: Math.max(0, targetPosition),
+                    behavior: 'smooth'
+                });
+                
+                setActiveHeading(id);
+
+                // 更新 URL hash
+                if (window.history.pushState) {
+                    const currentState = window.history.state || {};
+                    window.history.pushState(currentState, '', `#${id}`);
+                } else {
+                    window.location.hash = `#${id}`;
+                }
+            }, 50);
+        } else {
+            console.error('[ScrollToHeading] Element not found:', id);
         }
     };
 
@@ -372,9 +408,9 @@ export default function PostDetailPage() {
         <div className={styles['post-detail-page']}>
             {/* Back Navigation */}
             <div className={styles['back-navigation']}>
-                <button onClick={handleBack} className={styles['back-btn']}>
+                <button onClick={handleBack} className={styles['back-btn']} aria-label={t('post_detail.back')}>
                     <XIcon name="carbon:arrow-left" />
-                    <span>Back</span>
+                    <span>{t('post_detail.back')}</span>
                 </button>
             </div>
 
@@ -413,7 +449,8 @@ export default function PostDetailPage() {
                                             className={`${styles['toc-item']} ${styles[`level-${item.level}`]} ${activeHeading === item.id ? styles['active'] : ''}`}
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                scrollToHeading(item.id);
+                                                // 延迟一小段时间再滚动，确保浏览器已经处理了 hash
+                                                setTimeout(() => scrollToHeading(item.id), 10);
                                             }}
                                         >
                                             {item.text}
