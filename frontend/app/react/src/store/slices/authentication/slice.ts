@@ -23,7 +23,7 @@ const initialState: AuthState = {
 };
 
 // 登录
-export const authLogin = createAsyncThunk(
+export const login = createAsyncThunk(
     'authentication/login',
     async (
         params: { username?: string; email?: string; mobile?: string; password: string },

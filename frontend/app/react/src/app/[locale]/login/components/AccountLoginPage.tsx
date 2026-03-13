@@ -19,7 +19,7 @@ export default function AccountLoginPage() {
         }
         console.log('登录信息:', {username, password, rememberMe});
 
-        await authenticationStore.authLogin({
+        await authenticationStore.login({
             username: username,
             password: password,
         });

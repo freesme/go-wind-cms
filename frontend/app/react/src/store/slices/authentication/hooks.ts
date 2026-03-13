@@ -45,7 +45,7 @@ export function useAuthenticationStore() {
     /**
      * 异步处理用户登录操作并获取 accessToken
      */
-    async function authLogin(
+    async function login(
         params: LoginParams,
         onSuccess?: () => Promise<void> | void,
     ) {
@@ -90,7 +90,7 @@ export function useAuthenticationStore() {
     return {
         authentication,
         dispatch,
-        authLogin,
+        login,
         fetchUserInfo,
     };
 }
