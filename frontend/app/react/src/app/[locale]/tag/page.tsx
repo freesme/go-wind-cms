@@ -90,7 +90,7 @@ export default function TagListPage() {
                     <div className={styles['tags-grid']}>
                         {Array.from({length: 12}).map((_, i) => (
                             <div key={i} className={styles['tag-card-skeleton']}>
-                                <Skeleton height={120} active/>
+                                <Skeleton.Image style={{height: 120}} active/>
                             </div>
                         ))}
                     </div>

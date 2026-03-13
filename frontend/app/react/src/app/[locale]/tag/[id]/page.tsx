@@ -23,7 +23,7 @@ export default function TagDetailPage() {
     const tagStore = useTagStore();
 
     const [loading, setLoading] = useState(false);
-    const [tag, setTag] = useState<contentservicev1_Tag>(null);
+    const [tag, setTag] = useState<contentservicev1_Tag | null>(null);
 
     const tagId = useMemo(() => {
         const id = params?.id;

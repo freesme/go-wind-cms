@@ -11,7 +11,6 @@ import styles from './post-list.module.css';
 
 export default function PostListPage() {
     const t = useTranslations('page');
-    const postListRef = useRef<HTMLDivElement>(null);
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
     const handleCategoryChange = (categoryId: number | null) => {
@@ -37,7 +36,6 @@ export default function PostListPage() {
                 />
 
                 <PostList
-                    ref={postListRef}
                     initialPageSize={12}
                     pageSizes={[12, 24, 36, 48]}
                     categoryId={selectedCategoryId ?? undefined}

@@ -117,8 +117,8 @@ export const deleteTag = createAsyncThunk(
  * @param tag 标签对象
  * @returns 当前语言的翻译，如果找不到则返回第一个翻译或 null
  */
-export function getTranslation(tag: contentservicev1_Tag) {
-    if (!tag?.translations || tag.translations.length === 0) return null;
+export function getTranslation(tag: contentservicev1_Tag | null) {
+    if (!tag || !tag?.translations || tag.translations.length === 0) return null;
 
     const locale = currentLocaleLanguageCode();
     // 优先查找当前语言的翻译

@@ -47,7 +47,6 @@ export default function PostDetailPage() {
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [isTocExpanded, setIsTocExpanded] = useState(true);
 
-    const relatedPostListRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
 
     const postId = useMemo(() => {
@@ -543,7 +542,6 @@ export default function PostDetailPage() {
                 </div>
                 {relatedPostsQuery && (
                     <PostList
-                        ref={relatedPostListRef}
                         queryParams={relatedPostsQuery}
                         fieldMask="id,status,sort_order,is_featured,visits,likes,comment_count,author_name,available_languages,created_at,translations.id,translations.post_id,translations.language_code,translations.title,translations.summary,translations.thumbnail"
                         orderBy={['-sortOrder']}

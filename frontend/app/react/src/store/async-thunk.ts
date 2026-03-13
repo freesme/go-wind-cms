@@ -90,11 +90,11 @@ function createAbortableCall<
             // @ts-expect-error - 忽略类型检查
             const action = await dispatch(thunk(thunkParams));
 
-            console.log(`[AsyncThunk] ${thunk.typePrefix} action:`, {
-                type: action.type,
-                status: action.meta.requestStatus,
-                hasPayload: !!action.payload
-            });
+            // console.log(`[AsyncThunk] ${thunk.typePrefix} action:`, {
+            //     type: action.type,
+            //     status: action.meta.requestStatus,
+            //     hasPayload: !!action.payload
+            // });
 
             // 检查请求状态 - 修正：更安全的类型守卫
             // @ts-expect-error - 忽略类型检查

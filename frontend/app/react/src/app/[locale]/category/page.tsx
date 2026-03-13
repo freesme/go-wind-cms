@@ -64,7 +64,7 @@ export default function CategoryListPage() {
                     <div className={styles['categories-loading']}>
                         {[...Array(6)].map((_, i) => (
                             <div key={i} className={styles['category-loading-card']}>
-                                <Skeleton height={160} active/>
+                                <Skeleton.Image style={{height: 160}} active/>
                             </div>
                         ))}
                     </div>
