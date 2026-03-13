@@ -17,17 +17,24 @@ import {ThemeMode} from "@/store/types";
 import TopNavbar from './TopNavbar';
 
 import styles from './Header.module.css';
+import {useAccessStore} from "@/store/core/access/hooks";
+import {useAuthenticationStore} from "@/store/slices/authentication/hooks";
 
 export default function Header() {
     const t = useTranslations('navbar');
     const appT = useTranslations('app');
-    const brandTitle = appT('title');
     const menuT = useTranslations('menu');
+    const brandTitle = appT('title');
+
     const themeStore = useThemeStore();
     const currentMode = useThemeMode(); //  直接从 Redux store 获取，保证 SSR/CSR 一致
     const {changeLocale} = useI18n();
     const router = useI18nRouter();
-    const isLogin = false; // TODO: 从 accessStore 获取
+    const accessStore = useAccessStore();
+    const authenticationStore = useAuthenticationStore();
+
+    const accessToken = accessStore.access.accessToken;
+    const isLogin = !!accessToken && !accessStore.access.loginExpired;
 
     const handleClickLogo = () => {
         router.push('/');
@@ -45,46 +52,53 @@ export default function Header() {
         router.push('/register');
     };
     const handleClickLogout = async () => {
-        // TODO: 实现登出逻辑
         console.log('Logout');
+
+        if (isLogin) {
+            await authenticationStore.logout();
+        }
     };
 
-    const userMenuItems = [
-        {
-            key: 'login',
-            label: t('user.login'),
-            icon: <UserOutlined/>,
-            onClick: handleClickLogin
-        },
-        {
-            key: 'register',
-            label: t('user.register'),
-            icon: <UserOutlined/>,
-            onClick: handleClickRegister
-        },
-        {
-            type: 'divider' as const
-        },
-        {
-            key: 'homepage',
-            label: menuT('homepage'),
-            icon: <HomeOutlined/>,
-            onClick: handleClickUserHomepage
-        },
-        {
-            key: 'profile',
-            label: menuT('my_profile'),
-            icon: <UserOutlined/>,
-            onClick: handleClickSettings
-        },
-        {
-            key: 'logout',
-            label: menuT('logout'),
-            icon: <LogoutOutlined/>,
-            danger: true,
-            onClick: handleClickLogout
-        },
-    ];
+    // 根据登录状态动态生成用户菜单项
+    const userMenuItems = isLogin
+        ? [
+            {
+                key: 'homepage',
+                label: menuT('homepage'),
+                icon: <HomeOutlined/>,
+                onClick: handleClickUserHomepage
+            },
+            {
+                key: 'profile',
+                label: menuT('my_profile'),
+                icon: <UserOutlined/>,
+                onClick: handleClickSettings
+            },
+            {
+                type: 'divider' as const
+            },
+            {
+                key: 'logout',
+                label: menuT('logout'),
+                icon: <LogoutOutlined/>,
+                danger: true,
+                onClick: handleClickLogout
+            },
+        ]
+        : [
+            {
+                key: 'login',
+                label: t('user.login'),
+                icon: <UserOutlined/>,
+                onClick: handleClickLogin
+            },
+            {
+                key: 'register',
+                label: t('user.register'),
+                icon: <UserOutlined/>,
+                onClick: handleClickRegister
+            }
+        ];
     // 占位语言菜单
     const languageMenuItems = [
         {

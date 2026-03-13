@@ -76,11 +76,11 @@ export function useAuthenticationStore() {
 
                 accessStore.setAccessToken({
                     value: response.access_token,
-                    expiresAt: response.expires_in ? Date.now() + response.expires_in * 1000 : undefined,
+                    expiresAt: response.expires_in && response.expires_in != 0 ? Date.now() + response.expires_in * 1000 : undefined,
                 });
                 accessStore.setRefreshToken({
                     value: response.refresh_token || '',
-                    expiresAt: response.refresh_expires_in ? Date.now() + response.refresh_expires_in * 1000 : undefined,
+                    expiresAt: response.refresh_expires_in && response.refresh_expires_in != 0 ? Date.now() + response.refresh_expires_in * 1000 : undefined,
                 });
                 accessStore.setLoginExpired(false)
 
@@ -109,11 +109,55 @@ export function useAuthenticationStore() {
         return (await userProfileService.GetUser({})) as unknown as IUser;
     }
 
+    async function logout(redirect: boolean = true) {
+        try {
+            await authService.Logout({})
+        } catch {
+            // 不做任何处理
+        } finally {
+            accessStore.clearTokens()
+            accessStore.setLoginExpired(false)
+
+            // 回登录页带上当前路由地址
+            router.replace(redirect ? '/login?redirect=' + encodeURIComponent(window.location.pathname) : '/login');
+        }
+    }
+
+    /**
+     * 重新认证
+     */
+    async function reauthenticate() {
+        console.warn('Access token or refresh token is invalid or expired. ')
+
+        accessStore.setAccessToken(null)
+        accessStore.setLoginExpired(true)
+    }
+
+    /**
+     * 刷新访问令牌
+     */
+    async function refreshToken() {
+        const resp = await authService.RefreshToken({
+            grant_type: 'password',
+            refresh_token: accessStore.access.refreshToken ? accessStore.access.refreshToken.value : '',
+        })
+        const newToken = resp.access_token || ''
+
+        accessStore.setAccessToken({
+            value: newToken,
+            expiresAt: resp.expires_in && resp.expires_in != 0 ? Date.now() + resp.expires_in * 1000 : undefined,
+        })
+
+        return newToken
+    }
+
     return {
         authentication,
         dispatch,
         login,
+        logout,
+        refreshToken,
+        reauthenticate,
         fetchUserInfo,
     };
 }
-
