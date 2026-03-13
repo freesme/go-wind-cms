@@ -7,10 +7,13 @@ import {appNamespace} from "@/caches";
 
 const storage = new StorageManager({prefix: appNamespace, storageType: 'localStorage'});
 
+export const ACCESS_TOKEN_KEY = 'access-token';
+export const REFRESH_TOKEN_KEY = 'refresh-token';
+
 const initialState: IAccessState = {
     permissions: [],
-    accessToken: (typeof window !== 'undefined') ? storage.getItem<TokenPayload>('accessToken', null) : null,
-    refreshToken: (typeof window !== 'undefined') ? storage.getItem<TokenPayload>('refreshToken', null) : null,
+    accessToken: (typeof window !== 'undefined') ? storage.getItem<TokenPayload>(ACCESS_TOKEN_KEY, null) : null,
+    refreshToken: (typeof window !== 'undefined') ? storage.getItem<TokenPayload>(REFRESH_TOKEN_KEY, null) : null,
     isAccessChecked: false,
     loginExpired: false,
 };
@@ -22,9 +25,9 @@ function setTokenWithExpiry(state: IAccessState, token: TokenPayload | null) {
     state.accessToken = token;
     if (typeof window !== 'undefined') {
         if (token) {
-            storage.setItem('accessToken', token, token.expiresAt ? token.expiresAt - Date.now() : undefined);
+            storage.setItem(ACCESS_TOKEN_KEY, token, token.expiresAt ? token.expiresAt - Date.now() : undefined);
         } else {
-            storage.removeItem('accessToken');
+            storage.removeItem(ACCESS_TOKEN_KEY);
         }
     }
 }
@@ -57,9 +60,9 @@ const accessSlice = createSlice({
             state.refreshToken = action.payload;
             if (typeof window !== 'undefined') {
                 if (action.payload) {
-                    storage.setItem('refreshToken', action.payload, action.payload.expiresAt ? action.payload.expiresAt - Date.now() : undefined);
+                    storage.setItem(REFRESH_TOKEN_KEY, action.payload, action.payload.expiresAt ? action.payload.expiresAt - Date.now() : undefined);
                 } else {
-                    storage.removeItem('refreshToken');
+                    storage.removeItem(REFRESH_TOKEN_KEY);
                 }
             }
         },
@@ -76,9 +79,9 @@ const accessSlice = createSlice({
             state.refreshToken = refreshToken;
             if (typeof window !== 'undefined') {
                 if (refreshToken) {
-                    storage.setItem('refreshToken', refreshToken, refreshToken.expiresAt ? refreshToken.expiresAt - Date.now() : undefined);
+                    storage.setItem(REFRESH_TOKEN_KEY, refreshToken, refreshToken.expiresAt ? refreshToken.expiresAt - Date.now() : undefined);
                 } else {
-                    storage.removeItem('refreshToken');
+                    storage.removeItem(REFRESH_TOKEN_KEY);
                 }
             }
         },
@@ -128,8 +131,8 @@ const accessSlice = createSlice({
             state.refreshToken = null;
             state.loginExpired = false;
             if (typeof window !== 'undefined') {
-                storage.removeItem('accessToken');
-                storage.removeItem('refreshToken');
+                storage.removeItem(ACCESS_TOKEN_KEY);
+                storage.removeItem(REFRESH_TOKEN_KEY);
             }
         },
 
@@ -138,8 +141,8 @@ const accessSlice = createSlice({
          */
         resetAccess() {
             if (typeof window !== 'undefined') {
-                storage.removeItem('accessToken');
-                storage.removeItem('refreshToken');
+                storage.removeItem(ACCESS_TOKEN_KEY);
+                storage.removeItem(REFRESH_TOKEN_KEY);
             }
             return initialState;
         },
@@ -150,10 +153,10 @@ const accessSlice = createSlice({
         restoreAccess(state, action: PayloadAction<Partial<IAccessState>>) {
             if (typeof window !== 'undefined') {
                 if (action.payload.accessToken) {
-                    storage.setItem('accessToken', action.payload.accessToken, action.payload.accessToken.expiresAt ? action.payload.accessToken.expiresAt - Date.now() : undefined);
+                    storage.setItem(ACCESS_TOKEN_KEY, action.payload.accessToken, action.payload.accessToken.expiresAt ? action.payload.accessToken.expiresAt - Date.now() : undefined);
                 }
                 if (action.payload.refreshToken) {
-                    storage.setItem('refreshToken', action.payload.refreshToken, action.payload.refreshToken.expiresAt ? action.payload.refreshToken.expiresAt - Date.now() : undefined);
+                    storage.setItem(REFRESH_TOKEN_KEY, action.payload.refreshToken, action.payload.refreshToken.expiresAt ? action.payload.refreshToken.expiresAt - Date.now() : undefined);
                 }
             }
             return {...initialState, ...action.payload};
