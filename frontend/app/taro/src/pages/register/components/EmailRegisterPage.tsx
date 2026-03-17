@@ -1,9 +1,10 @@
 import {useState} from 'react';
-import {useTranslations} from 'next-intl';
+import {useTranslation} from 'react-i18next';
+
 import styles from '../register.scss';
 
 export default function EmailRegisterPage() {
-    const t = useTranslations('authentication');
+    const {t} = useTranslation('authentication');
 
     const [email, setEmail] = useState('');
     const [visibleEnter, setVisibleEnter] = useState(false);
@@ -63,7 +64,7 @@ export default function EmailRegisterPage() {
 }
 
 function EmailRegisterEnterCodePage({email}: { email: string }) {
-    const t = useTranslations('authentication');
+    const {t} = useTranslation('authentication');
     const [code, setCode] = useState(Array(6).fill(''));
     const [isCodeComplete, setIsCodeComplete] = useState(false);
     const [codeSent, setCodeSent] = useState(true);
@@ -74,7 +75,7 @@ function EmailRegisterEnterCodePage({email}: { email: string }) {
         setCodeSent(true);
         setCodeCountdown(60);
 
-        const timer = setInterval(() => {
+        const timer: NodeJS.Timeout = setInterval(() => {
             setCodeCountdown((prev) => {
                 if (prev <= 1) {
                     clearInterval(timer);

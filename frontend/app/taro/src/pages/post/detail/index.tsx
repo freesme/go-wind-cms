@@ -12,7 +12,6 @@ import {usePostStore} from '@/store/slices/post/hooks';
 import {formatDate} from "@/utils";
 import {contentservicev1_Post} from "@/api/generated/app/service/v1";
 
-import '../../../globals.css'; // 导入全局 CSS，确保 CSS 变量可用
 import styles from './post-detail.scss';
 
 // 常量定义

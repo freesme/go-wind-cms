@@ -10,7 +10,7 @@ import PhoneRegisterPage from './components/PhoneRegisterPage';
 import OtherRegisterPage from './components/OtherRegisterPage';
 import ControlPanel from '@/components/layout/ControlPanel';
 
-import './index.scss';
+import './register.scss';
 
 export default function RegisterPage() {
   const {t} = useTranslation('authentication');

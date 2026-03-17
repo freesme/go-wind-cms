@@ -1,9 +1,10 @@
 import {useState, useEffect} from 'react';
-import {useTranslations} from 'next-intl';
-import styles from '../login.scss';
+import {useTranslation} from 'react-i18next';
+
+import styles from '../index.scss';
 
 export default function PhoneLoginPage() {
-  const t = useTranslations('authentication');
+  const {t} = useTranslation('authentication');
   const [phone, setPhone] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [codeSent, setCodeSent] = useState(false);

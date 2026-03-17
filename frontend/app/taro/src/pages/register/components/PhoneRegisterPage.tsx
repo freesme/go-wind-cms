@@ -1,9 +1,10 @@
 import {useState, useEffect} from 'react';
-import {useTranslations} from 'next-intl';
+import {useTranslation} from 'react-i18next';
+
 import styles from '../register.scss';
 
 export default function PhoneRegisterPage() {
-    const t = useTranslations('authentication');
+    const {t} = useTranslation('authentication');
 
     const [phone, setPhone] = useState('');
     const [verificationCode, setVerificationCode] = useState('');

@@ -17,8 +17,8 @@ export const XIcon: React.FC<XIconProps> = ({name, size = 24, color, className, 
     return (
         <Icon
             icon={name}
-            width={typeof size === 'string' ? size : size}
-            height={typeof size === 'string' ? size : size}
+            width={size}
+            height={size}
             color={color}
             className={className}
             style={{

@@ -1,10 +1,12 @@
 import {useState} from 'react';
-import {useTranslations} from 'next-intl';
-import styles from '../login.scss';
+import {useTranslation} from 'react-i18next';
+
 import {useAuthenticationStore} from "@/store/slices/authentication/hooks";
 
+import styles from '../index.scss';
+
 export default function EmailLoginPage() {
-    const t = useTranslations('authentication');
+    const {t} = useTranslation('authentication');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);

@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {useLocale} from 'next-intl';
+import {useI18n} from '@/i18n';
 
 import {useLanguageStore} from '@/store/core/language/hooks';
 
@@ -22,11 +22,11 @@ export function useLanguageChangeEffect(
 ) {
     const {immediate = false, autoCleanup = true} = options;
 
-    const locale = useLocale();
+    const {locale} = useI18n();
     const languageStore = useLanguageStore();
 
     useEffect(() => {
-        // 同步 next-intl 的 locale 到 Redux store
+        // 同步 i18n 的 locale 到 Redux store
         if (languageStore.language.locale !== locale) {
             languageStore.setLocale(locale);
         }

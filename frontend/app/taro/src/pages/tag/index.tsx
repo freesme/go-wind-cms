@@ -7,7 +7,6 @@ import {AppEmpty} from '@/components/ui';
 import {useTagStore} from '@/store/slices/tag/hooks';
 import {contentservicev1_ListTagResponse, contentservicev1_Tag} from '@/api/generated/app/service/v1';
 
-import '../../globals.css'; // 导入全局 CSS，确保 CSS 变量可用
 import styles from './tag-list.scss';
 
 export default function TagListPage() {

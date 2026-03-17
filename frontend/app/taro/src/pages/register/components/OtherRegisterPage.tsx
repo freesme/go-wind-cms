@@ -1,10 +1,11 @@
-import {useTranslations} from 'next-intl';
+import {useTranslation} from 'react-i18next';
 
 import XIcon from '@/plugins/xicon';
+
 import styles from '../register.scss';
 
 export default function OtherRegisterPage() {
-    const t = useTranslations('authentication');
+    const {t} = useTranslation('authentication');
 
     const handleButtonGoogleRegister = () => {
         // TODO: 实现 Google 登录逻辑

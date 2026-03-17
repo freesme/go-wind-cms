@@ -1,14 +1,18 @@
 export default defineAppConfig({
   pages: [
     'pages/index',
-    'pages/about/index',
-    'pages/contact/index',
     'pages/login/index',
     'pages/register/index',
-    'pages/post/[id]/index',
-    'pages/category/[id]/index',
+    'pages/category/index',
+    'pages/category/detail/index',
+    'pages/post/index',
+    'pages/post/detail/index',
     'pages/tag/index',
-    'pages/tag/[id]/index',
+    'pages/tag/detail/index',
+    'pages/about/index',
+    'pages/contact/index',
+    'pages/disclaimer/index',
+    'pages/privacy/index',
     'pages/settings/index',
     'pages/user/index'
   ],

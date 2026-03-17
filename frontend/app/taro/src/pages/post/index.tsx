@@ -5,7 +5,7 @@ import {View, Text} from '@tarojs/components';
 import CategoryFilter from '@/components/category/CategoryFilter';
 import PostList from '@/components/post/PostList';
 
-import './index.scss';
+import './post-list.scss';
 
 export default function PostListPage() {
   const {t} = useTranslation('page');

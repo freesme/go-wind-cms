@@ -1,9 +1,10 @@
 import {useState, useMemo} from 'react';
-import {useTranslations} from 'next-intl';
+import {useTranslation} from 'react-i18next';
+
 import styles from '../register.scss';
 
 export default function AccountRegisterPage() {
-    const t = useTranslations('authentication');
+    const {t} = useTranslation('authentication');
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

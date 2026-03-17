@@ -9,7 +9,6 @@ import CategoryList from '@/components/category/CategoryList';
 import PostListWithPagination from '@/components/post/PostList';
 import {contentservicev1_Category} from "@/api/generated/app/service/v1";
 
-import '../../../globals.css'; // 导入全局 CSS，确保 CSS 变量可用
 import styles from './category-detail.scss';
 
 export default function CategoryDetailPage() {

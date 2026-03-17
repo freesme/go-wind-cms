@@ -9,8 +9,7 @@ import CategoryTree from '@/components/category/CategoryTree';
 import {contentservicev1_Category, contentservicev1_ListCategoryResponse} from "@/api/generated/app/service/v1";
 import {useI18nRouter} from "@/i18n/helpers";
 
-import '../../globals.css'; // 导入全局 CSS，确保 CSS 变量可用
-import styles from './page.scss';
+import styles from './category.scss';
 
 export default function CategoryListPage() {
   const {t} = useTranslation('page');
