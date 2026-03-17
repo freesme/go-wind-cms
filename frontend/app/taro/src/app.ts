@@ -1,17 +1,21 @@
-import { PropsWithChildren } from 'react'
-import { useLaunch } from '@tarojs/taro'
+import {PropsWithChildren, createElement} from 'react';
+import {useLaunch} from '@tarojs/taro';
+import {Provider} from 'react-redux';
+import store from './store';
+import './i18n';
 
-import './app.scss'
+import './app.scss';
 
-function App({ children }: PropsWithChildren<any>) {
-  useLaunch(() => {
-    console.log('App launched.')
-  })
+function App({children}: PropsWithChildren) {
+    useLaunch(() => {
+        console.log('App launched.');
+    });
 
-  // children 是将要会渲染的页面
-  return children
+    return createElement(
+        Provider,
+        {store},
+        children
+    );
 }
-  
 
-
-export default App
+export default App;

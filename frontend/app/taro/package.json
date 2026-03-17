@@ -45,6 +45,7 @@
   "author": "",
   "dependencies": {
     "@babel/runtime": "^7.29.2",
+    "@reduxjs/toolkit": "^2.11.2",
     "@tarojs/components": "4.1.11",
     "@tarojs/helper": "4.1.11",
     "@tarojs/plugin-framework-react": "4.1.11",
@@ -60,8 +61,15 @@
     "@tarojs/runtime": "4.1.11",
     "@tarojs/shared": "4.1.11",
     "@tarojs/taro": "4.1.11",
+    "axios": "^1.13.6",
+    "crypto-js": "^4.2.0",
+    "defu": "^6.1.4",
+    "i18next": "^25.8.18",
+    "nprogress": "^0.2.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-i18next": "^16.5.8",
+    "react-redux": "^9.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
@@ -72,7 +80,9 @@
     "@tarojs/cli": "4.1.11",
     "@tarojs/plugin-generator": "4.1.11",
     "@tarojs/vite-runner": "4.1.11",
+    "@types/crypto-js": "^4.2.2",
     "@types/minimatch": "^5.1.2",
+    "@types/nprogress": "^0.2.3",
     "@types/react": "^18.3.28",
     "@vitejs/plugin-react": "^4.7.0",
     "babel-preset-taro": "4.1.11",

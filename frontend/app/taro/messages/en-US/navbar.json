@@ -1,0 +1,25 @@
+{
+  "top": {
+    "home": "Home",
+    "mine": "Mine",
+    "about": "About",
+    "search_placeholder": "Please enter keywords to search",
+    "dark_mode": "Dark",
+    "light_mode": "Light",
+    "system_mode": "System",
+    "language": "Language"
+  },
+  "user": {
+    "register": "Register",
+    "login": "Login"
+  },
+  "theme": {
+    "dark": "Dark",
+    "light": "Light",
+    "system": "System"
+  },
+  "language": {
+    "zh-CN": "简体中文",
+    "en-US": "English"
+  }
+}

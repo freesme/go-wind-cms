@@ -1,5 +1,4 @@
 import {useLocale} from 'next-intl';
-import { StorageManager } from '@/caches/storage-manager';
 
 export * from './config';
 export * from './helpers/useI18n';
