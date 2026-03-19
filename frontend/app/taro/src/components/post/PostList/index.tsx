@@ -66,10 +66,10 @@ const PostList: React.FC<PostListProps> = ({
     }
   }, [currentPageSize, pageSize]);
 
-  // 监听 categoryId 和 tagId 变化，重置页码并重新查询
+  // 监听 categoryId 和 tagId 变化，只重置页码
   useEffect(() => {
     setCurrentPage(1);
-    fetchPosts(1, currentPageSize);
+    // 不立即调用 fetchPosts，等 currentPage 变化后自动触发
   }, [categoryId, tagId]);
 
   const fetchPosts = useCallback(async (page: number, pageSize: number) => {
