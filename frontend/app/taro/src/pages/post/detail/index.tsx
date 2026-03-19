@@ -13,7 +13,7 @@ import {usePostStore} from '@/store/slices/post/hooks';
 import {formatDate} from "@/utils";
 import {contentservicev1_Post} from "@/api/generated/app/service/v1";
 
-import styles from './post-detail.scss';
+import './post-detail.scss';
 
 // 常量定义
 const HEADING_OFFSET = 150;
@@ -30,7 +30,7 @@ export default function PostDetailPage() {
   const {t} = useTranslation();
   const postStore = usePostStore();
 
-  // 直接使用 store 中的数据，而不是本地 state
+  // 直接使用 store 中的数据，而不是本�?state
   const post = postStore.detail as contentservicev1_Post | null;
 
   const [localLoading, setLocalLoading] = useState(true);
@@ -43,10 +43,10 @@ export default function PostDetailPage() {
 
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // 优化 postId 获取逻辑，兼容 Taro 路由参数
+  // 优化 postId 获取逻辑，兼�?Taro 路由参数
   const postId = useMemo(() => {
     let id: string | null | undefined = null;
-    // 优先从 Taro 路由参数获取
+    // 优先�?Taro 路由参数获取
     if (typeof Taro.getCurrentInstance === 'function') {
       const instance = Taro.getCurrentInstance();
       const routeId = instance?.router?.params?.id;
@@ -61,7 +61,7 @@ export default function PostDetailPage() {
     return id ? parseInt(id) : null;
   }, []);
 
-  // 计算属性 - 使用 postStore 提供的工具函数
+  // 计算属�?- 使用 postStore 提供的工具函�?
   const displayTitle = useMemo(() => {
     if (!post) return '';
     return postStore.getPostTitle(post);
@@ -111,7 +111,7 @@ export default function PostDetailPage() {
         });
 
         if (fetchedPost) {
-          // TODO: Taro 中设置页面标题
+          // TODO: Taro 中设置页面标�?
           // document.title = `${postStore.getPostTitle(fetchedPost)} - GoWind Content Hub`;
         }
       } catch (error) {
@@ -123,7 +123,7 @@ export default function PostDetailPage() {
 
     loadPost();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [postId]); // 只依赖 postId
+  }, [postId]); // 只依�?postId
 
   // Generate table of contents - 在内容渲染后生成目录
   useEffect(() => {
@@ -148,7 +148,7 @@ export default function PostDetailPage() {
 
         headings.forEach((heading, index) => {
           const level = heading.tagName === 'H2' ? 2 : 3;
-          // 保证 id 唯一，使用 tagName + index
+          // 保证 id 唯一，使�?tagName + index
           const id = `${heading.tagName.toLowerCase()}-${index}`;
           if (!heading.id) heading.setAttribute('id', id);
 
@@ -168,10 +168,10 @@ export default function PostDetailPage() {
     return () => clearTimeout(timeoutId);
   }, [displayContent]); // 依赖计算后的内容
 
-  // 监听内容变化，重新生成目录
+  // 监听内容变化，重新生成目�?
   useEffect(() => {
     if (displayContent && tableOfContents.length === 0) {
-      // 如果还没有生成目录，立即生成一次
+      // 如果还没有生成目录，立即生成一�?
       generateTableOfContents();
     }
   }, [displayContent, tableOfContents.length]);
@@ -184,14 +184,14 @@ export default function PostDetailPage() {
       // 等待 RichText 渲染
       setTimeout(() => {
         const contentEl = contentRef.current;
-        const headings = contentEl.querySelectorAll('h2, h3');
+        const headings = contentEl ? contentEl.querySelectorAll('h2, h3') : null;
         const toc: TocItem[] = [];
 
-        console.log('[GenerateTOC] Found headings:', headings.length);
+        console.log('[GenerateTOC] Found headings:', headings?.length);
 
-        headings.forEach((heading, index) => {
+        headings?.forEach((heading, index) => {
           const level = heading.tagName === 'H2' ? 2 : 3;
-          // 保证 id 唯一，使用 tagName + index
+          // 保证 id 唯一，使�?tagName + index
           const id = `${heading.tagName.toLowerCase()}-${index}`;
 
           // 确保 ID 存在
@@ -252,7 +252,7 @@ export default function PostDetailPage() {
 
   // Handlers
   const handleBack = () => {
-    // TODO: 从 Taro.getCurrentPages() 获取参数
+    // TODO: �?Taro.getCurrentPages() 获取参数
     Taro.navigateBack();
   };
 
@@ -267,7 +267,7 @@ export default function PostDetailPage() {
   };
 
   const handleShare = () => {
-    // TODO: Taro 中使用 onShareAppMessage 配置分享
+    // TODO: Taro 中使�?onShareAppMessage 配置分享
     console.log('Share:', displayTitle);
   };
 
@@ -281,7 +281,7 @@ export default function PostDetailPage() {
         '| Element:', element.textContent?.trim()
       );
 
-      // Taro 中使用 pageScrollTo
+      // Taro 中使�?pageScrollTo
       Taro.pageScrollTo({
         selector: `#${id}`,
         duration: 300
@@ -297,45 +297,37 @@ export default function PostDetailPage() {
 
   if (isLoading) {
     return (
-      <View className={styles['post-detail-page']}>
+      <View className="post-detail-page">
         {/* Loading skeleton */}
-        <View className={styles['back-navigation']}>
-          <View className={styles['skeleton-btn']}></View>
+        <View className="back-navigation">
+          <View className="skeleton-btn"></View>
         </View>
-        <View className={styles['post-article']}>
-          <View className={styles['post-banner']}>
-            <View className={styles['skeleton-image']}></View>
+        <View className="post-article">
+          <View className="post-banner">
+            <View className="skeleton-image"></View>
           </View>
-          <View className={styles['post-wrapper']}>
-            <View className={styles['toc-sidebar']}>
-              <View className={styles['toc-container']}>
-                <View className={styles['skeleton-line']} style={{width: '200px', height: '24px'}}></View>
-                <View className={styles['skeleton-line']}
-                      style={{width: '180px', height: '20px', marginTop: '16px'}}></View>
-                <View className={styles['skeleton-line']}
-                      style={{width: '160px', height: '20px', marginTop: '8px'}}></View>
-                <View className={styles['skeleton-line']}
-                      style={{width: '140px', height: '20px', marginTop: '8px'}}></View>
+          <View className="post-wrapper">
+            <View className="toc-sidebar">
+              <View className="toc-container">
+                <View className="skeleton-line" style={{width: '200px', height: '24px'}}></View>
+                <View className="skeleton-line" style={{width: '180px', height: '20px', marginTop: '16px'}}></View>
+                <View className="skeleton-line" style={{width: '160px', height: '20px', marginTop: '8px'}}></View>
+                <View className="skeleton-line" style={{width: '140px', height: '20px', marginTop: '8px'}}></View>
               </View>
             </View>
-            <View className={styles['article-content']}>
-              <View className={styles['post-header']}>
-                <View className={styles['skeleton-title']} style={{width: '80%', height: '48px'}}></View>
-                <View className={styles['skeleton-subtitle']}
-                      style={{width: '60%', height: '32px', marginTop: '16px'}}></View>
-                <View className={styles['post-meta']}>
-                  <View className={styles['skeleton-meta']}
-                        style={{width: '100px', height: '20px'}}></View>
-                  <View className={styles['skeleton-meta']}
-                        style={{width: '100px', height: '20px'}}></View>
-                  <View className={styles['skeleton-meta']}
-                        style={{width: '100px', height: '20px'}}></View>
-                  <View className={styles['skeleton-meta']}
-                        style={{width: '100px', height: '20px'}}></View>
+            <View className="article-content">
+              <View className="post-header">
+                <View className="skeleton-title" style={{width: '80%', height: '48px'}}></View>
+                <View className="skeleton-subtitle" style={{width: '60%', height: '32px', marginTop: '16px'}}></View>
+                <View className="post-meta">
+                  <View className="skeleton-meta" style={{width: '100px', height: '20px'}}></View>
+                  <View className="skeleton-meta" style={{width: '100px', height: '20px'}}></View>
+                  <View className="skeleton-meta" style={{width: '100px', height: '20px'}}></View>
+                  <View className="skeleton-meta" style={{width: '100px', height: '20px'}}></View>
                 </View>
               </View>
-              <View className={styles['post-content']}>
-                <View className={styles['skeleton-paragraph']}></View>
+              <View className="post-content">
+                <View className="skeleton-paragraph"></View>
               </View>
             </View>
           </View>
@@ -346,9 +338,10 @@ export default function PostDetailPage() {
 
   if (!post) {
     return (
-      <View className={styles['post-detail-page']}>
-        <View className={styles['empty-state']}>
-          <XIcon name='carbon:warning' size={32} className='empty-icon' />
+      <View className="post-detail-page">
+        <View className="empty-state">
+          <XIcon name='carbon:warning' size={28} className='empty-icon'
+                 style={{display: 'inline-block', width: '28px', height: '28px', fontSize: '28px'}}/>
           <Text>{t('page.post_detail.not_found') || 'Post not found'}</Text>
         </View>
       </View>
@@ -356,132 +349,149 @@ export default function PostDetailPage() {
   }
 
   return (
-    <View className={styles['post-detail-page']}>
+    <View className="post-detail-page">
       {/* Back Navigation */}
-      <View className={styles['back-navigation']}>
-        <View onClick={handleBack} className={styles['back-btn']} aria-label={t('page.post_detail.back')}>
-          <XIcon name='carbon:arrow-left' size={18} />
+      <View className="back-navigation">
+        <View onClick={handleBack} className="back-btn" aria-label={t('page.post_detail.back')}>
+          <XIcon name='carbon:arrow-left' size={16}
+                 style={{display: 'inline-block', width: '16px', height: '16px', fontSize: '16px'}}/>
           <Text>{t('page.post_detail.back')}</Text>
         </View>
       </View>
 
       {/* Post Article */}
-      <View className={styles['post-article']}>
-        {/* Post Thumbnail Banner */}
-        {displayThumbnail && (
-          <View className={styles['post-banner']}>
-            <Image src={displayThumbnail}/>
-            <View className={styles['banner-overlay']}/>
-          </View>
-        )}
+      <View className="post-article">
+        {/* Article Content Wrapper */}
+        <View className="article-wrapper">
+          {/* Post Thumbnail Banner */}
+          {displayThumbnail && (
+            <View className="post-banner">
+              <Image src={displayThumbnail}/>
+              <View className="banner-overlay"/>
+            </View>
+          )}
 
-        <View className={`${styles['post-wrapper']} ${!isTocExpanded ? styles['toc-collapsed'] : ''}`}>
-          {/* Table of Contents Sidebar */}
-          {tableOfContents.length > 0 && isTocExpanded && (
-            <View className={styles['toc-sidebar']}>
-              <View className={styles['toc-container']}>
-                <View className={styles['toc-header']}>
-                  <Text className={styles['toc-title']}>
-                    <XIcon name='carbon:list' size={20} />
-                    <Text>{t('page.post_detail.table_of_contents')}</Text>
-                  </Text>
-                  <View
-                    onClick={() => setIsTocExpanded(false)}
-                    className={styles['toc-collapse-btn']}
-                  >
-                    <XIcon name='carbon:chevron-left' size={20} />
-                  </View>
-                </View>
-                <View className={styles['toc-list']}>
-                  {tableOfContents.map(item => (
+          {/* Content with TOC */}
+          <View className="content-with-toc">
+            {/* Left: Table of Contents */}
+            {tableOfContents.length > 0 && isTocExpanded && (
+              <View className="toc-sidebar">
+                <View className="toc-container">
+                  <View className="toc-header">
+                    <Text className="toc-title">
+                      <XIcon name='carbon:list' size={18}
+                             style={{display: 'inline-block', width: '18px', height: '18px', fontSize: '18px'}}/>
+                      <Text>{t('page.post_detail.table_of_contents')}</Text>
+                    </Text>
                     <View
-                      key={item.id}
-                      className={`${styles['toc-item']} ${styles[`level-${item.level}`]} ${activeHeading === item.id ? styles['active'] : ''}`}
-                      onClick={() => {
-                        setTimeout(() => scrollToHeading(item.id), 10);
-                      }}
+                      onClick={() => setIsTocExpanded(false)}
+                      className="toc-collapse-btn"
                     >
-                      <Text>{item.text}</Text>
+                      <XIcon name='carbon:chevron-left' size={18}
+                             style={{display: 'inline-block', width: '18px', height: '18px', fontSize: '18px'}}/>
                     </View>
-                  ))}
+                  </View>
+                  <View className="toc-list">
+                    {tableOfContents.map(item => (
+                      <View
+                        key={item.id}
+                        className={`toc-item level-${item.level}${activeHeading === item.id ? ' active' : ''}`}
+                        onClick={() => {
+                          setTimeout(() => scrollToHeading(item.id), 10);
+                        }}
+                      >
+                        <Text>{item.text}</Text>
+                      </View>
+                    ))}
+                  </View>
                 </View>
               </View>
-            </View>
-          )}
+            )}
 
-          {/* TOC Expand Button */}
-          {tableOfContents.length > 0 && !isTocExpanded && (
-            <View className={styles['toc-expand-trigger']}>
-              <View onClick={() => setIsTocExpanded(true)}>
-                <XIcon name='carbon:list' size={20} />
-                <Text>{t('page.post_detail.table_of_contents')}</Text>
-                <XIcon name='carbon:chevron-right' size={20} />
-              </View>
-            </View>
-          )}
-
-          <View className={styles['article-content']}>
-            {/* Post Header */}
-            <View className={styles['post-header']}>
-              <Text className={styles['post-title']}>{displayTitle}</Text>
-              <View className={styles['post-meta']}>
-                <View className={styles['meta-item']}>
-                  <View className={styles['meta-icon']}>
-                    <XIcon name='carbon:user' size={16} />
+            {/* Right: Article Content */}
+            <View className="article-content-inner">
+              {/* Post Header */}
+              <View className="post-header">
+                <Text className="post-title">{displayTitle}</Text>
+                <View className="post-meta">
+                  <View className="meta-item">
+                    <View className="meta-icon">
+                      <XIcon name='carbon:user' size={14}
+                             style={{display: 'inline-block', width: '14px', height: '14px', fontSize: '14px'}}/>
+                    </View>
+                    <Text>{post.authorName}</Text>
                   </View>
-                  <Text>{post.authorName}</Text>
-                </View>
-                <View className={styles['meta-item']}>
-                  <View className={styles['meta-icon']}>
-                    <XIcon name='carbon:calendar' size={16} />
+                  <View className="meta-item">
+                    <View className="meta-icon">
+                      <XIcon name='carbon:calendar' size={14}
+                             style={{display: 'inline-block', width: '14px', height: '14px', fontSize: '14px'}}/>
+                    </View>
+                    <Text>{formatDate(post.createdAt)}</Text>
                   </View>
-                  <Text>{formatDate(post.createdAt)}</Text>
-                </View>
-                <View className={styles['meta-item']}>
-                  <View className={styles['meta-icon']}>
-                    <XIcon name='carbon:view' size={16} />
+                  <View className="meta-item">
+                    <View className="meta-icon">
+                      <XIcon name='carbon:view' size={14}
+                             style={{display: 'inline-block', width: '14px', height: '14px', fontSize: '14px'}}/>
+                    </View>
+                    <Text>{post.visits || 0}</Text>
                   </View>
-                  <Text>{post.visits || 0}</Text>
-                </View>
-                <View className={styles['meta-item']}>
-                  <View className={styles['meta-icon']}>
-                    <XIcon name='carbon:thumb-up' size={16} />
+                  <View className="meta-item">
+                    <View className="meta-icon">
+                      <XIcon name='carbon:thumb-up' size={14}
+                             style={{display: 'inline-block', width: '14px', height: '14px', fontSize: '14px'}}/>
+                    </View>
+                    <Text>{post.likes || 0}</Text>
                   </View>
-                  <Text>{post.likes || 0}</Text>
                 </View>
               </View>
-            </View>
 
-            {/* Post Content */}
-            <View className={styles['post-content']} ref={contentRef}>
-              <ContentViewer content={displayContent} type="markdown"/>
-            </View>
+              {/* Post Content */}
+              <View className="post-content" ref={contentRef}>
+                <ContentViewer content={displayContent} type="markdown"/>
+              </View>
 
-            {/* Post Actions */}
-            <View className={styles['post-actions']}>
-              <View className={styles['action-buttons']}>
-                <View
-                  onClick={handleLike}
-                  className={`${styles['action-btn']} ${isLiked ? styles['liked'] : ''}`}
-                  aria-label={t('page.post_detail.likes')}
-                >
-                  <XIcon name={isLiked ? 'carbon:thumb-up' : 'carbon:thumb-up-outline'} size={20} />
-                </View>
-                <View
-                  onClick={handleBookmark}
-                  className={`${styles['action-btn']} ${isBookmarked ? styles['bookmarked'] : ''}`}
-                  aria-label={t('page.post_detail.bookmark')}
-                >
-                  <XIcon name={isBookmarked ? 'carbon:bookmark' : 'carbon:bookmark-outline'} size={20} />
-                </View>
-                <View
-                  onClick={handleShare}
-                  className={styles['action-btn']}
-                  aria-label={t('page.post_detail.share')}
-                >
-                  <XIcon name='carbon:share' size={20} />
+              {/* Post Actions */}
+              <View className="post-actions">
+                <View className="action-buttons">
+                  <View
+                    onClick={handleLike}
+                    className={`action-btn${isLiked ? ' liked' : ''}`}
+                    aria-label={t('page.post_detail.likes')}
+                  >
+                    <XIcon name={isLiked ? 'carbon:thumb-up' : 'carbon:thumb-up-outline'} size={18}
+                           style={{display: 'inline-block', width: '18px', height: '18px', fontSize: '18px'}}/>
+                  </View>
+                  <View
+                    onClick={handleBookmark}
+                    className={`action-btn${isBookmarked ? ' bookmarked' : ''}`}
+                    aria-label={t('page.post_detail.bookmark')}
+                  >
+                    <XIcon name={isBookmarked ? 'carbon:bookmark' : 'carbon:bookmark-outline'} size={18}
+                           style={{display: 'inline-block', width: '18px', height: '18px', fontSize: '18px'}}/>
+                  </View>
+                  <View
+                    onClick={handleShare}
+                    className="action-btn"
+                    aria-label={t('page.post_detail.share')}
+                  >
+                    <XIcon name='carbon:share' size={18}
+                           style={{display: 'inline-block', width: '18px', height: '18px', fontSize: '18px'}}/>
+                  </View>
                 </View>
               </View>
+
+              {/* TOC Expand Button - Only show when collapsed */}
+              {tableOfContents.length > 0 && !isTocExpanded && (
+                <View className="toc-expand-trigger">
+                  <View onClick={() => setIsTocExpanded(true)}>
+                    <XIcon name='carbon:list' size={18}
+                           style={{display: 'inline-block', width: '18px', height: '18px', fontSize: '18px'}}/>
+                    <Text>{t('page.post_detail.table_of_contents')}</Text>
+                    <XIcon name='carbon:chevron-right' size={18}
+                           style={{display: 'inline-block', width: '18px', height: '18px', fontSize: '18px'}}/>
+                  </View>
+                </View>
+              )}
             </View>
           </View>
         </View>
@@ -496,10 +506,11 @@ export default function PostDetailPage() {
       />
 
       {/* Related Posts */}
-      <View className={styles['related-section']}>
-        <View className={styles['section-header']}>
-          <Text className={styles['section-title']}>
-            <XIcon name='carbon:document' size={24} />
+      <View className="related-section">
+        <View className="section-header">
+          <Text className="section-title">
+            <XIcon name='carbon:document' size={20}
+                   style={{display: 'inline-block', width: '20px', height: '20px', fontSize: '20px'}}/>
             <Text>{t('page.post_detail.related_posts')}</Text>
           </Text>
         </View>
