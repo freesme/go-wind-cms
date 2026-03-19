@@ -1,24 +1,24 @@
 import {useTranslation} from 'react-i18next';
 import {View, Text} from '@tarojs/components';
 
-import styles from './disclaimer.scss';
+import './disclaimer.scss';
 
 export default function DisclaimerPage() {
   const {t} = useTranslation('page.legal.disclaimer');
 
   return (
-    <View className={styles.infoPage}>
+    <View className="info-page">
       {/* Hero Section */}
-      <View className={styles.hero}>
-        <View className={styles.heroContent}>
-          <Text className={styles.heroTitle}>{t('title')}</Text>
-          <Text className={styles.heroSubtitle}>{t('description')}</Text>
+      <View className="hero">
+        <View className="hero-content">
+          <Text className="hero-title">{t('title')}</Text>
+          <Text className="hero-subtitle">{t('description')}</Text>
         </View>
       </View>
 
       {/* Content Section */}
-      <View className={styles.infoCard}>
-        <View className={styles.list}>
+      <View className="info-card">
+        <View className="list">
           <Text>{t('item_1')}</Text>
           <Text>{t('item_2')}</Text>
           <Text>{t('item_3')}</Text>

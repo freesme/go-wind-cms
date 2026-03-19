@@ -10,7 +10,7 @@ import CategoryList from '@/components/category/CategoryList';
 import PostListWithPagination from '@/components/post/PostList';
 import {contentservicev1_Category} from "@/api/generated/app/service/v1";
 
-import styles from './category-detail.scss';
+import './category-detail.scss';
 
 export default function CategoryDetailPage() {
   const {t} = useTranslation('page');
@@ -71,18 +71,18 @@ export default function CategoryDetailPage() {
   }
 
   return (
-    <View className={styles['category-detail-page']}>
+    <View className="category-detail-page">
       {/* Hero Section */}
-      <View className={styles['hero-section']}>
-        <View className={styles['hero-content']}>
+      <View className="hero-section">
+        <View className="hero-content">
           <Text>{categoryStore.getCategoryName(categoryStore.detail)}</Text>
           {categoryStore.getCategoryDescription(categoryStore.detail) && (
-            <Text className={styles['category-description']}>
+            <Text className="category-description">
               {categoryStore.getCategoryDescription(categoryStore.detail)}
             </Text>
           )}
-          <View className={styles['category-stats']}>
-            <View className={styles['stat-item']}>
+          <View className="category-stats">
+            <View className="stat-item">
               <XIcon name='carbon:document' size={20} />
               <Text>{categoryStore.detail?.postCount || 0} {t('page.posts.articles')}</Text>
             </View>
@@ -91,10 +91,10 @@ export default function CategoryDetailPage() {
       </View>
 
       {/* Posts Section */}
-      <View className={styles['page-container']}>
+      <View className="page-container">
         {/* Back to Parent Button */}
-        <View className={styles['back-button-container']}>
-          <View className={styles['back-btn']} onClick={handleBackToParent}>
+        <View className="back-button-container">
+          <View className="back-btn" onClick={handleBackToParent}>
             <Text>← </Text>
             <Text>{parentCategoryId ? t('categories.back_to_parent') : t('categories.back_to_list')}</Text>
           </View>
@@ -102,7 +102,7 @@ export default function CategoryDetailPage() {
 
         {/* Sub Categories List */}
         {childCategories.length > 0 && (
-          <View className={styles['sub-categories-wrapper']}>
+          <View className="sub-categories-wrapper">
             <CategoryList
               categories={childCategories}
               loading={false}

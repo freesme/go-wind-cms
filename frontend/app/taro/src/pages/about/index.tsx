@@ -1,8 +1,7 @@
 import {useTranslation} from 'react-i18next';
 import {View, Text, Image} from '@tarojs/components';
 
-
-import styles from './about.scss';
+import './about.scss';
 
 export default function AboutPage() {
   const {t} = useTranslation();
@@ -59,57 +58,57 @@ export default function AboutPage() {
   ];
 
   return (
-    <View className={styles.aboutPage}>
+    <View className="about-page">
       {/* Hero Section */}
-      <View className={styles.hero}>
-        <View className={styles.heroContent}>
-          <Text className={styles.heroTitle}>{t('about.title')}</Text>
-          <Text className={styles.heroSubtitle}>{t('about.subtitle')}</Text>
-          <Text className={styles.heroDescription}>{t('about.description')}</Text>
+      <View className="hero">
+        <View className="hero-content">
+          <Text className="hero-title">{t('about.title')}</Text>
+          <Text className="hero-subtitle">{t('about.subtitle')}</Text>
+          <Text className="hero-description">{t('about.description')}</Text>
         </View>
       </View>
 
       {/* About Section */}
-      <View className={styles.aboutSection}>
-        <View className={styles.sectionContainer}>
-          <View className={styles.aboutContent}>
+      <View className="about-section">
+        <View className="section-container">
+          <View className="about-content">
             <Text>{t('about.about_us')}</Text>
             <Text>{t('about.about_us_desc_1')}</Text>
             <Text>{t('about.about_us_desc_2')}</Text>
             <Text>{t('about.about_us_desc_3')}</Text>
           </View>
-          <View className={styles.aboutStats}>
-            <View className={styles.statCard}>
-              <Text className={styles.statNumber}>10K+</Text>
-              <Text className={styles.statLabel}>{t('about.stat_users')}</Text>
+          <View className="about-stats">
+            <View className="stat-card">
+              <Text className="stat-number">10K+</Text>
+              <Text className="stat-label">{t('about.stat_users')}</Text>
             </View>
-            <View className={styles.statCard}>
-              <Text className={styles.statNumber}>500+</Text>
-              <Text className={styles.statLabel}>{t('about.stat_projects')}</Text>
+            <View className="stat-card">
+              <Text className="stat-number">500+</Text>
+              <Text className="stat-label">{t('about.stat_projects')}</Text>
             </View>
-            <View className={styles.statCard}>
-              <Text className={styles.statNumber}>99.9%</Text>
-              <Text className={styles.statLabel}>{t('about.stat_uptime')}</Text>
+            <View className="stat-card">
+              <Text className="stat-number">99.9%</Text>
+              <Text className="stat-label">{t('about.stat_uptime')}</Text>
             </View>
-            <View className={styles.statCard}>
-              <Text className={styles.statNumber}>24/7</Text>
-              <Text className={styles.statLabel}>{t('about.stat_support')}</Text>
+            <View className="stat-card">
+              <Text className="stat-number">24/7</Text>
+              <Text className="stat-label">{t('about.stat_support')}</Text>
             </View>
           </View>
         </View>
       </View>
 
       {/* Features Section */}
-      <View className={styles.featuresSection}>
-        <View className={styles.sectionContainer}>
-          <View className={styles.sectionHeader}>
+      <View className="features-section">
+        <View className="section-container">
+          <View className="section-header">
             <Text>{t('about.features')}</Text>
             <Text>{t('about.features_desc')}</Text>
           </View>
-          <View className={styles.featuresGrid}>
+          <View className="features-grid">
             {features.map((feature) => (
-              <View key={feature.title} className={styles.featureCard}>
-                <View className={styles.featureIcon}>
+              <View key={feature.title} className="feature-card">
+                <View className="feature-icon">
                   <Text>{feature.icon}</Text>
                 </View>
                 <Text>{feature.title}</Text>
@@ -121,16 +120,16 @@ export default function AboutPage() {
       </View>
 
       {/* Team Section */}
-      <View className={styles.teamSection}>
-        <View className={styles.sectionContainer}>
-          <View className={styles.sectionHeader}>
+      <View className="team-section">
+        <View className="section-container">
+          <View className="section-header">
             <Text>{t('about.team')}</Text>
             <Text>{t('about.team_desc')}</Text>
           </View>
-          <View className={styles.teamGrid}>
+          <View className="team-grid">
             {teamMembers.map((member) => (
-              <View key={member.name} className={styles.teamCard}>
-                <View className={styles.teamAvatar}>
+              <View key={member.name} className="team-card">
+                <View className="team-avatar">
                   <Image
                     src={member.avatar}
                     style={{width: 120, height: 120}}
@@ -145,22 +144,22 @@ export default function AboutPage() {
       </View>
 
       {/* Values Section */}
-      <View className={styles.valuesSection}>
-        <View className={styles.sectionContainer}>
-          <View className={styles.sectionHeader}>
+      <View className="values-section">
+        <View className="section-container">
+          <View className="section-header">
             <Text>{t('about.values')}</Text>
             <Text>{t('about.values_desc')}</Text>
           </View>
-          <View className={styles.valuesGrid}>
-            <View className={styles.valueCard}>
+          <View className="values-grid">
+            <View className="value-card">
               <Text>{t('about.value_innovation')}</Text>
               <Text>{t('about.value_innovation_desc')}</Text>
             </View>
-            <View className={styles.valueCard}>
+            <View className="value-card">
               <Text>{t('about.value_reliability')}</Text>
               <Text>{t('about.value_reliability_desc')}</Text>
             </View>
-            <View className={styles.valueCard}>
+            <View className="value-card">
               <Text>{t('about.value_customer')}</Text>
               <Text>{t('about.value_customer_desc')}</Text>
             </View>
@@ -169,15 +168,15 @@ export default function AboutPage() {
       </View>
 
       {/* CTA Section */}
-      <View className={styles.ctaSection}>
-        <View className={styles.sectionContainer}>
+      <View className="cta-section">
+        <View className="section-container">
           <Text>{t('about.cta_title')}</Text>
           <Text>{t('about.cta_desc')}</Text>
-          <View className={styles.ctaButtons}>
-            <View className={styles.buttonPrimary}>
+          <View className="cta-buttons">
+            <View className="button-primary">
               <Text>{t('about.cta_explore')}</Text>
             </View>
-            <View className={styles.buttonDefault}>
+            <View className="button-default">
               <Text>{t('about.cta_contact')}</Text>
             </View>
           </View>

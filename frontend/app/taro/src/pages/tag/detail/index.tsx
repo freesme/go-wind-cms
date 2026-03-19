@@ -3,18 +3,19 @@ import {useTranslation} from 'react-i18next';
 import {View, Text} from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import {AppEmpty} from '@/components/ui';
+import XIcon from '@/plugins/xicon';
 
 import {useTagStore} from '@/store/slices/tag/hooks';
 import PostListWithPagination from '@/components/post/PostList';
 import type {contentservicev1_Tag} from "@/api/generated/app/service/v1";
 
-import styles from './tag-detail.scss';
+import './tag-detail.scss';
 
 export default function TagDetailPage() {
   const {t} = useTranslation('page');
   const tagStore = useTagStore();
   const [tag, setTag] = useState<contentservicev1_Tag | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [_loading, setLoading] = useState(false);
   const tagId = useMemo(() => {
     const pages = Taro.getCurrentPages();
     const currentPage = pages[pages.length - 1];
@@ -53,32 +54,32 @@ export default function TagDetailPage() {
   const translation = tagStore.getTranslation(tag);
 
   return (
-    <View className={styles['tag-detail-page']}>
+    <View className="tag-detail-page">
       {/* Hero Section */}
       <View
-        className={styles['hero-section']}
+        className="hero-section"
         style={{
           background: tag?.color
             ? `linear-gradient(135deg, ${tag.color} 0%, ${tag.color}dd 50%, ${tag.color}aa 100%)`
             : undefined
         }}
       >
-        <View className={styles['hero-content']}>
+        <View className="hero-content">
           <View
-            className={styles['tag-icon']}
+            className="tag-icon"
             style={{color: tag?.color || '#6366f1'}}
           >
-            <Text>🏷️</Text>
+            <XIcon name='carbon:tag' size={32}/>
           </View>
           <Text>{translation?.name || t('tags.tag_untitled')}</Text>
           {translation?.description && (
-            <Text className={styles['tag-description']}>
+            <Text className="tag-description">
               {translation.description}
             </Text>
           )}
-          <View className={styles['tag-stats']}>
-            <View className={styles['stat-item']}>
-              <Text>📄</Text>
+          <View className="tag-stats">
+            <View className="stat-item">
+              <XIcon name='carbon:document' size={20}/>
               <Text>{tag?.postCount || 0} {t('page.posts.articles')}</Text>
             </View>
           </View>
@@ -86,10 +87,10 @@ export default function TagDetailPage() {
       </View>
 
       {/* Posts Section */}
-      <View className={styles['page-container']}>
+      <View className="page-container">
         {/* Back Button */}
-        <View className={styles['back-button-container']}>
-          <View className={styles['back-btn']} onClick={handleBack}>
+        <View className="back-button-container">
+          <View className="back-btn" onClick={handleBack}>
             <Text>← {t('categories.back_to_list')}</Text>
           </View>
         </View>

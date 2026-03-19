@@ -2,9 +2,9 @@ import {useState, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {View, Text} from '@tarojs/components';
 
-
-import styles from './settings.scss';
 import XIcon from "@/plugins/xicon";
+
+import './settings.scss';
 
 interface MenuItem {
   key: string;
@@ -133,66 +133,66 @@ export default function SettingsPage() {
   }, [activeMenu, accountSettings, messageSettings, preferenceSettings]);
 
   return (
-    <View className={styles.settingsPage}>
-      <View className={styles.settingsContainer}>
+    <View className="settings-page">
+      <View className="settings-container">
         {/* 左侧导航 */}
-        <View className={styles.sidebar}>
-          <View className={styles.menu}>
+        <View className="sidebar">
+          <View className="menu">
             {menuItems.map((item) => (
               <View
                 key={item.key}
-                className={`${styles.menuItem} ${activeMenu === item.key ? styles.active : ''}`}
+                className={`menu-item ${activeMenu === item.key ? 'active' : ''}`}
                 onClick={() => setActiveMenu(item.key as 'account' | 'message' | 'preference')}
               >
-                <View className={styles.menuIcon}>
+                <View className="menu-icon">
                   <Text>{item.icon}</Text>
                 </View>
-                <Text className={styles.menuLabel}>{item.label}</Text>
+                <Text className="menu-label">{item.label}</Text>
               </View>
             ))}
           </View>
         </View>
 
         {/* 中间内容区 */}
-        <View className={styles.content}>
+        <View className="content">
           {/* 页面头部 */}
-          <View className={styles.contentHeader}>
-            <Text className={styles.title}>{currentSettings.title}</Text>
-            <Text className={styles.subtitle}>{currentSettings.subtitle}</Text>
+          <View className="content-header">
+            <Text className="title">{currentSettings.title}</Text>
+            <Text className="subtitle">{currentSettings.subtitle}</Text>
           </View>
 
           {/* 动态渲染各 section */}
           {currentSettings.sections.map((section, sectionIndex) => (
-            <View key={sectionIndex} className={styles.section}>
-              <Text className={styles.sectionTitle}>{section.title}</Text>
+            <View key={sectionIndex} className="section">
+              <Text className="section-title">{section.title}</Text>
               {section.description && (
-                <Text className={styles.sectionDesc}>{section.description}</Text>
+                <Text className="section-desc">{section.description}</Text>
               )}
 
               {/* 账户特殊处理 - 第三方账号 */}
               {section.title === t('account.third_party_title') && (
-                <div className={styles.thirdPartyList}>
-                  <div className={styles.thirdPartyItem}>
-                    <div className={`${styles.platformIcon} ${styles.wechat}`}>
+                <div className="third-party-list">
+                  <div className="third-party-item">
+                    <div className={`platform-icon wechat`}>
                       <XIcon name="fa:wechat" size={24} color="white"/>
                     </div>
-                    <Text className={styles.platformLink}>
+                    <Text className="platform-link">
                       {t('account.bind_wechat')}
                     </Text>
                   </div>
-                  <div className={styles.thirdPartyItem}>
-                    <div className={`${styles.platformIcon} ${styles.weibo}`}>
+                  <div className="third-party-item">
+                    <div className={`platform-icon weibo`}>
                       <XIcon name="fa:weibo" size={24} color="white"/>
                     </div>
-                    <Text className={styles.platformLink}>
+                    <Text className="platform-link">
                       {t('account.bind_weibo')}
                     </Text>
                   </div>
-                  <div className={styles.thirdPartyItem}>
-                    <div className={`${styles.platformIcon} ${styles.qq}`}>
+                  <div className="third-party-item">
+                    <div className={`platform-icon qq`}>
                       <XIcon name="fa:qq" size={24} color="white"/>
                     </div>
-                    <Text className={styles.platformLink}>
+                    <Text className="platform-link">
                       {t('account.bind_qq')}
                     </Text>
                   </div>
@@ -201,33 +201,33 @@ export default function SettingsPage() {
 
               {/* 设置项列表 */}
               {section.title !== t('account.third_party_title') && section.items.map((item, itemIndex) => (
-                <View key={itemIndex} className={styles.settingItem}>
-                  <View className={styles.settingLabel}>
-                    <Text className={styles.labelText}>{item.label}</Text>
+                <View key={itemIndex} className="setting-item">
+                  <View className="setting-label">
+                    <Text className="label-text">{item.label}</Text>
                     {item.status && (
-                      <Text className={styles.labelStatus}>{item.status}</Text>
+                      <Text className="label-status">{item.status}</Text>
                     )}
                   </View>
 
                   {/* 根据 type 渲染不同的控件 */}
-                  <View className={styles.settingControl}>
+                  <View className="setting-control">
                     {/* 编辑按钮 */}
                     {item.type === 'button' && (
-                      <View className={styles.editBtn}>
+                      <View className="edit-btn">
                         <Text>{t('account.edit')}</Text>
                       </View>
                     )}
 
                     {/* 切换开关 */}
                     {item.type === 'toggle' && (
-                      <View className={styles.toggleSwitch}>
+                      <View className="toggle-switch">
                         {/* TODO: Taro Switch 组件 */}
                       </View>
                     )}
 
                     {/* 选择框 */}
                     {item.type === 'select' && (
-                      <View className={styles.selectControl}>
+                      <View className="select-control">
                         {/* TODO: Taro Picker 组件 */}
                       </View>
                     )}
@@ -239,19 +239,19 @@ export default function SettingsPage() {
         </View>
 
         {/* 右侧帮助区 */}
-        <View className={styles.helpSidebar}>
-          <View className={styles.helpSection}>
-            <Text className={styles.helpTitle}>{t('help.title')}</Text>
-            <Text className={styles.helpSubtitle}>{t('help.account_password')}</Text>
-            <View className={styles.helpList}>
+        <View className="help-sidebar">
+          <View className="help-section">
+            <Text className="help-title">{t('help.title')}</Text>
+            <Text className="help-subtitle">{t('help.account_password')}</Text>
+            <View className="help-list">
               <Text>1. {t('help.q1')}</Text>
               <Text>2. {t('help.q2')}</Text>
               <Text>3. {t('help.q3')}</Text>
               <Text>4. {t('help.q4')}</Text>
               <Text>5. {t('help.q5')}</Text>
             </View>
-            <Text className={styles.helpSubtitle}>{t('help.other_issues')}</Text>
-            <View className={styles.helpList}>
+            <Text className="help-subtitle">{t('help.other_issues')}</Text>
+            <View className="help-list">
               <Text>6. <Text>{t('help.q6')} {t('help.q6_link')}</Text></Text>
               <Text>7. <Text>{t('help.q7')} {t('help.q7_link')}</Text></Text>
             </View>

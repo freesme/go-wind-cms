@@ -2,41 +2,41 @@ import {useTranslation} from 'react-i18next';
 
 import XIcon from '@/plugins/xicon';
 
-import styles from '../register.scss';
+import '../register.scss';
 
 export default function OtherRegisterPage() {
-    const {t} = useTranslation('authentication');
+  const {t} = useTranslation('authentication');
 
-    const handleButtonGoogleRegister = () => {
-        // TODO: 实现 Google 登录逻辑
-        console.log('Google 注册');
-    };
+  const handleButtonGoogleRegister = () => {
+    // TODO: 实现 Google 登录逻辑
+    console.log('Google 注册');
+  };
 
-    const handleButtonGithubRegister = () => {
-        // TODO: 实现 GitHub 登录逻辑
-        console.log('GitHub 注册');
-    };
+  const handleButtonGithubRegister = () => {
+    // TODO: 实现 GitHub 登录逻辑
+    console.log('GitHub 注册');
+  };
 
-    return (
-        <div className={styles['other-register']}>
-            {/* Social Buttons */}
-            <button
-                type="button"
-                className={styles['social-button']}
-                onClick={handleButtonGoogleRegister}
-            >
-                <XIcon name="logos:google-icon" size={18}/>
-                {t('login.social_google')}
-            </button>
+  return (
+    <div className="other-register">
+      {/* Social Buttons */}
+      <button
+        type="button"
+        className="social-button"
+        onClick={handleButtonGoogleRegister}
+      >
+        <XIcon name="logos:google-icon" size={18}/>
+        {t('login.social_google')}
+      </button>
 
-            <button
-                type="button"
-                className={styles['social-button']}
-                onClick={handleButtonGithubRegister}
-            >
-                <XIcon name="logos:github-icon" size={18}/>
-                {t('login.social_github')}
-            </button>
-        </div>
-    );
+      <button
+        type="button"
+        className="social-button"
+        onClick={handleButtonGithubRegister}
+      >
+        <XIcon name="logos:github-icon" size={18}/>
+        {t('login.social_github')}
+      </button>
+    </div>
+  );
 }

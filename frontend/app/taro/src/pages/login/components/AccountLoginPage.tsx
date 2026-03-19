@@ -3,7 +3,7 @@ import {useTranslation} from 'react-i18next';
 
 import {useAuthenticationStore} from "@/store/slices/authentication/hooks";
 
-import styles from '../index.scss';
+import '../index.scss';
 
 export default function AccountLoginPage() {
   const {t} = useTranslation('authentication');
@@ -30,13 +30,13 @@ export default function AccountLoginPage() {
   };
 
   return (
-    <div className={styles['login-form']}>
-      <div className={styles['form-group']}>
+    <div className="login-form">
+      <div className="form-group">
         <label htmlFor="login-username">{t('login.username')}</label>
         <input
           id="login-username"
           type="text"
-          className={styles['input-field']}
+          className="input-field"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder={t('register.input_username')}
@@ -44,12 +44,12 @@ export default function AccountLoginPage() {
         />
       </div>
 
-      <div className={styles['form-group']}>
+      <div className="form-group">
         <label htmlFor="login-password">{t('login.password')}</label>
         <input
           id="login-password"
           type="password"
-          className={styles['input-field']}
+          className="input-field"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder={t('login.placeholder_password')}
@@ -58,8 +58,8 @@ export default function AccountLoginPage() {
         />
       </div>
 
-      <div className={styles['form-options']}>
-        <label className={styles['checkbox-label']}>
+      <div className="form-options">
+        <label className="checkbox-label">
           <input
             type="checkbox"
             checked={rememberMe}
@@ -67,12 +67,12 @@ export default function AccountLoginPage() {
           />
           <span>{t('login.remember_me')}</span>
         </label>
-        <button className={styles['text-btn']} onClick={handleForgotPassword}>
+        <button className="text-btn" onClick={handleForgotPassword}>
           {t('login.forgot_password')}
         </button>
       </div>
 
-      <button className={styles['login-button']} onClick={handleLogin}>
+      <button className="login-button" onClick={handleLogin}>
         {t('login.login')}
       </button>
     </div>

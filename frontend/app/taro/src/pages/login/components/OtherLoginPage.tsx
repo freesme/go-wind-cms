@@ -2,7 +2,7 @@ import {useTranslation} from 'react-i18next';
 
 import XIcon from '@/plugins/xicon';
 
-import styles from '../index.scss';
+import '../index.scss';
 
 export default function OtherLoginPage() {
   const {t} = useTranslation('authentication');
@@ -16,13 +16,13 @@ export default function OtherLoginPage() {
   };
 
   return (
-    <div className={styles['other-login']}>
-      <button className={styles['social-button']} onClick={handleGithubLogin}>
+    <div className="other-login">
+      <button className="social-button" onClick={handleGithubLogin}>
         <XIcon name="mdi:github" size={20}/>
         <span>{t('login.social_github')}</span>
       </button>
 
-      <button className={styles['social-button']} onClick={handleGoogleLogin}>
+      <button className="social-button" onClick={handleGoogleLogin}>
         <XIcon name="mdi:google" size={20}/>
         <span>{t('login.social_google')}</span>
       </button>

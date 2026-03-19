@@ -9,7 +9,7 @@ import CategoryTree from '@/components/category/CategoryTree';
 import {contentservicev1_Category, contentservicev1_ListCategoryResponse} from "@/api/generated/app/service/v1";
 import {useI18nRouter} from "@/i18n/helpers";
 
-import styles from './category.scss';
+import './category.scss';
 
 export default function CategoryListPage() {
   const {t} = useTranslation();
@@ -45,20 +45,20 @@ export default function CategoryListPage() {
   };
 
   return (
-    <View className={styles['category-page']}>
+    <View className="category-page">
       {/* Hero Section */}
-      <View className={styles['hero-section']}>
-        <View className={styles['hero-content']}>
+      <View className="hero-section">
+        <View className="hero-content">
           <Text>{t('page.categories.categories')}</Text>
           <Text>{t('page.categories.browse_all')}</Text>
         </View>
       </View>
 
       {/* Content Section */}
-      <View className={styles['page-container']}>
+      <View className="page-container">
         {/* Loading Skeleton - TODO: 实现 Taro 的加载骨架屏 */}
         {loading ? (
-          <View className={styles['categories-loading']}>
+          <View className="categories-loading">
             <Text>{t('page.common.loading')}</Text>
           </View>
         ) : (

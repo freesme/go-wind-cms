@@ -4,11 +4,12 @@ import {View, Text} from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import {AppEmpty} from '@/components/ui';
 import XIcon from '@/plugins/xicon';
+import Pagination from '@/components/Pagination';
 
 import {useTagStore} from '@/store/slices/tag/hooks';
 import {contentservicev1_ListTagResponse, contentservicev1_Tag} from '@/api/generated/app/service/v1';
 
-import styles from './tag-list.scss';
+import './tag-list.scss';
 
 export default function TagListPage() {
   const {t} = useTranslation();
@@ -17,7 +18,7 @@ export default function TagListPage() {
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState<contentservicev1_Tag[]>([]);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, _setPageSize] = useState(20);
   const [total, setTotal] = useState(0);
 
   async function loadTags() {
@@ -52,25 +53,25 @@ export default function TagListPage() {
     loadTags();
   }
 
-  function handlePageSizeChange(newSize: number) {
-    setPageSize(newSize);
-    setPage(1);
-    loadTags();
-  }
-
   useEffect(() => {
     loadTags();
   }, [page, pageSize]);
 
+  useEffect(() => {
+    if (page !== 1) {
+      setPage(1);
+    }
+  }, [pageSize]);
+
   return (
-    <View className={styles['tag-list-page']}>
+    <View className="tag-list-page">
       {/* Hero Section */}
-      <View className={styles['hero-section']}>
-        <View className={styles['hero-content']}>
+      <View className="hero-section">
+        <View className="hero-content">
           <Text>{t('page.tags.tags_list')}</Text>
           <Text>{t('page.tags.explore_all')}</Text>
-          <View className={styles['tag-stats']}>
-            <View className={styles['stat-item']}>
+          <View className="tag-stats">
+            <View className="stat-item">
               <XIcon name='carbon:tag' size={24}/>
               <Text>{tags.length} {t('page.tags.total_tags')}</Text>
             </View>
@@ -79,20 +80,20 @@ export default function TagListPage() {
       </View>
 
       {/* Tags Grid */}
-      <View className={styles['page-container']}>
+      <View className="page-container">
         {/* Loading Skeleton - TODO: 实现 Taro 骨架屏 */}
         {loading ? (
-          <View className={styles['tags-grid']}>
+          <View className="tags-grid">
             <Text>{t('page.common.loading')}</Text>
           </View>
         ) : (
           <>
             {tags.length > 0 && (
-              <View className={styles['tags-grid']}>
+              <View className="tags-grid">
                 {tags.map((tag) => (
                   <View
                     key={tag.id}
-                    className={styles['tag-card']}
+                    className="tag-card"
                     style={{
                       borderColor: tag.color || 'var(--color-border)',
                       background: `linear-gradient(135deg, ${tag.color}10 0%, var(--color-surface) 100%)`
@@ -100,17 +101,17 @@ export default function TagListPage() {
                     onClick={() => handleTagClick(tag.id || 0)}
                   >
                     <View
-                      className={styles['tag-icon']}
+                      className="tag-icon"
                       style={{color: tag.color || 'var(--color-brand)'}}
                     >
                       <XIcon name='carbon:tag' size={32}/>
                     </View>
-                    <View className={styles['tag-content']}>
+                    <View className="tag-content">
                       <Text>{tagStore.getTranslation(tag)?.name || t('page.tags.tag_untitled')}</Text>
-                      <Text className={styles['tag-description']}>
+                      <Text className="tag-description">
                         {tagStore.getTranslation(tag)?.description || ''}
                       </Text>
-                      <View className={styles['tag-meta']}>
+                      <View className="tag-meta">
                         <XIcon name='carbon:document' size={16}/>
                         <Text>
                           {tag.postCount || 0} {t('page.posts.articles')}
@@ -130,9 +131,14 @@ export default function TagListPage() {
             )}
 
             {total > pageSize && (
-              <View style={{margin: '32px auto 0', display: 'flex', justifyContent: 'center'}}>
-                {/* TODO: 实现 Taro 分页组件 */}
-                <Text>第 {page} 页，共 {Math.ceil(total / pageSize)} 页</Text>
+              <View className="pagination-wrapper">
+                <Pagination
+                  current={page}
+                  total={total}
+                  pageSize={pageSize}
+                  onChange={handlePageChange}
+                  showSizeChanger={true}
+                />
               </View>
             )}
           </>

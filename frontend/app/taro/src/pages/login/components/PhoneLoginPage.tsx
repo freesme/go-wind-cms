@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 
-import styles from '../index.scss';
+import '../index.scss';
 
 export default function PhoneLoginPage() {
   const {t} = useTranslation('authentication');
@@ -33,13 +33,13 @@ export default function PhoneLoginPage() {
   };
 
   return (
-    <div className={styles['login-form']}>
-      <div className={styles['form-group']}>
+    <div className="login-form">
+      <div className="form-group">
         <label htmlFor="login-phone">{t('register.phone')}</label>
         <input
           id="login-phone"
           type="tel"
-          className={styles['input-field']}
+          className="input-field"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           placeholder={t('login.placeholder_phone')}
@@ -47,13 +47,13 @@ export default function PhoneLoginPage() {
         />
       </div>
 
-      <div className={styles['form-group']}>
+      <div className="form-group">
         <label htmlFor="login-code">{t('register.code')}</label>
-        <div className={styles['code-input-row']}>
+        <div className="code-input-row">
           <input
             id="login-code"
             type="text"
-            className={styles['input-field']}
+            className="input-field"
             value={verificationCode}
             onChange={(e) => setVerificationCode(e.target.value)}
             placeholder={t('login.placeholder_code')}
@@ -62,7 +62,7 @@ export default function PhoneLoginPage() {
             onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
           />
           <button
-            className={`${styles['send-code-btn']} ${codeSent ? styles.disabled : ''}`}
+            className={`send-code-btn ${codeSent ? 'disabled' : ''}`}
             onClick={handleSendCode}
             disabled={codeSent}
           >
@@ -71,7 +71,7 @@ export default function PhoneLoginPage() {
         </div>
       </div>
 
-      <button className={styles['login-button']} onClick={handleLogin}>
+      <button className="login-button" onClick={handleLogin}>
         {t('login.login')}
       </button>
     </div>
