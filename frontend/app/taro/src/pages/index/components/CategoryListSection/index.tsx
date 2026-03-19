@@ -1,4 +1,4 @@
-import {useState, useEffect, useCallback} from 'react';
+import {useState, useEffect, useCallback, useMemo, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {View, Text} from '@tarojs/components';
 
@@ -19,31 +19,39 @@ interface CategoryListSectionProps {
   showHeader?: boolean;
 }
 
-export default function CategoryListSection({
-                                              skeletonCount = 8,
-                                              pageSize = 8,
-                                              page = 1,
-                                              filter = {status: 'CATEGORY_STATUS_ACTIVE'} as Record<string, unknown>,
-                                              orderBy = ['-sortOrder', '-postCount'],
-                                              fieldMask = 'id,status,sortOrder,icon,code,postCount,directPostCount,parent_id,createdAt,translations.id,translations.categoryId,translations.name,translations.languageCode,translations.description',
-                                              showHeader = true
-                                            }: CategoryListSectionProps) {
+export default function CategoryListSection(props: CategoryListSectionProps) {
+  const {
+    skeletonCount = 8,
+    pageSize = 8,
+    page = 1,
+    filter: filterProp,
+    orderBy: orderByProp,
+    fieldMask: fieldMaskProp,
+    showHeader = true
+  } = props;
   const {t} = useTranslation('page.home');
   const categoryStore = useCategoryStore();
+  // 用 useRef 缓存 listCategory 方法，确保依赖稳定
+  const listCategoryRef = useRef(categoryStore.listCategory);
 
   const [categories, setCategories] = useState<contentservicev1_Category[]>([]);
   const [loading, setLoading] = useState(false);
 
+  // useMemo 缓存参数，避免每次渲染新对象/数组
+  const filter = useMemo(() => filterProp ?? {status: 'CATEGORY_STATUS_ACTIVE'}, [filterProp]);
+  const orderBy = useMemo(() => orderByProp ?? ['-sortOrder', '-postCount'], [orderByProp]);
+  const fieldMask = useMemo(() => fieldMaskProp ?? 'id,status,sortOrder,icon,code,postCount,directPostCount,parent_id,createdAt,translations.id,translations.categoryId,translations.name,translations.languageCode,translations.description', [fieldMaskProp]);
+
   const loadCategories = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await categoryStore.listCategory({
+      console.log('Load categories:', {page, pageSize, filter, fieldMask, orderBy});
+      const res = await listCategoryRef.current({
         paging: {page, pageSize},
         formValues: filter,
         fieldMask,
-        orderBy: orderBy,
+        orderBy,
       }) as unknown as contentservicev1_ListCategoryResponse;
-
       setCategories(res.items || []);
     } catch (error) {
       console.error('Failed to load categories:', error);
@@ -51,7 +59,7 @@ export default function CategoryListSection({
     } finally {
       setLoading(false);
     }
-  }, [categoryStore, filter, fieldMask, orderBy, page, pageSize]);
+  }, [filter, fieldMask, orderBy, page, pageSize]);
 
   useEffect(() => {
     loadCategories();

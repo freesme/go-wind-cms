@@ -48,8 +48,12 @@ export const listCategory = createAsyncThunk(
                 pageSize: params.paging?.pageSize,
                 noPaging,
             });
-        } catch (error) {
-            return rejectWithValue(error);
+        } catch (error: any) {
+            return rejectWithValue({
+                message: error.message,
+                code: error.code,
+                response: error.response?.data,
+            });
         }
     }
 );
@@ -69,8 +73,12 @@ export const getCategory = createAsyncThunk(
                 locale,
                 viewMask: params.fieldMask,
             });
-        } catch (error) {
-            return rejectWithValue(error);
+        } catch (error: any) {
+            return rejectWithValue({
+                message: error.message,
+                code: error.code,
+                response: error.response?.data,
+            });
         }
     }
 );
@@ -90,8 +98,12 @@ export const createCategory = createAsyncThunk(
                     children: values.children ?? [],
                 } as contentservicev1_Category,
             });
-        } catch (error) {
-            return rejectWithValue(error);
+        } catch (error: any) {
+            return rejectWithValue({
+                message: error.message,
+                code: error.code,
+                response: error.response?.data,
+            });
         }
     }
 );
@@ -115,8 +127,12 @@ export const updateCategory = createAsyncThunk(
                 } as contentservicev1_Category,
                 updateMask: makeUpdateMask(Object.keys(params.values ?? [])),
             });
-        } catch (error) {
-            return rejectWithValue(error);
+        } catch (error: any) {
+            return rejectWithValue({
+                message: error.message,
+                code: error.code,
+                response: error.response?.data,
+            });
         }
     }
 );
@@ -128,8 +144,12 @@ export const deleteCategory = createAsyncThunk(
 
         try {
             return await categoryService.Delete({id});
-        } catch (error) {
-            return rejectWithValue(error);
+        } catch (error: any) {
+            return rejectWithValue({
+                message: error.message,
+                code: error.code,
+                response: error.response?.data,
+            });
         }
     }
 );
