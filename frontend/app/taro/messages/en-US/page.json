@@ -10,11 +10,11 @@
     "featured_posts": "Featured Posts",
     "latest_posts": "Latest Posts",
     "views": "Views",
-    "article_count": "{count} posts",
-    "views_count": "{count} views",
+    "article_count": "{{count}} posts",
+    "views_count": "{{count}} views",
     "platform_features": "Platform Features",
     "hero_description": "High-performance, Multilingual Content Platform Based on Go + Taro",
-    "updated_days_ago": "Updated {days} days ago",
+    "updated_days_ago": "Updated {{days}} days ago",
     "code_snippet_go": "func GetPost() {\n  return post\n}",
     "code_snippet_vue": "<template>\n  <div class=\"hch\">\n  </div>",
     "code_snippet_comment": "// Content Hub API",
@@ -46,8 +46,8 @@
     "no_results": "No results",
     "author": "Author",
     "date": "Date",
-    "views_count": "{count} views",
-    "total_articles": "{total} articles in total"
+    "views_count": "{{count}} views",
+    "total_articles": "{{total}} articles in total"
   },
   "categories": {
     "categories": "Categories",

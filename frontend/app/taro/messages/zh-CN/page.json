@@ -10,11 +10,11 @@
     "featured_posts": "推荐阅读",
     "latest_posts": "最新文章",
     "views": "阅读",
-    "article_count": "{count} 篇文章",
-    "views_count": "{count} 阅读",
+    "article_count": "{{count}} 篇文章",
+    "views_count": "{{count}} 阅读",
     "platform_features": "平台特性",
     "hero_description": "基于 Go + Taro 的高性能、多语言内容平台",
-    "updated_days_ago": "{days} 天前更新",
+    "updated_days_ago": "{{days}} 天前更新",
     "code_snippet_go": "func GetPost() {\n  return post\n}",
     "code_snippet_vue": "<template>\n  <div class=\"content-hub\">\n  </div>",
     "code_snippet_comment": "// Content Hub API",
@@ -46,8 +46,8 @@
     "no_results": "暂无结果",
     "author": "作者",
     "date": "日期",
-    "views_count": "{count} 阅读",
-    "total_articles": "共 {total} 篇文章"
+    "views_count": "{{count}} 阅读",
+    "total_articles": "共 {{total}} 篇文章"
   },
   "categories": {
     "categories": "内容分类",
