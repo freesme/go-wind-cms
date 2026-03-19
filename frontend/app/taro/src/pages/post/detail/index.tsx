@@ -7,6 +7,7 @@ import CommentSection from '@/components/comment/CommentSection';
 import ContentViewer from '@/components/content/ContentViewer';
 import PostList from '@/components/post/PostList';
 import BackToTop from '@/components/layout/BackToTop';
+import XIcon from '@/plugins/xicon';
 
 import {usePostStore} from '@/store/slices/post/hooks';
 import {formatDate} from "@/utils";
@@ -42,10 +43,21 @@ export default function PostDetailPage() {
 
   const contentRef = useRef<HTMLDivElement>(null);
 
+  // 优化 postId 获取逻辑，兼容 Taro 路由参数
   const postId = useMemo(() => {
-    const pages = Taro.getCurrentPages();
-    const currentPage = pages[pages.length - 1];
-    const id = (currentPage as any).options?.id;
+    let id: string | null | undefined = null;
+    // 优先从 Taro 路由参数获取
+    if (typeof Taro.getCurrentInstance === 'function') {
+      const instance = Taro.getCurrentInstance();
+      const routeId = instance?.router?.params?.id;
+      id = typeof routeId === 'string' ? routeId : null;
+    } else {
+      // 兼容 getCurrentPages
+      const pages = Taro.getCurrentPages();
+      const currentPage = pages[pages.length - 1];
+      const pageId = (currentPage as any).options?.id;
+      id = typeof pageId === 'string' ? pageId : null;
+    }
     return id ? parseInt(id) : null;
   }, []);
 
@@ -134,7 +146,8 @@ export default function PostDetailPage() {
 
       headings.forEach((heading, index) => {
         const level = heading.tagName === 'H2' ? 2 : 3;
-        const id = `heading-${index}`;
+        // 保证 id 唯一，使用 tagName + index
+        const id = `${heading.tagName.toLowerCase()}-${index}`;
         if (!heading.id) heading.setAttribute('id', id);
 
         toc.push({
@@ -176,7 +189,8 @@ export default function PostDetailPage() {
 
       headings.forEach((heading, index) => {
         const level = heading.tagName === 'H2' ? 2 : 3;
-        const id = `heading-${index}`;
+        // 保证 id 唯一，使用 tagName + index
+        const id = `${heading.tagName.toLowerCase()}-${index}`;
 
         // 确保 ID 存在
         if (!heading.id) {
@@ -330,7 +344,10 @@ export default function PostDetailPage() {
   if (!post) {
     return (
       <View className={styles['post-detail-page']}>
-        <View className={styles['empty-state']}>Post not found</View>
+        <View className={styles['empty-state']}>
+          <XIcon name='carbon:warning' size={32} className='empty-icon' />
+          <Text>{t('page.post_detail.not_found') || 'Post not found'}</Text>
+        </View>
       </View>
     );
   }
@@ -472,7 +489,6 @@ export default function PostDetailPage() {
         <View className={styles['section-header']}>
           <Text className={styles['section-title']}>
             <Text>📚 </Text>
-            <Text>{t('page.post_detail.related_posts')}</Text>
             <Text>{t('page.post_detail.related_posts')}</Text>
           </Text>
         </View>

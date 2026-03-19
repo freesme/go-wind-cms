@@ -30,7 +30,7 @@ const PostCard: React.FC<PostCardProps> = ({
       query.push(`categoryId=${categoryId}`);
     }
 
-    router.push(`/post/detail/${post.id}?${query.join('&')}`);
+    router.push(`/post/${post.id}?${query.join('&')}`);
 
     // Taro 中滚动到顶部
     // TODO: 使用 Taro.pageScrollTo API

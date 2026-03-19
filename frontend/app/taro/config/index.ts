@@ -64,12 +64,19 @@ export default defineConfig<'vite'>(async (merge, {}) => {
       router: {
         mode: 'browser', // 可选：'hash' | 'browser' | 'multi'
         customRoutes: { // 自定义路由映射
-          'pages/index/index': '/',
+          'pages/index': '/',
           'pages/about/index': '/about',
+          'pages/contact/index': '/contact',
+          'pages/disclaimer/index': '/disclaimer',
+          'pages/privacy/index': '/privacy',
+          'pages/settings/index': '/settings',
+          'pages/user/index': '/user',
           'pages/post/index': '/post',
-          'pages/post/detail': '/post/:id',
+          'pages/post/detail/index': '/post/:id',
           'pages/tag/index': '/tag',
+          'pages/tag/detail/index': '/tag/:id',
           'pages/category/index': '/category',
+          'pages/category/detail/index': '/category/:id',
           'pages/page/index': '/page',
           'pages/search/index': '/search',
           'pages/404/index': '/404'
