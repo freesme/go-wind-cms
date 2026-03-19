@@ -6,16 +6,16 @@ import PostList from '@/components/post/PostList';
 import './index.scss';
 
 export default function LatestPostsSection() {
-  const {t} = useTranslation('page.home');
+  const {t} = useTranslation();
 
   return (
     <View className='latest-section scroll-reveal'>
       <View className='section-header'>
         <Text className='section-title'>
-          📄 {t('latest_posts')}
+          📄 {t('page.home.latest_posts')}
         </Text>
         <View className='view-all-btn' onClick={() => console.log('Navigate to /post')}>
-          <Text>{t('view_all')} →</Text>
+          <Text>{t('page.home.view_all')} →</Text>
         </View>
       </View>
       <View className='latest-grid'>

@@ -5,7 +5,7 @@ import {useMemo} from 'react';
 import './index.scss';
 
 export default function FeaturedPostsSection() {
-  const {t} = useTranslation('page.home');
+  const {t} = useTranslation();
   // 用 useMemo 缓存 queryParams 和 orderBy，避免重复请求
   const queryParams = useMemo(() => ({status: 'POST_STATUS_PUBLISHED', isFeatured: true}), []);
   const orderBy = useMemo(() => ['-sortOrder'], []);
@@ -14,10 +14,10 @@ export default function FeaturedPostsSection() {
     <View className='featured-section scroll-reveal'>
       <View className='section-header'>
         <Text className='section-title'>
-          ⭐ {t('featured_posts')}
+           ⭐ {t('page.home.featured_posts')}
         </Text>
         <View className='view-all-btn' onClick={() => console.log('Navigate to /post')}>
-          <Text>{t('view_all')} →</Text>
+           <Text>{t('page.home.view_all')} →</Text>
         </View>
       </View>
       <View className='featured-grid'>

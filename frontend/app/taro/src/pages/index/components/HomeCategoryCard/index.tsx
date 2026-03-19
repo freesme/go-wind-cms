@@ -13,7 +13,7 @@ interface HomeCategoryCardProps {
 }
 
 const HomeCategoryCard: React.FC<HomeCategoryCardProps> = ({category, onClick}) => {
-  const {t} = useTranslation('page.home');
+  const {t} = useTranslation();
   const categoryStore = useCategoryStore();
 
   const handleClick = () => {
@@ -35,12 +35,12 @@ const HomeCategoryCard: React.FC<HomeCategoryCardProps> = ({category, onClick}) 
           <View className='home-category-info'>
             <Text className='category-name'>{categoryStore.getCategoryName(category)}</Text>
             <Text className='home-post-count'>
-              {t('article_count', {count: category.postCount || 0})}
+              {t('page.home.article_count', {count: category.postCount || 0})}
             </Text>
           </View>
         </View>
         <View className='home-category-badge'>
-          <Text>⏰ {t('updated_days_ago', {days: 3})}</Text>
+          <Text>⏰ {t('page.home.updated_days_ago', {days: 3})}</Text>
         </View>
       </View>
     </View>

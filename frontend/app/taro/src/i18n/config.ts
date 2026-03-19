@@ -75,3 +75,39 @@ export const allMessages: Record<Locale, Record<string, Record<string, unknown>>
     comment: enUS_comment,
   }
 };
+
+/**
+ * 递归将嵌套对象的所有叶子节点路径提取出来
+ * 例如：{ login: { brand_title: '标题' } } => { 'login.brand_title': '标题' }
+ */
+function flattenObject(obj: Record<string, any>, prefix = ''): Record<string, string> {
+  return Object.keys(obj).reduce((acc: Record<string, string>, key: string) => {
+    const newKey = prefix ? `${prefix}.${key}` : key;
+    if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
+      // 递归处理嵌套对象
+      Object.assign(acc, flattenObject(obj[key], newKey));
+    } else {
+      acc[newKey] = obj[key];
+    }
+    return acc;
+  }, {});
+}
+
+/**
+ * 将资源转换为 react-i18next 支持的格式
+ * 将所有消息扁平化到一个命名空间中，支持直接访问（如 t('login.brand_title')）
+ */
+export function getFlattenedMessages(): Record<Locale, Record<string, string>> {
+  const result: Record<Locale, Record<string, string>> = {
+    'zh-CN': {},
+    'en-US': {},
+  };
+
+  (locales as unknown as Locale[]).forEach(locale => {
+    const messages = allMessages[locale];
+    // 将整个消息对象扁平化到一个命名空间中
+    result[locale] = flattenObject(messages);
+  });
+
+  return result;
+}

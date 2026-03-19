@@ -29,7 +29,7 @@ export default function CategoryListSection(props: CategoryListSectionProps) {
     fieldMask: fieldMaskProp,
     showHeader = true
   } = props;
-  const {t} = useTranslation('page.home');
+  const {t} = useTranslation(); // 使用 t('page.home.xxx') 作为 key
   const categoryStore = useCategoryStore();
   // 用 useRef 缓存 listCategory 方法，确保依赖稳定
   const listCategoryRef = useRef(categoryStore.listCategory);
@@ -81,13 +81,13 @@ export default function CategoryListSection(props: CategoryListSectionProps) {
       {showHeader && (
         <View className='section-header'>
           <Text className='section-title'>
-            📁 {t('categories')}
+            📁 {t('page.home.categories')}
           </Text>
           <View
             className='view-all-btn'
             onClick={handleViewCategory}
           >
-            <Text>{t('view_all')} →</Text>
+            <Text>{t('page.home.view_all')} →</Text>
           </View>
         </View>
       )}

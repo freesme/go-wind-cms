@@ -14,7 +14,7 @@ import styles from './user.scss';
 import {formatDateTime} from "@/utils";
 
 export default function UserProfilePage() {
-  const {t} = useTranslation('page.user');
+  const {t} = useTranslation();
 
   const [loading, setLoading] = useState(false);
   const [postsLoading, setPostsLoading] = useState(false);
@@ -37,11 +37,11 @@ export default function UserProfilePage() {
 
   // 格式化性别
   const formatGender = (gender?: string) => {
-    if (!gender) return t('gender_secret');
+    if (!gender) return t('page.user.gender_secret');
     const genderMap: Record<string, string> = {
-      'SECRET': t('gender_secret'),
-      'MALE': t('gender_male'),
-      'FEMALE': t('gender_female'),
+      'SECRET': t('page.user.gender_secret'),
+      'MALE': t('page.user.gender_male'),
+      'FEMALE': t('page.user.gender_female'),
     };
     return genderMap[gender] || gender;
   };
@@ -50,12 +50,12 @@ export default function UserProfilePage() {
   const formatStatus = (status?: string) => {
     if (!status) return '-';
     const statusMap: Record<string, string> = {
-      'NORMAL': t('status_normal'),
-      'DISABLED': t('status_disabled'),
-      'PENDING': t('status_pending'),
-      'LOCKED': t('status_locked'),
-      'EXPIRED': t('status_expired'),
-      'CLOSED': t('status_closed'),
+      'NORMAL': t('page.status_normal'),
+      'DISABLED': t('page.status_disabled'),
+      'PENDING': t('page.status_pending'),
+      'LOCKED': t('page.status_locked'),
+      'EXPIRED': t('page.status_expired'),
+      'CLOSED': t('page.status_closed'),
     };
     return statusMap[status] || status;
   };
@@ -141,7 +141,7 @@ export default function UserProfilePage() {
   if (!user) {
     return (
       <View className={styles.emptyState}>
-        <Text className={styles.emptyText}>{t('please_login')}</Text>
+         <Text className={styles.emptyText}>{t('page.user.please_login')}</Text>
       </View>
     );
   }
@@ -176,7 +176,7 @@ export default function UserProfilePage() {
                     </Text>
                   )}
                 </View>
-                <View className={styles.editBtn}>{t('edit_profile')}</View>
+                       <View className={styles.editBtn}>{t('page.user.edit_profile')}</View>
               </View>
 
               {user?.description && (
@@ -199,19 +199,19 @@ export default function UserProfilePage() {
         <View className={styles.userStats}>
           <View className={styles.statItem}>
             <Text className={styles.statValue}>{stats.following}</Text>
-            <Text className={styles.statLabel}>{t('following')}</Text>
+            <Text className={styles.statLabel}>{t('page.user.following')}</Text>
           </View>
           <View className={styles.statItem}>
             <Text className={styles.statValue}>{stats.followers}</Text>
-            <Text className={styles.statLabel}>{t('followers')}</Text>
+            <Text className={styles.statLabel}>{t('page.user.followers')}</Text>
           </View>
           <View className={styles.statItem}>
             <Text className={styles.statValue}>{stats.posts}</Text>
-            <Text className={styles.statLabel}>{t('posts')}</Text>
+            <Text className={styles.statLabel}>{t('page.user.posts')}</Text>
           </View>
           <View className={styles.statItem}>
             <Text className={styles.statValue}>{stats.likes}</Text>
-            <Text className={styles.statLabel}>{t('likes_received')}</Text>
+            <Text className={styles.statLabel}>{t('page.user.likes_received')}</Text>
           </View>
         </View>
       </View>
@@ -222,29 +222,29 @@ export default function UserProfilePage() {
         <View className={styles.profileSidebar}>
           <View className={styles.infoCard}>
             <View className={styles.cardSection}>
-              <Text className={styles.sectionTitle}>{t('basic_info')}</Text>
+              <Text className={styles.sectionTitle}>{t('page.user.basic_info')}</Text>
               <View className={styles.infoList}>
                 {user?.username && (
                   <View className={styles.infoRow}>
-                    <Text className={styles.infoKey}>{t('username')}:</Text>
+                    <Text className={styles.infoKey}>{t('page.user.username')}:</Text>
                     <Text className={styles.infoVal}>{user.username}</Text>
                   </View>
                 )}
                 {user?.realname && (
                   <View className={styles.infoRow}>
-                    <Text className={styles.infoKey}>{t('realname')}:</Text>
+                    <Text className={styles.infoKey}>{t('page.user.realname')}:</Text>
                     <Text className={styles.infoVal}>{user.realname}</Text>
                   </View>
                 )}
                 {user?.email && (
                   <View className={styles.infoRow}>
-                    <Text className={styles.infoKey}>{t('email')}:</Text>
+                    <Text className={styles.infoKey}>{t('page.user.email')}:</Text>
                     <Text className={styles.infoVal}>{user.email}</Text>
                   </View>
                 )}
                 {user?.mobile && (
                   <View className={styles.infoRow}>
-                    <Text className={styles.infoKey}>{t('mobile')}:</Text>
+                    <Text className={styles.infoKey}>{t('page.user.mobile')}:</Text>
                     <Text className={styles.infoVal}>{user.mobile}</Text>
                   </View>
                 )}
@@ -254,29 +254,29 @@ export default function UserProfilePage() {
             <View className={styles.divider}></View>
 
             <View className={styles.cardSection}>
-              <Text className={styles.sectionTitle}>{t('account_info')}</Text>
+               <Text className={styles.sectionTitle}>{t('page.user.account_info')}</Text>
               <View className={styles.infoList}>
                 <View className={styles.infoRow}>
-                  <Text className={styles.infoKey}>{t('status')}:</Text>
+                   <Text className={styles.infoKey}>{t('page.user.status')}:</Text>
                   <Text className={`${styles.statusTag} ${styles[`status${user?.status}`]}`}>
                     {formatStatus(user?.status)}
                   </Text>
                 </View>
                 {user?.roleNames?.length && (
                   <View className={styles.infoRow}>
-                    <Text className={styles.infoKey}>{t('roles')}:</Text>
+                     <Text className={styles.infoKey}>{t('page.user.roles')}:</Text>
                     <Text className={styles.infoVal}>{user.roleNames.join(', ')}</Text>
                   </View>
                 )}
                 {user?.createdAt && (
                   <View className={styles.infoRow}>
-                    <Text className={styles.infoKey}>{t('created_at')}:</Text>
+                     <Text className={styles.infoKey}>{t('page.user.created_at')}:</Text>
                     <Text className={styles.infoVal}>{formatDateTime(user.createdAt)}</Text>
                   </View>
                 )}
                 {user?.lastLoginAt && (
                   <View className={styles.infoRow}>
-                    <Text className={styles.infoKey}>{t('last_login_at')}:</Text>
+                     <Text className={styles.infoKey}>{t('page.user.last_login_at')}:</Text>
                     <Text className={styles.infoVal}>{formatDateTime(user.lastLoginAt)}</Text>
                   </View>
                 )}
@@ -293,19 +293,19 @@ export default function UserProfilePage() {
                 className={`${styles.tab} ${activeTab === 'posts' ? styles.active : ''}`}
                 onClick={() => setActiveTab('posts')}
               >
-                <Text>{t('tab_posts')}</Text>
+                <Text>{t('page.user.tab_posts')}</Text>
               </View>
               <View
                 className={`${styles.tab} ${activeTab === 'activities' ? styles.active : ''}`}
                 onClick={() => setActiveTab('activities')}
               >
-                <Text>{t('tab_activities')}</Text>
+                <Text>{t('page.user.tab_activities')}</Text>
               </View>
               <View
                 className={`${styles.tab} ${activeTab === 'collections' ? styles.active : ''}`}
                 onClick={() => setActiveTab('collections')}
               >
-                <Text>{t('tab_collections')}</Text>
+                <Text>{t('page.user.tab_collections')}</Text>
               </View>
             </View>
 
@@ -327,15 +327,15 @@ export default function UserProfilePage() {
                             <View className={styles.postMeta}>
                               <View className={styles.metaInfo}>
                                 <Text>👁️</Text>
-                                <Text>{post.visits || 0} {t('views')}</Text>
+                                 <Text>{post.visits || 0} {t('page.views')}</Text>
                               </View>
                               <View className={styles.metaInfo}>
                                 <Text>👍</Text>
-                                <Text>{post.likes || 0} {t('likes')}</Text>
+                                 <Text>{post.likes || 0} {t('page.likes')}</Text>
                               </View>
                               <View className={styles.metaInfo}>
                                 <Text>💬</Text>
-                                <Text>{post.commentCount || 0} {t('comments')}</Text>
+                                 <Text>{post.commentCount || 0} {t('page.comments')}</Text>
                               </View>
                               <View className={styles.metaInfo}>
                                 <Text>🕐</Text>
@@ -344,7 +344,7 @@ export default function UserProfilePage() {
                             </View>
                           </View>
                           <View className={styles.viewPostBtn}>
-                            <Text>{t('view_post')} →</Text>
+                             <Text>{t('page.view_post')} →</Text>
                           </View>
                         </View>
                       ))}
@@ -352,7 +352,7 @@ export default function UserProfilePage() {
                   ) : (
                     <View className={styles.empty}>
                       <Text className={styles.emptyIcon}>📄</Text>
-                      <Text className={styles.emptyText}>{t('no_posts')}</Text>
+                       <Text className={styles.emptyText}>{t('page.user.no_posts')}</Text>
                     </View>
                   )}
                 </>
@@ -361,14 +361,14 @@ export default function UserProfilePage() {
               {activeTab === 'activities' && (
                 <View className={styles.empty}>
                   <Text className={styles.emptyIcon}>🎯</Text>
-                  <Text className={styles.emptyText}>{t('no_activities')}</Text>
+                   <Text className={styles.emptyText}>{t('page.user.no_activities')}</Text>
                 </View>
               )}
 
               {activeTab === 'collections' && (
                 <View className={styles.empty}>
                   <Text className={styles.emptyIcon}>🔖</Text>
-                  <Text className={styles.emptyText}>{t('no_collections')}</Text>
+                   <Text className={styles.emptyText}>{t('page.user.no_collections')}</Text>
                 </View>
               )}
             </View>

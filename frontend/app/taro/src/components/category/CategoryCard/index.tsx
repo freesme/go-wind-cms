@@ -18,7 +18,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
                                                      clickable = true,
                                                      onClick
                                                    }) => {
-  const {t} = useTranslation('page.categories');
+  const {t} = useTranslation();
   const categoryStore = useCategoryStore();
 
   const handleClick = () => {
@@ -49,7 +49,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
             📄
           </Text>
           <Text className='meta-text'>
-            {category.postCount || 0} {t('articles_count')}
+            {category.postCount || 0} {t('categories.articles_count')}
           </Text>
         </View>
       </View>

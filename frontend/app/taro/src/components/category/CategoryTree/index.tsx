@@ -18,7 +18,7 @@ const CategoryTree: React.FC<CategoryTreeProps> = ({
   level = 0,
   onCategoryClick
 }) => {
-  const {t} = useTranslation('page.categories');
+  const {t} = useTranslation();
   const categoryStore = useCategoryStore();
   const [expandedCategories, setExpandedCategories] = useState<Set<number>>(new Set());
 

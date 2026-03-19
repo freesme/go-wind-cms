@@ -1,20 +1,30 @@
 import i18n from 'i18next';
 import {initReactI18next} from 'react-i18next';
-import {allMessages, defaultLocale, DEFAULT_LANGUAGE, locales, validateLocale} from './config';
+import {allMessages, defaultLocale, DEFAULT_LANGUAGE, locales, validateLocale, getFlattenedMessages} from './config';
+
+// 获取扁平化后的消息
+const flattenedMessages = getFlattenedMessages();
 
 // 初始化 i18next
 i18n
   .use(initReactI18next)
   .init({
     resources: {
-      'zh-CN': {translation: allMessages['zh-CN']},
-      'en-US': {translation: allMessages['en-US']},
+      'zh-CN': {
+        translation: flattenedMessages['zh-CN'],
+      },
+      'en-US': {
+        translation: flattenedMessages['en-US'],
+      },
     },
     lng: defaultLocale,
     fallbackLng: 'zh-CN',
     interpolation: {
       escapeValue: false,
     },
+    // 支持嵌套的命名空间（如 page.home）
+    nsSeparator: '.',
+    keySeparator: '.',
   });
 
 // 显式导出 config 中的内容

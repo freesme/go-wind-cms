@@ -28,7 +28,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
                                                      gap = 20,
                                                      onCategoryClick
                                                    }) => {
-  const {t} = useTranslation('page.categories');
+  const {t} = useTranslation();
 
   const handleCategoryClick = (id: number) => {
     onCategoryClick?.(id);

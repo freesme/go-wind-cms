@@ -26,9 +26,9 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
                                                          onCategoryChange,
                                                          onLoaded
                                                        }) => {
-  const {t} = useTranslation('page.posts');
+  const {t} = useTranslation();
   const categoryStore = useCategoryStore();
-  const {t: categoryT} = useTranslation('page.categories');
+  const {t: categoryT} = useTranslation();
 
   const [internalCategories, setInternalCategories] = useState<contentservicev1_Category[]>([]);
   const [loading, setLoading] = useState(false);
@@ -116,7 +116,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
           onClick={() => handleCategoryChange(null)}
         >
           <Text>📁</Text>
-          <Text>{t('all_categories')}</Text>
+          <Text>{t('posts.all_categories')}</Text>
         </View>
 
         {/* 树形模式 */}

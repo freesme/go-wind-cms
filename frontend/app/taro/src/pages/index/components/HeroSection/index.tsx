@@ -6,11 +6,10 @@ import {useI18nRouter} from '@/i18n/helpers/useI18nRouter';
 import './index.scss';
 
 export default function HeroSection() {
-  const {t} = useTranslation('page.home');
-  const {t: brandT} = useTranslation('authentication.login');
+  const {t} = useTranslation();
   const router = useI18nRouter();
 
-  console.log('[HeroSection] Rendering...', { t, brandT });
+  console.log('[HeroSection] Rendering...', { t });
 
   return (
     <View className='hero'>
@@ -22,21 +21,21 @@ export default function HeroSection() {
       </View>
 
       <View className='hero-content'>
-        <Text className='hero-title'>{brandT('brand_title')}</Text>
-        <Text className='hero-subtitle'>{brandT('brand_subtitle')}</Text>
-        <Text className='hero-description'>{t('hero_description')}</Text>
+        <Text className='hero-title'>{t('authentication.login.brand_title')}</Text>
+        <Text className='hero-subtitle'>{t('authentication.login.brand_subtitle')}</Text>
+        <Text className='hero-description'>{t('page.home.hero_description')}</Text>
         <View className='hero-actions'>
           <View
             className='btn btn-primary'
             onClick={() => router.push('/post')}
           >
-            <Text>{t('browse_posts')}</Text>
+            <Text>{t('page.home.browse_posts')}</Text>
           </View>
           <View
             className='btn btn-secondary'
             onClick={() => router.push('/about')}
           >
-            <Text>{t('learn_more')}</Text>
+            <Text>{t('page.home.learn_more')}</Text>
           </View>
         </View>
       </View>

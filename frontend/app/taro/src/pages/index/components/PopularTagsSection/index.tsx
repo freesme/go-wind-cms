@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import {View, Text} from '@tarojs/components';
 
@@ -14,7 +14,7 @@ interface TagItem {
 }
 
 export default function PopularTagsSection() {
-  const {t} = useTranslation('page.tags');
+  const {t} = useTranslation();
   const tagStore = useTagStore();
 
   const [_tags, setTags] = useState<contentservicev1_Tag[]>([]);
@@ -39,7 +39,7 @@ export default function PopularTagsSection() {
         .filter(tag => tag.id !== undefined)
         .map((tag, index) => ({
           id: tag.id!,
-          name: tag.translations?.[0]?.name || t('tag_untitled'),
+          name: tag.translations?.[0]?.name || t('page.tags.tag_untitled'),
           color: tag.color || `hsl(${index * 60}, 100%, 50%)`,
         }));
 
@@ -67,13 +67,13 @@ export default function PopularTagsSection() {
     <View className='popular-section'>
       <View className='section-header'>
         <Text className='section-title'>
-          🔥 {t('popular_tags')}
+          🔥 {t('page.tags.popular_tags')}
         </Text>
         <View
           className='view-all-btn'
           onClick={() => console.log('Navigate to /tag')}
         >
-          <Text>{t('view_all')} →</Text>
+          <Text>{t('page.tags.view_all')} →</Text>
         </View>
       </View>
       <View className='tags-content'>

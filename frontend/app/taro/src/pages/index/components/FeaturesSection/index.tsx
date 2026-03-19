@@ -10,39 +10,39 @@ interface Feature {
 }
 
 export default function FeaturesSection() {
-  const {t} = useTranslation('page.home');
+  const {t} = useTranslation();
 
   // 特性列表
   const features: Feature[] = [
     {
       icon: '📄',
-      title: t('flexible_content_management'),
-      description: t('content_management_desc'),
+      title: t('page.home.flexible_content_management'),
+      description: t('page.home.content_management_desc'),
     },
     {
       icon: '☁️',
-      title: t('multi_tenant_architecture'),
-      description: t('multi_tenant_desc'),
+      title: t('page.home.multi_tenant_architecture'),
+      description: t('page.home.multi_tenant_desc'),
     },
     {
       icon: '🔒',
-      title: t('enterprise_security'),
-      description: t('security_desc'),
+      title: t('page.home.enterprise_security'),
+      description: t('page.home.security_desc'),
     },
     {
       icon: '📊',
-      title: t('advanced_analytics'),
-      description: t('analytics_desc'),
+      title: t('page.home.advanced_analytics'),
+      description: t('page.home.analytics_desc'),
     },
     {
       icon: '🔌',
-      title: t('api_integration'),
-      description: t('api_integration_desc'),
+      title: t('page.home.api_integration'),
+      description: t('page.home.api_integration_desc'),
     },
     {
       icon: '👥',
-      title: t('real_time_collaboration'),
-      description: t('real_time_collaboration_desc'),
+      title: t('page.home.real_time_collaboration'),
+      description: t('page.home.real_time_collaboration_desc'),
     },
   ];
 
@@ -50,7 +50,7 @@ export default function FeaturesSection() {
     <View className='features-section'>
       <View className='section-header'>
         <Text className='section-title'>
-          🚀 {t('platform_features')}
+          🚀 {t('page.home.platform_features')}
         </Text>
       </View>
       <View className='features-grid'>
