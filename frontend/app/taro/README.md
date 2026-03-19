@@ -38,6 +38,12 @@ taro/
 
 ### 安装与启动
 
+安装Taro cli：
+
+```shell
+pnpm install -g @tarojs/cli
+```
+
 1. **环境要求**
   - Node.js >= 16
   - pnpm >= 8
