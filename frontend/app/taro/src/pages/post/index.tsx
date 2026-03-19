@@ -29,18 +29,20 @@ export default function PostListPage() {
       {/* Hero Section */}
       <View className='hero-section'>
         <View className='hero-content'>
-          <Text>{t('page.posts.posts_list')}</Text>
-          <Text>{t('page.posts.explore_latest')}</Text>
+          <Text className='hero-title'>{t('page.posts.posts_list')}</Text>
+          <Text className='hero-subtitle'>{t('page.posts.explore_latest')}</Text>
         </View>
       </View>
 
       <View className='page-container'>
-        <CategoryFilter
-          selectedCategory={selectedCategoryId}
-          treeMode={true}
-          autoLoad={true}
-          onCategoryChange={handleCategoryChange}
-        />
+        <View className='category-filter-container'>
+          <CategoryFilter
+            selectedCategory={selectedCategoryId}
+            treeMode={true}
+            autoLoad={true}
+            onCategoryChange={handleCategoryChange}
+          />
+        </View>
 
         <PostList
           key={selectedCategoryId || 'all'}  // 使用 key 强制重新渲染
