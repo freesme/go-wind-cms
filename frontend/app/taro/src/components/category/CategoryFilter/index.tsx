@@ -32,7 +32,19 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
 
   const [internalCategories, setInternalCategories] = useState<contentservicev1_Category[]>([]);
   const [loading, setLoading] = useState(false);
-  const [expandedIds] = useState<Set<number>>(new Set());
+  const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
+
+  const toggleExpanded = (nodeId: number) => {
+    setExpandedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(nodeId)) {
+        next.delete(nodeId);
+      } else {
+        next.add(nodeId);
+      }
+      return next;
+    });
+  };
 
   const loadCategories = async () => {
     setLoading(true);
@@ -86,22 +98,60 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
     handleCategoryChange(nodeId);
   };
 
-  const hasChildren = (categoryId: number): boolean => {
-    const category = displayCategories.find(cat => cat.id === categoryId);
-    return !!(category && category.children && category.children.length > 0);
-  };
+  // 递归渲染分类项（支持多级）
+  const renderCategoryItem = (node: contentservicev1_Category, level: number = 0, parentPath: string = '') => {
+    const nodeId = node.id || 0;
+    const uniqueKey = `${parentPath}-${nodeId}`; // 使用路径确保 key 唯一
+    const isExpanded = expandedIds.has(nodeId);
+    const hasChildNodes = node.children && node.children.length > 0;
 
-  // const toggleExpanded = (nodeId: number) => {
-  //   setExpandedIds(prev => {
-  //     const next = new Set(prev);
-  //     if (next.has(nodeId)) {
-  //       next.delete(nodeId);
-  //     } else {
-  //       next.add(nodeId);
-  //     }
-  //     return next;
-  //   });
-  // };
+    console.log('[renderCategoryItem]', {
+      nodeId,
+      level,
+      hasChildNodes,
+      isExpanded,
+      treeMode,
+      childrenCount: node.children?.length
+    });
+
+    return (
+      <View key={uniqueKey} className='category-item-wrapper' style={{marginLeft: level > 0 ? `${level * 8}px` : undefined}}>
+        <View
+          className={`category-tab ${selectedCategory === nodeId ? 'active' : ''}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            console.log('[CategoryTab onClick]', { nodeId, hasChildNodes, treeMode, isExpanded });
+            if (hasChildNodes && treeMode) {
+              // 只有在树形模式且有子分类时，才切换展开/收起
+              console.log('[toggleExpanded]', nodeId);
+              toggleExpanded(nodeId);
+            } else {
+              // 否则选择该分类
+              console.log('[handleCategoryClick]', nodeId);
+              handleCategoryClick(nodeId);
+            }
+          }}
+        >
+          <XIcon name={node.icon || 'carbon:folder'} size={24} className='category-icon' />
+          <Text>{getCategoryName(node)}</Text>
+          {hasChildNodes && treeMode && (
+            <XIcon 
+              name={isExpanded ? 'carbon:chevron-up' : 'carbon:chevron-down'} 
+              size={16} 
+              style={{marginLeft: 'auto', flexShrink: 0}}
+            />
+          )}
+        </View>
+
+        {/* 递归渲染子分类 - 只在树形模式且展开时显示 */}
+        {hasChildNodes && treeMode && isExpanded && node.children && (
+          <View className='category-submenu' style={{display: 'flex', flexDirection: 'column'}}>
+            {node.children.map((child) => renderCategoryItem(child, level + 1, uniqueKey))}
+          </View>
+        )}
+      </View>
+    );
+  };
 
   if (loading && autoLoad) {
     return <View className='loading'>{t('page.common.loading')}</View>;
@@ -119,41 +169,10 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
           <Text>{t('page.posts.all_categories')}</Text>
         </View>
 
-        {/* 树形模式 */}
-        {treeMode && displayCategories.map((node) => {
-          return (
-            <View key={node.id} className='category-item-wrapper'>
-              <View
-                className={`category-tab ${selectedCategory === node.id ? 'active' : ''}`}
-                onClick={() => node.id && handleCategoryClick(node.id)}
-              >
-                <XIcon name={node.icon || 'carbon:folder'} size={24} className='category-icon' />
-                <Text>{getCategoryName(node)}</Text>
-              </View>
+        {/* 树形模式 - 只渲染根分类，子分类递归渲染 */}
+        {treeMode && rootCategories.map((node) => renderCategoryItem(node))}
 
-              {/* 子分类菜单 */}
-              {hasChildren(node.id || 0) && expandedIds.has(node.id || 0) && node.children && (
-                <View className='category-submenu'>
-                  {node.children.map((child) => (
-                    <View
-                      key={child.id}
-                      className={`category-subitem ${selectedCategory === child.id ? 'active' : ''}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleCategoryChange(child.id || 0);
-                      }}
-                    >
-                      <XIcon name={child.icon || 'carbon:folder'} size={20} className='category-icon' />
-                      <Text>{getCategoryName(child)}</Text>
-                    </View>
-                  ))}
-                </View>
-              )}
-            </View>
-          );
-        })}
-
-        {/* 平铺模式 */}
+        {/* 平铺模式 - 只显示根分类 */}
         {!treeMode && rootCategories.map((cat) => {
           return (
             <View

@@ -13,8 +13,15 @@
 
 .category-tabs {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 12px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  
+  &::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
   
   @media (min-width: 768px) {
     gap: 16px;
@@ -58,37 +65,45 @@
 }
 
 .category-item-wrapper {
-    position: relative;
+  position: relative;
+  flex-shrink: 0; /* 防止被压缩 */
 }
 
 .category-submenu {
-  position: absolute;
-  top: 100%;
+  // 全部使用相对定位，直接展开显示
+  position: relative;
+  top: 0;
   left: 0;
-  z-index: 100;
-  min-width: 180px;
-  padding: 12px;
-  margin-top: 8px;
-  background: #ffffff;
-  border: 1px solid #f1f5f9;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  z-index: 1;
+  width: 100%;
+  max-height: none;
+  overflow-y: visible;
+  padding: 8px 0 8px 20px; /* 左侧缩进 */
+  background: transparent;
+  border: none;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .category-subitem {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-radius: 8px;
-  background: transparent;
+  background: rgba(139, 92, 246, 0.04);
   color: #64748b;
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
   transition: all 0.3s;
+  white-space: nowrap;
+  flex-shrink: 0;
+  
+  &:active {
+    transform: scale(0.98);
+  }
   
   &:hover {
     background: rgba(139, 92, 246, 0.08);
@@ -97,6 +112,12 @@
   &.active {
     background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
     color: #ffffff;
+  }
+  
+  @media (min-width: 768px) {
+    padding: 10px 14px;
+    font-size: 14px;
+    background: transparent;
   }
 }
 
