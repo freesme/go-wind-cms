@@ -1,5 +1,6 @@
 import {useTranslation} from 'react-i18next';
 import {View, Text, Image} from '@tarojs/components';
+import XIcon from '@/plugins/xicon';
 
 import './about.scss';
 
@@ -43,17 +44,17 @@ export default function AboutPage() {
     {
       name: t('page.about.team_member_1'),
       role: t('page.about.team_role_1'),
-      avatar: '/logo.png',
+      avatar: '/assets/images/logo.png',
     },
     {
       name: t('page.about.team_member_2'),
       role: t('page.about.team_role_2'),
-      avatar: '/logo.png',
+      avatar: '/assets/images/logo.png',
     },
     {
       name: t('page.about.team_member_3'),
       role: t('page.about.team_role_3'),
-      avatar: '/logo.png',
+      avatar: '/assets/images/logo.png',
     },
   ];
 
@@ -72,10 +73,10 @@ export default function AboutPage() {
       <View className="about-section">
         <View className="section-container">
           <View className="about-content">
-            <Text>{t('page.about.about_us')}</Text>
-            <Text>{t('page.about.about_us_desc_1')}</Text>
-            <Text>{t('page.about.about_us_desc_2')}</Text>
-            <Text>{t('page.about.about_us_desc_3')}</Text>
+            <h2>{t('page.about.about_us')}</h2>
+            <p>{t('page.about.about_us_desc_1')}</p>
+            <p>{t('page.about.about_us_desc_2')}</p>
+            <p>{t('page.about.about_us_desc_3')}</p>
           </View>
           <View className="about-stats">
             <View className="stat-card">
@@ -102,17 +103,17 @@ export default function AboutPage() {
       <View className="features-section">
         <View className="section-container">
           <View className="section-header">
-            <Text>{t('page.about.features')}</Text>
-            <Text>{t('page.about.features_desc')}</Text>
+            <h2>{t('page.about.features')}</h2>
+            <p>{t('page.about.features_desc')}</p>
           </View>
           <View className="features-grid">
             {features.map((feature) => (
               <View key={feature.title} className="feature-card">
                 <View className="feature-icon">
-                  <Text>{feature.icon}</Text>
+                  <XIcon name={feature.icon} size={36} />
                 </View>
-                <Text>{feature.title}</Text>
-                <Text>{feature.description}</Text>
+                <Text className="feature-title">{feature.title}</Text>
+                <Text className="feature-description">{feature.description}</Text>
               </View>
             ))}
           </View>
@@ -123,8 +124,8 @@ export default function AboutPage() {
       <View className="team-section">
         <View className="section-container">
           <View className="section-header">
-            <Text>{t('page.about.team')}</Text>
-            <Text>{t('page.about.team_desc')}</Text>
+            <h2>{t('page.about.team')}</h2>
+            <p>{t('page.about.team_desc')}</p>
           </View>
           <View className="team-grid">
             {teamMembers.map((member) => (
@@ -135,8 +136,8 @@ export default function AboutPage() {
                     style={{width: 120, height: 120}}
                   />
                 </View>
-                <Text>{member.name}</Text>
-                <Text>{member.role}</Text>
+                <Text className="team-name">{member.name}</Text>
+                <Text className="team-role">{member.role}</Text>
               </View>
             ))}
           </View>
@@ -147,21 +148,21 @@ export default function AboutPage() {
       <View className="values-section">
         <View className="section-container">
           <View className="section-header">
-            <Text>{t('page.about.values')}</Text>
-            <Text>{t('page.about.values_desc')}</Text>
+            <h2>{t('page.about.values')}</h2>
+            <p>{t('page.about.values_desc')}</p>
           </View>
           <View className="values-grid">
             <View className="value-card">
-              <Text>{t('page.about.value_innovation')}</Text>
-              <Text>{t('page.about.value_innovation_desc')}</Text>
+              <Text className="value-title">{t('page.about.value_innovation')}</Text>
+              <Text className="value-description">{t('page.about.value_innovation_desc')}</Text>
             </View>
             <View className="value-card">
-              <Text>{t('page.about.value_reliability')}</Text>
-              <Text>{t('page.about.value_reliability_desc')}</Text>
+              <Text className="value-title">{t('page.about.value_reliability')}</Text>
+              <Text className="value-description">{t('page.about.value_reliability_desc')}</Text>
             </View>
             <View className="value-card">
-              <Text>{t('page.about.value_customer')}</Text>
-              <Text>{t('page.about.value_customer_desc')}</Text>
+              <Text className="value-title">{t('page.about.value_customer')}</Text>
+              <Text className="value-description">{t('page.about.value_customer_desc')}</Text>
             </View>
           </View>
         </View>
@@ -170,8 +171,8 @@ export default function AboutPage() {
       {/* CTA Section */}
       <View className="cta-section">
         <View className="section-container">
-          <Text>{t('page.about.cta_title')}</Text>
-          <Text>{t('page.about.cta_desc')}</Text>
+          <h2>{t('page.about.cta_title')}</h2>
+          <p>{t('page.about.cta_desc')}</p>
           <View className="cta-buttons">
             <View className="button-primary">
               <Text>{t('page.about.cta_explore')}</Text>
