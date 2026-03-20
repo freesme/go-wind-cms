@@ -6,7 +6,6 @@ import store from './store';
 import './i18n';
 import Layout from './components/layout/Layout';
 
-import '@nutui/nutui-taro/dist/styles/themes/default.scss'
 import './app.scss';
 
 function App({children}: PropsWithChildren): ReactElement {

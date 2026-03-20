@@ -45,8 +45,6 @@
   "author": "",
   "dependencies": {
     "@babel/runtime": "^7.29.2",
-    "@iconify/iconify": "^3.1.1",
-    "@nutui/nutui-taro": "^4.3.14",
     "@react-native/metro-config": "^0.73.5",
     "@reduxjs/toolkit": "^2.11.2",
     "@tarojs/components": "4.1.11",

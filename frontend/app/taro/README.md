@@ -11,7 +11,7 @@ taro/
 ├── babel.config.js           # Babel 配置
 ├── commitlint.config.mjs     # Commitlint 配置
 ├── package.json              # 项目依赖与脚本
-├── pnpm-lock.yaml            # pnpm 锁定文件
+├── npm-lock.yaml            # npm 锁定文件
 ├── project.config.json       # 小程序项目配置
 ├── README.md                 # 项目说明文档
 ├── stylelint.config.mjs      # Stylelint 配置
@@ -41,38 +41,38 @@ taro/
 安装Taro cli：
 
 ```shell
-pnpm install -g @tarojs/cli
+npm install -g @tarojs/cli
 ```
 
 1. **环境要求**
   - Node.js >= 16
-  - pnpm >= 8
+  - npm >= 8
   - 推荐 Windows 10/11 或 macOS
 
 2. **安装依赖**
    ```bash
-   pnpm install
+   npm install
    ```
 
 3. **开发模式启动**
   - 微信小程序：
     ```bash
-    pnpm run dev:weapp
+    npm run dev:weapp
     ```
   - H5：
     ```bash
-    pnpm run dev:h5
+    npm run dev:h5
     ```
   - 其他平台见 package.json scripts
 
 4. **构建产物**
   - 微信小程序：
     ```bash
-    pnpm run build:weapp
+    npm run build:weapp
     ```
   - H5：
     ```bash
-    pnpm run build:h5
+    npm run build:h5
     ```
 
 ---
@@ -81,17 +81,17 @@ pnpm install -g @tarojs/cli
 
 | 命令               | 说明      |
 |------------------|---------|
-| pnpm run dev:*   | 各端开发模式  |
-| pnpm run build:* | 各端构建产物  |
-| pnpm run new     | 新建页面/组件 |
+| npm run dev:*   | 各端开发模式  |
+| npm run build:* | 各端构建产物  |
+| npm run new     | 新建页面/组件 |
 
 ---
 
 ### 常见问题
 
 1. **依赖安装失败**
-  - 请确保 Node.js 和 pnpm 版本符合要求。
-  - 删除 `node_modules` 和 `pnpm-lock.yaml` 后重新安装。
+  - 请确保 Node.js 和 npm 版本符合要求。
+  - 删除 `node_modules` 和 `npm-lock.yaml` 后重新安装。
 
 2. **小程序编译异常**
   - 检查 `project.config.json` 配置。

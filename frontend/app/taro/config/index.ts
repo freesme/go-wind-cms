@@ -18,6 +18,7 @@ export default defineConfig<'vite'>(async (merge, {}) => {
     },
     sourceRoot: 'src',
     outputRoot: 'dist',
+    stylelint: false,
     plugins: [
       "@tarojs/plugin-generator"
     ],
