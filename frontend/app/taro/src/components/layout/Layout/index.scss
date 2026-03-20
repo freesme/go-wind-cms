@@ -8,12 +8,42 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  // 确保内容区域在 Header 下方
-  // Header 高度通常为 70px 左右
-  padding-top: 70px;
+  // 使用 CSS 变量，根据响应式调整
+  padding-top: var(--header-height, 75px);
+  
+  // 移动端优化
+  @media (max-width: 768px) {
+    padding-top: var(--header-height, 64px);
+  }
+  
+  // 小屏移动端
+  @media (max-width: 480px) {
+    padding-top: var(--header-height, 60px);
+  }
 }
 
 // 为 Header 固定高度设置 CSS 变量
 :root {
-  --header-height: 70px;
+  --header-height: var(--layout-topbar-height, 75px); // PC 端默认高度
+}
+
+// 平板端
+@media (max-width: 1024px) {
+  :root {
+    --header-height: 64px;
+  }
+}
+
+// 移动端
+@media (max-width: 768px) {
+  :root {
+    --header-height: 64px;
+  }
+}
+
+// 小屏移动端
+@media (max-width: 480px) {
+  :root {
+    --header-height: 60px;
+  }
 }

@@ -56,6 +56,7 @@ html.dark .fixed-top {
   border-radius: 8px;
   flex-shrink: 0;
   max-width: 200px; // 限制最大宽度，避免挤压导航
+  overflow: visible; // 确保内容不被裁剪
 
   &:hover {
     background-color: rgba(102, 102, 238, 0.06);
@@ -68,6 +69,7 @@ html.dark .fixed-top {
   flex-shrink: 0;
   transition: transform 0.3s;
   object-fit: contain;
+  display: block; // 确保图片正常显示
 }
 
 .logo-section:hover .logo {
@@ -161,18 +163,18 @@ html.dark .fixed-top {
 
 @media (max-width: 768px) {
   .top-bar {
-    padding: 0 12px; // 减小内边距，留出更多空间
-    gap: 8px;
-    height: 60px;
+    padding: 0 16px; // 适中内边距
+    gap: 12px;
+    height: 64px; // 增大 Header 高度
   }
 
   .logo {
-    width: 36px;
-    height: 36px;
+    width: 44px; // 增大 Logo 尺寸
+    height: 44px;
   }
 
   .site-name {
-    font-size: 15px;
+    font-size: 16px;
   }
 
   // 移动端导航栏自适应
@@ -182,24 +184,30 @@ html.dark .fixed-top {
     overflow: visible;
   }
 
+  // 移动端汉堡按钮和图标按钮更大
+  .mobile-menu-toggle,
+  .actions .dropdown-wrapper .icon-btn {
+    width: 48px; // 增大点击区域
+    height: 48px;
+    min-width: 48px;
+  }
+
   .logo-section {
-    padding: 4px 8px; // 减小内边距
+    padding: 8px 12px; // 调整内边距
     max-width: none; // 移动端不限制宽度
-    gap: 8px; // 减小间距
+    gap: 12px; // 调整间距
   }
 
   .actions .dropdown-wrapper .icon-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 18px;
+    font-size: 22px; // 增大图标
   }
 }
 
 @media (max-width: 480px) {
   .top-bar {
-    padding: 0 8px; // 进一步减小内边距
-    gap: 6px;
-    height: 56px;
+    padding: 0 12px; // 适中内边距
+    gap: 10px;
+    height: 60px; // 增大 Header 高度
   }
 
   .logo-nav-section {
@@ -207,8 +215,8 @@ html.dark .fixed-top {
   }
 
   .logo {
-    width: 32px;
-    height: 32px;
+    width: 40px; // 增大 Logo 尺寸
+    height: 40px;
   }
 
   .site-name {
@@ -223,14 +231,20 @@ html.dark .fixed-top {
     overflow: visible;
   }
 
+  // 小屏移动端汉堡按钮和图标按钮保持较大尺寸
+  .mobile-menu-toggle,
+  .actions .dropdown-wrapper .icon-btn {
+    width: 44px; // 保持足够大的点击区域
+    height: 44px;
+    min-width: 44px;
+  }
+
   .logo-section {
-    padding: 4px; // 最小内边距
-    gap: 6px;
+    padding: 8px 10px; // 适中内边距
+    gap: 10px;
   }
 
   .actions .dropdown-wrapper .icon-btn {
-    width: 32px;
-    height: 32px;
-    font-size: 16px;
+    font-size: 20px;
   }
 }

@@ -289,10 +289,11 @@ html.dark .loading-state {
   .menu-item {
     flex-shrink: 0;
     white-space: nowrap;
-    padding: 12px 16px;
-    font-size: 15px;
+    padding: 18px 24px; // 增大内边距，更易点击
+    font-size: 17px; // 增大字体
     border-radius: 8px;
     width: 100%;
+    min-height: 56px; // 最小高度，确保点击区域足够
   }
 
   // 移动端优化子菜单显示
@@ -315,8 +316,9 @@ html.dark .loading-state {
   }
 
   .submenu-item {
-    padding: 10px 12px;
-    font-size: 14px;
+    padding: 16px 18px; // 增大内边距
+    font-size: 16px; // 增大字体
+    min-height: 52px; // 最小高度
   }
 
   // 移动端子菜单箭头

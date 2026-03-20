@@ -15,8 +15,8 @@ body {
 
 /* ========== CSS Variables ========== */
 :root {
-    /* 布局尺寸 */
-    --layout-header-height: 64px;
+    /* 布局尺寸 - 响应式 */
+    --layout-header-height: 75px;
     --layout-navbar-height: 50px;
     --layout-footer-height: 200px;
     --layout-topbar-height: 75px;
@@ -57,11 +57,25 @@ body {
     --space-2: 8px;
     --space-3: 12px;
     --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
     
     /* 圆角变量 */
     --radius-sm: 4px;
     --radius-md: 8px;
     --radius-lg: 12px;
+    --radius-xl: 16px;
+    
+    /* 响应式断点 */
+    --breakpoint-xs: 480px;
+    --breakpoint-sm: 768px;
+    --breakpoint-md: 1024px;
+    --breakpoint-lg: 1280px;
+    --breakpoint-xl: 1536px;
+    
+    /* 触摸优化 */
+    --touch-target-min: 44px;
+    --touch-target-comfortable: 48px;
 }
 
 /* 暗黑模式 */
@@ -105,4 +119,51 @@ html {
 /* 禁用选中（可选） */
 .no-select {
     user-select: none;
+}
+
+/* ========== 性能优化 ========== */
+/* GPU 加速 */
+.gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* 避免布局抖动 */
+.layout-stable {
+    contain: layout style;
+}
+
+/* 触摸优化 */
+.touch-optimized {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* 图片懒加载占位 */
+.image-lazy {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* 滚动优化 */
+.scroll-optimized {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+/* 移动端点击延迟消除 */
+@media (max-width: 768px) {
+    * {
+        touch-action: manipulation;
+    }
 }

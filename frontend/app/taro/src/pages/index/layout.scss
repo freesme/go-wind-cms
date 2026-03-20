@@ -13,7 +13,8 @@
   flex-direction: column;
   width: 100%;
   min-height: 100vh;
-  padding-top: var(--layout-header-height, 64px);
+  // 使用 CSS 变量，与 Layout 组件保持一致
+  padding-top: var(--header-height, 75px);
   background: var(--color-bg, #f8fafc);
 
   &.noHeader {
@@ -43,6 +44,14 @@ html.dark .content {
 /* 响应式布局 */
 @media (max-width: 768px) {
   .content {
-    min-height: calc(100vh - 56px - 150px); /* 移动端 Header 和 Footer 较矮 */
+    padding-top: var(--header-height, 64px);
+    min-height: calc(100vh - var(--header-height, 64px));
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding-top: var(--header-height, 60px);
+    min-height: calc(100vh - var(--header-height, 60px));
   }
 }

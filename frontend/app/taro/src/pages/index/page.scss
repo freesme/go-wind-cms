@@ -7,16 +7,16 @@
 /* Section Container - 移动端优先 */
 .section-container {
   width: 100%;
-  padding: 40px 16px;
+  padding: var(--space-5) var(--space-4); // 移动端间距
   
   @media (min-width: 768px) {
-    max-width: 1200px;
+    max-width: var(--layout-max-width);
     margin: 0 auto;
-    padding: 60px 24px;
+    padding: var(--space-6) var(--space-5); // 平板间距
   }
   
   @media (min-width: 1200px) {
-    padding: 80px 32px;
+    padding: 80px var(--space-6); // PC 间距
   }
 }
 
@@ -39,10 +39,10 @@
 
 /* Section 通用样式 */
 .section {
-  padding: 40px 0;
+  padding: var(--space-5) 0; // 移动端间距
   
   @media (min-width: 768px) {
-    padding: 60px 0;
+    padding: var(--space-6) 0; // 平板间距
   }
 }
 
@@ -50,11 +50,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 32px;
+  margin-bottom: var(--space-5); // 移动端间距
   padding: 0;
   
   @media (min-width: 768px) {
-    margin-bottom: 48px;
+    margin-bottom: var(--space-6); // 平板间距
   }
 }
 
@@ -82,9 +82,10 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: 8px 14px; // 增大点击区域
+  border-radius: var(--radius-md);
   background: rgba(99, 102, 241, 0.08);
+  min-height: var(--touch-target-min); // 最小触摸区域
   
   &:active {
     background: rgba(99, 102, 241, 0.15);
@@ -93,7 +94,8 @@
   
   @media (min-width: 768px) {
     font-size: 15px;
-    padding: 8px 16px;
+    padding: 10px 18px; // 增大 PC 端尺寸
+    min-height: auto;
     
     &:hover {
       background: rgba(99, 102, 241, 0.12);
