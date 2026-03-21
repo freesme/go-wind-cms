@@ -20,6 +20,8 @@ export default function AccountRegisterPage() {
     });
   };
 
+  // @ts-ignore
+  // @ts-ignore
   return (
     <View className='register-form'>
       {/* Username */}

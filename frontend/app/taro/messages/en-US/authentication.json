@@ -68,6 +68,7 @@
     "code_sent_title": "Verification code has been sent to",
     "code_sent_subtitle": "Please check your inbox and enter the code",
     "resend_after": "to resend",
+    "resend_after_countdown": "Retry in {count}s",
     "next_step": "Next Step",
     "back_home": "Back to Home"
   },

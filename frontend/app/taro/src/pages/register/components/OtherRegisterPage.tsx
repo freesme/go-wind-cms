@@ -26,7 +26,7 @@ export default function OtherRegisterPage() {
         onClick={handleButtonGoogleRegister}
       >
         <XIcon name='logos:google-icon' size={20} />
-        <Text>使用 Google 继续</Text>
+        <Text>{t('authentication.login.social_google')}</Text>
       </View>
       
       {/* GitHub Button */}
@@ -35,7 +35,7 @@ export default function OtherRegisterPage() {
         onClick={handleButtonGithubRegister}
       >
         <XIcon name='logos:github-icon' size={20} />
-        <Text>使用 GitHub 继续</Text>
+        <Text>{t('authentication.login.social_github')}</Text>
       </View>
     </View>
   );

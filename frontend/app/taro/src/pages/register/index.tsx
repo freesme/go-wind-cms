@@ -48,26 +48,26 @@ export default function RegisterPage() {
       <View className='register-left'>
         <View className='brand'>
           <Image src='/assets/images/logo.png' className='brand-logo' />
-          <Text className='brand-title'>风行内容中台</Text>
-          <Text className='brand-subtitle'>内容一次创作，全域高效分发</Text>
+          <Text className='brand-title'>{t('authentication.login.brand_title')}</Text>
+          <Text className='brand-subtitle'>{t('authentication.login.brand_subtitle')}</Text>
         </View>
         
         <View className='benefits-list'>
           <View className='benefit-item'>
             <XIcon name='carbon:checkmark' size={20} className='benefit-icon' />
-            <Text>海量优质内容</Text>
+            <Text>{t('authentication.login.feature_projects')}</Text>
           </View>
           <View className='benefit-item'>
             <XIcon name='carbon:checkmark' size={20} className='benefit-icon' />
-            <Text>个性化推荐</Text>
+            <Text>{t('authentication.login.feature_isolation')}</Text>
           </View>
           <View className='benefit-item'>
             <XIcon name='carbon:checkmark' size={20} className='benefit-icon' />
-            <Text>多端同步体验</Text>
+            <Text>{t('authentication.login.feature_permissions')}</Text>
           </View>
           <View className='benefit-item'>
             <XIcon name='carbon:checkmark' size={20} className='benefit-icon' />
-            <Text>智能内容发现</Text>
+            <Text>{t('authentication.login.feature_analytics')}</Text>
           </View>
         </View>
       </View>
@@ -76,8 +76,8 @@ export default function RegisterPage() {
       <View className='register-right'>
         <View className='register-card'>
           <View className='card-header'>
-            <Text className='card-title'>欢迎注册账号</Text>
-            <Text className='card-subtitle'>使用以下账号注册</Text>
+            <Text className='card-title'>{t('authentication.register.title')}</Text>
+            <Text className='card-subtitle'>{t('authentication.register.register_with')}</Text>
           </View>
 
           {/* Tab 切换 */}
@@ -86,25 +86,25 @@ export default function RegisterPage() {
               className={`tab ${activeTab === 'account' ? 'active' : ''}`}
               onClick={() => setActiveTab('account')}
             >
-              账号
+              {t('authentication.login.tab_account')}
             </View>
             <View
               className={`tab ${activeTab === 'email' ? 'active' : ''}`}
               onClick={() => setActiveTab('email')}
             >
-              邮箱
+              {t('authentication.login.tab_email')}
             </View>
             <View
               className={`tab ${activeTab === 'phone' ? 'active' : ''}`}
               onClick={() => setActiveTab('phone')}
             >
-              手机
+              {t('authentication.login.tab_phone')}
             </View>
             <View
               className={`tab ${activeTab === 'other' ? 'active' : ''}`}
               onClick={() => setActiveTab('other')}
             >
-              其他
+              {t('authentication.login.tab_other')}
             </View>
           </View>
 
@@ -119,9 +119,9 @@ export default function RegisterPage() {
           {/* 登录链接 */}
           <View className='login-section'>
             <Text>
-              已有账号？
+              {t('authentication.register.already_have_account')}
               <Text className='text-btn' onClick={handleLoginClick}>
-                立即登录
+                {t('authentication.register.login_now')}
               </Text>
             </Text>
           </View>
@@ -129,20 +129,20 @@ export default function RegisterPage() {
           {/* 返回首页 */}
           <View className='back-home'>
             <Text className='text-btn' onClick={handleBackHome}>
-              ← 返回首页
+              ← {t('authentication.login.back_home')}
             </Text>
           </View>
 
           {/* 服务条款 */}
           <View className='terms'>
             <Text className='terms-text'>
-              登录即表示你同意我们的
+              {t('authentication.login.terms_prefix')}
               <Text className='terms-link' onClick={handleTermsClick}>
-                服务条款
+                {t('authentication.login.terms_of_service')}
               </Text>
-              和
+              {t('authentication.login.terms_and')}
               <Text className='terms-link' onClick={handlePrivacyClick}>
-                隐私政策
+                {t('authentication.login.privacy_policy')}
               </Text>
             </Text>
           </View>

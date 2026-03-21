@@ -68,6 +68,7 @@
     "code_sent_title": "验证码已发送至",
     "code_sent_subtitle": "请查收邮件并输入验证码",
     "resend_after": "后重新发送",
+    "resend_after_countdown": "{count}秒后重试",
     "next_step": "下一步",
     "back_home": "返回首页"
   },

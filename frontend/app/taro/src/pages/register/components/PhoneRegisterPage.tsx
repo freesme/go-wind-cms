@@ -67,12 +67,12 @@ export default function PhoneRegisterPage() {
     <View className='register-form'>
       {/* Phone Number Group */}
       <View className='form-group'>
-        <Text className='form-label'>手机号</Text>
+        <Text className='form-label'>{t('authentication.register.phone')}</Text>
         <Input
           type='text'
           value={phone}
           onInput={(e) => setPhone(e.detail.value)}
-          placeholder='请输入手机号'
+          placeholder={t('authentication.register.input_phone')}
           className='input-field'
           maxlength={11}
         />
@@ -80,13 +80,13 @@ export default function PhoneRegisterPage() {
 
       {/* Verification Code Group */}
       <View className='form-group'>
-        <Text className='form-label'>验证码</Text>
+        <Text className='form-label'>{t('authentication.register.code')}</Text>
         <View className='code-input-row'>
           <Input
             type='text'
             value={verificationCode}
             onInput={(e) => setVerificationCode(e.detail.value)}
-            placeholder='请输入验证码'
+            placeholder={t('authentication.register.input_code')}
             className='input-field'
             maxlength={6}
           />
@@ -96,8 +96,8 @@ export default function PhoneRegisterPage() {
             onClick={handleButtonSendVerifyCode}
           >
             {codeSent
-              ? `${codeCountdown}秒后重试`
-              : '发送验证码'}
+              ? t('authentication.register.resend_after_countdown', {count: codeCountdown})
+              : t('authentication.register.send_code')}
           </Button>
         </View>
       </View>
@@ -112,7 +112,7 @@ export default function PhoneRegisterPage() {
         }
         onClick={handleButtonRegisterOrLogin}
       >
-        注册/登录
+        {t('authentication.register.register_or_login')}
       </Button>
     </View>
   );

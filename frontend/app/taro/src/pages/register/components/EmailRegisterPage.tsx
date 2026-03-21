@@ -94,9 +94,9 @@ function EmailRegisterEnterCodePage({email}: { email: string }) {
   return (
     <View className='register-form'>
       <View className='email-sent-info'>
-        <Text className='hint-title'>{t('authentication.register.code_sent')}</Text>
+        <Text className='hint-title'>{t('authentication.register.code_sent_title')}</Text>
         <Text className='email-display'>{email}</Text>
-        <Text className='hint-subtitle'>{t('authentication.register.input_code_hint')}</Text>
+        <Text className='hint-subtitle'>{t('authentication.register.code_sent_subtitle')}</Text>
       </View>
       <View className='form-group'>
         <Text className='form-label'>{t('authentication.register.code')}</Text>
@@ -119,7 +119,7 @@ function EmailRegisterEnterCodePage({email}: { email: string }) {
       <View className='resend-section'>
         <Text>
           {codeSent
-            ? t('authentication.register.resend_code_countdown', {count: codeCountdown})
+            ? t('authentication.register.resend_after_countdown', {count: codeCountdown})
             : (
               <Text className='text-btn' onClick={handleResend}>
                 {t('authentication.register.resend_code')}
