@@ -4,7 +4,7 @@ import {View, Text, Image} from '@tarojs/components';
 
 import {useI18nRouter} from '@/i18n/helpers';
 import XIcon from '@/plugins/xicon';
-import ControlPanel from '@/components/layout/ControlPanel';
+// import ControlPanel from '@/components/layout/ControlPanel';
 
 import AccountRegisterPage from './components/AccountRegisterPage';
 import EmailRegisterPage from './components/EmailRegisterPage';
@@ -41,9 +41,6 @@ export default function RegisterPage() {
 
   return (
     <View className='register-page'>
-      {/* 顶部控制按钮 */}
-      <ControlPanel />
-
       {/* 左侧品牌区 */}
       <View className='register-left'>
         <View className='brand'>

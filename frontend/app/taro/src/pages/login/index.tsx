@@ -4,7 +4,7 @@ import {View, Text, Image} from '@tarojs/components';
 
 import {useI18nRouter} from '@/i18n/helpers';
 import XIcon from '@/plugins/xicon';
-import ControlPanel from '@/components/layout/ControlPanel';
+// import ControlPanel from '@/components/layout/ControlPanel';
 
 import AccountLoginPage from './components/AccountLoginPage';
 import EmailLoginPage from './components/EmailLoginPage';
@@ -41,9 +41,6 @@ export default function LoginPage() {
 
   return (
     <View className='login-page'>
-      {/* 顶部控制按钮 */}
-      <ControlPanel />
-
       {/* 左侧品牌区 */}
       <View className='login-left'>
         <View className='brand'>
