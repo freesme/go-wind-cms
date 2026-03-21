@@ -30,7 +30,7 @@ export default function Header() {
   const isLogin = !!accessToken && !accessStore.access.loginExpired;
 
   const handleClickLogo = () => {
-    router.push('/pages/index/index');
+    router.push('pages/index');
   };
   const handleClickSettings = () => {
     router.push('/settings');

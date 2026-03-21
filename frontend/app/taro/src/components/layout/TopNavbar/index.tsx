@@ -112,12 +112,13 @@ export default function TopNavbar({onClick}: TopNavbarProps) {
 
   // 处理导航点击
   const handleNavigate = (item: siteservicev1_NavigationItem) => {
+    // console.log('Navigate to:', item.url)
     if (item.isOpenNewTab) {
       // Taro 中打开外部链接需要使用 Taro.navigateToMiniProgram 或其他方式
       console.log('Open external link:', item.url);
     } else {
       if (item.url != null) {
-        router.push(item.url);
+        router.push(item.url !== '/' ? item.url : 'pages/index');
       }
     }
   };
@@ -171,9 +172,9 @@ export default function TopNavbar({onClick}: TopNavbarProps) {
                   {/* 子菜单箭头指示器 */}
                   {item.children && item.children.length > 0 && (
                     <View className='submenu-arrow'>
-                      <XIcon 
-                        name={`carbon:chevron-${expandedSubMenus.has(item.id?.toString() || '') ? 'up' : 'down'}`} 
-                        size={16} 
+                      <XIcon
+                        name={`carbon:chevron-${expandedSubMenus.has(item.id?.toString() || '') ? 'up' : 'down'}`}
+                        size={16}
                       />
                     </View>
                   )}
@@ -181,7 +182,7 @@ export default function TopNavbar({onClick}: TopNavbarProps) {
 
                 {/* 子菜单 */}
                 {item.children && item.children.length > 0 && (
-                  <View 
+                  <View
                     className={`submenu ${expandedSubMenus.has(item.id?.toString() || '') ? 'submenu-open' : ''}`}
                     style={
                       submenuPosition && expandedSubMenus.has(item.id?.toString() || '')

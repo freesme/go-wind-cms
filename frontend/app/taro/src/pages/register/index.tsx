@@ -26,7 +26,7 @@ export default function RegisterPage() {
 
   // 返回首页
   const handleBackHome = () => {
-    router.push('/pages/index/index');
+    router.push('pages/index');
   };
 
   // 服务条款
