@@ -72,13 +72,14 @@ export default defineConfig<'vite'>(async (merge, {}) => {
           'pages/privacy/index': '/privacy',
           'pages/settings/index': '/settings',
           'pages/user/index': '/user',
+          'pages/register/index': '/register',
+          'pages/login/index': '/login',
           'pages/post/index': '/post',
           'pages/post/detail/index': '/post/:id',
           'pages/tag/index': '/tag',
           'pages/tag/detail/index': '/tag/:id',
           'pages/category/index': '/category',
           'pages/category/detail/index': '/category/:id',
-          'pages/page/index': '/page',
           'pages/search/index': '/search',
           'pages/404/index': '/404'
         }

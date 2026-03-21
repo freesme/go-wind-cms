@@ -129,6 +129,75 @@ html.dark .fixed-top {
         font-size: 20px;
       }
     }
+
+    // 下拉菜单
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 180px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      z-index: 1001;
+      overflow: hidden;
+      animation: dropdownSlideIn 0.2s ease-out;
+
+      .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+        background: transparent;
+        width: 100%;
+        text-align: left;
+
+        &:hover {
+          background: rgba(102, 102, 238, 0.06);
+        }
+
+        &:active {
+          background: rgba(102, 102, 238, 0.12);
+        }
+
+        &.danger {
+          color: #ef4444;
+
+          &:hover {
+            background: rgba(239, 68, 68, 0.08);
+          }
+        }
+
+        .dropdown-item-icon {
+          font-size: 18px;
+          color: #666;
+          flex-shrink: 0;
+        }
+
+        .dropdown-item-label {
+          font-size: 14px;
+          color: #333;
+          flex: 1;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+}
+
+// 下拉菜单动画
+@keyframes dropdownSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

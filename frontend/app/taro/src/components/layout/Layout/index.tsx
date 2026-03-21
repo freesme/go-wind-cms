@@ -8,9 +8,9 @@ import './index.scss'; // 添加样式文件
 
 // 需要排除 Header 和 Footer 的页面路径
 const EXCLUDED_PAGES = [
-  '/pages/login/index',
-  '/pages/register/index',
-  '/pages/forgot-password/index', // 如果后续创建忘记密码页面
+  '/login',
+  '/register',
+  '/forgot-password', // 如果后续创建忘记密码页面
 ];
 
 interface LayoutProps extends PropsWithChildren {}

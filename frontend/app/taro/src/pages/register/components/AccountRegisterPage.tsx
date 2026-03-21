@@ -1,5 +1,7 @@
-import {useState, useMemo} from 'react';
+import {useState} from 'react';
 import {useTranslation} from 'react-i18next';
+import {Input, Button,Text, View} from '@tarojs/components';
+
 
 import '../register.scss';
 
@@ -10,107 +12,59 @@ export default function AccountRegisterPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  // 用户名验证（3-20个字符，只能包含字母、数字、下划线）
-  const isValidUsername = useMemo(() => {
-    if (!username) return false;
-    const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
-    return usernameRegex.test(username);
-  }, [username]);
-
-  // 密码强度验证（至少 6 个字符）
-  const isValidPassword = useMemo(() => {
-    return password.length >= 6;
-  }, [password]);
-
-  // 确认密码验证
-  const isPasswordMatch = useMemo(() => {
-    return password === confirmPassword && confirmPassword.length > 0;
-  }, [password, confirmPassword]);
-
-  // 表单是否可提交
-  const isFormValid = useMemo(() => {
-    return isValidUsername && isValidPassword && isPasswordMatch;
-  }, [isValidUsername, isValidPassword, isPasswordMatch]);
-
   const handleButtonRegister = () => {
-    if (!isFormValid) {
-      return;
-    }
-
     console.log('注册信息：', {
       username: username,
       password: password,
+      confirmPassword: confirmPassword,
     });
   };
 
   return (
-    <div className='register-form'>
+    <View className='register-form'>
       {/* Username */}
-      <div className='form-group'>
-        <label htmlFor='register-account-username'>
-          {t('authentication.register.username')}
-        </label>
-        <input
-          id='register-account-username'
+      <View className='form-group'>
+        <Text className='form-label'>{t('authentication.register.username')}</Text>
+        <Input
           type='text'
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onInput={e => setUsername(e.detail.value)}
           placeholder={t('authentication.register.input_username')}
-          autoComplete='username'
-          className={`input-field ${username && !isValidUsername ? 'error' : ''}`}
+          className='input-field'
         />
-        {username && !isValidUsername && (
-          <span className='error-hint'>{t('authentication.register.invalid_username')}</span>
-        )}
-      </div>
+      </View>
 
       {/* Password */}
-      <div className='form-group'>
-        <label htmlFor='register-account-password'>
-          {t('authentication.register.password')}
-        </label>
-        <input
-          id='register-account-password'
+      <View className='form-group'>
+        <Text className='form-label'>{t('authentication.register.password')}</Text>
+        <Input
           type='password'
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onInput={e => setPassword(e.detail.value)}
           placeholder={t('authentication.register.input_password')}
-          autoComplete='new-password'
-          className={`input-field ${password && !isValidPassword ? 'error' : ''}`}
+          className='input-field'
         />
-        {password && !isValidPassword && (
-          <span className='error-hint'>{t('authentication.register.invalid_password')}</span>
-        )}
-      </div>
+      </View>
 
       {/* Confirm Password */}
-      <div className='form-group'>
-        <label htmlFor='register-account-confirm-password'>
-          {t('authentication.register.confirm_password')}
-        </label>
-        <input
-          id='register-account-confirm-password'
+      <View className='form-group'>
+        <Text className='form-label'>{t('authentication.register.confirm_password')}</Text>
+        <Input
           type='password'
           value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          onInput={e => setConfirmPassword(e.detail.value)}
           placeholder={t('authentication.register.input_confirm_password')}
-          autoComplete='new-password'
-          className={`input-field ${confirmPassword && !isPasswordMatch ? 'error' : ''}`}
+          className='input-field'
         />
-        {confirmPassword && !isPasswordMatch && (
-          <span className='error-hint'>{t('authentication.register.password_not_match')}</span>
-        )}
-      </div>
+      </View>
 
       {/* Register Button */}
-      <button
-        type='button'
+      <Button
         className='register-button'
-        disabled={!isFormValid}
         onClick={handleButtonRegister}
       >
         {t('authentication.register.register')}
-      </button>
-    </div>
+      </Button>
+    </View>
   );
 }

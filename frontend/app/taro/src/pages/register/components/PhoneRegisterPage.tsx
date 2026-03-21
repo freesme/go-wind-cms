@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
+import {View, Input, Button, Text} from '@tarojs/components';
 
 import '../register.scss';
 
@@ -33,6 +34,13 @@ export default function PhoneRegisterPage() {
     };
   }, [codeSent, codeCountdown]);
 
+  // 手机号简单校验
+  const isValidPhone = () => {
+    if (!phone) return false;
+    const phoneRegex = /^1[3-9]\d{9}$/;
+    return phoneRegex.test(phone);
+  };
+
   /**
    * 发送验证码
    */
@@ -56,58 +64,56 @@ export default function PhoneRegisterPage() {
   };
 
   return (
-    <div className='register-form'>
+    <View className='register-form'>
       {/* Phone Number Group */}
-      <div className='form-group'>
-        <label htmlFor='register-phone-number'>
-          {t('authentication.register.phone')}
-        </label>
-        <input
-          id='register-phone-number'
+      <View className='form-group'>
+        <Text className='form-label'>手机号</Text>
+        <Input
           type='text'
           value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          placeholder={t('authentication.register.input_phone')}
-          autoComplete='tel'
+          onInput={(e) => setPhone(e.detail.value)}
+          placeholder='请输入手机号'
           className='input-field'
+          maxlength={11}
         />
-      </div>
+      </View>
 
       {/* Verification Code Group */}
-      <div className='form-group'>
-        <label htmlFor='register-phone-code'>
-          {t('authentication.register.code')}
-        </label>
-        <div className='code-input-row'>
-          <input
-            id='register-phone-code'
+      <View className='form-group'>
+        <Text className='form-label'>验证码</Text>
+        <View className='code-input-row'>
+          <Input
             type='text'
             value={verificationCode}
-            onChange={(e) => setVerificationCode(e.target.value)}
-            placeholder={t('authentication.register.input_code')}
-            maxLength={6}
-            autoComplete='one-time-code'
+            onInput={(e) => setVerificationCode(e.detail.value)}
+            placeholder='请输入验证码'
             className='input-field'
+            maxlength={6}
           />
-          <button
-            type='button'
-            disabled={codeSent}
-            className={`send-code-btn ${codeSent ? 'disabled' : ''}`}
+          <Button
+            className='send-code-btn'
+            disabled={codeSent || !isValidPhone()}
             onClick={handleButtonSendVerifyCode}
           >
-            {codeSent ? `${codeCountdown}s` : t('authentication.register.send_code')}
-          </button>
-        </div>
-      </div>
+            {codeSent
+              ? `${codeCountdown}秒后重试`
+              : '发送验证码'}
+          </Button>
+        </View>
+      </View>
 
-      {/* Register Button */}
-      <button
-        type='button'
+      {/* Register/Login Button */}
+      <Button
         className='register-button'
+        disabled={
+          !isValidPhone() ||
+          !verificationCode ||
+          verificationCode.length !== 6
+        }
         onClick={handleButtonRegisterOrLogin}
       >
-        {t('authentication.register.register_or_login')}
-      </button>
-    </div>
+        注册/登录
+      </Button>
+    </View>
   );
 }

@@ -28,7 +28,7 @@ export default function LoginPage() {
       {/* 左侧品牌区 */}
       <View className='login-left'>
         <View className='brand'>
-          <Image src='/logo.png' className='brand-logo' />
+          <Image src='/assets/images/logo.png' className='brand-logo' />
           <Text className='brand-title'>{t('authentication.login.brand_title')}</Text>
           <Text className='brand-subtitle'>{t('authentication.login.brand_subtitle')}</Text>
         </View>

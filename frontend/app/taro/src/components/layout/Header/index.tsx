@@ -29,6 +29,9 @@ export default function Header() {
   const accessToken = accessStore.access.accessToken;
   const isLogin = !!accessToken && !accessStore.access.loginExpired;
 
+  // 下拉菜单状态
+  const [openDropdown, setOpenDropdown] = useState<'user' | 'language' | 'theme' | null>(null);
+
   const handleClickLogo = () => {
     router.push('pages/index');
   };
@@ -50,6 +53,17 @@ export default function Header() {
     if (isLogin) {
       await authenticationStore.logout();
     }
+    setOpenDropdown(null);
+  };
+
+  // 切换下拉菜单
+  const toggleDropdown = (type: 'user' | 'language' | 'theme') => {
+    setOpenDropdown(openDropdown === type ? null : type);
+  };
+
+  // 关闭所有下拉菜单
+  const closeAllDropdowns = () => {
+    setOpenDropdown(null);
   };
 
   // 根据登录状态动态生成用户菜单项
@@ -173,36 +187,94 @@ export default function Header() {
           {/* 功能按钮区 */}
           <View className='actions'>
             <View className='space'>
+              {/* 用户菜单 */}
               <View className='dropdown-wrapper'>
                 <View
                   className='icon-btn'
                   role='button'
                   aria-label='User menu'
-                  onClick={() => console.log('User menu clicked')}
+                  onClick={() => toggleDropdown('user')}
                 >
                   <XIcon name='carbon:user' size={24} />
                 </View>
-                {/* TODO: 实现 Dropdown 组件 */}
+                {openDropdown === 'user' && (
+                  <View className='dropdown-menu'>
+                    {userMenuItems.map((item) => (
+                      <View
+                        key={item.key}
+                        className={`dropdown-item ${item.danger ? 'danger' : ''}`}
+                        onClick={() => {
+                          if (item.onClick) item.onClick();
+                          closeAllDropdowns();
+                        }}
+                      >
+                        {item.icon && (
+                          <XIcon name={item.icon} size={18} className='dropdown-item-icon' />
+                        )}
+                        <Text className='dropdown-item-label'>{item.label}</Text>
+                      </View>
+                    ))}
+                  </View>
+                )}
               </View>
+              {/* 语言菜单 */}
               <View className='dropdown-wrapper'>
                 <View
                   className='icon-btn'
                   role='button'
                   aria-label='Language'
-                  onClick={() => console.log('Language clicked')}
+                  onClick={() => toggleDropdown('language')}
                 >
                   <XIcon name='carbon:language' size={24} className='lang-icon' />
                 </View>
+                {openDropdown === 'language' && (
+                  <View className='dropdown-menu'>
+                    {languageMenuItems.map((item) => (
+                      <View
+                        key={item.key}
+                        className='dropdown-item'
+                        onClick={() => {
+                          if (item.onClick) {
+                            item.onClick();
+                          }
+                          closeAllDropdowns();
+                        }}
+                      >
+                        <Text className='dropdown-item-label'>{item.label}</Text>
+                      </View>
+                    ))}
+                  </View>
+                )}
               </View>
+              {/* 主题菜单 */}
               <View className='dropdown-wrapper'>
                 <View
                   className='icon-btn'
                   role='button'
                   aria-label='Toggle theme'
-                  onClick={() => console.log('Theme clicked')}
+                  onClick={() => toggleDropdown('theme')}
                 >
                   <XIcon name={displayIcon} size={24} className='theme-icon' />
                 </View>
+                {openDropdown === 'theme' && (
+                  <View className='dropdown-menu'>
+                    {themeMenuItems.map((item) => (
+                      <View
+                        key={item.key}
+                        className='dropdown-item'
+                        onClick={() => {
+                          item.onClick();
+                          closeAllDropdowns();
+                        }}
+                      >
+                        {item.icon && (
+                          <XIcon name={item.icon} size={18} className='dropdown-item-icon' />
+                        )}
+                        <Text className='dropdown-item-label'>{item.label}</Text>
+                      </View>
+                    ))}
+                  </View>
+                )}
               </View>
             </View>
           </View>

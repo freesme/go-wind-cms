@@ -1,4 +1,5 @@
 import {useTranslation} from 'react-i18next';
+import {View, Text} from '@tarojs/components';
 
 import XIcon from '@/plugins/xicon';
 
@@ -18,25 +19,24 @@ export default function OtherRegisterPage() {
   };
 
   return (
-    <div className='other-register'>
-      {/* Social Buttons */}
-      <button
-        type='button'
+    <View className='other-register'>
+      {/* Google Button */}
+      <View
         className='social-button'
         onClick={handleButtonGoogleRegister}
       >
-        <XIcon name='logos:google-icon' size={18} />
-        {t('authentication.login.social_google')}
-      </button>
-
-      <button
-        type='button'
+        <XIcon name='logos:google-icon' size={20} />
+        <Text>使用 Google 继续</Text>
+      </View>
+      
+      {/* GitHub Button */}
+      <View
         className='social-button'
         onClick={handleButtonGithubRegister}
       >
-        <XIcon name='logos:github-icon' size={18} />
-        {t('authentication.login.social_github')}
-      </button>
-    </div>
+        <XIcon name='logos:github-icon' size={20} />
+        <Text>使用 GitHub 继续</Text>
+      </View>
+    </View>
   );
 }

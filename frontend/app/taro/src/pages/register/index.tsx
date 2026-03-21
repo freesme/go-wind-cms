@@ -21,7 +21,7 @@ export default function RegisterPage() {
 
   // 登录
   const handleLoginClick = () => {
-    router.push('/login');
+    router.push('pages/login');
   };
 
   // 返回首页
@@ -31,12 +31,12 @@ export default function RegisterPage() {
 
   // 服务条款
   const handleTermsClick = () => {
-    router.push('/terms');
+    router.push('pages/terms');
   };
 
   // 隐私政策
   const handlePrivacyClick = () => {
-    router.push('/privacy');
+    router.push('pages/privacy');
   };
 
   return (
@@ -47,27 +47,27 @@ export default function RegisterPage() {
       {/* 左侧品牌区 */}
       <View className='register-left'>
         <View className='brand'>
-          <Image src='/logo.png' className='brand-logo' />
-          <Text className='brand-title'>{t('authentication.login.brand_title')}</Text>
-          <Text className='brand-subtitle'>{t('authentication.login.brand_subtitle')}</Text>
+          <Image src='/assets/images/logo.png' className='brand-logo' />
+          <Text className='brand-title'>风行内容中台</Text>
+          <Text className='brand-subtitle'>内容一次创作，全域高效分发</Text>
         </View>
-
+        
         <View className='benefits-list'>
           <View className='benefit-item'>
             <XIcon name='carbon:checkmark' size={20} className='benefit-icon' />
-            <Text>{t('authentication.login.feature_projects')}</Text>
+            <Text>海量优质内容</Text>
           </View>
           <View className='benefit-item'>
             <XIcon name='carbon:checkmark' size={20} className='benefit-icon' />
-            <Text>{t('authentication.login.feature_isolation')}</Text>
+            <Text>个性化推荐</Text>
           </View>
           <View className='benefit-item'>
             <XIcon name='carbon:checkmark' size={20} className='benefit-icon' />
-            <Text>{t('authentication.login.feature_permissions')}</Text>
+            <Text>多端同步体验</Text>
           </View>
           <View className='benefit-item'>
             <XIcon name='carbon:checkmark' size={20} className='benefit-icon' />
-            <Text>{t('authentication.login.feature_analytics')}</Text>
+            <Text>智能内容发现</Text>
           </View>
         </View>
       </View>
@@ -76,36 +76,36 @@ export default function RegisterPage() {
       <View className='register-right'>
         <View className='register-card'>
           <View className='card-header'>
-            <Text className='card-title'>{t('authentication.register.title')}</Text>
-            <Text className='card-subtitle'>{t('authentication.register.register_with')}</Text>
+            <Text className='card-title'>欢迎注册账号</Text>
+            <Text className='card-subtitle'>使用以下账号注册</Text>
           </View>
 
           {/* Tab 切换 */}
           <View className='register-tabs'>
-            <button
+            <View
               className={`tab ${activeTab === 'account' ? 'active' : ''}`}
               onClick={() => setActiveTab('account')}
             >
-              {t('authentication.login.tab_account')}
-            </button>
-            <button
+              账号
+            </View>
+            <View
               className={`tab ${activeTab === 'email' ? 'active' : ''}`}
               onClick={() => setActiveTab('email')}
             >
-              {t('authentication.login.tab_email')}
-            </button>
-            <button
+              邮箱
+            </View>
+            <View
               className={`tab ${activeTab === 'phone' ? 'active' : ''}`}
               onClick={() => setActiveTab('phone')}
             >
-              {t('authentication.login.tab_phone')}
-            </button>
-            <button
+              手机
+            </View>
+            <View
               className={`tab ${activeTab === 'other' ? 'active' : ''}`}
               onClick={() => setActiveTab('other')}
             >
-              {t('authentication.login.tab_other')}
-            </button>
+              其他
+            </View>
           </View>
 
           {/* 注册表单内容 */}
@@ -119,31 +119,31 @@ export default function RegisterPage() {
           {/* 登录链接 */}
           <View className='login-section'>
             <Text>
-              {t('authentication.register.already_have_account')}
-              <button className='text-btn' onClick={handleLoginClick}>
-                {t('authentication.register.login_now')}
-              </button>
+              已有账号？
+              <Text className='text-btn' onClick={handleLoginClick}>
+                立即登录
+              </Text>
             </Text>
           </View>
 
           {/* 返回首页 */}
           <View className='back-home'>
-            <button className='text-btn' onClick={handleBackHome}>
-              ← {t('authentication.login.back_home')}
-            </button>
+            <Text className='text-btn' onClick={handleBackHome}>
+              ← 返回首页
+            </Text>
           </View>
 
           {/* 服务条款 */}
           <View className='terms'>
-            <Text>
-              {t('authentication.login.terms_prefix')}
-              <button className='text-btn' onClick={handleTermsClick}>
-                {t('authentication.login.terms_of_service')}
-              </button>
-              {t('login.terms_and')}
-              <button className='text-btn' onClick={handlePrivacyClick}>
-                {t('authentication.login.privacy_policy')}
-              </button>
+            <Text className='terms-text'>
+              登录即表示你同意我们的
+              <Text className='terms-link' onClick={handleTermsClick}>
+                服务条款
+              </Text>
+              和
+              <Text className='terms-link' onClick={handlePrivacyClick}>
+                隐私政策
+              </Text>
             </Text>
           </View>
         </View>
