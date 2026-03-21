@@ -22,13 +22,20 @@ interface LayoutProps extends PropsWithChildren {}
  * - 自动排除登录、注册、忘记密码等页面
  */
 export default function Layout({children}: LayoutProps) {
-  // 获取当前页面路径
-  const currentPagePath = Taro.getCurrentPages()[0]?.route;
+  // 获取当前页面路径（栈顶为当前页面）
+  const pages = Taro.getCurrentPages();
+  const currentPagePath = pages.length > 0 ? pages[pages.length - 1]?.route : '';
 
   // 判断是否需要排除 Header 和 Footer
-  const shouldExcludeLayout = currentPagePath && EXCLUDED_PAGES.some(path =>
-    currentPagePath.startsWith(path.replace('/pages', ''))
-  );
+  const shouldExcludeLayout = currentPagePath && EXCLUDED_PAGES.some(path => {
+    // 支持 /login、login、/pages/login/index 等多种写法
+    const normalized = currentPagePath.replace(/^pages\//, '/').replace(/\/index$/, '').replace(/^\//, '');
+    const basePath = path.replace(/^\//, '');
+    return (
+      normalized === basePath ||
+      normalized.startsWith(basePath)
+    );
+  });
 
   // 如果是排除页面，直接渲染内容
   if (shouldExcludeLayout) {
