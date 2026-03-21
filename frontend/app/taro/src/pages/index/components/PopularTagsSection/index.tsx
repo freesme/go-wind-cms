@@ -5,9 +5,9 @@ import XIcon from '@/plugins/xicon';
 
 import {useTagStore} from '@/store/slices/tag/hooks';
 import type {contentservicev1_ListTagResponse, contentservicev1_Tag} from '@/api/generated/app/service/v1';
+import {useI18nRouter} from "@/i18n/helpers";
 
 import './index.scss';
-import {useI18nRouter} from "@/i18n/helpers";
 
 interface TagItem {
   id: number;
@@ -82,7 +82,7 @@ export default function PopularTagsSection() {
     <View className='popular-section'>
       <View className='section-header'>
         <Text className='section-title'>
-          <XIcon name='carbon:fire' size={24}/> {t('page.tags.popular_tags')}
+          <XIcon name='carbon:fire' size={24} /> {t('page.tags.popular_tags')}
         </Text>
         <View
           className='view-all-btn'
@@ -96,7 +96,7 @@ export default function PopularTagsSection() {
           <View className='tags-grid'>
             {Array.from({length: 6}).map((_, i) => (
               <View key={i} className='tag-item skeleton'>
-                <View className='skeleton-placeholder'/>
+                <View className='skeleton-placeholder' />
               </View>
             ))}
           </View>

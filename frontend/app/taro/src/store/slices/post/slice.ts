@@ -1,10 +1,9 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import {createPostServiceClient} from "@/api/generated/app/service/v1";
-import {requestApi} from "@/transport/rest";
-import {
+import {createPostServiceClient,
   contentservicev1_Post,
   contentservicev1_PostTranslation,
-} from '@/api/generated/app/service/v1';
+} from "@/api/generated/app/service/v1";
+import {requestApi} from "@/transport/rest";
 import {currentLocaleLanguageCode} from "@/i18n";
 import {makeOrderBy, makeQueryString} from "@/transport/rest/utils";
 import {IPostState} from "@/store/types";

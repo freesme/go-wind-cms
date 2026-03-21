@@ -1,10 +1,10 @@
 import {useSelector, useDispatch} from 'react-redux';
 
-import type {IThemeState, ThemeMode} from '../../types';
 import type {AppDispatch, RootState} from '@/store';
 
-import {setMode} from './slice';
+import type {IThemeState, ThemeMode} from '../../types';
 
+import {setMode} from './slice';
 
 export function useThemeStore() {
     const dispatch = useDispatch<AppDispatch>();

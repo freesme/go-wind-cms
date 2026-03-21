@@ -1,7 +1,8 @@
 import {useSelector, useDispatch} from 'react-redux';
 
-import type {ILanguageState} from '../../types';
 import type {AppDispatch, RootState} from '@/store';
+
+import type {ILanguageState} from '../../types';
 import {setLocale} from './slice';
 
 export function useLanguageStore() {

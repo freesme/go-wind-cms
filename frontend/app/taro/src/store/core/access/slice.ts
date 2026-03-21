@@ -1,8 +1,8 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
+import {StorageManager, appNamespace} from '@/caches';
 
 import type {IAccessState, TokenPayload} from '../../types';
-import {StorageManager, appNamespace} from '@/caches';
 
 const storage = new StorageManager({prefix: appNamespace, storageType: 'localStorage'});
 

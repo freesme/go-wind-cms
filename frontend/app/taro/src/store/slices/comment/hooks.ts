@@ -1,5 +1,8 @@
 import {useSelector, useDispatch} from 'react-redux';
+
 import type {RootState, AppDispatch} from '@/store';
+import {createAbortableCalls} from "@/store/async-thunk";
+
 import {
   listComment,
   getComment,
@@ -9,7 +12,6 @@ import {
   clearCommentDetail,
   resetComment,
 } from './slice';
-import {createAbortableCalls} from "@/store/async-thunk";
 
 export function useCommentStore() {
   const comment = useSelector((state: RootState) => state.comment);

@@ -4,7 +4,6 @@ import type {
     AxiosResponse,
     CreateAxiosDefaults,
 } from 'axios';
-
 import axios from 'axios';
 
 import {merge, bindMethods} from '@/utils';

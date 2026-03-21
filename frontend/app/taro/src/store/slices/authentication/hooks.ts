@@ -1,10 +1,8 @@
 import {useSelector, useDispatch} from 'react-redux';
+import Taro from "@tarojs/taro";
 
-import type {IAuthenticationState, IUser} from '../../types';
 import type {AppDispatch, RootState} from '@/store';
-import {authenticationservicev1_GrantType} from '@/api/generated/app/service/v1';
-import {setLoginLoading} from './slice';
-import {
+import {authenticationservicev1_GrantType,
   createAuthenticationServiceClient,
   createUserProfileServiceClient,
 } from '@/api/generated/app/service/v1';
@@ -13,6 +11,9 @@ import {encryptByAES} from "@/utils";
 import {useAccessStore} from "@/store/core/access/hooks";
 import {useUserStore} from "@/store/core/user/hooks";
 import {useI18nRouter} from "@/i18n/helpers";
+
+import {setLoginLoading} from './slice';
+import type {IAuthenticationState, IUser} from '../../types';
 
 export interface LoginParams {
   username?: string;

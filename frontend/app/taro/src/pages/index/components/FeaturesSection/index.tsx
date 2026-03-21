@@ -1,5 +1,6 @@
 import {useTranslation} from 'react-i18next';
 import {View, Text} from '@tarojs/components';
+
 import XIcon from '@/plugins/xicon';
 
 import './index.scss';

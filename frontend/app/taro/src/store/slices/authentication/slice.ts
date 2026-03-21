@@ -70,7 +70,7 @@ export const logout = createAsyncThunk('authentication/logout', async (_, {dispa
 // 刷新token
 export const refreshToken = createAsyncThunk(
   'authentication/refreshToken',
-  async (refresh_token: string, {dispatch}) => {
+  async (refresh_token: string, {}) => {
     const authnService = createAuthenticationServiceClient(requestApi);
 
     const resp = await authnService.RefreshToken({
@@ -124,7 +124,7 @@ const authenticationSlice = createSlice({
       state.error = null;
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: () => {
     // 可扩展异步 action 状态
   },
 });

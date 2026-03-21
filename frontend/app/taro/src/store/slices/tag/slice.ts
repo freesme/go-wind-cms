@@ -1,10 +1,9 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import {createTagServiceClient} from '../../../api/generated/app/service/v1';
-import {requestApi} from '@/transport/rest';
-import {
+import {createTagServiceClient,
     contentservicev1_Tag,
     contentservicev1_TagTranslation,
 } from '@/api/generated/app/service/v1';
+import {requestApi} from '@/transport/rest';
 import {currentLocaleLanguageCode} from '@/i18n';
 import {makeOrderBy, makeQueryString} from "@/transport/rest/utils";
 import {ITagState} from "@/store/types";

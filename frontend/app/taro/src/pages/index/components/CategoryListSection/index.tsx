@@ -1,7 +1,9 @@
 import {useState, useEffect, useCallback, useMemo, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
+
 import {View, Text} from '@tarojs/components';
 import XIcon from '@/plugins/xicon';
+import {useI18nRouter} from "@/i18n/helpers";
 
 import {useCategoryStore} from '@/store/slices/category/hooks';
 import type {contentservicev1_Category, contentservicev1_ListCategoryResponse} from '@/api/generated/app/service/v1';
@@ -9,7 +11,6 @@ import type {contentservicev1_Category, contentservicev1_ListCategoryResponse} f
 import HomeCategoryCard from '../HomeCategoryCard';
 
 import './index.scss';
-import {useI18nRouter} from "@/i18n/helpers";
 
 interface CategoryListSectionProps {
   skeletonCount?: number;
@@ -98,7 +99,7 @@ export default function CategoryListSection(props: CategoryListSectionProps) {
       {loading ? (
         <View className='categories-grid'>
           {Array.from({length: skeletonCount}).map((_, i) => (
-            <View key={i} className='category-card-skeleton'/>
+            <View key={i} className='category-card-skeleton' />
           ))}
         </View>
       ) : (

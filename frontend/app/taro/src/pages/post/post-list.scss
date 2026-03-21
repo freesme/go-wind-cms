@@ -9,13 +9,18 @@
 /* Hero Section - 简化版 */
 .hero-section {
   background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
-  padding: 80px 20px;
+  padding: 3rem 2rem;
   text-align: center;
   position: relative;
   overflow: hidden;
+  min-height: 350px; /* 统一高度 */
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   
   @media (min-width: 768px) {
-    padding: 100px 24px;
+    padding: 3rem 2rem;
   }
   
   /* 简化的背景装饰 */

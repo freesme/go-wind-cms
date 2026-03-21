@@ -21,32 +21,32 @@ export default function Home() {
 
   return (
     <View className='home-page'>
-      {/* Hero Section - 首屏展示 */}
-      <HeroSection/>
-      
-      {/* Featured Posts - 精选文章 */}
+      {/* Hero Section */}
+      <HeroSection />
+
+      {/* Featured Posts */}
       <View className='section-container'>
-        <FeaturedPostsSection/>
+        <FeaturedPostsSection />
       </View>
-      
-      {/* Categories - 分类浏览 */}
+
+      {/* Categories */}
       <View className='section-container'>
-        <CategoryListSection/>
+        <CategoryListSection />
       </View>
-      
-      {/* Latest Posts - 最新文章 */}
+
+      {/* Latest Posts */}
       <View className='section-container'>
-        <LatestPostsSection/>
+        <LatestPostsSection />
       </View>
-      
-      {/* Popular Tags - 热门标签 */}
+
+      {/* Popular Tags */}
       <View className='section-container'>
-        <PopularTagsSection/>
+        <PopularTagsSection />
       </View>
-      
-      {/* Features - 特性介绍 */}
+
+      {/* Features */}
       <View className='section-container'>
-        <FeaturesSection/>
+        <FeaturesSection />
       </View>
     </View>
   );

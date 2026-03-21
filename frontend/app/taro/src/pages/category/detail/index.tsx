@@ -2,9 +2,11 @@ import {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {View, Text} from '@tarojs/components';
 import Taro from '@tarojs/taro';
+
 import {AppEmpty} from '@/components/ui';
 import {useCategoryStore} from '@/store/slices/category/hooks';
 import XIcon from '@/plugins/xicon';
+import {useI18nRouter} from '@/i18n/helpers/useI18nRouter';
 
 import CategoryList from '@/components/category/CategoryList';
 import PostListWithPagination from '@/components/post/PostList';
@@ -14,6 +16,9 @@ import './category-detail.scss';
 
 export default function CategoryDetailPage() {
   const {t} = useTranslation();
+
+  const router = useI18nRouter();
+
   const categoryStore = useCategoryStore();
   const [childCategories, setChildCategories] = useState<contentservicev1_Category[]>([]);
 
@@ -51,14 +56,14 @@ export default function CategoryDetailPage() {
   }
 
   function handleViewChildCategory(id: number) {
-    Taro.navigateTo({url: `/category/${id}`});
+    router.push(`/category/${id}`);
   }
 
   function handleBackToParent() {
     if (parentCategoryId) {
-      Taro.navigateTo({url: `/category/${parentCategoryId}`});
+      router.push(`/category/${parentCategoryId}`);
     } else {
-      Taro.navigateBack();
+      router.back();
     }
   }
 
@@ -67,22 +72,22 @@ export default function CategoryDetailPage() {
   }, [categoryId]);
 
   if (!categoryId) {
-    return <AppEmpty variant="error" description="Invalid category ID"/>;
+    return <AppEmpty variant='error' description='Invalid category ID' />;
   }
 
   return (
-    <View className="category-detail-page">
+    <View className='category-detail-page'>
       {/* Hero Section */}
-      <View className="hero-section">
-        <View className="hero-content">
-          <Text className="hero-title">{categoryStore.getCategoryName(categoryStore.detail)}</Text>
+      <View className='hero-section'>
+        <View className='hero-content'>
+          <Text className='hero-title'>{categoryStore.getCategoryName(categoryStore.detail)}</Text>
           {categoryStore.getCategoryDescription(categoryStore.detail) && (
-            <Text className="category-description">
+            <Text className='category-description'>
               {categoryStore.getCategoryDescription(categoryStore.detail)}
             </Text>
           )}
-          <View className="category-stats">
-            <View className="stat-item">
+          <View className='category-stats'>
+            <View className='stat-item'>
               <XIcon name='carbon:document' size={20} />
               <Text>{categoryStore.detail?.postCount || 0} {t('page.posts.articles')}</Text>
             </View>
@@ -91,10 +96,10 @@ export default function CategoryDetailPage() {
       </View>
 
       {/* Posts Section */}
-      <View className="page-container">
+      <View className='page-container'>
         {/* Back to Parent Button */}
-        <View className="back-button-container">
-          <View className="back-btn" onClick={handleBackToParent}>
+        <View className='back-button-container'>
+          <View className='back-btn' onClick={handleBackToParent}>
             <Text>← </Text>
             <Text>{parentCategoryId ? t('page.categories.back_to_parent') : t('page.categories.back_to_list')}</Text>
           </View>
@@ -102,7 +107,7 @@ export default function CategoryDetailPage() {
 
         {/* Sub Categories List */}
         {childCategories.length > 0 && (
-          <View className="sub-categories-wrapper">
+          <View className='sub-categories-wrapper'>
             <CategoryList
               categories={childCategories}
               loading={false}
@@ -118,7 +123,7 @@ export default function CategoryDetailPage() {
           initialPageSize={10}
           pageSizes={[10, 20, 30, 40]}
           categoryId={categoryId}
-          from="category"
+          from='category'
         />
       </View>
     </View>

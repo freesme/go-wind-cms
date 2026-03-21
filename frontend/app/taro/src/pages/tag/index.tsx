@@ -1,10 +1,11 @@
 import {useState, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import {View, Text} from '@tarojs/components';
-import Taro from '@tarojs/taro';
+
 import {AppEmpty} from '@/components/ui';
 import XIcon from '@/plugins/xicon';
 import Pagination from '@/components/Pagination';
+import {useI18nRouter} from "@/i18n/helpers";
 
 import {useTagStore} from '@/store/slices/tag/hooks';
 import {contentservicev1_ListTagResponse, contentservicev1_Tag} from '@/api/generated/app/service/v1';
@@ -13,6 +14,9 @@ import './tag-list.scss';
 
 export default function TagListPage() {
   const {t} = useTranslation();
+
+  const router = useI18nRouter();
+
   const tagStore = useTagStore();
 
   const [loading, setLoading] = useState(false);
@@ -45,7 +49,7 @@ export default function TagListPage() {
   }
 
   function handleTagClick(id: number) {
-    Taro.navigateTo({url: `/tag/${id}`});
+    router.push(`/tag/${id}`);
   }
 
   function handlePageChange(newPage: number) {
@@ -64,15 +68,15 @@ export default function TagListPage() {
   }, [pageSize]);
 
   return (
-    <View className="tag-list-page">
+    <View className='tag-list-page'>
       {/* Hero Section */}
-      <View className="hero-section">
-        <View className="hero-content">
-          <Text className="hero-title">标签列表</Text>
-          <Text className="hero-subtitle">探索所有标签</Text>
-          <View className="tag-stats">
-            <View className="stat-item">
-              <XIcon name='carbon:tag' size={20}/>
+      <View className='hero-section'>
+        <View className='hero-content'>
+          <Text className='hero-title'>{t('page.tags.tags_list')}</Text>
+          <Text className='hero-subtitle'>{t('page.tags.explore_all')}</Text>
+          <View className='tag-stats'>
+            <View className='stat-item'>
+              <XIcon name='carbon:tag' size={20} />
               <Text>{total} {t('page.tags.total_tags')}</Text>
             </View>
           </View>
@@ -80,33 +84,33 @@ export default function TagListPage() {
       </View>
 
       {/* Tags Grid */}
-      <View className="page-container">
+      <View className='page-container'>
         {/* Loading Skeleton - TODO: 实现 Taro 骨架屏 */}
         {loading ? (
-          <View className="tags-grid">
+          <View className='tags-grid'>
             <Text>{t('common.loading')}</Text>
           </View>
         ) : (
           <>
             {tags.length > 0 && (
-              <View className="tags-grid">
+              <View className='tags-grid'>
                 {tags.map((tag) => (
                   <View
                     key={tag.id}
-                    className="tag-card"
+                    className='tag-card'
                     style={{
                       borderColor: tag.color || 'rgba(0, 0, 0, 0.08)',
                       background: `linear-gradient(135deg, ${tag.color || '#f0f0f0'}15 0%, #ffffff 100%)`
                     }}
                     onClick={() => handleTagClick(tag.id || 0)}
                   >
-                    <View className="tag-content">
+                    <View className='tag-content'>
                       <Text>{tagStore.getTranslation(tag)?.name || t('page.tags.tag_untitled')}</Text>
-                      <Text className="tag-description">
+                      <Text className='tag-description'>
                         {tagStore.getTranslation(tag)?.description || ''}
                       </Text>
-                      <View className="tag-meta">
-                        <XIcon name='carbon:document' size={16}/>
+                      <View className='tag-meta'>
+                        <XIcon name='carbon:document' size={16} />
                         <Text>
                           {tag.postCount || 0} {t('page.posts.articles')}
                         </Text>
@@ -115,23 +119,23 @@ export default function TagListPage() {
                   </View>
                 ))}
                 {tags.length === 0 && total > 0 && (
-                  <AppEmpty description={t('page.tags.no_tags_in_page')}/>
+                  <AppEmpty description={t('page.tags.no_tags_in_page')} />
                 )}
               </View>
             )}
 
             {!loading && tags.length === 0 && total === 0 && (
-              <AppEmpty inContainer description={t('page.tags.no_tags')}/>
+              <AppEmpty inContainer description={t('page.tags.no_tags')} />
             )}
 
             {total > pageSize && (
-              <View className="pagination-wrapper">
+              <View className='pagination-wrapper'>
                 <Pagination
                   current={page}
                   total={total}
                   pageSize={pageSize}
                   onChange={handlePageChange}
-                  showSizeChanger={true}
+                  showSizeChanger
                 />
               </View>
             )}

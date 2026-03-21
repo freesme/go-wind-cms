@@ -56,41 +56,41 @@ export default function PhoneRegisterPage() {
   };
 
   return (
-    <div className="register-form">
+    <div className='register-form'>
       {/* Phone Number Group */}
-      <div className="form-group">
-        <label htmlFor="register-phone-number">
+      <div className='form-group'>
+        <label htmlFor='register-phone-number'>
           {t('authentication.register.phone')}
         </label>
         <input
-          id="register-phone-number"
-          type="text"
+          id='register-phone-number'
+          type='text'
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           placeholder={t('authentication.register.input_phone')}
-          autoComplete="tel"
-          className="input-field"
+          autoComplete='tel'
+          className='input-field'
         />
       </div>
 
       {/* Verification Code Group */}
-      <div className="form-group">
-        <label htmlFor="register-phone-code">
+      <div className='form-group'>
+        <label htmlFor='register-phone-code'>
           {t('authentication.register.code')}
         </label>
-        <div className="code-input-row">
+        <div className='code-input-row'>
           <input
-            id="register-phone-code"
-            type="text"
+            id='register-phone-code'
+            type='text'
             value={verificationCode}
             onChange={(e) => setVerificationCode(e.target.value)}
             placeholder={t('authentication.register.input_code')}
             maxLength={6}
-            autoComplete="one-time-code"
-            className="input-field"
+            autoComplete='one-time-code'
+            className='input-field'
           />
           <button
-            type="button"
+            type='button'
             disabled={codeSent}
             className={`send-code-btn ${codeSent ? 'disabled' : ''}`}
             onClick={handleButtonSendVerifyCode}
@@ -102,8 +102,8 @@ export default function PhoneRegisterPage() {
 
       {/* Register Button */}
       <button
-        type="button"
-        className="register-button"
+        type='button'
+        className='register-button'
         onClick={handleButtonRegisterOrLogin}
       >
         {t('authentication.register.register_or_login')}

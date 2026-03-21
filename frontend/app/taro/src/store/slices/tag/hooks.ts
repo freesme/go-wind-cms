@@ -1,5 +1,8 @@
 import {useSelector, useDispatch} from 'react-redux';
+
 import type {RootState, AppDispatch} from '@/store';
+import {createAbortableCalls} from "@/store/async-thunk";
+
 import {
     listTag,
     getTag,
@@ -10,7 +13,6 @@ import {
     resetTag,
     getTranslation,
 } from './slice';
-import {createAbortableCalls} from "@/store/async-thunk";
 
 export function useTagStore() {
     const tag = useSelector((state: RootState) => state.tag);

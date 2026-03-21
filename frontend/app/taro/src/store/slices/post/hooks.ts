@@ -1,5 +1,8 @@
 import {useSelector, useDispatch} from 'react-redux';
+
 import type {RootState, AppDispatch} from '@/store';
+import {createAbortableCalls} from "@/store/async-thunk";
+
 import {
     listPost,
     getPost,
@@ -14,7 +17,6 @@ import {
     getPostThumbnail,
     getPostContent,
 } from './slice';
-import {createAbortableCalls} from "@/store/async-thunk";
 
 export function usePostStore() {
     const post = useSelector((state: RootState) => state.post);

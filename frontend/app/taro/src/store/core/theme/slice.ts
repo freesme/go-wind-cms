@@ -1,8 +1,9 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
+import {StorageManager, appNamespace} from '@/caches';
+
+
 import type {IThemeState, ThemeMode} from '../../types';
-import {StorageManager} from '@/caches';
-import {appNamespace} from '@/caches';
 
 // 使用函数来延迟初始化，确保只在客户端访问 localStorage
 const getInitialState = (): IThemeState => {
@@ -15,9 +16,9 @@ const getInitialState = (): IThemeState => {
     try {
         const storage = new StorageManager({prefix: `${appNamespace}-theme`});
         const storedMode = storage.getItem<ThemeMode>('mode', null);
-        
+
         console.log('[Theme Store] storedMode:', storedMode, typeof storedMode);
-        
+
         // 如果有明确的主题偏好（light/dark），直接使用
         if (storedMode && storedMode !== 'system') {
             console.log('[Theme Store] Using stored mode:', storedMode);
@@ -25,7 +26,7 @@ const getInitialState = (): IThemeState => {
                 mode: storedMode
             };
         }
-        
+
         // 如果用户选择了跟随系统，或者没有存储，根据系统主题设置初始值
         const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const systemTheme = isDark ? 'dark' : 'light';

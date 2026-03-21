@@ -15,9 +15,9 @@ export default function HeroSection() {
     <View className='hero'>
       {/* 简化背景 - 移除复杂动画 */}
       <View className='hero-bg-wrapper'>
-        <View className='hero-gradient-bg'/>
+        <View className='hero-gradient-bg' />
         {/* H5 端保留简单的网格背景 */}
-        <View className='hero-grid-bg'/>
+        <View className='hero-grid-bg' />
       </View>
 
       <View className='hero-content'>

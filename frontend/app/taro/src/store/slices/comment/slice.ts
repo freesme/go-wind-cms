@@ -1,9 +1,8 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import {createCommentServiceClient} from '@/api/generated/app/service/v1';
-import {requestApi} from '@/transport/rest';
-import {
+import {createCommentServiceClient,
     commentservicev1_Comment,
 } from '@/api/generated/app/service/v1';
+import {requestApi} from '@/transport/rest';
 import {makeOrderBy, makeQueryString} from "@/transport/rest/utils";
 import {ICommentState} from "@/store/types";
 

@@ -26,30 +26,30 @@ export default function EmailRegisterPage() {
   return (
     <div>
       {!visibleEnter ? (
-        <div className="register-form">
+        <div className='register-form'>
           {/* Email Input Group */}
-          <div className="form-group">
-            <label htmlFor="register-email-address">
+          <div className='form-group'>
+            <label htmlFor='register-email-address'>
               {t('authentication.register.email')}
             </label>
             <input
-              id="register-email-address"
-              type="text"
+              id='register-email-address'
+              type='text'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder={t('authentication.register.input_email')}
-              autoComplete="email"
+              autoComplete='email'
               className={`input-field ${email && !isValidEmail() ? 'error' : ''}`}
             />
             {email && !isValidEmail() && (
-              <span className="error-hint">{t('authentication.register.invalid_email')}</span>
+              <span className='error-hint'>{t('authentication.register.invalid_email')}</span>
             )}
           </div>
 
           {/* Next Button */}
           <button
-            type="button"
-            className="register-button"
+            type='button'
+            className='register-button'
             disabled={!isValidEmail()}
             onClick={handleButtonNext}
           >
@@ -57,7 +57,7 @@ export default function EmailRegisterPage() {
           </button>
         </div>
       ) : (
-        <EmailRegisterEnterCodePage email={email}/>
+        <EmailRegisterEnterCodePage email={email} />
       )}
     </div>
   );
@@ -104,18 +104,18 @@ function EmailRegisterEnterCodePage({email}: { email: string }) {
   };
 
   return (
-    <div className="code-container">
+    <div className='code-container'>
       {/* Email Hint */}
-      <div className="email-sent-info">
-        <p className="hint-title">{t('authentication.register.code_sent_title')}</p>
-        <p className="email-display">{email}</p>
-        <p className="hint-subtitle">{t('authentication.register.code_sent_subtitle')}</p>
+      <div className='email-sent-info'>
+        <p className='hint-title'>{t('authentication.register.code_sent_title')}</p>
+        <p className='email-display'>{email}</p>
+        <p className='hint-subtitle'>{t('authentication.register.code_sent_subtitle')}</p>
       </div>
 
       {/* Verification Code Input */}
-      <div className="code-input-wrapper">
+      <div className='code-input-wrapper'>
         <input
-          type="text"
+          type='text'
           maxLength={6}
           value={code.join('')}
           onChange={(e) => {
@@ -125,15 +125,15 @@ function EmailRegisterEnterCodePage({email}: { email: string }) {
               handleInputComplete(value.join(''));
             }
           }}
-          className="verification-code-input"
-          placeholder="请输入验证码"
+          className='verification-code-input'
+          placeholder='请输入验证码'
         />
       </div>
 
       {/* Resend Button */}
-      <div className="resend-section">
+      <div className='resend-section'>
         <button
-          className="text-btn"
+          className='text-btn'
           disabled={codeSent}
           onClick={handleButtonResend}
         >
@@ -143,8 +143,8 @@ function EmailRegisterEnterCodePage({email}: { email: string }) {
 
       {/* Confirm Button */}
       <button
-        type="button"
-        className="register-button"
+        type='button'
+        className='register-button'
         disabled={!isCodeComplete}
         onClick={handleButtonConfirm}
       >

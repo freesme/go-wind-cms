@@ -23,31 +23,31 @@ export default function LoginPage() {
   return (
     <View className='login-page'>
       {/* 顶部控制按钮 */}
-      <ControlPanel/>
+      <ControlPanel />
 
       {/* 左侧品牌区 */}
       <View className='login-left'>
         <View className='brand'>
-          <Image src='/logo.png' className='brand-logo'/>
+          <Image src='/logo.png' className='brand-logo' />
           <Text className='brand-title'>{t('authentication.login.brand_title')}</Text>
           <Text className='brand-subtitle'>{t('authentication.login.brand_subtitle')}</Text>
         </View>
 
         <View className='features-list'>
           <View className='feature-item'>
-            <XIcon name='carbon:checkmark' size={20} className='feature-icon'/>
+            <XIcon name='carbon:checkmark' size={20} className='feature-icon' />
             <Text>{t('authentication.login.feature_projects')}</Text>
           </View>
           <View className='feature-item'>
-            <XIcon name='carbon:checkmark' size={20} className='feature-icon'/>
+            <XIcon name='carbon:checkmark' size={20} className='feature-icon' />
             <Text>{t('authentication.login.feature_isolation')}</Text>
           </View>
           <View className='feature-item'>
-            <XIcon name='carbon:checkmark' size={20} className='feature-icon'/>
+            <XIcon name='carbon:checkmark' size={20} className='feature-icon' />
             <Text>{t('authentication.login.feature_permissions')}</Text>
           </View>
           <View className='feature-item'>
-            <XIcon name='carbon:checkmark' size={20} className='feature-icon'/>
+            <XIcon name='carbon:checkmark' size={20} className='feature-icon' />
             <Text>{t('authentication.login.feature_analytics')}</Text>
           </View>
         </View>
@@ -91,10 +91,10 @@ export default function LoginPage() {
 
           {/* 登录表单内容 */}
           <View className='login-content'>
-            {activeTab === 'account' && <AccountLoginPage/>}
-            {activeTab === 'email' && <EmailLoginPage/>}
-            {activeTab === 'phone' && <PhoneLoginPage/>}
-            {activeTab === 'other' && <OtherLoginPage/>}
+            {activeTab === 'account' && <AccountLoginPage />}
+            {activeTab === 'email' && <EmailLoginPage />}
+            {activeTab === 'phone' && <PhoneLoginPage />}
+            {activeTab === 'other' && <OtherLoginPage />}
           </View>
 
           {/* 注册链接 */}

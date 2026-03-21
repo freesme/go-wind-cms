@@ -4,12 +4,12 @@ import {View, Text, Image} from '@tarojs/components';
 
 import {useI18nRouter} from '@/i18n/helpers';
 import XIcon from '@/plugins/xicon';
+import ControlPanel from '@/components/layout/ControlPanel';
 
 import AccountRegisterPage from './components/AccountRegisterPage';
 import EmailRegisterPage from './components/EmailRegisterPage';
 import PhoneRegisterPage from './components/PhoneRegisterPage';
 import OtherRegisterPage from './components/OtherRegisterPage';
-import ControlPanel from '@/components/layout/ControlPanel';
 
 import './register.scss';
 
@@ -42,12 +42,12 @@ export default function RegisterPage() {
   return (
     <View className='register-page'>
       {/* 顶部控制按钮 */}
-      <ControlPanel/>
+      <ControlPanel />
 
       {/* 左侧品牌区 */}
       <View className='register-left'>
         <View className='brand'>
-          <Image src='/logo.png' className='brand-logo'/>
+          <Image src='/logo.png' className='brand-logo' />
           <Text className='brand-title'>{t('authentication.login.brand_title')}</Text>
           <Text className='brand-subtitle'>{t('authentication.login.brand_subtitle')}</Text>
         </View>
@@ -110,10 +110,10 @@ export default function RegisterPage() {
 
           {/* 注册表单内容 */}
           <View className='register-content'>
-            {activeTab === 'account' && <AccountRegisterPage/>}
-            {activeTab === 'email' && <EmailRegisterPage/>}
-            {activeTab === 'phone' && <PhoneRegisterPage/>}
-            {activeTab === 'other' && <OtherRegisterPage/>}
+            {activeTab === 'account' && <AccountRegisterPage />}
+            {activeTab === 'email' && <EmailRegisterPage />}
+            {activeTab === 'phone' && <PhoneRegisterPage />}
+            {activeTab === 'other' && <OtherRegisterPage />}
           </View>
 
           {/* 登录链接 */}

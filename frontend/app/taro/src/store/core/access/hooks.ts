@@ -1,7 +1,8 @@
 import {useSelector, useDispatch} from 'react-redux';
 
-import type {IAccessState, TokenPayload} from '../../types';
 import type {AppDispatch, RootState} from '@/store';
+
+import type {IAccessState, TokenPayload} from '../../types';
 import {
     setAccessToken,
     setRefreshToken,
@@ -53,11 +54,7 @@ export function useIsLogin() {
         }
 
         // 检查是否过期
-        if (accessToken.expiresAt && accessToken.expiresAt < Date.now()) {
-            return false;
-        }
-
-        return true;
+        return !(accessToken.expiresAt && accessToken.expiresAt < Date.now());
     });
 }
 

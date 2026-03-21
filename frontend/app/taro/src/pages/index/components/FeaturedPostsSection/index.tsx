@@ -1,12 +1,13 @@
 import {useTranslation} from 'react-i18next';
 import {View, Text} from '@tarojs/components';
 import {useMemo} from 'react';
+
 import XIcon from '@/plugins/xicon';
+import {useI18nRouter} from "@/i18n/helpers";
 
 import PostList from '@/components/post/PostList';
 
 import './index.scss';
-import {useI18nRouter} from "@/i18n/helpers";
 
 export default function FeaturedPostsSection() {
   const {t} = useTranslation();
@@ -34,7 +35,7 @@ export default function FeaturedPostsSection() {
           page={1}
           pageSize={3}
           columns={3}
-          showSkeleton={true}
+          showSkeleton
           from='home'
           showPagination={false}
         />

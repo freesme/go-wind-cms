@@ -35,7 +35,8 @@ export const XIcon: React.FC<XIconProps> = ({name, size = 24, color, className =
     // 直接渲染SVG代码
     // @ts-ignore
     return <svg style={{width: size, height: size, ...style}} className={unoClass}
-                dangerouslySetInnerHTML={{__html: svg}}/>;
+      dangerouslySetInnerHTML={{__html: svg}}
+    />;
   }
   // 渲染本地SVG文件
   return (
@@ -43,7 +44,7 @@ export const XIcon: React.FC<XIconProps> = ({name, size = 24, color, className =
       src={name}
       style={{width: size, height: size, ...style}}
       className={unoClass}
-      mode="aspectFit"
+      mode='aspectFit'
     />
   );
 };

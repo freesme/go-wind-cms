@@ -1,7 +1,8 @@
 import {useSelector, useDispatch} from 'react-redux';
 
-import type {IUserState, IUser} from '../../types';
 import type {AppDispatch, RootState} from '@/store';
+
+import type {IUserState, IUser} from '../../types';
 import {setUser, clearUser} from './slice';
 
 export function useUserStore() {

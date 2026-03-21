@@ -2,11 +2,12 @@ import {useState, useEffect, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {View, Text} from '@tarojs/components';
 import Taro from '@tarojs/taro';
+
 import {AppEmpty} from '@/components/ui';
 import XIcon from '@/plugins/xicon';
+import PostListWithPagination from '@/components/post/PostList';
 
 import {useTagStore} from '@/store/slices/tag/hooks';
-import PostListWithPagination from '@/components/post/PostList';
 import type {contentservicev1_Tag} from "@/api/generated/app/service/v1";
 
 import './tag-detail.scss';
@@ -48,25 +49,25 @@ export default function TagDetailPage() {
   }, [tagId]);
 
   if (!tagId) {
-    return <AppEmpty variant="error" description="Invalid tag ID"/>;
+    return <AppEmpty variant='error' description='Invalid tag ID' />;
   }
 
   const translation = tagStore.getTranslation(tag);
 
   return (
-    <View className="tag-detail-page">
+    <View className='tag-detail-page'>
       {/* Hero Section */}
-      <View className="hero-section">
-        <View className="hero-content">
-          <Text className="tag-title">{translation?.name || t('page.tags.tag_untitled')}</Text>
+      <View className='hero-section'>
+        <View className='hero-content'>
+          <Text className='tag-title'>{translation?.name || t('page.tags.tag_untitled')}</Text>
           {translation?.description && (
-            <Text className="tag-description">
+            <Text className='tag-description'>
               {translation.description}
             </Text>
           )}
-          <View className="tag-stats">
-            <View className="stat-item">
-              <XIcon name='carbon:document' size={20}/>
+          <View className='tag-stats'>
+            <View className='stat-item'>
+              <XIcon name='carbon:document' size={20} />
               <Text>{tag?.postCount || 0} {t('page.posts.articles')}</Text>
             </View>
           </View>
@@ -74,10 +75,10 @@ export default function TagDetailPage() {
       </View>
 
       {/* Posts Section */}
-      <View className="page-container">
+      <View className='page-container'>
         {/* Back Button */}
-        <View className="back-button-container">
-          <View className="back-btn" onClick={handleBack}>
+        <View className='back-button-container'>
+          <View className='back-btn' onClick={handleBack}>
             <Text>← {t('page.categories.back_to_list')}</Text>
           </View>
         </View>
@@ -89,7 +90,7 @@ export default function TagDetailPage() {
             initialPageSize={10}
             pageSizes={[10, 20, 30, 40]}
             tagId={tagId}
-            from="tag"
+            from='tag'
           />
         )}
       </View>

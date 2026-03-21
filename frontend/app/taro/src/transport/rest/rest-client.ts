@@ -10,7 +10,7 @@ import {
 import store from "@/store";
 
 
-export function createRequestClient(baseURL: string, getLocale?: () => string, getToken?: () => string) {
+export function createRequestClient(baseURL: string, getLocaleFunc?: () => string, getTokenFunc?: () => string) {
   const client = new RequestClient({
     baseURL,
   });
@@ -23,11 +23,11 @@ export function createRequestClient(baseURL: string, getLocale?: () => string, g
   // 请求头处理
   client.addRequestInterceptor({
     fulfilled: (config) => {
-      if (getToken) {
-        config.headers.Authorization = formatToken(getToken());
+      if (getTokenFunc) {
+        config.headers.Authorization = formatToken(getTokenFunc());
       }
-      if (getLocale) {
-        config.headers['Accept-Language'] = getLocale();
+      if (getLocaleFunc) {
+        config.headers['Accept-Language'] = getLocaleFunc();
       }
       return config as never;
     },

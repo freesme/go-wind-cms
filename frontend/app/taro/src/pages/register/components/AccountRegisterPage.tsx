@@ -44,68 +44,68 @@ export default function AccountRegisterPage() {
   };
 
   return (
-    <div className="register-form">
+    <div className='register-form'>
       {/* Username */}
-      <div className="form-group">
-        <label htmlFor="register-account-username">
+      <div className='form-group'>
+        <label htmlFor='register-account-username'>
           {t('authentication.register.username')}
         </label>
         <input
-          id="register-account-username"
-          type="text"
+          id='register-account-username'
+          type='text'
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder={t('authentication.register.input_username')}
-          autoComplete="username"
+          autoComplete='username'
           className={`input-field ${username && !isValidUsername ? 'error' : ''}`}
         />
         {username && !isValidUsername && (
-          <span className="error-hint">{t('authentication.register.invalid_username')}</span>
+          <span className='error-hint'>{t('authentication.register.invalid_username')}</span>
         )}
       </div>
 
       {/* Password */}
-      <div className="form-group">
-        <label htmlFor="register-account-password">
+      <div className='form-group'>
+        <label htmlFor='register-account-password'>
           {t('authentication.register.password')}
         </label>
         <input
-          id="register-account-password"
-          type="password"
+          id='register-account-password'
+          type='password'
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder={t('authentication.register.input_password')}
-          autoComplete="new-password"
+          autoComplete='new-password'
           className={`input-field ${password && !isValidPassword ? 'error' : ''}`}
         />
         {password && !isValidPassword && (
-          <span className="error-hint">{t('authentication.register.invalid_password')}</span>
+          <span className='error-hint'>{t('authentication.register.invalid_password')}</span>
         )}
       </div>
 
       {/* Confirm Password */}
-      <div className="form-group">
-        <label htmlFor="register-account-confirm-password">
+      <div className='form-group'>
+        <label htmlFor='register-account-confirm-password'>
           {t('authentication.register.confirm_password')}
         </label>
         <input
-          id="register-account-confirm-password"
-          type="password"
+          id='register-account-confirm-password'
+          type='password'
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           placeholder={t('authentication.register.input_confirm_password')}
-          autoComplete="new-password"
+          autoComplete='new-password'
           className={`input-field ${confirmPassword && !isPasswordMatch ? 'error' : ''}`}
         />
         {confirmPassword && !isPasswordMatch && (
-          <span className="error-hint">{t('authentication.register.password_not_match')}</span>
+          <span className='error-hint'>{t('authentication.register.password_not_match')}</span>
         )}
       </div>
 
       {/* Register Button */}
       <button
-        type="button"
-        className="register-button"
+        type='button'
+        className='register-button'
         disabled={!isFormValid}
         onClick={handleButtonRegister}
       >

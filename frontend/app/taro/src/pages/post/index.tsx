@@ -38,8 +38,8 @@ export default function PostListPage() {
         <View className='category-filter-container'>
           <CategoryFilter
             selectedCategory={selectedCategoryId}
-            treeMode={true}
-            autoLoad={true}
+            treeMode
+            autoLoad
             onCategoryChange={handleCategoryChange}
           />
         </View>

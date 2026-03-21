@@ -16,14 +16,14 @@ export default function OtherLoginPage() {
   };
 
   return (
-    <div className="other-login">
-      <button className="social-button" onClick={handleGithubLogin}>
-        <XIcon name="mdi:github" size={20}/>
+    <div className='other-login'>
+      <button className='social-button' onClick={handleGithubLogin}>
+        <XIcon name='mdi:github' size={20} />
         <span>{t('authentication.login.social_github')}</span>
       </button>
 
-      <button className="social-button" onClick={handleGoogleLogin}>
-        <XIcon name="mdi:google" size={20}/>
+      <button className='social-button' onClick={handleGoogleLogin}>
+        <XIcon name='mdi:google' size={20} />
         <span>{t('authentication.login.social_google')}</span>
       </button>
     </div>

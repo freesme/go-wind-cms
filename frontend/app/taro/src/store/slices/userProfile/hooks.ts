@@ -1,10 +1,12 @@
 import {useSelector, useDispatch} from 'react-redux';
+
 import type {RootState, AppDispatch} from '@/store';
+import {createAbortableCalls} from "@/store/async-thunk";
+
 import {
     fetchUserProfile,
     clearUserProfile,
 } from './slice';
-import {createAbortableCalls} from "@/store/async-thunk";
 
 export function useUserProfileStore() {
     const userProfile = useSelector((state: RootState) => state.userProfile);

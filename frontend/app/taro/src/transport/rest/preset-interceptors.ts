@@ -1,7 +1,7 @@
+import axios from 'axios';
+
 import type {RequestClient} from './request-client';
 import type {MakeErrorMessageFn, ResponseInterceptorConfig} from './types';
-
-import axios from 'axios';
 
 export const authenticateResponseInterceptor = ({
                                                   client,

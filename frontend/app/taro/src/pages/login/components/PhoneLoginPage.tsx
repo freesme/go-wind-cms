@@ -34,32 +34,32 @@ export default function PhoneLoginPage() {
   };
 
   return (
-    <div className="login-form">
-      <div className="form-group">
-        <label htmlFor="login-phone">{t('authentication.register.phone')}</label>
+    <div className='login-form'>
+      <div className='form-group'>
+        <label htmlFor='login-phone'>{t('authentication.register.phone')}</label>
         <input
-          id="login-phone"
-          type="tel"
-          className="input-field"
+          id='login-phone'
+          type='tel'
+          className='input-field'
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           placeholder={t('authentication.login.placeholder_phone')}
-          autoComplete="tel"
+          autoComplete='tel'
         />
       </div>
 
-      <div className="form-group">
-        <label htmlFor="login-code">{t('authentication.register.code')}</label>
-        <div className="code-input-row">
+      <div className='form-group'>
+        <label htmlFor='login-code'>{t('authentication.register.code')}</label>
+        <div className='code-input-row'>
           <input
-            id="login-code"
-            type="text"
-            className="input-field"
+            id='login-code'
+            type='text'
+            className='input-field'
             value={verificationCode}
             onChange={(e) => setVerificationCode(e.target.value)}
             placeholder={t('authentication.login.placeholder_code')}
             maxLength={6}
-            autoComplete="one-time-code"
+            autoComplete='one-time-code'
             onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
           />
           <button
@@ -72,7 +72,7 @@ export default function PhoneLoginPage() {
         </div>
       </div>
 
-      <button className="login-button" onClick={handleLogin}>
+      <button className='login-button' onClick={handleLogin}>
         {t('authentication.login.login')}
       </button>
     </div>

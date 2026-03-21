@@ -38,11 +38,11 @@ const HomeCategoryCard: React.FC<HomeCategoryCardProps> = ({category, onClick}) 
       className='home-category-card scroll-reveal-item'
       onClick={handleClick}
     >
-      <View className='home-category-card-bg'/>
+      <View className='home-category-card-bg' />
       <View className='home-category-card-content'>
         <View className='home-category-card-header'>
           <View className='home-category-icon'>
-            <XIcon name={category.icon || 'carbon:folder'} size={32} className='icon-placeholder'/>
+            <XIcon name={category.icon || 'carbon:folder'} size={32} className='icon-placeholder' />
           </View>
           <View className='home-category-info'>
             <Text className='category-name'>{categoryStore.getCategoryName(category)}</Text>
@@ -52,7 +52,7 @@ const HomeCategoryCard: React.FC<HomeCategoryCardProps> = ({category, onClick}) 
           </View>
         </View>
         <View className='home-category-badge'>
-          <XIcon name='carbon:time' size={14} style={{marginRight: '4px'}}/>
+          <XIcon name='carbon:time' size={14} style={{marginRight: '4px'}} />
           <Text>{t('page.home.updated_days_ago', {days: daysAgo})}</Text>
         </View>
       </View>

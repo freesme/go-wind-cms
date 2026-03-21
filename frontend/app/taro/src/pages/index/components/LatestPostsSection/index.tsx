@@ -1,7 +1,7 @@
 import {useTranslation} from 'react-i18next';
 import {View, Text} from '@tarojs/components';
-import XIcon from '@/plugins/xicon';
 
+import XIcon from '@/plugins/xicon';
 import PostList from '@/components/post/PostList';
 import {useI18nRouter} from "@/i18n/helpers";
 
@@ -30,7 +30,7 @@ export default function LatestPostsSection() {
           page={1}
           pageSize={6}
           columns={3}
-          showSkeleton={true}
+          showSkeleton
           from='home'
           showPagination={false}
         />

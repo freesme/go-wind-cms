@@ -73,8 +73,9 @@ export const uploadFileThunk = createAsyncThunk(
 );
 
 function normalizeBase64(s: string): string {
-    let str = s.replaceAll(/\s+/g, '');
-    str = str.replaceAll('-', '+').replaceAll('_', '/');
+    // 使用 replace 替代 replaceAll 以兼容旧版本
+    let str = s.replace(/\s+/g, '');
+    str = str.replace(/-/g, '+').replace(/_/g, '/');
     while (str.length % 4 !== 0) str += '=';
     return str;
 }

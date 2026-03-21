@@ -18,23 +18,23 @@ export default function OtherRegisterPage() {
   };
 
   return (
-    <div className="other-register">
+    <div className='other-register'>
       {/* Social Buttons */}
       <button
-        type="button"
-        className="social-button"
+        type='button'
+        className='social-button'
         onClick={handleButtonGoogleRegister}
       >
-        <XIcon name="logos:google-icon" size={18}/>
+        <XIcon name='logos:google-icon' size={18} />
         {t('authentication.login.social_google')}
       </button>
 
       <button
-        type="button"
-        className="social-button"
+        type='button'
+        className='social-button'
         onClick={handleButtonGithubRegister}
       >
-        <XIcon name="logos:github-icon" size={18}/>
+        <XIcon name='logos:github-icon' size={18} />
         {t('authentication.login.social_github')}
       </button>
     </div>

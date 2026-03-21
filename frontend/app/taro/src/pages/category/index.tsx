@@ -1,13 +1,14 @@
 import {useState, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import {View, Text} from '@tarojs/components';
-import {AppEmpty} from '@/components/ui';
 
-import {useCategoryStore} from '@/store/slices/category/hooks';
+import {AppEmpty} from '@/components/ui';
 import CategoryTree from '@/components/category/CategoryTree';
 
-import {contentservicev1_Category, contentservicev1_ListCategoryResponse} from "@/api/generated/app/service/v1";
+import {useCategoryStore} from '@/store/slices/category/hooks';
 import {useI18nRouter} from "@/i18n/helpers";
+
+import {contentservicev1_Category, contentservicev1_ListCategoryResponse} from "@/api/generated/app/service/v1";
 
 import './category.scss';
 
@@ -45,20 +46,20 @@ export default function CategoryListPage() {
   };
 
   return (
-    <View className="category-page">
+    <View className='category-page'>
       {/* Hero Section */}
-      <View className="hero-section">
-        <View className="hero-content">
-          <Text className="hero-title">内容分类</Text>
-          <Text className="hero-subtitle">浏览所有内容分类</Text>
+      <View className='hero-section'>
+        <View className='hero-content'>
+          <Text className='hero-title'>内容分类</Text>
+          <Text className='hero-subtitle'>浏览所有内容分类</Text>
         </View>
       </View>
 
       {/* Content Section */}
-      <View className="page-container">
+      <View className='page-container'>
         {/* Loading Skeleton - TODO: 实现 Taro 的加载骨架屏 */}
         {loading ? (
-          <View className="categories-loading">
+          <View className='categories-loading'>
             <Text>{t('common.loading')}</Text>
           </View>
         ) : (
@@ -72,7 +73,7 @@ export default function CategoryListPage() {
               <AppEmpty
                 description={t('page.categories.no_categories')}
                 inContainer
-                image={<span className="i-carbon:folder-blank" style={{fontSize: '64px'}}/>}
+                image={<span className='i-carbon:folder-blank' style={{fontSize: '64px'}} />}
               />
             )}
           </>

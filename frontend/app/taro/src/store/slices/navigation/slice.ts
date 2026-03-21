@@ -1,11 +1,10 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 
-import {createNavigationServiceClient} from '@/api/generated/app/service/v1';
-import {requestApi} from '@/transport/rest';
-import {
+import {createNavigationServiceClient,
     siteservicev1_Navigation,
     siteservicev1_NavigationItem,
 } from '@/api/generated/app/service/v1';
+import {requestApi} from '@/transport/rest';
 import {currentLocaleLanguageCode} from "@/i18n";
 import {makeOrderBy, makeQueryString} from "@/transport/rest/utils";
 import {INavigationState} from "@/store/types";

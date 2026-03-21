@@ -31,49 +31,49 @@ export default function EmailLoginPage() {
   };
 
   return (
-    <div className="login-form">
-      <div className="form-group">
-        <label htmlFor="login-email">{t('authentication.register.email')}</label>
+    <div className='login-form'>
+      <div className='form-group'>
+        <label htmlFor='login-email'>{t('authentication.register.email')}</label>
         <input
-          id="login-email"
-          type="email"
-          className="input-field"
+          id='login-email'
+          type='email'
+          className='input-field'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder={t('authentication.login.placeholder_email')}
-          autoComplete="email"
+          autoComplete='email'
         />
       </div>
 
-      <div className="form-group">
-        <label htmlFor="login-password-email">{t('authentication.login.password')}</label>
+      <div className='form-group'>
+        <label htmlFor='login-password-email'>{t('authentication.login.password')}</label>
         <input
-          id="login-password-email"
-          type="password"
-          className="input-field"
+          id='login-password-email'
+          type='password'
+          className='input-field'
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder={t('authentication.login.placeholder_password')}
-          autoComplete="current-password"
+          autoComplete='current-password'
           onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
         />
       </div>
 
-      <div className="form-options">
-        <label className="checkbox-label">
+      <div className='form-options'>
+        <label className='checkbox-label'>
           <input
-            type="checkbox"
+            type='checkbox'
             checked={rememberMe}
             onChange={(e) => setRememberMe(e.target.checked)}
           />
           <span>{t('authentication.login.remember_me')}</span>
         </label>
-        <button className="text-btn" onClick={handleForgotPassword}>
+        <button className='text-btn' onClick={handleForgotPassword}>
           {t('authentication.login.forgot_password')}
         </button>
       </div>
 
-      <button className="login-button" onClick={handleLogin}>
+      <button className='login-button' onClick={handleLogin}>
         {t('authentication.login.login')}
       </button>
     </div>

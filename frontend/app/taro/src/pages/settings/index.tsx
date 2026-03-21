@@ -133,66 +133,66 @@ export default function SettingsPage() {
   }, [activeMenu, accountSettings, messageSettings, preferenceSettings]);
 
   return (
-    <View className="settings-page">
-      <View className="settings-container">
+    <View className='settings-page'>
+      <View className='settings-container'>
         {/* 左侧导航 */}
-        <View className="sidebar">
-          <View className="menu">
+        <View className='sidebar'>
+          <View className='menu'>
             {menuItems.map((item) => (
               <View
                 key={item.key}
                 className={`menu-item ${activeMenu === item.key ? 'active' : ''}`}
                 onClick={() => setActiveMenu(item.key as 'account' | 'message' | 'preference')}
               >
-                <View className="menu-icon">
+                <View className='menu-icon'>
                   <Text>{item.icon}</Text>
                 </View>
-                <Text className="menu-label">{item.label}</Text>
+                <Text className='menu-label'>{item.label}</Text>
               </View>
             ))}
           </View>
         </View>
 
         {/* 中间内容区 */}
-        <View className="content">
+        <View className='content'>
           {/* 页面头部 */}
-          <View className="content-header">
-            <Text className="title">{currentSettings.title}</Text>
-            <Text className="subtitle">{currentSettings.subtitle}</Text>
+          <View className='content-header'>
+            <Text className='title'>{currentSettings.title}</Text>
+            <Text className='subtitle'>{currentSettings.subtitle}</Text>
           </View>
 
           {/* 动态渲染各 section */}
           {currentSettings.sections.map((section, sectionIndex) => (
-            <View key={sectionIndex} className="section">
-              <Text className="section-title">{section.title}</Text>
+            <View key={sectionIndex} className='section'>
+              <Text className='section-title'>{section.title}</Text>
               {section.description && (
-                <Text className="section-desc">{section.description}</Text>
+                <Text className='section-desc'>{section.description}</Text>
               )}
 
               {/* 账户特殊处理 - 第三方账号 */}
               {section.title === t('settings.account.third_party_title') && (
-                <div className="third-party-list">
-                  <div className="third-party-item">
-                    <div className={`platform-icon wechat`}>
-                      <XIcon name="fa:wechat" size={24} color="white"/>
+                <div className='third-party-list'>
+                  <div className='third-party-item'>
+                    <div className='platform-icon wechat'>
+                      <XIcon name='fa:wechat' size={24} color='white' />
                     </div>
-                    <Text className="platform-link">
+                    <Text className='platform-link'>
                       {t('settings.account.bind_wechat')}
                     </Text>
                   </div>
-                  <div className="third-party-item">
-                    <div className={`platform-icon weibo`}>
-                      <XIcon name="fa:weibo" size={24} color="white"/>
+                  <div className='third-party-item'>
+                    <div className='platform-icon weibo'>
+                      <XIcon name='fa:weibo' size={24} color='white' />
                     </div>
-                    <Text className="platform-link">
+                    <Text className='platform-link'>
                       {t('settings.account.bind_weibo')}
                     </Text>
                   </div>
-                  <div className="third-party-item">
-                    <div className={`platform-icon qq`}>
-                      <XIcon name="fa:qq" size={24} color="white"/>
+                  <div className='third-party-item'>
+                    <div className='platform-icon qq'>
+                      <XIcon name='fa:qq' size={24} color='white' />
                     </div>
-                    <Text className="platform-link">
+                    <Text className='platform-link'>
                       {t('settings.account.bind_qq')}
                     </Text>
                   </div>
@@ -201,33 +201,33 @@ export default function SettingsPage() {
 
               {/* 设置项列表 */}
               {section.title !== t('settings.account.third_party_title') && section.items.map((item, itemIndex) => (
-                <View key={itemIndex} className="setting-item">
-                  <View className="setting-label">
-                    <Text className="label-text">{item.label}</Text>
+                <View key={itemIndex} className='setting-item'>
+                  <View className='setting-label'>
+                    <Text className='label-text'>{item.label}</Text>
                     {item.status && (
-                      <Text className="label-status">{item.status}</Text>
+                      <Text className='label-status'>{item.status}</Text>
                     )}
                   </View>
 
                   {/* 根据 type 渲染不同的控件 */}
-                  <View className="setting-control">
+                  <View className='setting-control'>
                     {/* 编辑按钮 */}
                     {item.type === 'button' && (
-                      <View className="edit-btn">
+                      <View className='edit-btn'>
                         <Text>{t('settings.account.edit')}</Text>
                       </View>
                     )}
 
                     {/* 切换开关 */}
                     {item.type === 'toggle' && (
-                      <View className="toggle-switch">
+                      <View className='toggle-switch'>
                         {/* TODO: Taro Switch 组件 */}
                       </View>
                     )}
 
                     {/* 选择框 */}
                     {item.type === 'select' && (
-                      <View className="select-control">
+                      <View className='select-control'>
                         {/* TODO: Taro Picker 组件 */}
                       </View>
                     )}
@@ -239,19 +239,19 @@ export default function SettingsPage() {
         </View>
 
         {/* 右侧帮助区 */}
-        <View className="help-sidebar">
-          <View className="help-section">
-            <Text className="help-title">{t('settings.help.title')}</Text>
-            <Text className="help-subtitle">{t('settings.help.account_password')}</Text>
-            <View className="help-list">
+        <View className='help-sidebar'>
+          <View className='help-section'>
+            <Text className='help-title'>{t('settings.help.title')}</Text>
+            <Text className='help-subtitle'>{t('settings.help.account_password')}</Text>
+            <View className='help-list'>
               <Text>1. {t('settings.help.q1')}</Text>
               <Text>2. {t('settings.help.q2')}</Text>
               <Text>3. {t('settings.help.q3')}</Text>
               <Text>4. {t('settings.help.q4')}</Text>
               <Text>5. {t('settings.help.q5')}</Text>
             </View>
-            <Text className="help-subtitle">{t('settings.help.other_issues')}</Text>
-            <View className="help-list">
+            <Text className='help-subtitle'>{t('settings.help.other_issues')}</Text>
+            <View className='help-list'>
               <Text>6. <Text>{t('settings.help.q6')} {t('settings.help.q6_link')}</Text></Text>
               <Text>7. <Text>{t('settings.help.q7')} {t('settings.help.q7_link')}</Text></Text>
             </View>

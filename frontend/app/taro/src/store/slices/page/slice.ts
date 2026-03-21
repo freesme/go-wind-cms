@@ -1,10 +1,9 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import {createPageServiceClient} from '@/api/generated/app/service/v1';
-import {requestApi} from '@/transport/rest';
-import {
+import {createPageServiceClient,
     contentservicev1_Page,
     contentservicev1_PageTranslation,
 } from '@/api/generated/app/service/v1';
+import {requestApi} from '@/transport/rest';
 import {currentLocaleLanguageCode} from '@/i18n';
 import {makeOrderBy, makeQueryString} from "@/transport/rest/utils";
 import {IPageState} from "@/store/types";

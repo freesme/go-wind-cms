@@ -1,5 +1,8 @@
 import {useSelector, useDispatch} from 'react-redux';
+
+import {createAbortableCalls} from "@/store/async-thunk";
 import type {RootState, AppDispatch} from '@/store/types';
+
 import {
     listNavigation,
     getNavigation,
@@ -10,7 +13,6 @@ import {
     resetNavigation,
     findNavItem,
 } from './slice';
-import {createAbortableCalls} from "@/store/async-thunk";
 
 export function useNavigationStore() {
     const navigation = useSelector((state: RootState) => state.navigation);
