@@ -184,5 +184,21 @@
     "insertHorizontalRule": "Insert Horizontal Rule",
     "words": "Words",
     "chars": "Characters"
+  },
+  "dateRange": {
+    "start": "Start Time",
+    "end": "End Time",
+    "range": "Time Range",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "last7Days": "Last 7 Days",
+    "last30Days": "Last 30 Days",
+    "thisWeek": "This Week",
+    "lastWeek": "Last Week",
+    "thisMonth": "This Month",
+    "lastMonth": "Last Month",
+    "thisYear": "This Year",
+    "lastYear": "Last Year",
+    "custom": "Custom"
   }
 }

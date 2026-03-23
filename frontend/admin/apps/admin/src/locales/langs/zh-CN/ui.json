@@ -187,5 +187,21 @@
     "justify": "两端对齐",
     "words": "字",
     "chars": "字符"
+  },
+  "dateRange": {
+    "start": "开始时间",
+    "end": "结束时间",
+    "range": "时间范围",
+    "today": "今日",
+    "yesterday": "昨日",
+    "last7Days": "最近7天",
+    "last30Days": "最近30天",
+    "thisWeek": "本周",
+    "lastWeek": "上周",
+    "thisMonth": "本月",
+    "lastMonth": "上月",
+    "thisYear": "今年",
+    "lastYear": "去年",
+    "custom": "自定义"
   }
 }

@@ -81,6 +81,41 @@ const formOptions: VbenFormProps = {
       componentProps: {
         showTime: true,
         allowClear: true,
+        presets: [
+          {
+            label: $t('ui.dateRange.today'),
+            value: [dayjs().startOf('day'), dayjs().endOf('day')],
+          },
+          {
+            label: $t('ui.dateRange.yesterday'),
+            value: [
+              dayjs().subtract(1, 'day').startOf('day'),
+              dayjs().subtract(1, 'day').endOf('day'),
+            ],
+          },
+          {
+            label: $t('ui.dateRange.thisWeek'),
+            value: [dayjs().startOf('week'), dayjs().endOf('week')],
+          },
+          {
+            label: $t('ui.dateRange.lastWeek'),
+            value: [
+              dayjs().subtract(1, 'week').startOf('week'),
+              dayjs().subtract(1, 'week').endOf('week'),
+            ],
+          },
+          {
+            label: $t('ui.dateRange.thisMonth'),
+            value: [dayjs().startOf('month'), dayjs().endOf('month')],
+          },
+          {
+            label: $t('ui.dateRange.lastMonth'),
+            value: [
+              dayjs().subtract(1, 'month').startOf('month'),
+              dayjs().subtract(1, 'month').endOf('month'),
+            ],
+          },
+        ],
       },
     },
   ],
