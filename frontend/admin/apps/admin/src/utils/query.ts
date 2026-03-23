@@ -124,15 +124,20 @@ export function cleanQueryRule(obj: any): any {
 }
 
 /**
- * 移除对象中的 null 和 undefined 值
- * @param obj
+ * 移除对象中的 null、undefined 和空字符串值
+ * @param obj 需要处理的对象
+ * @returns 处理后的对象或 undefined
  */
-export const removeNullUndefined = (obj: any) =>
-  Object.fromEntries(
-    Object.entries(obj).filter(
-      ([_, v]) => v !== null && v !== undefined && v !== '',
-    ),
+export function removeNullUndefined(
+  obj?: Record<string, any>,
+): Record<string, any> | undefined {
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return undefined;
+  const entries = Object.entries(obj).filter(
+    ([_, v]) => v !== null && v !== undefined && v !== '',
   );
+  if (entries.length === 0) return undefined;
+  return Object.fromEntries(entries);
+}
 
 /**
  * 创建列表查询JSON过滤字符串
