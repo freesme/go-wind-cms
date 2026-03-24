@@ -44,6 +44,7 @@ export const useNavigationStore = defineStore('navigation', () => {
    */
   async function createNavigation(values: Record<string, any> = {}) {
     return await service.Create({
+      // @ts-ignore proto generated code is error.
       data: {
         ...values,
       },
@@ -59,6 +60,7 @@ export const useNavigationStore = defineStore('navigation', () => {
   ) {
     return await service.Update({
       id,
+      // @ts-ignore proto generated code is error.
       data: {
         ...values,
       },

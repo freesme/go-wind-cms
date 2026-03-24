@@ -16,9 +16,11 @@ import { router } from '#/router';
 import {
   editorTypeToColor,
   editorTypeToName,
+  enableBoolToColor,
+  enableBoolToName,
+  postStatusList,
   postStatusToColor,
   postStatusToName,
-  statusList,
   usePostStore,
 } from '#/stores';
 
@@ -46,7 +48,7 @@ const formOptions: VbenFormProps = {
       fieldName: 'status',
       label: $t('page.post.status'),
       componentProps: {
-        options: statusList,
+        options: postStatusList,
         placeholder: $t('ui.placeholder.select'),
         filterOption: (input: string, option: any) =>
           option.label.toLowerCase().includes(input.toLowerCase()),
@@ -84,48 +86,77 @@ const gridOptions: VxeGridProps<Post> = {
             pageSize: page.pageSize,
           },
           formValues,
+          'id,status,sort_order,is_featured,visits,likes,comment_count,author_name,available_languages,created_at,code,editor_type,disallow_comment,in_progress,auto_summary,is_featured,translations.id,translations.post_id,translations.language_code,translations.title,translations.summary,translations.thumbnail',
         );
       },
     },
   },
 
   columns: [
-    { title: $t('page.post.slug'), field: 'slug' },
+    {
+      title: $t('page.post.postTitle'),
+      field: 'translations.title',
+      align: 'left',
+      fixed: 'left',
+      minWidth: 400,
+      slots: { default: 'postTitle' },
+    },
+    {
+      title: $t('page.post.slug'),
+      field: 'code',
+      align: 'left',
+      minWidth: 200,
+    },
     {
       title: $t('page.post.editorType'),
       field: 'editorType',
       slots: { default: 'editorType' },
+      minWidth: 140,
     },
     {
-      title: $t('page.post.disallowComment'),
-      field: 'disallowComment',
+      title: $t('page.post.authorName'),
+      field: 'authorName',
+      align: 'left',
+      minWidth: 140,
     },
-    { title: $t('page.post.inProgress'), field: 'inProgress' },
-    { title: $t('page.post.autoSummary'), field: 'autoSummary' },
-    { title: $t('page.post.isFeatured'), field: 'isFeatured' },
-    { title: $t('page.post.visits'), field: 'visits', width: 80 },
-    { title: $t('page.post.authorName'), field: 'authorName' },
-    { title: $t('page.post.likes'), field: 'likes', width: 80 },
-    { title: $t('page.post.commentCount'), field: 'commentCount', width: 80 },
+    { title: $t('page.post.visits'), field: 'visits', minWidth: 80 },
+    { title: $t('page.post.likes'), field: 'likes', minWidth: 80 },
+    {
+      title: $t('page.post.commentCount'),
+      field: 'commentCount',
+      minWidth: 80,
+    },
     {
       title: $t('page.post.status'),
       field: 'status',
       slots: { default: 'status' },
-      width: 95,
+      minWidth: 95,
     },
     { title: $t('ui.table.sortOrder'), field: 'sortOrder', width: 70 },
+    {
+      title: $t('page.post.disallowComment'),
+      field: 'disallowComment',
+      slots: { default: 'disallowComment' },
+      minWidth: 80,
+    },
+    {
+      title: $t('page.post.isFeatured'),
+      field: 'isFeatured',
+      slots: { default: 'isFeatured' },
+      minWidth: 80,
+    },
     {
       title: $t('ui.table.createdAt'),
       field: 'createdAt',
       formatter: 'formatDateTime',
-      width: 140,
+      minWidth: 140,
     },
     {
       title: $t('ui.table.action'),
       field: 'action',
       fixed: 'right',
       slots: { default: 'action' },
-      width: 90,
+      minWidth: 90,
     },
   ],
 };
@@ -169,6 +200,14 @@ async function handleDelete(row: any) {
     });
   }
 }
+
+function getPostTitle(row: any) {
+  const currentLang = i18n.global.locale.value;
+  const translation = row.translations?.find(
+    (t: any) => t.languageCode === currentLang,
+  );
+  return translation?.title || row.translations?.[0]?.title || '';
+}
 </script>
 
 <template>
@@ -187,6 +226,19 @@ async function handleDelete(row: any) {
       <template #editorType="{ row }">
         <a-tag :color="editorTypeToColor(row.editorType)">
           {{ editorTypeToName(row.editorType) }}
+        </a-tag>
+      </template>
+      <template #postTitle="{ row }">
+        <span>{{ getPostTitle(row) }}</span>
+      </template>
+      <template #disallowComment="{ row }">
+        <a-tag :color="enableBoolToColor(row.disallowComment)">
+          {{ enableBoolToName(row.disallowComment) }}
+        </a-tag>
+      </template>
+      <template #isFeatured="{ row }">
+        <a-tag :color="enableBoolToColor(row.isFeatured)">
+          {{ enableBoolToName(row.isFeatured) }}
         </a-tag>
       </template>
       <template #action="{ row }">

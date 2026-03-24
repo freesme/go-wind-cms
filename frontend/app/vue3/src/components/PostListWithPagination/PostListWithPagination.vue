@@ -69,7 +69,10 @@ async function loadPosts() {
       filters.tag_ids__in = props.tagIds
     }
 
-    const res = await postStore.listPost(pagination.value, filters)
+    const res = await postStore.listPost(pagination.value,
+      filters,
+      'id,status,sort_order,is_featured,visits,likes,comment_count,author_name,available_languages,created_at,translations.id,translations.post_id,translations.language_code,translations.title,translations.summary,translations.thumbnail'
+    )
     posts.value = res.items || []
     total.value = res.total || 0
   } catch (error) {

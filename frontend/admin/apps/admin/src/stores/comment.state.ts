@@ -52,6 +52,7 @@ export const useCommentStore = defineStore('comment', () => {
    */
   async function createComment(values: Record<string, any> = {}) {
     return await service.Create({
+      // @ts-ignore proto generated code is error.
       data: {
         ...values,
       },
@@ -64,6 +65,7 @@ export const useCommentStore = defineStore('comment', () => {
   async function updateComment(id: number, values: Record<string, any> = {}) {
     return await service.Update({
       id,
+      // @ts-ignore proto generated code is error.
       data: {
         ...values,
       },
@@ -158,20 +160,20 @@ export function commentContentTypeToName(
 
 const COMMENT_CONTENT_TYPE_COLOR_THEME = {
   light: {
-    // 帖子 - 专业蓝（代表内容、文本类）
-    CONTENT_TYPE_POST: '#3b82f6',
-    // 页面 - 优雅紫（代表静态页面、站点类）
-    CONTENT_TYPE_PAGE: '#8b5cf6',
-    // 产品 - 活力橙（代表商品、实物类）
-    CONTENT_TYPE_PRODUCT: '#f97316',
+    // 帖子 - 专业沉稳蓝（文本内容主色，辨识度高）
+    CONTENT_TYPE_POST: '#2563eb',
+    // 页面 - 雅致柔和紫（静态页面，优雅不艳俗）
+    CONTENT_TYPE_PAGE: '#7c3aed',
+    // 产品 - 温暖活力橙（商品实物，醒目不刺眼）
+    CONTENT_TYPE_PRODUCT: '#ea580c',
   },
   dark: {
-    // 深色模式-帖子：在浅色基础上降低明度，提升深色背景下的可读性
-    CONTENT_TYPE_POST: '#60a5fa',
-    // 深色模式-页面：调整为更柔和的紫色，避免深色背景下太跳
-    CONTENT_TYPE_PAGE: '#a78bfa',
-    // 深色模式-产品：降低饱和度，提升与深色背景的融合度
-    CONTENT_TYPE_PRODUCT: '#fb923c',
+    // 深色模式-帖子：柔和明亮蓝，深色背景清晰舒适
+    CONTENT_TYPE_POST: '#3b82f6',
+    // 深色模式-页面：低饱和柔紫，护眼不突兀
+    CONTENT_TYPE_PAGE: '#8b5cf6',
+    // 深色模式-产品：暖调柔橙，融合度更高
+    CONTENT_TYPE_PRODUCT: '#fdba74',
   },
 } as const;
 
@@ -181,7 +183,8 @@ export function commentContentTypeToColor(
 ): string {
   const colorMap = COMMENT_CONTENT_TYPE_COLOR_THEME[theme];
   return (
-    colorMap[commentContentType as keyof typeof colorMap] || colorMap.DEFAULT
+    colorMap[commentContentType as keyof typeof colorMap] ||
+    colorMap.CONTENT_TYPE_POST
   );
 }
 

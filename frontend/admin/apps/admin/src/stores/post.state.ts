@@ -50,7 +50,7 @@ export const usePostStore = defineStore('post', () => {
 
   async function getPostWithLanguageCode(id: number, languageCode: string) {
     if (!id) return null;
-    return await service.Get({ id, languageCode });
+    return await service.Get({ id, locale: languageCode });
   }
 
   /**
@@ -58,6 +58,7 @@ export const usePostStore = defineStore('post', () => {
    */
   async function createPost(values: Record<string, any> = {}) {
     return await service.Create({
+      // @ts-ignore proto generated code is error.
       data: {
         ...values,
       },
@@ -70,10 +71,10 @@ export const usePostStore = defineStore('post', () => {
   async function updatePost(id: number, values: Record<string, any> = {}) {
     return await service.Update({
       id,
+      // @ts-ignore proto generated code is error.
       data: {
         ...values,
       },
-      // @ts-ignore proto generated code is error.
       updateMask: makeUpdateMask(Object.keys(values ?? [])),
     });
   }

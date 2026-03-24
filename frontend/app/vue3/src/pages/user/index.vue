@@ -138,8 +138,8 @@ async function loadUserPosts() {
     const result = await postStore.listPost(
       {page: 1, pageSize: 10},
       {author_id: user.value.id}, // 使用作者ID进行过滤
-      null,
-      ['-createdAt'] // 按创建时间倒序
+      'id,status,sort_order,is_featured,visits,likes,comment_count,author_name,available_languages,created_at,translations.id,translations.post_id,translations.language_code,translations.title,translations.summary,translations.thumbnail'
+        ['-createdAt'] // 按创建时间倒序
     )
 
     if (result) {
