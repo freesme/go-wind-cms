@@ -611,6 +611,9 @@
     "isFeatured": "是否推荐",
     "postCount": "帖子数量",
     "name": "标签名称",
+    "code": "标签别名",
+    "description": "标签描述",
+    "coverImage": "封面图片",
     "button": {
       "create": "创建标签",
       "saveDraft": "保存草稿",

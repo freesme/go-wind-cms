@@ -115,14 +115,14 @@ const gridOptions: VxeGridProps<PageType> = {
       title: $t('page.page.showInNavigation'),
       field: 'showInNavigation',
       formatter: ({ cellValue }) =>
-        cellValue ? $t('ui.text.yes') : $t('ui.text.no'),
+        cellValue ? $t('ui.button.yes') : $t('ui.button.no'),
       width: 120,
     },
     {
       title: $t('page.page.disallowComment'),
       field: 'disallowComment',
       formatter: ({ cellValue }) =>
-        cellValue ? $t('ui.text.yes') : $t('ui.text.no'),
+        cellValue ? $t('ui.button.yes') : $t('ui.button.no'),
       width: 100,
     },
     {
@@ -177,7 +177,7 @@ function handleEdit(row: any) {
   console.log('Edit', row, i18n.global.locale.value);
   router.push({
     name: 'EditPage',
-    params: { id: row.id },
+    params: { id: Number(row.id || 0) },
     query: { lang: i18n.global.locale.value },
   });
 }

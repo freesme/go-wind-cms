@@ -149,7 +149,7 @@ const gridOptions: VxeGridProps<Site> = {
       field: 'isDefault',
       width: 100,
       formatter: ({ cellValue }) =>
-        cellValue ? $t('ui.text.yes') : $t('ui.text.no'),
+        cellValue ? $t('ui.button.yes') : $t('ui.button.no'),
     },
     {
       title: $t('page.site.visitCount'),

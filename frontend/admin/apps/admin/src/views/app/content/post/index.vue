@@ -174,10 +174,10 @@ function handleCreate() {
 
 /* 编辑 */
 function handleEdit(row: any) {
-  console.log('编辑', row, i18n.global.locale.value);
+  console.log('编辑', row.id, i18n.global.locale.value);
   router.push({
     name: 'EditPost',
-    params: { id: row.id },
+    params: { id: String(row.id) },
     query: { lang: i18n.global.locale.value },
   });
 }

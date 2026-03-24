@@ -175,7 +175,7 @@ function handleEdit(row: any) {
   console.log('Edit', row, i18n.global.locale.value);
   router.push({
     name: 'EditCategory',
-    params: { id: row.id },
+    params: { id: Number(row.id || 0) },
     query: { lang: i18n.global.locale.value },
   });
 }

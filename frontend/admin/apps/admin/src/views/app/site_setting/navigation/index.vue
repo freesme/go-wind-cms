@@ -107,7 +107,7 @@ const gridOptions: VxeGridProps<Navigation> = {
       field: 'isActive',
       width: 100,
       formatter: ({ cellValue }) =>
-        cellValue ? $t('ui.text.yes') : $t('ui.text.no'),
+        cellValue ? $t('ui.button.yes') : $t('ui.button.no'),
     },
     {
       title: $t('page.navigation.items'),

@@ -4,7 +4,7 @@ import type { VxeGridProps } from '#/adapter/vxe-table';
 import { h } from 'vue';
 
 import { Page, type VbenFormProps } from '@vben/common-ui';
-import { LucideFilePenLine, LucideTrash2 } from '@vben/icons';
+import { IconifyIcon, LucideFilePenLine, LucideTrash2 } from '@vben/icons';
 import { i18n } from '@vben/locales';
 
 import { notification } from 'ant-design-vue';
@@ -80,65 +80,71 @@ const gridOptions: VxeGridProps<Tag> = {
   columns: [
     {
       title: $t('page.tag.name'),
-      field: 'translations',
-      formatter: ({ cellValue }) => {
-        if (cellValue && cellValue.length > 0) {
-          return cellValue[0]?.name || '';
-        }
-        return '';
-      },
+      field: 'translations.name',
+      minWidth: 100,
+      fixed: 'left',
+      align: 'left',
+      slots: { default: 'tagName' },
+    },
+    {
+      title: $t('page.tag.description'),
+      field: 'translations.description',
+      minWidth: 250,
+      align: 'left',
+      slots: { default: 'tagDescription' },
     },
     {
       title: $t('page.tag.color'),
       field: 'color',
       slots: { default: 'color' },
-      width: 100,
+      minWidth: 100,
     },
     {
       title: $t('page.tag.icon'),
       field: 'icon',
-      width: 80,
+      minWidth: 80,
+      slots: { default: 'icon' },
     },
     {
       title: $t('page.tag.group'),
       field: 'group',
-      width: 120,
+      minWidth: 120,
     },
     {
       title: $t('page.tag.isFeatured'),
       field: 'isFeatured',
       formatter: ({ cellValue }) =>
-        cellValue ? $t('ui.text.yes') : $t('ui.text.no'),
-      width: 100,
+        cellValue ? $t('ui.button.yes') : $t('ui.button.no'),
+      minWidth: 100,
     },
     {
       title: $t('page.tag.postCount'),
       field: 'postCount',
-      width: 100,
+      minWidth: 100,
     },
     {
       title: $t('page.tag.status'),
       field: 'status',
       slots: { default: 'status' },
-      width: 100,
+      minWidth: 100,
     },
     {
       title: $t('ui.table.sortOrder'),
       field: 'sortOrder',
-      width: 80,
+      minWidth: 80,
     },
     {
       title: $t('ui.table.createdAt'),
       field: 'createdAt',
       formatter: 'formatDateTime',
-      width: 150,
+      minWidth: 150,
     },
     {
       title: $t('ui.table.action'),
       field: 'action',
       fixed: 'right',
       slots: { default: 'action' },
-      width: 100,
+      minWidth: 100,
     },
   ],
 };
@@ -156,10 +162,10 @@ function handleCreate() {
 
 /* Edit */
 function handleEdit(row: any) {
-  console.log('Edit', row, i18n.global.locale.value);
+  console.log('Edit', row.id, i18n.global.locale.value);
   router.push({
     name: 'EditTag',
-    params: { id: row.id },
+    params: { id: String(row.id) },
     query: { lang: i18n.global.locale.value },
   });
 }
@@ -182,6 +188,32 @@ async function handleDelete(row: any) {
     });
   }
 }
+
+function getTranslation(row: any) {
+  const currentLang = i18n.global.locale.value;
+  const translation = row.translations?.find(
+    (t: any) => t.languageCode === currentLang,
+  );
+  return translation || row.translations?.[0] || undefined;
+}
+
+function getTagName(row: any) {
+  const translation = getTranslation(row);
+  return translation?.name || row.translations?.[0]?.name || '';
+}
+
+function getTagDescription(row: any) {
+  const translation = getTranslation(row);
+  return translation?.description || row.translations?.[0]?.description || '';
+}
+
+function getIcon(row: any) {
+  if (!row.icon) return '';
+  // 如果已有前缀（如carbon:xxx），直接返回
+  if (row.icon.includes(':')) return row.icon;
+  // 否则加上carbon:前缀
+  return `carbon:${row.icon}`;
+}
 </script>
 
 <template>
@@ -201,6 +233,15 @@ async function handleDelete(row: any) {
         <a-tag :color="tagStatusToColor(row.status)">
           {{ tagStatusToName(row.status) }}
         </a-tag>
+      </template>
+      <template #tagName="{ row }">
+        {{ getTagName(row) }}
+      </template>
+      <template #tagDescription="{ row }">
+        {{ getTagDescription(row) }}
+      </template>
+      <template #icon="{ row }">
+        <IconifyIcon v-if="row.icon" :icon="getIcon(row)" class="size-6" />
       </template>
       <template #action="{ row }">
         <a-button
