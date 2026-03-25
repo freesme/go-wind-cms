@@ -4881,7 +4881,7 @@ export function createNavigationItemServiceClient(
 ): NavigationItemService {
   return {
     List(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `admin/v1/navigations`; // eslint-disable-line quotes
+      const path = `admin/v1/navigation-items`; // eslint-disable-line quotes
       const body = null;
       const queryParams: string[] = [];
       if (request.page) {

@@ -338,5 +338,24 @@
       "SITE_STATUS_INACTIVE": "停用",
       "SITE_STATUS_MAINTENANCE": "维护中"
     }
+  },
+  "navigation": {
+    "location": {
+      "HEADER": "页头导航",
+      "FOOTER": "页脚导航",
+      "SIDEBAR": "侧边栏导航",
+      "MOBILE": "移动端专属导航",
+      "TOP_BAR": "顶部通知栏",
+      "OFFCANVAS": "抽屉式导航"
+    }
+  },
+  "navigationItem": {
+    "linkType": {
+      "LINK_TYPE_CUSTOM": "自定义路径",
+      "LINK_TYPE_POST": "关联文章",
+      "LINK_TYPE_PAGE": "关联页面",
+      "LINK_TYPE_CATEGORY": "关联分类",
+      "LINK_TYPE_EXTERNAL": "外部链接"
+    }
   }
 }

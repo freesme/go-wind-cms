@@ -13,7 +13,7 @@ service NavigationItemService {
   // 获取导航项目列表
   rpc List (pagination.PagingRequest) returns (site.service.v1.ListNavigationItemResponse) {
     option (google.api.http) = {
-      get: "/admin/v1/navigations"
+      get: "/admin/v1/navigation-items"
     };
   }
 

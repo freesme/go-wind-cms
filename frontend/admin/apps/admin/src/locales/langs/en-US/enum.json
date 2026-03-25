@@ -342,5 +342,24 @@
       "SITE_STATUS_INACTIVE": "Inactive",
       "SITE_STATUS_MAINTENANCE": "Maintenance"
     }
+  },
+  "navigation": {
+    "location": {
+      "HEADER": "Header Navigation",
+      "FOOTER": "Footer Navigation",
+      "SIDEBAR": "Sidebar Navigation",
+      "MOBILE": "Mobile Navigation",
+      "TOP_BAR": "Top Bar",
+      "OFFCANVAS": "Offcanvas Navigation"
+    }
+  },
+  "navigationItem": {
+    "linkType": {
+      "LINK_TYPE_CUSTOM": "Custom Path",
+      "LINK_TYPE_POST": "Linked Post",
+      "LINK_TYPE_PAGE": "Linked Page",
+      "LINK_TYPE_CATEGORY": "Linked Category",
+      "LINK_TYPE_EXTERNAL": "External Link"
+    }
   }
 }

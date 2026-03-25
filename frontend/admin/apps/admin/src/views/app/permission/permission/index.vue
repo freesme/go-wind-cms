@@ -3,8 +3,8 @@ import { reactive } from 'vue';
 
 import { ColPage } from '@vben/common-ui';
 
-import PermissionGroupList from '#/views/app/permission/permission/permission-group-list.vue';
-import PermissionList from '#/views/app/permission/permission/permission-list.vue';
+import PermissionGroupList from './permission-group-list.vue';
+import PermissionList from './permission-list.vue';
 
 const props = reactive({
   leftCollapsedWidth: 0,

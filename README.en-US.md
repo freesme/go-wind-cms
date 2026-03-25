@@ -79,6 +79,7 @@ Adhering to the philosophy of efficient, stable, and scalable technology selecti
     </tr>
     <tr>
         <td><img src="./docs/images/admin_site_setting_list.png" alt="Backend site configuration list"/></td>
+        <td><img src="./docs/images/admin_navigation_list.png" alt="Backend navigation list"/></td>
     </tr>
 </table>
 

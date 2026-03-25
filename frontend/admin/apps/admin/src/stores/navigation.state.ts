@@ -1,8 +1,14 @@
+import { computed } from 'vue';
+
+import { $t } from '@vben/locales';
 import { useUserStore } from '@vben/stores';
 
 import { defineStore } from 'pinia';
 
-import { createNavigationServiceClient } from '#/generated/api/admin/service/v1';
+import {
+  createNavigationServiceClient,
+  type siteservicev1_Navigation_Location,
+} from '#/generated/api/admin/service/v1';
 import { makeOrderBy, makeQueryString, makeUpdateMask } from '#/utils/query';
 import { type Paging, requestClientRequestHandler } from '#/utils/request';
 
@@ -87,3 +93,58 @@ export const useNavigationStore = defineStore('navigation', () => {
     deleteNavigation,
   };
 });
+
+export const navigationLocationList = computed(() => [
+  {
+    value: 'HEADER',
+    label: $t('enum.navigation.location.HEADER'),
+  },
+  {
+    value: 'FOOTER',
+    label: $t('enum.navigation.location.FOOTER'),
+  },
+  {
+    value: 'SIDEBAR',
+    label: $t('enum.navigation.location.SIDEBAR'),
+  },
+  {
+    value: 'MOBILE',
+    label: $t('enum.navigation.location.MOBILE'),
+  },
+  {
+    value: 'TOP_BAR',
+    label: $t('enum.navigation.location.TOP_BAR'),
+  },
+  {
+    value: 'OFFCANVAS',
+    label: $t('enum.navigation.location.OFFCANVAS'),
+  },
+]);
+
+export function navigationLocationToName(
+  location: siteservicev1_Navigation_Location,
+) {
+  const values = navigationLocationList.value;
+  const matchedItem = values.find((item) => item.value === location);
+  return matchedItem ? matchedItem.label : '';
+}
+
+const NAVIGATION_LOCATION_COLOR_MAP = {
+  HEADER: '#6366f1', // 头部：柔和紫蓝（高级、醒目不刺眼）
+  FOOTER: '#059669', // 底部：沉稳绿（信任、清爽）
+  SIDEBAR: '#d97706', // 侧边栏：暖金（柔和不艳）
+  MOBILE: '#dc2626', // 移动端：暗红（警示、统一）
+  TOP_BAR: '#dc2626', // 顶栏：同移动端
+  OFFCANVAS: '#dc2626', // 抽屉：同移动端
+  DEFAULT: '#94a3b8', // 默认：中性灰（保留原优质色）
+} as const;
+
+export function navigationLocationToColor(
+  location: siteservicev1_Navigation_Location,
+) {
+  return (
+    NAVIGATION_LOCATION_COLOR_MAP[
+      location as keyof typeof NAVIGATION_LOCATION_COLOR_MAP
+    ] || NAVIGATION_LOCATION_COLOR_MAP.DEFAULT
+  );
+}

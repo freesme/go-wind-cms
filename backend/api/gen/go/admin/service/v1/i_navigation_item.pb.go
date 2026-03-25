@@ -28,9 +28,9 @@ var File_admin_service_v1_i_navigation_item_proto protoreflect.FileDescriptor
 
 const file_admin_service_v1_i_navigation_item_proto_rawDesc = "" +
 	"\n" +
-	"(admin/service/v1/i_navigation_item.proto\x12\x10admin.service.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1epagination/v1/pagination.proto\x1a%site/service/v1/navigation_item.proto2\x81\x05\n" +
-	"\x15NavigationItemService\x12m\n" +
-	"\x04List\x12\x19.pagination.PagingRequest\x1a+.site.service.v1.ListNavigationItemResponse\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/admin/v1/navigations\x12z\n" +
+	"(admin/service/v1/i_navigation_item.proto\x12\x10admin.service.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1epagination/v1/pagination.proto\x1a%site/service/v1/navigation_item.proto2\x86\x05\n" +
+	"\x15NavigationItemService\x12r\n" +
+	"\x04List\x12\x19.pagination.PagingRequest\x1a+.site.service.v1.ListNavigationItemResponse\"\"\x82\xd3\xe4\x93\x02\x1c\x12\x1a/admin/v1/navigation-items\x12z\n" +
 	"\x03Get\x12).site.service.v1.GetNavigationItemRequest\x1a\x1f.site.service.v1.NavigationItem\"'\x82\xd3\xe4\x93\x02!\x12\x1f/admin/v1/navigation-items/{id}\x12~\n" +
 	"\x06Create\x12,.site.service.v1.CreateNavigationItemRequest\x1a\x1f.site.service.v1.NavigationItem\"%\x82\xd3\xe4\x93\x02\x1f:\x01*\"\x1a/admin/v1/navigation-items\x12\x83\x01\n" +
 	"\x06Update\x12,.site.service.v1.UpdateNavigationItemRequest\x1a\x1f.site.service.v1.NavigationItem\"*\x82\xd3\xe4\x93\x02$:\x01*\x1a\x1f/admin/v1/navigation-items/{id}\x12w\n" +

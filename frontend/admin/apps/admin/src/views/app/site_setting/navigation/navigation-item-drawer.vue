@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
@@ -7,34 +7,21 @@ import { $t } from '@vben/locales';
 import { notification } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
-import { navigationLocationList, useLanguageStore, useNavigationStore } from "#/stores";
+import { navigationItemLinkTypeList, useNavigationItemStore } from '#/stores';
 
-const navigationStore = useNavigationStore();
-const languageStore = useLanguageStore();
+const navigationItemStore = useNavigationItemStore();
 
 const data = ref<Record<string, any>>();
-const languageOptions = ref<{ label: string; value: string }[]>([]);
 
 const getTitle = computed(() =>
   data.value?.create
-    ? $t('ui.modal.create', { moduleName: $t('page.navigation.moduleName') })
-    : $t('ui.modal.update', { moduleName: $t('page.navigation.moduleName') }),
+    ? $t('ui.modal.create', {
+        moduleName: $t('page.navigationItem.moduleName'),
+      })
+    : $t('ui.modal.update', {
+        moduleName: $t('page.navigationItem.moduleName'),
+      }),
 );
-
-onMounted(async () => {
-  try {
-    const resp = await languageStore.listLanguage(undefined, {}, undefined, [
-      'id',
-    ] as any);
-    languageOptions.value =
-      resp.items?.map((lang) => ({
-        label: lang.nativeName || lang.languageCode || '',
-        value: lang.languageCode || '',
-      })) || [];
-  } catch (error) {
-    console.error('Failed to load language list:', error);
-  }
-});
 
 const [BaseForm, baseFormApi] = useVbenForm({
   showDefaultActions: false,
@@ -46,8 +33,37 @@ const [BaseForm, baseFormApi] = useVbenForm({
   schema: [
     {
       component: 'Input',
-      fieldName: 'name',
-      label: $t('page.navigation.name'),
+      fieldName: 'title',
+      label: $t('page.navigationItem.title'),
+      componentProps: {
+        placeholder: $t('ui.placeholder.input'),
+        allowClear: true,
+      },
+      rules: 'required',
+    },
+    {
+      component: 'Input',
+      fieldName: 'description',
+      label: $t('page.navigationItem.description'),
+      componentProps: {
+        placeholder: $t('ui.placeholder.input'),
+        allowClear: true,
+      },
+    },
+    {
+      component: 'Input',
+      fieldName: 'icon',
+      label: $t('page.navigationItem.icon'),
+      componentProps: {
+        placeholder: $t('ui.placeholder.input'),
+        allowClear: true,
+      },
+      rules: 'required',
+    },
+    {
+      component: 'Input',
+      fieldName: 'url',
+      label: $t('page.navigationItem.url'),
       componentProps: {
         placeholder: $t('ui.placeholder.input'),
         allowClear: true,
@@ -56,22 +72,11 @@ const [BaseForm, baseFormApi] = useVbenForm({
     },
     {
       component: 'Select',
-      fieldName: 'location',
-      label: $t('page.navigation.location'),
+      fieldName: 'linkType',
+      label: $t('page.navigationItem.linkType'),
+      defaultValue: 'LINK_TYPE_CUSTOM',
       componentProps: {
-        options: navigationLocationList,
-        placeholder: $t('ui.placeholder.select'),
-        allowClear: true,
-      },
-      rules: 'selectRequired',
-    },
-    {
-      component: 'Select',
-      fieldName: 'locale',
-      label: $t('page.navigation.locale'),
-      defaultValue: 'zh-CN',
-      componentProps: {
-        options: languageOptions,
+        options: navigationItemLinkTypeList,
         placeholder: $t('ui.placeholder.select'),
         allowClear: true,
       },
@@ -79,11 +84,28 @@ const [BaseForm, baseFormApi] = useVbenForm({
     },
     {
       component: 'Switch',
-      fieldName: 'isActive',
-      label: $t('page.navigation.isActive'),
-      defaultValue: true,
+      fieldName: 'isOpenNewTab',
+      label: $t('page.navigationItem.isOpenNewTab'),
+      defaultValue: false,
       componentProps: {
         class: 'w-auto',
+      },
+    },
+    {
+      component: 'Switch',
+      fieldName: 'isInvalid',
+      label: $t('page.navigationItem.isInvalid'),
+      defaultValue: false,
+      componentProps: {
+        class: 'w-auto',
+      },
+    },
+    {
+      component: 'Textarea',
+      fieldName: 'cssClass',
+      label: $t('page.navigationItem.cssClass'),
+      componentProps: {
+        rows: 12,
       },
     },
   ],
@@ -112,14 +134,14 @@ const [Drawer, drawerApi] = useVbenDrawer({
           items = parsed;
         } else {
           notification.error({
-            message: $t('page.navigation.validation.itemsJsonInvalid'),
+            message: $t('page.navigationItem.validation.itemsJsonInvalid'),
           });
           setLoading(false);
           return;
         }
       } catch {
         notification.error({
-          message: $t('page.navigation.validation.itemsJsonInvalid'),
+          message: $t('page.navigationItem.validation.itemsJsonInvalid'),
         });
         setLoading(false);
         return;
@@ -136,8 +158,11 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
     try {
       await (data.value?.create
-        ? navigationStore.createNavigation(payload)
-        : navigationStore.updateNavigation(data.value?.row?.id, payload));
+        ? navigationItemStore.createNavigationItem(payload)
+        : navigationItemStore.updateNavigationItem(
+            data.value?.row?.id,
+            payload,
+          ));
 
       notification.success({
         message: data.value?.create
@@ -165,18 +190,9 @@ const [Drawer, drawerApi] = useVbenDrawer({
     const row = data.value?.row;
 
     if (row) {
-      baseFormApi.setValues({
-        isActive: row.isActive,
-        itemsJson: JSON.stringify(row.items || [], null, 2),
-        locale: row.locale,
-        location: row.location,
-        name: row.name,
-      });
+      baseFormApi.setValues(data.value?.row);
     } else {
-      baseFormApi.setValues({
-        isActive: true,
-        itemsJson: '[]',
-      });
+      baseFormApi.setValues({});
     }
 
     setLoading(false);

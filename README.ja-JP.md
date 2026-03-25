@@ -79,6 +79,7 @@ GoWind HCH（ゴーウィンド HCH）は、すぐに使える企業向けの Go
     </tr>
     <tr>
         <td><img src="./docs/images/admin_site_setting_list.png" alt="バックエンドサイト設定リスト"/></td>
+        <td><img src="./docs/images/admin_navigation_list.png" alt="バックエンドナビゲーションリスト"/></td>
     </tr>
 </table>
 

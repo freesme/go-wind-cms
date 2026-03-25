@@ -1,13 +1,21 @@
+import { computed } from 'vue';
+
+import { $t } from '@vben/locales';
 import { useUserStore } from '@vben/stores';
 
 import { defineStore } from 'pinia';
 
-import { createNavigationItemServiceClient } from '#/generated/api/admin/service/v1';
+import {
+  createNavigationItemServiceClient,
+  type siteservicev1_NavigationItem_LinkType,
+} from '#/generated/api/admin/service/v1';
 import { makeOrderBy, makeQueryString, makeUpdateMask } from '#/utils/query';
 import { type Paging, requestClientRequestHandler } from '#/utils/request';
 
 export const useNavigationItemStore = defineStore('navigation-item', () => {
-  const service = createNavigationItemServiceClient(requestClientRequestHandler);
+  const service = createNavigationItemServiceClient(
+    requestClientRequestHandler,
+  );
   const userStore = useUserStore();
 
   /**
@@ -87,3 +95,53 @@ export const useNavigationItemStore = defineStore('navigation-item', () => {
     deleteNavigationItem,
   };
 });
+
+export const navigationItemLinkTypeList = computed(() => [
+  {
+    value: 'LINK_TYPE_CUSTOM',
+    label: $t('enum.navigationItem.linkType.LINK_TYPE_CUSTOM'),
+  },
+  {
+    value: 'LINK_TYPE_POST',
+    label: $t('enum.navigationItem.linkType.LINK_TYPE_POST'),
+  },
+  {
+    value: 'LINK_TYPE_PAGE',
+    label: $t('enum.navigationItem.linkType.LINK_TYPE_PAGE'),
+  },
+  {
+    value: 'LINK_TYPE_CATEGORY',
+    label: $t('enum.navigationItem.linkType.LINK_TYPE_CATEGORY'),
+  },
+  {
+    value: 'LINK_TYPE_EXTERNAL',
+    label: $t('enum.navigationItem.linkType.LINK_TYPE_EXTERNAL'),
+  },
+]);
+
+export function navigationItemLinkTypeToName(
+  linkType: siteservicev1_NavigationItem_LinkType,
+) {
+  const values = navigationItemLinkTypeList.value;
+  const matchedItem = values.find((item) => item.value === linkType);
+  return matchedItem ? matchedItem.label : '';
+}
+
+const NAVIGATION_ITEM_LINK_TYPE_COLOR_MAP = {
+  LINK_TYPE_CUSTOM: '#6366f1', // 头部：柔和紫蓝（高级、醒目不刺眼）
+  LINK_TYPE_POST: '#059669', // 底部：沉稳绿（信任、清爽）
+  LINK_TYPE_PAGE: '#d97706', // 侧边栏：暖金（柔和不艳）
+  LINK_TYPE_CATEGORY: '#dc2626', // 移动端：暗红（警示、统一）
+  LINK_TYPE_EXTERNAL: '#dc2626', // 顶栏：同移动端
+  DEFAULT: '#94a3b8', // 默认：中性灰（保留原优质色）
+} as const;
+
+export function navigationItemLinkTypeToColor(
+  linkType: siteservicev1_NavigationItem_LinkType,
+) {
+  return (
+    NAVIGATION_ITEM_LINK_TYPE_COLOR_MAP[
+      linkType as keyof typeof NAVIGATION_ITEM_LINK_TYPE_COLOR_MAP
+    ] || NAVIGATION_ITEM_LINK_TYPE_COLOR_MAP.DEFAULT
+  );
+}

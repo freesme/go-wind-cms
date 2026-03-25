@@ -43,7 +43,7 @@ type NavigationItemServiceHTTPServer interface {
 
 func RegisterNavigationItemServiceHTTPServer(s *http.Server, srv NavigationItemServiceHTTPServer) {
 	r := s.Route("/")
-	r.GET("/admin/v1/navigations", _NavigationItemService_List15_HTTP_Handler(srv))
+	r.GET("/admin/v1/navigation-items", _NavigationItemService_List15_HTTP_Handler(srv))
 	r.GET("/admin/v1/navigation-items/{id}", _NavigationItemService_Get15_HTTP_Handler(srv))
 	r.POST("/admin/v1/navigation-items", _NavigationItemService_Create12_HTTP_Handler(srv))
 	r.PUT("/admin/v1/navigation-items/{id}", _NavigationItemService_Update12_HTTP_Handler(srv))
@@ -226,7 +226,7 @@ func (c *NavigationItemServiceHTTPClientImpl) Get(ctx context.Context, in *v11.G
 // List 获取导航项目列表
 func (c *NavigationItemServiceHTTPClientImpl) List(ctx context.Context, in *v1.PagingRequest, opts ...http.CallOption) (*v11.ListNavigationItemResponse, error) {
 	var out v11.ListNavigationItemResponse
-	pattern := "/admin/v1/navigations"
+	pattern := "/admin/v1/navigation-items"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationNavigationItemServiceList))
 	opts = append(opts, http.PathTemplate(pattern))

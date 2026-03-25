@@ -732,6 +732,23 @@
       "itemsJsonInvalid": "导航项 JSON 格式错误，请输入数组格式"
     }
   },
+  "navigationItem": {
+    "moduleName": "导航项管理",
+    "title": "显示文本",
+    "description": "描述文本",
+    "icon": "图标",
+    "url": "链接URL",
+    "linkType": "链接类型",
+    "objectId": "关联对象",
+    "sortOrder": "排序优先级",
+    "isOpenNewTab": "新标签页打开",
+    "isInvalid": "是否无效",
+    "cssClass": "自定义CSS类",
+    "requiredPermission": "访问权限",
+    "button": {
+      "create": "创建导航项"
+    }
+  },
   "site": {
     "moduleName": "站点管理",
     "name": "站点名称",

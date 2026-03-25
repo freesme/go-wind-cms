@@ -3,8 +3,8 @@ import { reactive } from 'vue';
 
 import { ColPage } from '@vben/common-ui';
 
-import DictEntryList from '#/views/app/system/dict/dict-entry-list.vue';
-import DictTypeList from '#/views/app/system/dict/dict-type-list.vue';
+import DictEntryList from './dict-entry-list.vue';
+import DictTypeList from './dict-type-list.vue';
 
 const props = reactive({
   leftCollapsedWidth: 0,
