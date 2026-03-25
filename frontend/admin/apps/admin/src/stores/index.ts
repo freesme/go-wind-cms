@@ -17,6 +17,7 @@ export * from './login-policy.state';
 export * from './media-asset.state';
 export * from './menu.state';
 export * from './navigation.state';
+export * from './navigation-item.state';
 export * from './operation-audit-log.state';
 export * from './org-unit.state';
 export * from './page.state';
