@@ -111,16 +111,20 @@ const gridOptions: VxeGridProps<Site> = {
     {
       title: $t('page.site.name'),
       field: 'name',
+      fixed: 'left',
+      align: 'left',
       minWidth: 140,
     },
     {
       title: $t('page.site.slug'),
       field: 'slug',
+      align: 'left',
       minWidth: 120,
     },
     {
       title: $t('page.site.domain'),
       field: 'domain',
+      align: 'left',
       minWidth: 140,
     },
     {

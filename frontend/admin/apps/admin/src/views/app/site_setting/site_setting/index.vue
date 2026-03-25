@@ -103,26 +103,36 @@ const gridOptions: VxeGridProps<SiteSetting> = {
 
   columns: [
     {
-      title: $t('page.siteSetting.key'),
-      field: 'key',
-    },
-    {
       title: $t('page.siteSetting.label'),
       field: 'label',
+      fixed: 'left',
+      align: 'left',
+      minWidth: 140,
+    },
+    {
+      title: $t('page.siteSetting.key'),
+      field: 'key',
+      align: 'left',
+      minWidth: 140,
+    },
+    {
+      title: $t('page.siteSetting.value'),
+      field: 'value',
+      align: 'left',
+      minWidth: 140,
     },
     {
       title: $t('page.siteSetting.type'),
       field: 'type',
       slots: { default: 'type' },
+      minWidth: 140,
     },
     {
       title: $t('page.siteSetting.locale'),
       field: 'locale',
+      minWidth: 80,
     },
-    {
-      title: $t('page.siteSetting.value'),
-      field: 'value',
-    },
+
     {
       title: $t('ui.table.action'),
       field: 'action',
