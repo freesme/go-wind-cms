@@ -1781,6 +1781,8 @@ export interface DictEntryService {
   Update(request: dictservicev1_UpdateDictEntryRequest): Promise<wellKnownEmpty>;
   // 删除字典条目
   Delete(request: dictservicev1_DeleteDictEntryRequest): Promise<wellKnownEmpty>;
+  // 查询启用的字典条目
+  ListByTypeCode(request: dictservicev1_ListDictEntryByTypeCodeRequest): Promise<dictservicev1_ListDictEntryByTypeCodeResponse>;
 }
 
 export function createDictEntryServiceClient(
@@ -1925,6 +1927,29 @@ export function createDictEntryServiceClient(
         method: "Delete",
       }) as Promise<wellKnownEmpty>;
     },
+    ListByTypeCode(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      const path = `admin/v1/dict/entries/by-type-code`; // eslint-disable-line quotes
+      const body = null;
+      const queryParams: string[] = [];
+      if (request.typeCode) {
+        queryParams.push(`typeCode=${encodeURIComponent(request.typeCode.toString())}`)
+      }
+      if (request.local) {
+        queryParams.push(`local=${encodeURIComponent(request.local.toString())}`)
+      }
+      let uri = path;
+      if (queryParams.length > 0) {
+        uri += `?${queryParams.join("&")}`
+      }
+      return handler({
+        path: uri,
+        method: "GET",
+        body,
+      }, {
+        service: "DictEntryService",
+        method: "ListByTypeCode",
+      }) as Promise<dictservicev1_ListDictEntryByTypeCodeResponse>;
+    },
   };
 }
 // 查询字典项列表 - 回应
@@ -1977,6 +2002,15 @@ export type dictservicev1_UpdateDictEntryRequest = {
 // 批量删除字典 - 请求
 export type dictservicev1_DeleteDictEntryRequest = {
   ids: number[] | undefined;
+};
+
+export type dictservicev1_ListDictEntryByTypeCodeRequest = {
+  typeCode: string | undefined;
+  local?: string;
+};
+
+export type dictservicev1_ListDictEntryByTypeCodeResponse = {
+  items: dictservicev1_DictEntry[] | undefined;
 };
 
 // 数据字典分类管理服务
@@ -2173,10 +2207,9 @@ export type dictservicev1_ListDictTypeResponse = {
 export type dictservicev1_DictType = {
   id?: number;
   typeCode?: string;
+  typeName?: string;
   isEnabled?: boolean;
   sortOrder?: number;
-  i18n: { [key: string]: dictservicev1_DictTypeI18n } | undefined;
-  currentI18n?: dictservicev1_DictTypeI18n;
   tenantId?: number;
   tenantName?: string;
   createdBy?: number;
@@ -2185,14 +2218,6 @@ export type dictservicev1_DictType = {
   createdAt?: wellKnownTimestamp;
   updatedAt?: wellKnownTimestamp;
   deletedAt?: wellKnownTimestamp;
-};
-
-// 字典类型多语言信息
-export type dictservicev1_DictTypeI18n = {
-  typeName: string | undefined;
-  description?: string;
-  languageCode?: string;
-  languageName?: string;
 };
 
 // 查询字典类型详情 - 请求
@@ -2565,40 +2590,6 @@ export function createFileTransferServiceClient(
         method: "PostUploadFile",
       }) as Promise<storageservicev1_UploadFileResponse>;
     },
-    UEditorPostUploadFile(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `admin/v1/file/ueditor/upload`; // eslint-disable-line quotes
-      const body = JSON.stringify(request);
-      const queryParams: string[] = [];
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "POST",
-        body,
-      }, {
-        service: "FileTransferService",
-        method: "UEditorPostUploadFile",
-      }) as Promise<storageservicev1_UEditorUploadResponse>;
-    },
-    UEditorPutUploadFile(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `admin/v1/file/ueditor/upload`; // eslint-disable-line quotes
-      const body = JSON.stringify(request);
-      const queryParams: string[] = [];
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "PUT",
-        body,
-      }, {
-        service: "FileTransferService",
-        method: "UEditorPutUploadFile",
-      }) as Promise<storageservicev1_UEditorUploadResponse>;
-    },
     UploadMediaAsset(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
       const path = `admin/v1/file/asset/upload`; // eslint-disable-line quotes
       const body = JSON.stringify(request);
@@ -2672,34 +2663,6 @@ export type storageservicev1_PresignOption = {
 export type storageservicev1_UploadFileResponse = {
   objectName?: string;
   presignedUrl?: string;
-};
-
-export type storageservicev1_UEditorUploadRequest = {
-  action?: string;
-  file?: string;
-  sourceFileName?: string;
-  mime?: string;
-  tenantId?: number;
-  userId?: number;
-};
-
-export type storageservicev1_UEditorUploadResponse = {
-  state?: string;
-  url?: string;
-  title?: string;
-  original?: string;
-  type?: string;
-  size?: number;
-  list: storageservicev1_UEditorUploadResponse_Item[] | undefined;
-};
-
-export type storageservicev1_UEditorUploadResponse_Item = {
-  state: string | undefined;
-  url?: string;
-  title?: string;
-  original?: string;
-  type?: string;
-  size?: number;
 };
 
 export type storageservicev1_UploadMediaAssetRequest = {

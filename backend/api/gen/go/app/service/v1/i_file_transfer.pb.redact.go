@@ -22,7 +22,6 @@ var (
 	_ status.Status
 	_ httpbody.HttpBody
 	_ storagepb.DownloadFileRequest
-	_ storagepb.UEditorRequest
 )
 
 // RegisterRedactedFileTransferServiceServer wraps the FileTransferServiceServer with the redacted server and registers the service in GRPC
@@ -74,20 +73,4 @@ func (s *redactedFileTransferServiceServer) PostUploadFile(ctx context.Context, 
 		redact.Apply(res)
 	}
 	return res, err
-}
-
-// UEditorPostUploadFile is the redacted wrapper for the actual FileTransferServiceServer.UEditorPostUploadFile method
-// Client streaming
-func (s *redactedFileTransferServiceServer) UEditorPostUploadFile(stream grpc.ClientStreamingServer[storagepb.UEditorUploadRequest, storagepb.UEditorUploadResponse]) error {
-	// Note: Redaction for client streaming is not fully implemented
-	// Streaming methods pass through without redaction
-	return s.srv.UEditorPostUploadFile(stream)
-}
-
-// UEditorPutUploadFile is the redacted wrapper for the actual FileTransferServiceServer.UEditorPutUploadFile method
-// Client streaming
-func (s *redactedFileTransferServiceServer) UEditorPutUploadFile(stream grpc.ClientStreamingServer[storagepb.UEditorUploadRequest, storagepb.UEditorUploadResponse]) error {
-	// Note: Redaction for client streaming is not fully implemented
-	// Streaming methods pass through without redaction
-	return s.srv.UEditorPutUploadFile(stream)
 }

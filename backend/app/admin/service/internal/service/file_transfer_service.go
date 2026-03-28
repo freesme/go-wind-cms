@@ -347,63 +347,6 @@ func (s *FileTransferService) DownloadFile(ctx context.Context, req *storageV1.D
 	}
 }
 
-func (s *FileTransferService) UEditorUploadFile(ctx context.Context, req *storageV1.UEditorUploadRequest) (*storageV1.UEditorUploadResponse, error) {
-	//s.log.Infof("上传文件： %s", req.GetFile())
-
-	if req.File == nil {
-		return nil, storageV1.ErrorUploadFailed("unknown file")
-	}
-
-	// 获取操作人信息
-	operator, err := auth.FromContext(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	req.TenantId = trans.Ptr(operator.GetTenantId())
-	req.UserId = trans.Ptr(operator.GetUserId())
-
-	var bucketName string
-	switch req.GetAction() {
-	default:
-		fallthrough
-	case storageV1.UEditorAction_uploadFile.String():
-		bucketName = "files"
-	case storageV1.UEditorAction_uploadImage.String(), storageV1.UEditorAction_uploadScrawl.String(), storageV1.UEditorAction_catchImage.String():
-		bucketName = "images"
-	case storageV1.UEditorAction_uploadVideo.String():
-		bucketName = "videos"
-	}
-
-	info, _, downloadUrl, err := s.mc.UploadFile(
-		ctx,
-		bucketName,
-		req.GetSourceFileName(),
-		req.GetMime(),
-		req.GetFile(),
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	if _, err = s.recordFile(
-		ctx,
-		operator.GetTenantId(), operator.GetUserId(),
-		req.GetFile(),
-		req.GetSourceFileName(),
-		info, downloadUrl); err != nil {
-	}
-
-	return &storageV1.UEditorUploadResponse{
-		State:    trans.Ptr("SUCCESS"),
-		Original: trans.Ptr(req.GetSourceFileName()),
-		Title:    trans.Ptr(req.GetSourceFileName()),
-		Url:      trans.Ptr(downloadUrl),
-		Size:     trans.Ptr(int32(len(req.GetFile()))),
-		Type:     trans.Ptr(path.Ext(req.GetSourceFileName())),
-	}, nil
-}
-
 func (s *FileTransferService) mimeTypeToBucketName(mimeType string) string {
 	if mimeType == "" {
 		return "files"

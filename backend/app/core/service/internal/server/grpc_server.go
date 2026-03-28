@@ -44,7 +44,6 @@ func NewGrpcServer(
 
 	taskService *service.TaskService,
 
-	uEditorService *service.UEditorService,
 	fileService *service.FileService,
 
 	dictTypeService *service.DictTypeService,
@@ -127,7 +126,6 @@ func NewGrpcServer(
 	auditV1.RegisterPermissionAuditLogServiceServer(srv, permissionAuditLogService)
 
 	storageV1.RegisterFileServiceServer(srv, fileService)
-	storageV1.RegisterUEditorServiceServer(srv, uEditorService)
 
 	internalMessageV1.RegisterInternalMessageServiceServer(srv, internalMessageService)
 	internalMessageV1.RegisterInternalMessageCategoryServiceServer(srv, internalMessageCategoryService)

@@ -27,36 +27,28 @@ var File_app_service_v1_i_file_transfer_proto protoreflect.FileDescriptor
 
 const file_app_service_v1_i_file_transfer_proto_rawDesc = "" +
 	"\n" +
-	"$app/service/v1/i_file_transfer.proto\x12\x0eapp.service.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x19google/api/httpbody.proto\x1a&storage/service/v1/file_transfer.proto\x1a storage/service/v1/ueditor.proto2\xb2\x05\n" +
+	"$app/service/v1/i_file_transfer.proto\x12\x0eapp.service.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x19google/api/httpbody.proto\x1a&storage/service/v1/file_transfer.proto2\x99\x03\n" +
 	"\x13FileTransferService\x12\x80\x01\n" +
 	"\fDownloadFile\x12'.storage.service.v1.DownloadFileRequest\x1a(.storage.service.v1.DownloadFileResponse\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/app/v1/file/download\x12~\n" +
 	"\rPutUploadFile\x12%.storage.service.v1.UploadFileRequest\x1a&.storage.service.v1.UploadFileResponse\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\x1a\x13/app/v1/file/upload\x12\x7f\n" +
-	"\x0ePostUploadFile\x12%.storage.service.v1.UploadFileRequest\x1a&.storage.service.v1.UploadFileResponse\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/app/v1/file/upload\x12\x8a\x01\n" +
-	"\x15UEditorPostUploadFile\x12(.storage.service.v1.UEditorUploadRequest\x1a).storage.service.v1.UEditorUploadResponse\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/app/v1/ueditor(\x01\x12\x89\x01\n" +
-	"\x14UEditorPutUploadFile\x12(.storage.service.v1.UEditorUploadRequest\x1a).storage.service.v1.UEditorUploadResponse\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\x1a\x0f/app/v1/ueditor(\x01B\xb3\x01\n" +
+	"\x0ePostUploadFile\x12%.storage.service.v1.UploadFileRequest\x1a&.storage.service.v1.UploadFileResponse\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/app/v1/file/uploadB\xb3\x01\n" +
 	"\x12com.app.service.v1B\x12IFileTransferProtoP\x01Z/go-wind-cms/api/gen/go/app/service/v1;servicev1\xa2\x02\x03ASX\xaa\x02\x0eApp.Service.V1\xca\x02\x0eApp\\Service\\V1\xe2\x02\x1aApp\\Service\\V1\\GPBMetadata\xea\x02\x10App::Service::V1b\x06proto3"
 
 var file_app_service_v1_i_file_transfer_proto_goTypes = []any{
-	(*v1.DownloadFileRequest)(nil),   // 0: storage.service.v1.DownloadFileRequest
-	(*v1.UploadFileRequest)(nil),     // 1: storage.service.v1.UploadFileRequest
-	(*v1.UEditorUploadRequest)(nil),  // 2: storage.service.v1.UEditorUploadRequest
-	(*v1.DownloadFileResponse)(nil),  // 3: storage.service.v1.DownloadFileResponse
-	(*v1.UploadFileResponse)(nil),    // 4: storage.service.v1.UploadFileResponse
-	(*v1.UEditorUploadResponse)(nil), // 5: storage.service.v1.UEditorUploadResponse
+	(*v1.DownloadFileRequest)(nil),  // 0: storage.service.v1.DownloadFileRequest
+	(*v1.UploadFileRequest)(nil),    // 1: storage.service.v1.UploadFileRequest
+	(*v1.DownloadFileResponse)(nil), // 2: storage.service.v1.DownloadFileResponse
+	(*v1.UploadFileResponse)(nil),   // 3: storage.service.v1.UploadFileResponse
 }
 var file_app_service_v1_i_file_transfer_proto_depIdxs = []int32{
 	0, // 0: app.service.v1.FileTransferService.DownloadFile:input_type -> storage.service.v1.DownloadFileRequest
 	1, // 1: app.service.v1.FileTransferService.PutUploadFile:input_type -> storage.service.v1.UploadFileRequest
 	1, // 2: app.service.v1.FileTransferService.PostUploadFile:input_type -> storage.service.v1.UploadFileRequest
-	2, // 3: app.service.v1.FileTransferService.UEditorPostUploadFile:input_type -> storage.service.v1.UEditorUploadRequest
-	2, // 4: app.service.v1.FileTransferService.UEditorPutUploadFile:input_type -> storage.service.v1.UEditorUploadRequest
-	3, // 5: app.service.v1.FileTransferService.DownloadFile:output_type -> storage.service.v1.DownloadFileResponse
-	4, // 6: app.service.v1.FileTransferService.PutUploadFile:output_type -> storage.service.v1.UploadFileResponse
-	4, // 7: app.service.v1.FileTransferService.PostUploadFile:output_type -> storage.service.v1.UploadFileResponse
-	5, // 8: app.service.v1.FileTransferService.UEditorPostUploadFile:output_type -> storage.service.v1.UEditorUploadResponse
-	5, // 9: app.service.v1.FileTransferService.UEditorPutUploadFile:output_type -> storage.service.v1.UEditorUploadResponse
-	5, // [5:10] is the sub-list for method output_type
-	0, // [0:5] is the sub-list for method input_type
+	2, // 3: app.service.v1.FileTransferService.DownloadFile:output_type -> storage.service.v1.DownloadFileResponse
+	3, // 4: app.service.v1.FileTransferService.PutUploadFile:output_type -> storage.service.v1.UploadFileResponse
+	3, // 5: app.service.v1.FileTransferService.PostUploadFile:output_type -> storage.service.v1.UploadFileResponse
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name

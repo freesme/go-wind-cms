@@ -20,12 +20,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	FileTransferService_DownloadFile_FullMethodName          = "/admin.service.v1.FileTransferService/DownloadFile"
-	FileTransferService_PutUploadFile_FullMethodName         = "/admin.service.v1.FileTransferService/PutUploadFile"
-	FileTransferService_PostUploadFile_FullMethodName        = "/admin.service.v1.FileTransferService/PostUploadFile"
-	FileTransferService_UEditorPostUploadFile_FullMethodName = "/admin.service.v1.FileTransferService/UEditorPostUploadFile"
-	FileTransferService_UEditorPutUploadFile_FullMethodName  = "/admin.service.v1.FileTransferService/UEditorPutUploadFile"
-	FileTransferService_UploadMediaAsset_FullMethodName      = "/admin.service.v1.FileTransferService/UploadMediaAsset"
+	FileTransferService_DownloadFile_FullMethodName     = "/admin.service.v1.FileTransferService/DownloadFile"
+	FileTransferService_PutUploadFile_FullMethodName    = "/admin.service.v1.FileTransferService/PutUploadFile"
+	FileTransferService_PostUploadFile_FullMethodName   = "/admin.service.v1.FileTransferService/PostUploadFile"
+	FileTransferService_UploadMediaAsset_FullMethodName = "/admin.service.v1.FileTransferService/UploadMediaAsset"
 )
 
 // FileTransferServiceClient is the client API for FileTransferService service.
@@ -40,10 +38,6 @@ type FileTransferServiceClient interface {
 	PutUploadFile(ctx context.Context, in *v1.UploadFileRequest, opts ...grpc.CallOption) (*v1.UploadFileResponse, error)
 	// 上传文件 POST 方式
 	PostUploadFile(ctx context.Context, in *v1.UploadFileRequest, opts ...grpc.CallOption) (*v1.UploadFileResponse, error)
-	// UEditor 上传文件
-	UEditorPostUploadFile(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[v1.UEditorUploadRequest, v1.UEditorUploadResponse], error)
-	// UEditor 上传文件
-	UEditorPutUploadFile(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[v1.UEditorUploadRequest, v1.UEditorUploadResponse], error)
 	UploadMediaAsset(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[v1.UploadMediaAssetRequest, v1.UploadFileResponse], error)
 }
 
@@ -85,35 +79,9 @@ func (c *fileTransferServiceClient) PostUploadFile(ctx context.Context, in *v1.U
 	return out, nil
 }
 
-func (c *fileTransferServiceClient) UEditorPostUploadFile(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[v1.UEditorUploadRequest, v1.UEditorUploadResponse], error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &FileTransferService_ServiceDesc.Streams[0], FileTransferService_UEditorPostUploadFile_FullMethodName, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &grpc.GenericClientStream[v1.UEditorUploadRequest, v1.UEditorUploadResponse]{ClientStream: stream}
-	return x, nil
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type FileTransferService_UEditorPostUploadFileClient = grpc.ClientStreamingClient[v1.UEditorUploadRequest, v1.UEditorUploadResponse]
-
-func (c *fileTransferServiceClient) UEditorPutUploadFile(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[v1.UEditorUploadRequest, v1.UEditorUploadResponse], error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &FileTransferService_ServiceDesc.Streams[1], FileTransferService_UEditorPutUploadFile_FullMethodName, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &grpc.GenericClientStream[v1.UEditorUploadRequest, v1.UEditorUploadResponse]{ClientStream: stream}
-	return x, nil
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type FileTransferService_UEditorPutUploadFileClient = grpc.ClientStreamingClient[v1.UEditorUploadRequest, v1.UEditorUploadResponse]
-
 func (c *fileTransferServiceClient) UploadMediaAsset(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[v1.UploadMediaAssetRequest, v1.UploadFileResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &FileTransferService_ServiceDesc.Streams[2], FileTransferService_UploadMediaAsset_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &FileTransferService_ServiceDesc.Streams[0], FileTransferService_UploadMediaAsset_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -136,10 +104,6 @@ type FileTransferServiceServer interface {
 	PutUploadFile(context.Context, *v1.UploadFileRequest) (*v1.UploadFileResponse, error)
 	// 上传文件 POST 方式
 	PostUploadFile(context.Context, *v1.UploadFileRequest) (*v1.UploadFileResponse, error)
-	// UEditor 上传文件
-	UEditorPostUploadFile(grpc.ClientStreamingServer[v1.UEditorUploadRequest, v1.UEditorUploadResponse]) error
-	// UEditor 上传文件
-	UEditorPutUploadFile(grpc.ClientStreamingServer[v1.UEditorUploadRequest, v1.UEditorUploadResponse]) error
 	UploadMediaAsset(grpc.ClientStreamingServer[v1.UploadMediaAssetRequest, v1.UploadFileResponse]) error
 	mustEmbedUnimplementedFileTransferServiceServer()
 }
@@ -159,12 +123,6 @@ func (UnimplementedFileTransferServiceServer) PutUploadFile(context.Context, *v1
 }
 func (UnimplementedFileTransferServiceServer) PostUploadFile(context.Context, *v1.UploadFileRequest) (*v1.UploadFileResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method PostUploadFile not implemented")
-}
-func (UnimplementedFileTransferServiceServer) UEditorPostUploadFile(grpc.ClientStreamingServer[v1.UEditorUploadRequest, v1.UEditorUploadResponse]) error {
-	return status.Error(codes.Unimplemented, "method UEditorPostUploadFile not implemented")
-}
-func (UnimplementedFileTransferServiceServer) UEditorPutUploadFile(grpc.ClientStreamingServer[v1.UEditorUploadRequest, v1.UEditorUploadResponse]) error {
-	return status.Error(codes.Unimplemented, "method UEditorPutUploadFile not implemented")
 }
 func (UnimplementedFileTransferServiceServer) UploadMediaAsset(grpc.ClientStreamingServer[v1.UploadMediaAssetRequest, v1.UploadFileResponse]) error {
 	return status.Error(codes.Unimplemented, "method UploadMediaAsset not implemented")
@@ -244,20 +202,6 @@ func _FileTransferService_PostUploadFile_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FileTransferService_UEditorPostUploadFile_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(FileTransferServiceServer).UEditorPostUploadFile(&grpc.GenericServerStream[v1.UEditorUploadRequest, v1.UEditorUploadResponse]{ServerStream: stream})
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type FileTransferService_UEditorPostUploadFileServer = grpc.ClientStreamingServer[v1.UEditorUploadRequest, v1.UEditorUploadResponse]
-
-func _FileTransferService_UEditorPutUploadFile_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(FileTransferServiceServer).UEditorPutUploadFile(&grpc.GenericServerStream[v1.UEditorUploadRequest, v1.UEditorUploadResponse]{ServerStream: stream})
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type FileTransferService_UEditorPutUploadFileServer = grpc.ClientStreamingServer[v1.UEditorUploadRequest, v1.UEditorUploadResponse]
-
 func _FileTransferService_UploadMediaAsset_Handler(srv interface{}, stream grpc.ServerStream) error {
 	return srv.(FileTransferServiceServer).UploadMediaAsset(&grpc.GenericServerStream[v1.UploadMediaAssetRequest, v1.UploadFileResponse]{ServerStream: stream})
 }
@@ -286,16 +230,6 @@ var FileTransferService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams: []grpc.StreamDesc{
-		{
-			StreamName:    "UEditorPostUploadFile",
-			Handler:       _FileTransferService_UEditorPostUploadFile_Handler,
-			ClientStreams: true,
-		},
-		{
-			StreamName:    "UEditorPutUploadFile",
-			Handler:       _FileTransferService_UEditorPutUploadFile_Handler,
-			ClientStreams: true,
-		},
 		{
 			StreamName:    "UploadMediaAsset",
 			Handler:       _FileTransferService_UploadMediaAsset_Handler,

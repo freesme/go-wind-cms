@@ -1410,43 +1410,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/TagTranslation'
-    /app/v1/ueditor:
-        put:
-            tags:
-                - FileTransferService
-            description: UEditor 上传文件
-            operationId: FileTransferService_UEditorPutUploadFile
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/UEditorUploadRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/UEditorUploadResponse'
-        post:
-            tags:
-                - FileTransferService
-            description: UEditor 上传文件
-            operationId: FileTransferService_UEditorPostUploadFile
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/UEditorUploadRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/UEditorUploadResponse'
 components:
     schemas:
         Any:
@@ -2742,66 +2705,6 @@ components:
                     description: 删除时间
                     format: date-time
             description: 标签翻译
-        UEditorUploadRequest:
-            type: object
-            properties:
-                action:
-                    type: string
-                    description: 动作
-                file:
-                    type: string
-                    description: 文件内容
-                    format: bytes
-                sourceFileName:
-                    type: string
-                    description: 原文件文件名
-                mime:
-                    type: string
-                    description: 文件的MIME类型
-                tenantId:
-                    type: integer
-                    description: 租户ID，0代表系统全局角色
-                    format: uint32
-                userId:
-                    type: integer
-                    description: 用户ID
-                    format: uint32
-        UEditorUploadResponse:
-            type: object
-            properties:
-                state:
-                    type: string
-                url:
-                    type: string
-                title:
-                    type: string
-                original:
-                    type: string
-                type:
-                    type: string
-                size:
-                    type: integer
-                    format: int32
-                list:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/UEditorUploadResponse_Item'
-        UEditorUploadResponse_Item:
-            type: object
-            properties:
-                state:
-                    type: string
-                url:
-                    type: string
-                title:
-                    type: string
-                original:
-                    type: string
-                type:
-                    type: string
-                size:
-                    type: integer
-                    format: int32
         UpdateCategoryRequest:
             type: object
             properties:

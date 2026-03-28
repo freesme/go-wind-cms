@@ -31,9 +31,6 @@ func registerFileTransferServiceHandler(srv *http.Server, svc *service.FileTrans
 
 	r.GET("admin/v1/file/download", _FileTransferService_DownloadFile_HTTP_Handler(svc))
 
-	r.POST("admin/v1/file/ueditor/upload", _FileTransferService_UEditorPostUploadFile_HTTP_Handler(svc))
-	r.PUT("admin/v1/file/ueditor/upload", _FileTransferService_UEditorPutUploadFile_HTTP_Handler(svc))
-
 	r.POST("admin/v1/file/asset/upload", _FileTransferService_UploadMediaAsset_HTTP_Handler(svc))
 }
 
@@ -316,94 +313,6 @@ func _FileTransferService_DownloadFile_HTTP_Handler(svc *service.FileTransferSer
 			return ctx.Result(500, err.Error())
 		}
 		return nil
-	}
-}
-
-func _FileTransferService_UEditorPostUploadFile_HTTP_Handler(svc *service.FileTransferService) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		http.SetOperation(ctx, adminV1.FileTransferService_UEditorPostUploadFile_FullMethodName)
-
-		var in storageV1.UEditorUploadRequest
-		var err error
-
-		file, header, err := ctx.Request().FormFile("file")
-		if err == nil {
-			defer file.Close()
-
-			b := new(strings.Builder)
-			_, err = io.Copy(b, file)
-
-			in.SourceFileName = trans.Ptr(header.Filename)
-			in.Mime = trans.Ptr(header.Header.Get("Content-Type"))
-			in.File = []byte(b.String())
-		}
-
-		if err = ctx.BindQuery(&in); err != nil {
-			return err
-		}
-
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			var resp *storageV1.UEditorUploadResponse
-
-			resp, err = svc.UEditorUploadFile(ctx, req.(*storageV1.UEditorUploadRequest))
-			in.File = nil
-
-			return resp, err
-		})
-
-		// 逻辑处理，取数据
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-
-		reply := out.(*storageV1.UEditorUploadResponse)
-
-		return ctx.Result(200, reply)
-	}
-}
-
-func _FileTransferService_UEditorPutUploadFile_HTTP_Handler(svc *service.FileTransferService) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		http.SetOperation(ctx, adminV1.FileTransferService_UEditorPutUploadFile_FullMethodName)
-
-		var in storageV1.UEditorUploadRequest
-		var err error
-
-		file, header, err := ctx.Request().FormFile("file")
-		if err == nil {
-			defer file.Close()
-
-			b := new(strings.Builder)
-			_, err = io.Copy(b, file)
-
-			in.SourceFileName = trans.Ptr(header.Filename)
-			in.Mime = trans.Ptr(header.Header.Get("Content-Type"))
-			in.File = []byte(b.String())
-		}
-
-		if err = ctx.BindQuery(&in); err != nil {
-			return err
-		}
-
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			var resp *storageV1.UEditorUploadResponse
-
-			resp, err = svc.UEditorUploadFile(ctx, req.(*storageV1.UEditorUploadRequest))
-			in.File = nil
-
-			return resp, err
-		})
-
-		// 逻辑处理，取数据
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-
-		reply := out.(*storageV1.UEditorUploadResponse)
-
-		return ctx.Result(200, reply)
 	}
 }
 

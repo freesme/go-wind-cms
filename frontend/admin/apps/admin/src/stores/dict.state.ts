@@ -148,19 +148,31 @@ export const useDictStore = defineStore('dict', () => {
     return await dictEntryService.Delete({ ids });
   }
 
+  /**
+   * 根据字典类型编码查询字典项列表
+   */
+  async function listDictEntriesByTypeCode(code: string) {
+    return await dictEntryService.ListByTypeCode({
+      typeCode: code,
+    });
+  }
+
   function $reset() {}
 
   return {
     $reset,
+
     listDictType,
-    listDictEntry,
     getDictType,
     getDictTypeByCode,
     createDictType,
-    createDictEntry,
     updateDictType,
-    updateDictEntry,
     deleteDictType,
+
+    listDictEntry,
+    createDictEntry,
+    updateDictEntry,
     deleteDictEntry,
+    listDictEntriesByTypeCode,
   };
 });

@@ -1054,40 +1054,6 @@ export function createFileTransferServiceClient(
         method: "PostUploadFile",
       }) as Promise<storageservicev1_UploadFileResponse>;
     },
-    UEditorPostUploadFile(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `app/v1/ueditor`; // eslint-disable-line quotes
-      const body = JSON.stringify(request);
-      const queryParams: string[] = [];
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "POST",
-        body,
-      }, {
-        service: "FileTransferService",
-        method: "UEditorPostUploadFile",
-      }) as Promise<storageservicev1_UEditorUploadResponse>;
-    },
-    UEditorPutUploadFile(request) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      const path = `app/v1/ueditor`; // eslint-disable-line quotes
-      const body = JSON.stringify(request);
-      const queryParams: string[] = [];
-      let uri = path;
-      if (queryParams.length > 0) {
-        uri += `?${queryParams.join("&")}`
-      }
-      return handler({
-        path: uri,
-        method: "PUT",
-        body,
-      }, {
-        service: "FileTransferService",
-        method: "UEditorPutUploadFile",
-      }) as Promise<storageservicev1_UEditorUploadResponse>;
-    },
   };
 }
 // 文件下载请求
@@ -1144,34 +1110,6 @@ export type storageservicev1_PresignOption = {
 export type storageservicev1_UploadFileResponse = {
   objectName?: string;
   presignedUrl?: string;
-};
-
-export type storageservicev1_UEditorUploadRequest = {
-  action?: string;
-  file?: string;
-  sourceFileName?: string;
-  mime?: string;
-  tenantId?: number;
-  userId?: number;
-};
-
-export type storageservicev1_UEditorUploadResponse = {
-  state?: string;
-  url?: string;
-  title?: string;
-  original?: string;
-  type?: string;
-  size?: number;
-  list: storageservicev1_UEditorUploadResponse_Item[] | undefined;
-};
-
-export type storageservicev1_UEditorUploadResponse_Item = {
-  state: string | undefined;
-  url?: string;
-  title?: string;
-  original?: string;
-  type?: string;
-  size?: number;
 };
 
 // 导航服务
