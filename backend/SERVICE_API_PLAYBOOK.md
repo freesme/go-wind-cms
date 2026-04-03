@@ -897,3 +897,8 @@ make ts
 - “trade 直接做独立 trade-service”
 
 我可以下一步继续按你选的路线，直接给你拆出一份更具体的文件级改动清单。
+
+相关文档：
+
+- [CORE_SERVICE_DOMAIN_MAP.md](C:/Users/WIN10/GolandProjects/go-wind-cms/backend/CORE_SERVICE_DOMAIN_MAP.md)
+  - 拆解 `core-service` 当前领域边界、核心实体、关系表和典型调用链
