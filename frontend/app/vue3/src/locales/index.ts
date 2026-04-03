@@ -22,7 +22,7 @@ export {
   languageCodeToLocale,
 } from './utils';
 
-export type {CompileError} from '@intlify/core-base';
+export type {CompileError} from '@intlify/user-base';
 
 const $t = i18n.global.t;
 

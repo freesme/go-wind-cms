@@ -1,4 +1,4 @@
-import type { EmitType } from '@vben-core/typings';
+import type { EmitType } from '@vben-user/typings';
 
 import type { TabsProps } from './types';
 
@@ -8,7 +8,7 @@ import {
   type Sortable,
   useIsMobile,
   useSortable,
-} from '@vben-core/composables';
+} from '@vben-user/composables';
 
 // 可能会找到拖拽的子元素，这里需要确保拖拽的dom时tab元素
 function findParentElement(element: HTMLElement) {

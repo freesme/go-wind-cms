@@ -74,15 +74,15 @@ cfgexp --type=etcd --addr=localhost:2379 --proj=go-wind-cms
 **必须先启动 core-service**，因为 admin-service 和 app-service 通过 gRPC 依赖它。
 
 ```bash
-# 终端 1：启动 core-service
-cd app/core/service
+# 终端 1：启动 user-service
+cd app/user/service
 go run ./cmd/server/ -c ./configs
 
-# 终端 2：启动 admin-service（等 core 启动完成后）
+# 终端 2：启动 admin-service（等 user 启动完成后）
 cd app/admin/service
 go run ./cmd/server/ -c ./configs
 
-# 终端 3：启动 app-service（等 core 启动完成后）
+# 终端 3：启动 app-service（等 user 启动完成后）
 cd app/app/service
 go run ./cmd/server/ -c ./configs
 ```

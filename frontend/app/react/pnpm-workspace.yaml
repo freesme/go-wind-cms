@@ -1,5 +1,5 @@
 ignoredBuiltDependencies:
   - '@parcel/watcher'
-  - '@swc/core'
+  - '@swc/user'
   - sharp
   - unrs-resolver

@@ -1,4 +1,4 @@
-import type { ClassType } from '@vben-core/typings';
+import type { ClassType } from '@vben-user/typings';
 
 import type { DrawerApi } from './drawer-api';
 

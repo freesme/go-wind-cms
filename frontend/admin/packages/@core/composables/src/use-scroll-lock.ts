@@ -1,10 +1,10 @@
-import { getScrollbarWidth, needsScrollbar } from '@vben-core/shared/utils';
+import { getScrollbarWidth, needsScrollbar } from '@vben-user/shared/utils';
 
 import {
   useScrollLock as _useScrollLock,
   tryOnBeforeUnmount,
   tryOnMounted,
-} from '@vueuse/core';
+} from '@vueuse/user';
 
 export const SCROLL_FIXED_CLASS = `_scroll__fixed_`;
 

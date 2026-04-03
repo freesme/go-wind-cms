@@ -90,7 +90,7 @@ func NewAuthorizer() authzEngine.Engine {
 }
 
 func NewAuthenticationServiceClient(ctx *bootstrap.Context, r registry.Discovery) authenticationV1.AuthenticationServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -99,7 +99,7 @@ func NewAuthenticationServiceClient(ctx *bootstrap.Context, r registry.Discovery
 }
 
 func NewUserCredentialServiceClient(ctx *bootstrap.Context, r registry.Discovery) authenticationV1.UserCredentialServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -108,7 +108,7 @@ func NewUserCredentialServiceClient(ctx *bootstrap.Context, r registry.Discovery
 }
 
 func NewLoginPolicyServiceClient(ctx *bootstrap.Context, r registry.Discovery) authenticationV1.LoginPolicyServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -117,7 +117,7 @@ func NewLoginPolicyServiceClient(ctx *bootstrap.Context, r registry.Discovery) a
 }
 
 func NewUserServiceClient(ctx *bootstrap.Context, r registry.Discovery) identityV1.UserServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -126,7 +126,7 @@ func NewUserServiceClient(ctx *bootstrap.Context, r registry.Discovery) identity
 }
 
 func NewTenantServiceClient(ctx *bootstrap.Context, r registry.Discovery) identityV1.TenantServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -135,7 +135,7 @@ func NewTenantServiceClient(ctx *bootstrap.Context, r registry.Discovery) identi
 }
 
 func NewRoleServiceClient(ctx *bootstrap.Context, r registry.Discovery) permissionV1.RoleServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -144,7 +144,7 @@ func NewRoleServiceClient(ctx *bootstrap.Context, r registry.Discovery) permissi
 }
 
 func NewOrgUnitServiceClient(ctx *bootstrap.Context, r registry.Discovery) identityV1.OrgUnitServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -153,7 +153,7 @@ func NewOrgUnitServiceClient(ctx *bootstrap.Context, r registry.Discovery) ident
 }
 
 func NewPositionServiceClient(ctx *bootstrap.Context, r registry.Discovery) identityV1.PositionServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -162,7 +162,7 @@ func NewPositionServiceClient(ctx *bootstrap.Context, r registry.Discovery) iden
 }
 
 func NewInternalMessageCategoryServiceClient(ctx *bootstrap.Context, r registry.Discovery) internalMessageV1.InternalMessageCategoryServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -171,7 +171,7 @@ func NewInternalMessageCategoryServiceClient(ctx *bootstrap.Context, r registry.
 }
 
 func NewInternalMessageServiceClient(ctx *bootstrap.Context, r registry.Discovery) internalMessageV1.InternalMessageServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -180,7 +180,7 @@ func NewInternalMessageServiceClient(ctx *bootstrap.Context, r registry.Discover
 }
 
 func NewInternalMessageRecipientServiceClient(ctx *bootstrap.Context, r registry.Discovery) internalMessageV1.InternalMessageRecipientServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -189,7 +189,7 @@ func NewInternalMessageRecipientServiceClient(ctx *bootstrap.Context, r registry
 }
 
 func NewOssServiceClient(ctx *bootstrap.Context, r registry.Discovery) storageV1.OssServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -198,7 +198,7 @@ func NewOssServiceClient(ctx *bootstrap.Context, r registry.Discovery) storageV1
 }
 
 func NewFileServiceClient(ctx *bootstrap.Context, r registry.Discovery) storageV1.FileServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -207,7 +207,7 @@ func NewFileServiceClient(ctx *bootstrap.Context, r registry.Discovery) storageV
 }
 
 func NewPermissionGroupServiceClient(ctx *bootstrap.Context, r registry.Discovery) permissionV1.PermissionGroupServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -216,7 +216,7 @@ func NewPermissionGroupServiceClient(ctx *bootstrap.Context, r registry.Discover
 }
 
 func NewPermissionServiceClient(ctx *bootstrap.Context, r registry.Discovery) permissionV1.PermissionServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -225,7 +225,7 @@ func NewPermissionServiceClient(ctx *bootstrap.Context, r registry.Discovery) pe
 }
 
 func NewApiServiceClient(ctx *bootstrap.Context, r registry.Discovery) resourceV1.ApiServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -234,7 +234,7 @@ func NewApiServiceClient(ctx *bootstrap.Context, r registry.Discovery) resourceV
 }
 
 func NewMenuServiceClient(ctx *bootstrap.Context, r registry.Discovery) resourceV1.MenuServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -243,7 +243,7 @@ func NewMenuServiceClient(ctx *bootstrap.Context, r registry.Discovery) resource
 }
 
 func NewPermissionAuditLogServiceClient(ctx *bootstrap.Context, r registry.Discovery) auditV1.PermissionAuditLogServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -252,7 +252,7 @@ func NewPermissionAuditLogServiceClient(ctx *bootstrap.Context, r registry.Disco
 }
 
 func NewPolicyEvaluationLogServiceClient(ctx *bootstrap.Context, r registry.Discovery) permissionV1.PolicyEvaluationLogServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -261,7 +261,7 @@ func NewPolicyEvaluationLogServiceClient(ctx *bootstrap.Context, r registry.Disc
 }
 
 func NewApiAuditLogServiceClient(ctx *bootstrap.Context, r registry.Discovery) auditV1.ApiAuditLogServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -270,7 +270,7 @@ func NewApiAuditLogServiceClient(ctx *bootstrap.Context, r registry.Discovery) a
 }
 
 func NewDataAccessAuditLogServiceClient(ctx *bootstrap.Context, r registry.Discovery) auditV1.DataAccessAuditLogServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -279,7 +279,7 @@ func NewDataAccessAuditLogServiceClient(ctx *bootstrap.Context, r registry.Disco
 }
 
 func NewLoginAuditLogServiceClient(ctx *bootstrap.Context, r registry.Discovery) auditV1.LoginAuditLogServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -288,7 +288,7 @@ func NewLoginAuditLogServiceClient(ctx *bootstrap.Context, r registry.Discovery)
 }
 
 func NewOperationAuditLogServiceClient(ctx *bootstrap.Context, r registry.Discovery) auditV1.OperationAuditLogServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -297,7 +297,7 @@ func NewOperationAuditLogServiceClient(ctx *bootstrap.Context, r registry.Discov
 }
 
 func NewDictEntryServiceClient(ctx *bootstrap.Context, r registry.Discovery) dictV1.DictEntryServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -306,7 +306,7 @@ func NewDictEntryServiceClient(ctx *bootstrap.Context, r registry.Discovery) dic
 }
 
 func NewDictTypeServiceClient(ctx *bootstrap.Context, r registry.Discovery) dictV1.DictTypeServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -315,7 +315,7 @@ func NewDictTypeServiceClient(ctx *bootstrap.Context, r registry.Discovery) dict
 }
 
 func NewLanguageServiceClient(ctx *bootstrap.Context, r registry.Discovery) dictV1.LanguageServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -324,7 +324,7 @@ func NewLanguageServiceClient(ctx *bootstrap.Context, r registry.Discovery) dict
 }
 
 func NewTaskServiceClient(ctx *bootstrap.Context, r registry.Discovery) taskV1.TaskServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -333,7 +333,7 @@ func NewTaskServiceClient(ctx *bootstrap.Context, r registry.Discovery) taskV1.T
 }
 
 func NewCommentServiceClient(ctx *bootstrap.Context, r registry.Discovery) commentV1.CommentServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -342,7 +342,7 @@ func NewCommentServiceClient(ctx *bootstrap.Context, r registry.Discovery) comme
 }
 
 func NewCategoryServiceClient(ctx *bootstrap.Context, r registry.Discovery) contentV1.CategoryServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -351,7 +351,7 @@ func NewCategoryServiceClient(ctx *bootstrap.Context, r registry.Discovery) cont
 }
 
 func NewPageServiceClient(ctx *bootstrap.Context, r registry.Discovery) contentV1.PageServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -360,7 +360,7 @@ func NewPageServiceClient(ctx *bootstrap.Context, r registry.Discovery) contentV
 }
 
 func NewPostServiceClient(ctx *bootstrap.Context, r registry.Discovery) contentV1.PostServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -369,7 +369,7 @@ func NewPostServiceClient(ctx *bootstrap.Context, r registry.Discovery) contentV
 }
 
 func NewTagServiceClient(ctx *bootstrap.Context, r registry.Discovery) contentV1.TagServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -378,7 +378,7 @@ func NewTagServiceClient(ctx *bootstrap.Context, r registry.Discovery) contentV1
 }
 
 func NewNavigationServiceClient(ctx *bootstrap.Context, r registry.Discovery) siteV1.NavigationServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -387,7 +387,7 @@ func NewNavigationServiceClient(ctx *bootstrap.Context, r registry.Discovery) si
 }
 
 func NewNavigationItemServiceClient(ctx *bootstrap.Context, r registry.Discovery) siteV1.NavigationItemServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -396,7 +396,7 @@ func NewNavigationItemServiceClient(ctx *bootstrap.Context, r registry.Discovery
 }
 
 func NewSiteSettingServiceClient(ctx *bootstrap.Context, r registry.Discovery) siteV1.SiteSettingServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -405,7 +405,7 @@ func NewSiteSettingServiceClient(ctx *bootstrap.Context, r registry.Discovery) s
 }
 
 func NewSiteServiceClient(ctx *bootstrap.Context, r registry.Discovery) siteV1.SiteServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}
@@ -414,7 +414,7 @@ func NewSiteServiceClient(ctx *bootstrap.Context, r registry.Discovery) siteV1.S
 }
 
 func NewMediaAssetServiceClient(ctx *bootstrap.Context, r registry.Discovery) mediaV1.MediaAssetServiceClient {
-	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.CoreService), ctx.GetConfig())
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.UserService), ctx.GetConfig())
 	if err != nil {
 		return nil
 	}

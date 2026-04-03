@@ -6,7 +6,7 @@
 import { onBeforeUnmount, onMounted, reactive, ref, watchEffect } from 'vue';
 import type { ComputedRef, Ref } from 'vue';
 
-import { unrefElement } from '@vueuse/core';
+import { unrefElement } from '@vueuse/user';
 
 export function useModalDraggable(
   targetRef: Ref<HTMLElement | undefined>,

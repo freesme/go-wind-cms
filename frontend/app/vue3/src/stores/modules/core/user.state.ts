@@ -15,7 +15,7 @@ interface IUserState {
   roles: string[]
 }
 
-export const useUserStore = defineStore('core-user', {
+export const useUserStore = defineStore('user-user', {
   state: (): IUserState => ({
     user: null,
     roles: [],

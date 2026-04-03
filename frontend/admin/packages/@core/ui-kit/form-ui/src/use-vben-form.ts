@@ -6,7 +6,7 @@ import type {
 
 import { defineComponent, h, isReactive, onBeforeUnmount, watch } from 'vue';
 
-import { useStore } from '@vben-core/shared/store';
+import { useStore } from '@vben-user/shared/store';
 
 import { FormApi } from './form-api';
 import VbenUseForm from './vben-use-form.vue';

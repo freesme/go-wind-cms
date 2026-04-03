@@ -1522,11 +1522,11 @@ INSERT INTO public.tag_translations (
 (
     NOW() - INTERVAL '60 days', NOW(), 1, 'en-US',
     'Go Language', 'go',
-    'Go (Golang) is an open-source programming language developed by Google, concise, efficient, and high-concurrency, the core development language of GoWind Content Hub.',
+    'Go (Golang) is an open-source programming language developed by Google, concise, efficient, and high-concurrency, the user development language of GoWind Content Hub.',
     '/images/tags/go-en.jpg',
     'tag-default', '/en/tags/go', 'https://gowind.com/en/tags/go',
     'Go Language,Golang,GoWind,High Concurrency,Programming Language',
-    'Go (Golang) is an open-source programming language developed by Google, concise, efficient, and high-concurrency, the core development language of GoWind Content Hub.',
+    'Go (Golang) is an open-source programming language developed by Google, concise, efficient, and high-concurrency, the user development language of GoWind Content Hub.',
     'Go Language | GoWind Tags'
 ),
 -- ========== 标签2：Content Hub - 中文 ==========
@@ -1610,11 +1610,11 @@ INSERT INTO public.tag_translations (
 (
     NOW() - INTERVAL '50 days', NOW(), 5, 'en-US',
     'New Features', 'new-features',
-    'New feature modules of GoWind Content Hub, including multi-tenancy, AI content generation, performance optimization and other core new features.',
+    'New feature modules of GoWind Content Hub, including multi-tenancy, AI content generation, performance optimization and other user new features.',
     '/images/tags/new-features-en.jpg',
     'tag-default', '/en/tags/new-features', 'https://gowind.com/en/tags/new-features',
     'New Features,GoWind,Content Hub,Multi-tenancy,AI Content Generation',
-    'New feature modules of GoWind Content Hub, including multi-tenancy, AI content generation, performance optimization and other core new features.',
+    'New feature modules of GoWind Content Hub, including multi-tenancy, AI content generation, performance optimization and other user new features.',
     'New Features | GoWind Tags'
 ),
 -- ========== 标签6：升级指南 - 中文 ==========
@@ -2468,7 +2468,7 @@ v1.9版本QPS仅5万，响应时间200ms，无法满足高并发需求。
     NOW() - INTERVAL '25 days', NOW(), 2, 'en-US',
     'GoWind Content Hub v2.0 Official Release: Multi-tenancy Support, 100% Performance Boost',
     'gowind-v2-0-release',
-    'GoWind Content Hub v2.0 release introduces core updates including multi-tenancy support, performance optimization, UI refactoring, with QPS exceeding 100,000.',
+    'GoWind Content Hub v2.0 release introduces user updates including multi-tenancy support, performance optimization, UI refactoring, with QPS exceeding 100,000.',
     '# GoWind Content Hub v2.0 Official Release
 
 ## Release Notes
@@ -2499,7 +2499,7 @@ GoWind Content Hub v2.0 was released on March 1, 2024, marking the most signific
     'post-announcement', '/en/blog/gowind-v2-0-release',
     3200,
     'GoWind,Content Hub,v2.0,Release Notes,Multi-tenancy,Performance Optimization,UI Refactoring',
-    'GoWind Content Hub v2.0 release introduces core updates including multi-tenancy support, performance optimization, UI refactoring, with QPS exceeding 100,000.',
+    'GoWind Content Hub v2.0 release introduces user updates including multi-tenancy support, performance optimization, UI refactoring, with QPS exceeding 100,000.',
     'GoWind Content Hub v2.0 Official Release: Multi-tenancy Support, 100% Performance Boost | GoWind Official Announcement'
 ),
 -- ========== 文章3：Linux 环境下部署 GoWind Content Hub - 英文 ==========

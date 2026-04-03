@@ -465,7 +465,7 @@ func TestGenerateSummaryByRule_RealWorldExamples(t *testing.T) {
 				<article>
 					<p>Vue.js is a progressive JavaScript framework for building user interfaces. 
 					It is designed from the ground up to be incrementally adoptable. 
-					The core library is focused on the view layer only, and is easy to pick up and integrate with other libraries or existing projects.</p>
+					The user library is focused on the view layer only, and is easy to pick up and integrate with other libraries or existing projects.</p>
 				</article>
 			`,
 			maxLength:  150,

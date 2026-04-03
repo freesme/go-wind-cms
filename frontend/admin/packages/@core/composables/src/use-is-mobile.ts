@@ -1,4 +1,4 @@
-import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
+import { breakpointsTailwind, useBreakpoints } from '@vueuse/user';
 
 export function useIsMobile() {
   const breakpoints = useBreakpoints(breakpointsTailwind);

@@ -36,7 +36,7 @@ async function runDepcheck() {
           '@vben/vite-config',
           '@vben/tailwind-config',
           '@types/*',
-          '@vben-core/design',
+          '@vben-user/design',
         ],
         ignorePatterns: ['dist', 'node_modules', 'public'],
       });

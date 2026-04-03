@@ -1,0 +1,88 @@
+package service
+
+import (
+	"context"
+
+	"github.com/go-kratos/kratos/v2/log"
+	paginationV1 "github.com/tx7do/go-crud/api/gen/go/pagination/v1"
+	"github.com/tx7do/go-utils/trans"
+	"github.com/tx7do/kratos-bootstrap/bootstrap"
+	"google.golang.org/protobuf/types/known/emptypb"
+
+	"go-wind-cms/app/user/service/internal/data"
+
+	contentV1 "go-wind-cms/api/gen/go/content/service/v1"
+)
+
+type PostService struct {
+	contentV1.UnimplementedPostServiceServer
+
+	postRepo *data.PostRepo
+	log      *log.Helper
+}
+
+func NewPostService(ctx *bootstrap.Context, uc *data.PostRepo) *PostService {
+	return &PostService{
+		log:      ctx.NewLoggerHelper("post/service/user-service"),
+		postRepo: uc,
+	}
+}
+
+func (s *PostService) List(ctx context.Context, req *paginationV1.PagingRequest) (*contentV1.ListPostResponse, error) {
+	return s.postRepo.List(ctx, req)
+}
+
+func (s *PostService) Get(ctx context.Context, req *contentV1.GetPostRequest) (*contentV1.Post, error) {
+	return s.postRepo.Get(ctx, req)
+}
+
+func (s *PostService) Create(ctx context.Context, req *contentV1.CreatePostRequest) (*contentV1.Post, error) {
+	if req.Data.Status == nil {
+		req.Data.Status = trans.Ptr(contentV1.Post_POST_STATUS_PUBLISHED)
+	}
+
+	return s.postRepo.Create(ctx, req)
+}
+
+func (s *PostService) Update(ctx context.Context, req *contentV1.UpdatePostRequest) (*contentV1.Post, error) {
+	return s.postRepo.Update(ctx, req)
+}
+
+func (s *PostService) Delete(ctx context.Context, req *contentV1.DeletePostRequest) (*emptypb.Empty, error) {
+	err := s.postRepo.Delete(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &emptypb.Empty{}, nil
+}
+
+func (s *PostService) TranslationExists(ctx context.Context, req *contentV1.PostTranslationExistsRequest) (*contentV1.PostTranslationExistsResponse, error) {
+	exists, err := s.postRepo.TranslationExists(ctx, req.GetPostId(), req.GetLanguageCode())
+	if err != nil {
+		return nil, err
+	}
+
+	return &contentV1.PostTranslationExistsResponse{
+		Exists: exists,
+	}, nil
+}
+
+func (s *PostService) GetTranslation(ctx context.Context, req *contentV1.GetPostRequest) (*contentV1.PostTranslation, error) {
+	return s.postRepo.GetTranslation(ctx, req)
+}
+
+func (s *PostService) CreateTranslation(ctx context.Context, req *contentV1.CreatePostTranslationRequest) (*contentV1.PostTranslation, error) {
+	return s.postRepo.CreateTranslation(ctx, req)
+}
+
+func (s *PostService) UpdateTranslation(ctx context.Context, req *contentV1.UpdatePostTranslationRequest) (*contentV1.PostTranslation, error) {
+	return s.postRepo.UpdateTranslation(ctx, req)
+}
+
+func (s *PostService) DeleteTranslation(ctx context.Context, req *contentV1.DeletePostTranslationRequest) (*emptypb.Empty, error) {
+	err := s.postRepo.DeleteTranslation(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &emptypb.Empty{}, nil
+}

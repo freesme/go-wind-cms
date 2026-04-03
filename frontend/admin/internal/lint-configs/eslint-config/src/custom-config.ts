@@ -9,7 +9,7 @@ const restrictedImportIgnores = [
 const customConfig: Linter.Config[] = [
   // shadcn-ui 内部组件是自动生成的，不做太多限制
   {
-    files: ['packages/@core/ui-kit/shadcn-ui/**/**'],
+    files: ['packages/@user/ui-kit/shadcn-ui/**/**'],
     rules: {
       'no-console': 0,
       'vue/require-default-prop': 'off',
@@ -43,22 +43,22 @@ const customConfig: Linter.Config[] = [
             {
               group: ['#/rpc/service/*'],
               message:
-                'The #/rpc/service package cannot be imported, please use the @core package itself',
+                'The #/rpc/service package cannot be imported, please use the @user package itself',
             },
             {
               group: ['#/layouts/*'],
               message:
-                'The #/layouts package cannot be imported, please use the @core package itself',
+                'The #/layouts package cannot be imported, please use the @user package itself',
             },
             {
               group: ['#/locales/*'],
               message:
-                'The #/locales package cannot be imported, please use the @core package itself',
+                'The #/locales package cannot be imported, please use the @user package itself',
             },
             {
               group: ['#/storess/*'],
               message:
-                'The #/storess package cannot be imported, please use the @core package itself',
+                'The #/storess package cannot be imported, please use the @user package itself',
             },
           ],
         },
@@ -68,7 +68,7 @@ const customConfig: Linter.Config[] = [
   },
   {
     // @core内部组件，不能引入@vben/* 里面的包
-    files: ['packages/@core/**/**'],
+    files: ['packages/@user/**/**'],
     ignores: restrictedImportIgnores,
     rules: {
       'no-restricted-imports': [
@@ -78,7 +78,7 @@ const customConfig: Linter.Config[] = [
             {
               group: ['@vben/*'],
               message:
-                'The @core package cannot import the @vben package, please use the @core package itself',
+                'The @user package cannot import the @vben package, please use the @user package itself',
             },
           ],
         },
@@ -86,8 +86,8 @@ const customConfig: Linter.Config[] = [
     },
   },
   {
-    // @core/shared内部组件，不能引入@vben/* 或者 @vben-core/* 里面的包
-    files: ['packages/@core/base/**/**'],
+    // @user/shared内部组件，不能引入@vben/* 或者 @vben-user/* 里面的包
+    files: ['packages/@user/base/**/**'],
     ignores: restrictedImportIgnores,
     rules: {
       'no-restricted-imports': [
@@ -95,9 +95,9 @@ const customConfig: Linter.Config[] = [
         {
           patterns: [
             {
-              group: ['@vben/*', '@vben-core/*'],
+              group: ['@vben/*', '@vben-user/*'],
               message:
-                'The @vben-core/shared package cannot import the @vben package, please use the @core/shared package itself',
+                'The @vben-user/shared package cannot import the @vben package, please use the @user/shared package itself',
             },
           ],
         },
@@ -126,7 +126,7 @@ const customConfig: Linter.Config[] = [
             {
               group: ['@vben/*'],
               message:
-                'The @vben package cannot be imported, please use the @core package itself',
+                'The @vben package cannot be imported, please use the @user package itself',
             },
           ],
         },

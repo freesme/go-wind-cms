@@ -10,7 +10,7 @@ import type {
   TitleComponentOption,
   TooltipComponentOption,
 } from 'echarts/components';
-import type { ComposeOption } from 'echarts/core';
+import type { ComposeOption } from 'echarts/user';
 
 import { BarChart, LineChart, PieChart, RadarChart } from 'echarts/charts';
 import {
@@ -24,7 +24,7 @@ import {
   // 内置数据转换器组件 (filter, sort)
   TransformComponent,
 } from 'echarts/components';
-import * as echarts from 'echarts/core';
+import * as echarts from 'echarts/user';
 import { LabelLayout, UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
 

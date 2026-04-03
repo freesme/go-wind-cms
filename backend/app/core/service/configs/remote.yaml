@@ -1,7 +1,0 @@
-config:
-  type: "etcd"
-
-  etcd:
-    endpoints:
-      - "localhost:2379"
-    key: "go-wind-cms/core/service"

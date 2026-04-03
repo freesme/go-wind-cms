@@ -4,7 +4,7 @@ import {
   breakpointsTailwind,
   useBreakpoints,
   useDebounceFn,
-} from '@vueuse/core';
+} from '@vueuse/user';
 
 import {StorageManager} from '@/caches';
 import {isMacOs, merge} from '@/utils';

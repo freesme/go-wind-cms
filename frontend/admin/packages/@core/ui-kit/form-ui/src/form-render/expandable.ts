@@ -2,7 +2,7 @@ import type { FormRenderProps } from '../types';
 
 import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue';
 
-import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
+import { breakpointsTailwind, useBreakpoints } from '@vueuse/user';
 
 /**
  * 动态计算行数

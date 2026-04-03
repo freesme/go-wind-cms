@@ -1,5 +1,5 @@
 import type { TabDefinition } from '@vben/types';
-import type { IContextMenuItem } from '@vben-core/tabs-ui';
+import type { IContextMenuItem } from '@vben-user/tabs-ui';
 import type { RouteLocationNormalizedGeneric } from 'vue-router';
 
 import { computed, ref, watch } from 'vue';

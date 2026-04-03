@@ -10,7 +10,7 @@ import type {
 import { type App, unref } from 'vue';
 import { createI18n } from 'vue-i18n';
 
-import { useSimpleLocale } from '@vben-core/composables';
+import { useSimpleLocale } from '@vben-user/composables';
 
 const i18n = createI18n({
   globalInjection: true,

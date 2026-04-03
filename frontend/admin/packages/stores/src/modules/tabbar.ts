@@ -1,4 +1,4 @@
-import type { TabDefinition } from '@vben-core/typings';
+import type { TabDefinition } from '@vben-user/typings';
 import type { Router, RouteRecordNormalized } from 'vue-router';
 
 import { toRaw } from 'vue';
@@ -7,7 +7,7 @@ import {
   openRouteInNewWindow,
   startProgress,
   stopProgress,
-} from '@vben-core/shared/utils';
+} from '@vben-user/shared/utils';
 
 import { acceptHMRUpdate, defineStore } from 'pinia';
 
@@ -41,7 +41,7 @@ interface TabbarState {
 /**
  * @zh_CN 访问权限相关
  */
-export const useTabbarStore = defineStore('core-tabbar', {
+export const useTabbarStore = defineStore('user-tabbar', {
   actions: {
     /**
      * Close tabs in bulk

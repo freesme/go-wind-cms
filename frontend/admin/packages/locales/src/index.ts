@@ -23,7 +23,7 @@ export {
   type LocaleSetupOptions,
   type SupportedLanguagesType,
 } from './typing';
-export type { CompileError } from '@intlify/core-base';
+export type { CompileError } from '@intlify/user-base';
 
 export { useI18n } from 'vue-i18n';
 

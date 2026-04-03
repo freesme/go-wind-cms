@@ -951,7 +951,7 @@ Interests outside of work enrich life and prevent burnout.`,
   },
   'ui-design-principles': {
     title: 'Core Principles of UI Design',
-    summary: 'Great UI design follows core principles. This article explains essential factors in practical design work.',
+    summary: 'Great UI design follows user principles. This article explains essential factors in practical design work.',
     content: `# Core Principles of UI Design
 
 Excellent UI design improves user experience.

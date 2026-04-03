@@ -13,7 +13,7 @@ import type {
   PreferencesButtonPositionType,
   TabsStyleType,
   ThemeModeType,
-} from '@vben-core/typings';
+} from '@vben-user/typings';
 
 type SupportedLanguagesType = 'en-US' | 'zh-CN';
 
