@@ -57,7 +57,7 @@ function Install-Scoop {
     #>
     Log "Installing Scoop..."
     try {
-        Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force -ErrorAction Stop
+        Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force -ErrorAction SilentlyContinue
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         Invoke-RestMethod -Uri https://get.scoop.sh -UseBasicParsing | Invoke-Expression
         Log "Scoop installed successfully"
@@ -80,10 +80,12 @@ function Add-ScoopBuckets {
     )
 
     Log "Configuring Scoop Buckets..."
-    $bucketList = @(& scoop bucket list 2>$null)
+    $bucketNames = @(& scoop bucket list 2>$null | ForEach-Object {
+        if ($_ -is [string]) { $_.Trim() } else { $_.Name }
+    })
 
     foreach ($bucket in $Buckets) {
-        if ($bucketList -notcontains $bucket) {
+        if ($bucketNames -notcontains $bucket) {
             Log "  Adding bucket: $bucket"
             try {
                 & scoop bucket add $bucket --no-update 2>$null
@@ -175,6 +177,13 @@ function Install-DockerDesktop {
     优先使用 Winget 安装，失败则尝试 Scoop
     #>
     Log "Installing Docker Desktop..."
+
+    # 检查 Docker 是否已安装
+    if (Get-Command docker -ErrorAction SilentlyContinue) {
+        $dockerVersion = & docker --version 2>&1
+        Log "  [SKIP] Docker already installed: $dockerVersion"
+        return $true
+    }
 
     if (Get-Command winget -ErrorAction SilentlyContinue) {
         Log "  Using Winget to install Docker Desktop"
@@ -585,7 +594,7 @@ function Install-GoCliTools {
         'github.com/google/gnostic@latest',
         'github.com/bufbuild/buf/cmd/buf@latest',
         'entgo.io/ent/cmd/ent@latest',
-        'github.com/golangci/golangci-lint/cmd/golangci-lint@latest',
+        'github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest',
         'github.com/tx7do/kratos-cli/config-exporter/cmd/cfgexp@latest',
         'github.com/tx7do/kratos-cli/sql-orm/cmd/sql2orm@latest',
         'github.com/tx7do/kratos-cli/sql-proto/cmd/sql2proto@latest',
@@ -604,14 +613,16 @@ function Install-GoCliTools {
 Initialize-GoEnvironment -GoPath (Join-Path $env:USERPROFILE "go") -GoProxy "https://goproxy.io,direct" -SkipPlugins $false -SkipCliTools $false
 
 # ========== 手动配置提示
+$goPathValue = $env:GOPATH
+if (-not $goPathValue) { $goPathValue = Join-Path $env:USERPROFILE "go" }
 Log "Environment setup completed (current session only)!"
 Write-Host @"
 
 ==================== MANUAL CONFIG TIPS ====================
 1. To make GOPATH permanent:
    Add these lines to your PowerShell Profile:
-   `$env:GOPATH = "$gopath"
-   `$env:PATH += ";$gopath\bin"
+   `$env:GOPATH = "$goPathValue"
+   `$env:PATH += ";$goPathValue\bin"
 
 2. Check service status (admin):
    Get-Service com.docker.service
