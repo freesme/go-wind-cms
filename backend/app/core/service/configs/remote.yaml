@@ -1,7 +1,7 @@
 config:
-  type: "consul"
+  type: "etcd"
 
-  consul:
-    scheme: "http"
-    address: "localhost:8500"
+  etcd:
+    endpoints:
+      - "localhost:2379"
     key: "go-wind-cms/core/service"

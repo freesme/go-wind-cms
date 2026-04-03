@@ -7,7 +7,7 @@ services:
     image: docker.io/bitnami/postgresql:latest
     restart: always
     ports:
-      - "5432:5432"
+      - "15432:5432"
     networks:
       - app-tier
     environment:
@@ -47,7 +47,7 @@ services:
 #      - ${APP_ROOT:-/root/app}/redis/data:/bitnami/redis/data
 
   elasticsearch:
-    image: docker.io/bitnami/elasticsearch:latest
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.0
     restart: always
     ports:
       - "9200:9200"
@@ -55,16 +55,15 @@ services:
     networks:
       - app-tier
     environment:
-      - ELASTICSEARCH_USERNAME=elastic
-      - ELASTICSEARCH_PASSWORD=*Abcd123456
-      - ELASTICSEARCH_ENABLE_SECURITY=true
-      - ELASTICSEARCH_CLUSTER_NAME=gwc-cluster
-      - ELASTICSEARCH_NODE_NAME=gwc-node-1
-      - ELASTICSEARCH_CLUSTER_INITIAL_MASTER_NODES=gwc-node-1
-      - ELASTICSEARCH_DISCOVERY_TYPE=single-node
-      - ELASTICSEARCH_NETWORK_HOST=0.0.0.0
-      - ELASTICSEARCH_HEAP_SIZE=1g  # 根据服务器配置调整，建议不超过物理内存的50%
-      - ELASTICSEARCH_ACTION_DESTRUCTIVE_REQUIRES_NAME=true # 禁止执行没有指定索引名称的删除操作，增加安全性
+      - ELASTIC_PASSWORD=*Abcd123456
+      - xpack.security.enabled=true
+      - cluster.name=gwc-cluster
+      - node.name=gwc-node-1
+      - cluster.initial_master_nodes=gwc-node-1
+      - discovery.type=single-node
+      - network.host=0.0.0.0
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - action.destructive_requires_name=true
     ulimits:
       memlock:
         soft: -1
@@ -77,8 +76,8 @@ services:
     image: docker.io/minio/minio:latest
     restart: always
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - "19000:9000"
+      - "19001:9001"
     networks:
       - app-tier
     environment:
