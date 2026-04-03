@@ -65,7 +65,7 @@ install_go_cli_tools() {
         "github.com/google/gnostic@latest" \
         "github.com/bufbuild/buf/cmd/buf@latest" \
         "entgo.io/ent/cmd/ent@latest" \
-        "github.com/golangci/golangci-lint/cmd/golangci-lint@latest" \
+        "github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest" \
         "github.com/tx7do/kratos-cli/config-exporter/cmd/cfgexp@latest" \
         "github.com/tx7do/kratos-cli/sql-orm/cmd/sql2orm@latest" \
         "github.com/tx7do/kratos-cli/sql-proto/cmd/sql2proto@latest" \

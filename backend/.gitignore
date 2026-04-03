@@ -28,6 +28,7 @@ Thumbs.db
 *.key
 *.log
 bin/
+api/third_party/buf/
 
 # Develop tools
 .vscode/

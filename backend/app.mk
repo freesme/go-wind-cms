@@ -44,11 +44,11 @@ endif
 
 ifeq ($(GIT_EXIST),TRUE)
 ifeq ($(HAS_DOTGIT),TRUE)
-	# CUR_TAG is the last git tag plus the delta from the current commit to the tag
-	# e.g. v1.5.5-<nr of commits since>-g<current git sha>
+    # CUR_TAG is the last git tag plus the delta from the current commit to the tag
+    # e.g. v1.5.5-<nr of commits since>-g<current git sha>
 	CUR_TAG ?= $(shell git describe --tags --first-parent)
 
-	# LAST_TAG is the last git tag
+    # LAST_TAG is the last git tag
     # e.g. v1.5.5
     LAST_TAG ?= $(shell git describe --match "v*" --abbrev=0 --tags --first-parent)
 

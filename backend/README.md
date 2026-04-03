@@ -103,3 +103,9 @@ make run
 ```
 
 ## Docker部署
+
+## GoLand Proto 导入配置
+
+如果 GoLand 在 `api/protos` 下提示 `Cannot resolve import 'errors/errors.proto'`、`google/api/annotations.proto` 或 `validate/validate.proto`，先导出 Buf 远程依赖到本地，再把导出目录加入 GoLand 的 Protocol Buffers import paths。
+
+详细步骤见 [scripts/proto/README.md](/C:/Users/CatBread/GolandProjects/go-wind-cms/backend/scripts/proto/README.md)。

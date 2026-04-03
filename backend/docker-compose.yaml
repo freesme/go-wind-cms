@@ -15,21 +15,6 @@ services:
       - POSTGRES_PASSWORD=*Abcd123456
       - POSTGRES_DB=gwc
 
-#  mysql:
-#    image: docker.io/bitnami/mariadb:latest
-#    restart: always
-#    ports:
-#      - "3306:3306"
-#    networks:
-#      - app-tier
-#    environment:
-#      - MARIADB_ROOT_PASSWORD=*Abcd123456
-#      - MARIADB_USER=admin
-#      - MARIADB_PASSWORD=*Abcd123456
-#      - MARIADB_DATABASE=gwc
-#      - ALLOW_EMPTY_PASSWORD=yes
-#      - TZ=Asia/Shanghai
-
   redis:
     image: docker.io/bitnami/redis:latest
     restart: always

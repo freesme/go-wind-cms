@@ -460,6 +460,7 @@ go run main.go
 | DOCKER_COMPOSE_NAMING.md | Docker 脚本说明    | scripts/     |
 | GO_ENVIRONMENT_GUIDE.md  | Go 环境配置详解      | scripts/env/ |
 | QUICK_START.md           | Windows 脚本快速参考 | scripts/env/ |
+| proto/README.md          | Proto 依赖导出与 GoLand 配置 | scripts/proto/ |
 
 ---
 
