@@ -39,6 +39,10 @@ func NewApiService(
 func (s *ApiService) init() {
 }
 
+func (s *ApiService) Count(ctx context.Context, req *paginationV1.PagingRequest) (*resourceV1.CountApiResponse, error) {
+	return s.apiRepo.Count(ctx, req)
+}
+
 func (s *ApiService) List(ctx context.Context, req *paginationV1.PagingRequest) (*resourceV1.ListApiResponse, error) {
 	return s.apiRepo.List(ctx, req)
 }
