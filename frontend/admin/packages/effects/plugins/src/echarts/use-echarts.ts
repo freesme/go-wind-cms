@@ -13,7 +13,7 @@ import {
   useResizeObserver,
   useTimeoutFn,
   useWindowSize,
-} from '@vueuse/user';
+} from '@vueuse/core';
 
 import echarts from './echarts';
 

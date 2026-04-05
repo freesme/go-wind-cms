@@ -1,5 +1,5 @@
-import type { VbenButtonProps } from '@vben-user/shadcn-ui';
-import type { ClassType } from '@vben-user/typings';
+import type { VbenButtonProps } from '@vben-core/shadcn-ui';
+import type { ClassType } from '@vben-core/typings';
 import type { FieldOptions, FormContext, GenericObject } from 'vee-validate';
 import type { ZodTypeAny } from 'zod';
 

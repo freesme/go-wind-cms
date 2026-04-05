@@ -2,10 +2,10 @@ import type {
   ComponentRecordType,
   GenerateMenuAndRoutesOptions,
   RouteRecordStringComponent,
-} from '@vben-user/typings';
+} from '@vben-core/typings';
 import type { RouteRecordRaw } from 'vue-router';
 
-import { mapTree } from '@vben-user/shared/utils';
+import { mapTree } from '@vben-core/shared/utils';
 
 /**
  * 动态生成路由 - 后端方式

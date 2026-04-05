@@ -1,17 +1,17 @@
-import type { DeepPartial } from '@vben-user/typings';
+import type { DeepPartial } from '@vben-core/typings';
 
 import type { InitialOptions, Preferences } from './types';
 
 import { markRaw, reactive, readonly, watch } from 'vue';
 
-import { StorageManager } from '@vben-user/shared/cache';
-import { isMacOs, merge } from '@vben-user/shared/utils';
+import { StorageManager } from '@vben-core/shared/cache';
+import { isMacOs, merge } from '@vben-core/shared/utils';
 
 import {
   breakpointsTailwind,
   useBreakpoints,
   useDebounceFn,
-} from '@vueuse/user';
+} from '@vueuse/core';
 
 import { defaultPreferences } from './config';
 import { updateCSSVariables } from './update-css-variables';

@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-imports */
-import type { RouteMeta as IRouteMeta } from '@vben-user/typings';
+import type { RouteMeta as IRouteMeta } from '@vben-core/typings';
 
 import 'vue-router';
 

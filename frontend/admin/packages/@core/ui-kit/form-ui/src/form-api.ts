@@ -1,4 +1,4 @@
-import type { Recordable } from '@vben-user/typings';
+import type { Recordable } from '@vben-core/typings';
 import type {
   FormState,
   GenericObject,
@@ -10,7 +10,7 @@ import type { FormActions, FormSchema, VbenFormProps } from './types';
 
 import { toRaw } from 'vue';
 
-import { Store } from '@vben-user/shared/store';
+import { Store } from '@vben-core/shared/store';
 import {
   bindMethods,
   createMerge,
@@ -20,7 +20,7 @@ import {
   isObject,
   mergeWithArrayOverride,
   StateHandler,
-} from '@vben-user/shared/utils';
+} from '@vben-core/shared/utils';
 
 function getDefaultState(): VbenFormProps {
   return {

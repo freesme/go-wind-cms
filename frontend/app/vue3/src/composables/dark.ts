@@ -1,5 +1,5 @@
-// these APIs are auto-imported from @vueuse/user
-import {useDark, usePreferredDark, useToggle} from "@vueuse/user";
+// these APIs are auto-imported from @vueuse/core
+import {useDark, usePreferredDark, useToggle} from "@vueuse/core";
 
 export const isDark = useDark()
 export const toggleDark = useToggle(isDark)

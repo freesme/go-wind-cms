@@ -3,7 +3,7 @@ import type {
   LayoutHeaderModeType,
   LayoutType,
   ThemeModeType,
-} from '@vben-user/typings';
+} from '@vben-core/typings';
 
 interface VbenLayoutProps {
   /**

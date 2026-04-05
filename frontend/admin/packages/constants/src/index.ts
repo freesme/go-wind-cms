@@ -1,2 +1,2 @@
 export * from './core';
-export * from '@vben-user/shared/constants';
+export * from '@vben-core/shared/constants';

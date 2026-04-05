@@ -1,1 +1,1 @@
-import '@vben-user/design';
+import '@vben-core/design';

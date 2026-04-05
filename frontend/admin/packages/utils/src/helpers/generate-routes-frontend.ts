@@ -1,6 +1,6 @@
 import type { RouteRecordRaw } from 'vue-router';
 
-import { filterTree, mapTree } from '@vben-user/shared/utils';
+import { filterTree, mapTree } from '@vben-core/shared/utils';
 
 /**
  * 动态生成路由 - 前端方式

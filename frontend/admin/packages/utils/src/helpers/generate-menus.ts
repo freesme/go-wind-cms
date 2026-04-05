@@ -1,7 +1,7 @@
-import type { ExRouteRecordRaw, MenuRecordRaw } from '@vben-user/typings';
+import type { ExRouteRecordRaw, MenuRecordRaw } from '@vben-core/typings';
 import type { Router, RouteRecordRaw } from 'vue-router';
 
-import { filterTree, mapTree } from '@vben-user/shared/utils';
+import { filterTree, mapTree } from '@vben-core/shared/utils';
 
 /**
  * 根据 routes 生成菜单列表

@@ -1,7 +1,7 @@
 import type { PostEditProps } from './types';
 
 import { $t } from '@vben/locales';
-import { StorageManager } from '@vben-user/shared/cache';
+import { StorageManager } from '@vben-core/shared/cache';
 
 import { defineStore } from 'pinia';
 

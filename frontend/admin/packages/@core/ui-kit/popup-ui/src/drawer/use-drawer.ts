@@ -6,7 +6,7 @@ import type {
 
 import { defineComponent, h, inject, nextTick, provide, reactive } from 'vue';
 
-import { useStore } from '@vben-user/shared/store';
+import { useStore } from '@vben-core/shared/store';
 
 import VbenDrawer from './drawer.vue';
 import { DrawerApi } from './drawer-api';

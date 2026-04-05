@@ -223,7 +223,7 @@ const content = reactive({
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ContentEditor } from '@/components/ContentEditor'
-import { useDebounceFn } from '@vueuse/user'
+import { useDebounceFn } from '@vueuse/core'
 
 const content = ref('')
 const saving = ref(false)

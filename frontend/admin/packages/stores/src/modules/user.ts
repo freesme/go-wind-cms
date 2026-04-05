@@ -44,7 +44,7 @@ export type AccessState = {
 /**
  * @zh_CN 用户信息相关
  */
-export const useUserStore = defineStore('user-user', () => {
+export const useUserStore = defineStore('core-user', () => {
   const userInfo = ref<AccessState['userInfo']>(null);
   const userRoles = ref<AccessState['userRoles']>([]);
 

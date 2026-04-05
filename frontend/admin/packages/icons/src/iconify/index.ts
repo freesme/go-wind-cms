@@ -1,6 +1,6 @@
-import { createIconifyIcon } from '@vben-user/icons';
+import { createIconifyIcon } from '@vben-core/icons';
 
-export * from '@vben-user/icons';
+export * from '@vben-core/icons';
 
 /** MDI */
 

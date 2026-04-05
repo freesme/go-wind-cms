@@ -1,4 +1,4 @@
-import type { BreadcrumbStyleType } from '@vben-user/typings';
+import type { BreadcrumbStyleType } from '@vben-core/typings';
 
 import type { Component } from 'vue';
 

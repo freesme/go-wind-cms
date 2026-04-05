@@ -2,10 +2,9 @@ packages:
   - internal/*
   - internal/lint-configs/*
   - packages/*
-  - packages/@user/base/*
-  - packages/@user/ui-kit/*
-  - packages/@user/forward/*
-  - packages/@user/*
+  - packages/@core/base/*
+  - packages/@core/ui-kit/*
+  - packages/@core/*
   - packages/effects/*
   - packages/business/*
   - apps/*

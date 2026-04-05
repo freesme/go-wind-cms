@@ -1,4 +1,4 @@
-import type { TabDefinition } from '@vben-user/typings';
+import type { TabDefinition } from '@vben-core/typings';
 import type { Router, RouteRecordNormalized } from 'vue-router';
 
 import { toRaw } from 'vue';
@@ -7,7 +7,7 @@ import {
   openRouteInNewWindow,
   startProgress,
   stopProgress,
-} from '@vben-user/shared/utils';
+} from '@vben-core/shared/utils';
 
 import { acceptHMRUpdate, defineStore } from 'pinia';
 

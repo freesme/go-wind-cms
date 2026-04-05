@@ -2,7 +2,7 @@ import type { ExtendedModalApi, ModalApiOptions, ModalProps } from './modal';
 
 import { defineComponent, h, inject, nextTick, provide, reactive } from 'vue';
 
-import { useStore } from '@vben-user/shared/store';
+import { useStore } from '@vben-core/shared/store';
 
 import VbenModal from './modal.vue';
 import { ModalApi } from './modal-api';
