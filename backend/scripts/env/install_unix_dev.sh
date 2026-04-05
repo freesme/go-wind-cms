@@ -18,8 +18,98 @@ if [ "$EUID" -ne 0 ]; then SUDO='sudo'; fi
 TARGET_USER=${SUDO_USER:-$(whoami)}
 TARGET_HOME=$(eval echo "~${TARGET_USER}")
 
-# [复用您原有的 detect_os_and_package_manager 函数内容...]
-# 此处省略 detect_os 函数，逻辑保持一致
+# ============================================================================
+# 系统检测与包管理器识别
+# 返回格式: os_type|pkg_mgr|pkg_cmd|docker_setup
+# ============================================================================
+
+detect_os_and_package_manager() {
+    local os_type pkg_mgr pkg_cmd docker_setup
+
+    if [[ "$(uname)" == "Darwin" ]]; then
+        os_type="macos"
+        pkg_mgr="brew"
+        pkg_cmd="brew install"
+        docker_setup="desktop"
+    elif [ -f /etc/os-release ]; then
+        # shellcheck source=/dev/null
+        . /etc/os-release
+        case "${ID:-}" in
+            ubuntu|debian)
+                os_type="ubuntu"
+                pkg_mgr="apt"
+                pkg_cmd="apt-get install -y"
+                docker_setup="apt"
+                ;;
+            centos|rhel)
+                os_type="centos"
+                pkg_mgr="yum"
+                pkg_cmd="yum install -y"
+                docker_setup="yum"
+                ;;
+            rocky|almalinux)
+                os_type="rocky"
+                pkg_mgr="dnf"
+                pkg_cmd="dnf install -y"
+                docker_setup="dnf"
+                ;;
+            fedora)
+                os_type="fedora"
+                pkg_mgr="dnf"
+                pkg_cmd="dnf install -y"
+                docker_setup="dnf"
+                ;;
+            *)
+                warn "未识别的 Linux 发行版: ${ID:-unknown}"
+                os_type="unknown"
+                pkg_mgr="unknown"
+                pkg_cmd="unknown"
+                docker_setup="unknown"
+                ;;
+        esac
+    else
+        warn "无法识别操作系统"
+        os_type="unknown"
+        pkg_mgr="unknown"
+        pkg_cmd="unknown"
+        docker_setup="unknown"
+    fi
+
+    echo "${os_type}|${pkg_mgr}|${pkg_cmd}|${docker_setup}"
+}
+
+# ============================================================================
+# 基础工具安装 (Git, Curl, JQ, wget 等)
+# ============================================================================
+
+install_basic_tools() {
+    local os_type=$1
+    local pkg_mgr=$2
+    local pkg_cmd=$3
+
+    log "安装基础工具 (git, curl, jq, wget)..."
+
+    case "$os_type" in
+        macos)
+            # 确保 Homebrew 已安装
+            if ! command -v brew >/dev/null 2>&1; then
+                log "未检测到 Homebrew，正在安装..."
+                /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            fi
+            brew install git curl jq wget
+            ;;
+        ubuntu)
+            ${SUDO} apt-get update -y
+            ${SUDO} apt-get install -y git curl jq wget ca-certificates gnupg lsb-release
+            ;;
+        centos|rocky|fedora)
+            ${SUDO} ${pkg_cmd} git curl jq wget ca-certificates
+            ;;
+        *)
+            warn "跳过基础工具安装：未知系统 $os_type"
+            ;;
+    esac
+}
 
 # ============================================================================
 # 开发者专属安装函数
@@ -60,12 +150,13 @@ install_go_plugins() {
 install_go_cli_tools() {
     log "安装 CLI 脚手架工具..."
 
+    # 注意：golangci-lint 在 macOS 由 brew 安装（install_dev_binaries），
+    # 此处不重复 go install，避免 GOPATH/bin 与 brew 版本冲突
     go_install_packages \
         "github.com/go-kratos/kratos/cmd/kratos/v2@latest" \
         "github.com/google/gnostic@latest" \
         "github.com/bufbuild/buf/cmd/buf@latest" \
         "entgo.io/ent/cmd/ent@latest" \
-        "github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest" \
         "github.com/tx7do/kratos-cli/config-exporter/cmd/cfgexp@latest" \
         "github.com/tx7do/kratos-cli/sql-orm/cmd/sql2orm@latest" \
         "github.com/tx7do/kratos-cli/sql-proto/cmd/sql2proto@latest" \
@@ -119,31 +210,42 @@ install_dev_binaries() {
 
 main() {
     # 1. 检测系统
-    # (此处调用 detect_os_and_package_manager)
-    local info=$(detect_os_and_package_manager)
+    local info
+    info=$(detect_os_and_package_manager)
+    local os_type pkg_mgr pkg_cmd docker_setup
+    # 保存并恢复 IFS：bash 对内建命令 read 的前置赋值会永久修改 IFS
+    local old_ifs="$IFS"
     IFS='|' read -r os_type pkg_mgr pkg_cmd docker_setup <<< "$info"
+    IFS="$old_ifs"
 
     # 2. 基础工具 (Git, Curl, JQ 等)
     install_basic_tools "$os_type" "$pkg_mgr" "$pkg_cmd"
 
     # 3. Docker (开发环境需要运行资料库容器)
-    install_docker "$pkg_mgr" "$docker_setup"
+#    install_docker "$pkg_mgr" "$docker_setup"
 
     # 4. Go 环境与代码生成插件
     install_go_dev_tools
     install_dev_binaries "$os_type"
 
     # 5. 设置开发路径 (确保 GOBIN 在 PATH 中)
+    # 注意：$SHELL 在非交互式/CI 环境下可能未设置，使用 ${SHELL:-} 避免 set -u 报错
     local shell_rc="${TARGET_HOME}/.bashrc"
-    [[ "$SHELL" == *"zsh"* ]] && shell_rc="${TARGET_HOME}/.zshrc"
+    [[ "${SHELL:-}" == *"zsh"* ]] && shell_rc="${TARGET_HOME}/.zshrc"
+
+    # 文件不存在时创建（全新系统上 .bashrc/.zshrc 可能缺失），
+    # 否则 grep 返回非零退出码会触发 set -e 提前退出
+    touch "$shell_rc"
 
     if ! grep -q "go/bin" "$shell_rc"; then
         echo 'export PATH=$PATH:$(go env GOPATH)/bin' >> "$shell_rc"
         log "已将 GOBIN 加入 $shell_rc，请执行 'source $shell_rc' 生效"
+    else
+        log "GOBIN 已存在于 $shell_rc，跳过"
     fi
 
     log "✅ 开发环境准备完成！"
-    log "已安装：Docker, Go 插件, Protoc"
+    log "已安装：基础工具, Go 插件, Protoc, CLI 脚手架"
 }
 
 main
