@@ -46,6 +46,7 @@ export const useUserStore = defineStore('core-user', {
   },
 })
 
+// @ts-ignore
 const hot = import.meta.hot
 if (hot)
   hot.accept(acceptHMRUpdate(useUserStore, hot))

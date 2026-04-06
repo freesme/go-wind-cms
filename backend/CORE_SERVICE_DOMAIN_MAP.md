@@ -1,4 +1,4 @@
-# Core Service 领域地图
+# User Service 领域地图
 
 本文聚焦 `backend/app/core/service`，目标是回答三个问题：
 
