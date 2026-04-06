@@ -63,6 +63,13 @@ managed:
       path: media/service/v1
       value: go-wind-cms/api/gen/go/media/service/v1;mediapb
 
+    - file_option: go_package
+      path: book/service/v1
+      value: go-wind-cms/api/gen/go/book/service/v1;bookv1
+    - file_option: go_package
+      path: trade/service/v1
+      value: go-wind-cms/api/gen/go/trade/service/v1;tradev1
+
 plugins:
   # generate go code
   #- plugin: buf.build/protocolbuffers/go

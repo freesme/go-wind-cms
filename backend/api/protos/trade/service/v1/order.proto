@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package trade.service.v1;
+
+import "google/protobuf/empty.proto";
+import "pagination/v1/pagination.proto";
+
+// 订单服务
+// trade-service 在 CreateOrder 时通过 gRPC 调用 book-service 获取书籍信息，演示跨服务调用
+service OrderService {
+  // 获取订单列表
+  rpc List (pagination.PagingRequest) returns (ListOrdersResponse) {}
+
+  // 获取订单详情
+  rpc Get (GetOrderRequest) returns (Order) {}
+
+  // 创建订单（内部调用 book-service 获取书籍信息）
+  rpc CreateOrder (CreateOrderRequest) returns (Order) {}
+
+  // 取消订单
+  rpc Cancel (CancelOrderRequest) returns (google.protobuf.Empty) {}
+}
+
+// 订单状态
+enum OrderStatus {
+  ORDER_STATUS_UNSPECIFIED = 0;
+  ORDER_STATUS_PENDING = 1;    // 待支付
+  ORDER_STATUS_PAID = 2;       // 已支付
+  ORDER_STATUS_CANCELLED = 3;  // 已取消
+}
+
+// 订单
+message Order {
+  optional uint32 id = 1 [json_name = "id"];
+  // 书籍ID（关联 book-service）
+  optional uint32 book_id = 2 [json_name = "bookId"];
+  // 书籍名称（由 book-service 返回）
+  optional string book_title = 3 [json_name = "bookTitle"];
+  // 购买数量
+  optional int32 quantity = 4 [json_name = "quantity"];
+  // 单价（由 book-service 返回）
+  optional float unit_price = 5 [json_name = "unitPrice"];
+  // 总价
+  optional float total_price = 6 [json_name = "totalPrice"];
+  // 用户ID
+  optional uint32 user_id = 7 [json_name = "userId"];
+  // 订单状态
+  optional OrderStatus status = 8 [json_name = "status"];
+}
+
+// 订单列表响应
+message ListOrdersResponse {
+  repeated Order items = 1 [json_name = "items"];
+  uint64 total = 2 [json_name = "total"];
+}
+
+// 获取订单请求
+message GetOrderRequest {
+  uint32 id = 1 [json_name = "id"];
+}
+
+// 创建订单请求
+message CreateOrderRequest {
+  uint32 book_id = 1 [json_name = "bookId"];
+  int32 quantity = 2 [json_name = "quantity"];
+  uint32 user_id = 3 [json_name = "userId"];
+}
+
+// 取消订单请求
+message CancelOrderRequest {
+  uint32 id = 1 [json_name = "id"];
+}

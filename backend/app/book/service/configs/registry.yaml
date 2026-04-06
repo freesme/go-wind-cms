@@ -1,0 +1,6 @@
+registry:
+  type: "etcd"
+
+  etcd:
+    endpoints:
+      - "192.168.31.203:2379"

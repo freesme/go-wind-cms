@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package book.service.v1;
+
+import "google/protobuf/empty.proto";
+import "pagination/v1/pagination.proto";
+
+// 书籍服务
+service BookService {
+  // 获取书籍列表
+  rpc List (pagination.PagingRequest) returns (ListBooksResponse) {}
+
+  // 获取书籍详情
+  rpc Get (GetBookRequest) returns (Book) {}
+
+  // 创建书籍
+  rpc Create (CreateBookRequest) returns (google.protobuf.Empty) {}
+
+  // 更新书籍
+  rpc Update (UpdateBookRequest) returns (google.protobuf.Empty) {}
+
+  // 删除书籍
+  rpc Delete (DeleteBookRequest) returns (google.protobuf.Empty) {}
+}
+
+// 书籍
+message Book {
+  // 书籍ID
+  optional uint32 id = 1 [json_name = "id"];
+  // 标题
+  optional string title = 2 [json_name = "title"];
+  // 作者
+  optional string author = 3 [json_name = "author"];
+  // 单价
+  optional float price = 4 [json_name = "price"];
+  // 库存
+  optional int32 stock = 5 [json_name = "stock"];
+}
+
+// 书籍列表响应
+message ListBooksResponse {
+  repeated Book items = 1 [json_name = "items"];
+  uint64 total = 2 [json_name = "total"];
+}
+
+// 获取书籍请求
+message GetBookRequest {
+  uint32 id = 1 [json_name = "id"];
+}
+
+// 创建书籍请求
+message CreateBookRequest {
+  Book data = 1 [json_name = "data"];
+}
+
+// 更新书籍请求
+message UpdateBookRequest {
+  uint32 id = 1 [json_name = "id"];
+  Book data = 2 [json_name = "data"];
+}
+
+// 删除书籍请求
+message DeleteBookRequest {
+  uint32 id = 1 [json_name = "id"];
+}

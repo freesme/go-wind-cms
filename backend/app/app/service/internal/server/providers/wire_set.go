@@ -16,7 +16,7 @@ import (
 	"go-wind-cms/app/app/service/internal/server"
 )
 
-// ProviderSet is the Wire provider set for data layer.
+// ProviderSet is the Wire provider set for the data layer.
 var ProviderSet = wire.NewSet(
 	server.NewRestServer,
 	server.NewRestMiddleware,
