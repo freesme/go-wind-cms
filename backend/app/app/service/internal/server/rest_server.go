@@ -90,6 +90,7 @@ func NewRestServer(
 	tagService *service.TagService,
 	pageService *service.PageService,
 	navigationService *service.NavigationService,
+	orderService *service.OrderService,
 ) *http.Server {
 	cfg := ctx.GetConfig()
 
@@ -114,6 +115,7 @@ func NewRestServer(
 	appV1.RegisterPageServiceHTTPServer(srv, pageService)
 
 	appV1.RegisterCommentServiceHTTPServer(srv, commentService)
+	appV1.RegisterOrderServiceHTTPServer(srv, orderService)
 
 	if cfg.GetServer().GetRest().GetEnableSwagger() {
 		swaggerUI.RegisterSwaggerUIServerWithOption(

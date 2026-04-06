@@ -17,13 +17,20 @@ import (
 
 func initApp(ctx *bootstrap.Context) (*kratos.App, func(), error) {
 	discovery := data.NewDiscovery(ctx)
-	bookClient := data.NewBookServiceClient(ctx, discovery)
-	orderRepo := data.NewOrderRepo(ctx.GetLogger())
-	orderService := service.NewOrderService(ctx.GetLogger(), orderRepo, bookClient)
-	grpcServer, err := server.NewGrpcServer(ctx, orderService)
+	entClient, cleanup, err := data.NewEntClient(ctx)
 	if err != nil {
 		return nil, nil, err
 	}
+	bookClient := data.NewBookServiceClient(ctx, discovery)
+	orderRepo := data.NewOrderRepo(ctx.GetLogger(), entClient)
+	orderService := service.NewOrderService(ctx.GetLogger(), orderRepo, bookClient)
+	grpcServer, err := server.NewGrpcServer(ctx, orderService)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
 	app := newApp(ctx, grpcServer)
-	return app, func() {}, nil
+	return app, func() {
+		cleanup()
+	}, nil
 }

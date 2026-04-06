@@ -51,4 +51,6 @@ var ProviderSet = wire.NewSet(
 	data.NewSiteSettingServiceClient,
 
 	data.NewMediaAssetServiceClient,
+
+	data.NewTradeServiceClient,
 )

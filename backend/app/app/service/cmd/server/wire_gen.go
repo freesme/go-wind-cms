@@ -34,6 +34,7 @@ func initApp(context *bootstrap.Context) (*kratos.App, func(), error) {
 	minIOClient := data.NewMinIoClient(context)
 	fileServiceClient := data.NewFileServiceClient(context, discovery)
 	fileTransferService := service.NewFileTransferService(context, minIOClient, fileServiceClient)
+	tradeServiceClient := data.NewTradeServiceClient(context, discovery)
 	userServiceClient := data.NewUserServiceClient(context, discovery)
 	tenantServiceClient := data.NewTenantServiceClient(context, discovery)
 	orgUnitServiceClient := data.NewOrgUnitServiceClient(context, discovery)
@@ -53,7 +54,8 @@ func initApp(context *bootstrap.Context) (*kratos.App, func(), error) {
 	pageService := service.NewPageService(context, pageServiceClient)
 	navigationServiceClient := data.NewNavigationServiceClient(context, discovery)
 	navigationService := service.NewNavigationService(context, navigationServiceClient)
-	httpServer := server.NewRestServer(context, v, authenticationService, fileTransferService, userProfileService, postService, categoryService, commentService, tagService, pageService, navigationService)
+	orderService := service.NewOrderService(context.GetLogger(), userServiceClient, tradeServiceClient)
+	httpServer := server.NewRestServer(context, v, authenticationService, fileTransferService, userProfileService, postService, categoryService, commentService, tagService, pageService, navigationService, orderService)
 	grpcMiddlewares := server.NewGrpcMiddleware(context)
 	grpcServer, err := server.NewGrpcServer(context, grpcMiddlewares)
 	if err != nil {

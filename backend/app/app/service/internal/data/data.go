@@ -25,6 +25,7 @@ import (
 	permissionV1 "go-wind-cms/api/gen/go/permission/service/v1"
 	siteV1 "go-wind-cms/api/gen/go/site/service/v1"
 	storageV1 "go-wind-cms/api/gen/go/storage/service/v1"
+	tradev1 "go-wind-cms/api/gen/go/trade/service/v1"
 
 	"go-wind-cms/pkg/oss"
 	"go-wind-cms/pkg/serviceid"
@@ -157,6 +158,17 @@ func NewFileServiceClient(ctx *bootstrap.Context, r registry.Discovery) storageV
 	}
 
 	return storageV1.NewFileServiceClient(cli)
+}
+
+// NewTradeServiceClient 创建 trade-service 的 gRPC 客户端。
+// app-service 只是编排方：它先校验用户，再把下单请求透传给 trade-service。
+func NewTradeServiceClient(ctx *bootstrap.Context, r registry.Discovery) tradev1.OrderServiceClient {
+	cli, err := rpc.CreateGrpcClient(ctx.Context(), r, serviceid.NewDiscoveryName(serviceid.TradeService), ctx.GetConfig())
+	if err != nil {
+		return nil
+	}
+
+	return tradev1.NewOrderServiceClient(cli)
 }
 
 func NewCommentServiceClient(ctx *bootstrap.Context, r registry.Discovery) commentV1.CommentServiceClient {

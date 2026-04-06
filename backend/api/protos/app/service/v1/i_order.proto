@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package app.service.v1;
+
+import "google/api/annotations.proto";
+import "trade/service/v1/order.proto";
+
+// 订单聚合服务（App 层）
+service OrderService {
+  // 在 App 网关下单：先确认用户信息（App 层会先调用 User Service），再委托 Trade Service 创建订单。
+  // 最终订单内页返回的是 Trade Service 的订单对象。
+  rpc CreateOrder (CreateOrderRequest) returns (trade.service.v1.Order) {
+    option (google.api.http) = {
+      post: "/app/v1/orders"
+      body: "*"
+    };
+  }
+}
+
+// 订单创建请求
+message CreateOrderRequest {
+  uint32 book_id = 1 [json_name = "bookId"];      // 书籍ID
+  int32 quantity = 2 [json_name = "quantity"];     // 购买数量
+}

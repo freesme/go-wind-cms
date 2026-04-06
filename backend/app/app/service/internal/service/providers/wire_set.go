@@ -27,5 +27,6 @@ var ProviderSet = wire.NewSet(
 	service.NewCommentService,
 	service.NewPageService,
 	service.NewPostService,
+	service.NewOrderService,
 	service.NewNavigationService,
 )

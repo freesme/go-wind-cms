@@ -8,5 +8,6 @@ import (
 
 // ProviderSet is the Wire provider set for the data layer.
 var ProviderSet = wire.NewSet(
+	data.NewEntClient,
 	data.NewBookRepo,
 )

@@ -2,7 +2,7 @@ logger:
   type: std # Options: std, file, fluent, zap, logrus, aliyun, tencent
 
   fluent:
-    endpoint: "tcp://localhost:24224"
+    endpoint: "tcp://192.168.31.203:24224"
 
   zap:
     level: "debug"
