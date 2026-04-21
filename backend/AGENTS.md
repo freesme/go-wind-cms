@@ -56,3 +56,8 @@ Use `app/<name>/service` as the working directory for service-specific generatio
 ## Security & Configuration Tips
 - Do not commit secrets (DB credentials, JWT keys, S3/MinIO keys, etc.). Keep them local via `.env`/`configs/*`.
 - Export runtime config to etcd in local dev before launching all services (see `STARTUP.md` for command sequence).
+
+## AI Context
+- If `.nexus-map/INDEX.md` exists, read it first and then read every file listed in its mandatory operation block before making cross-module or interface changes.
+- If `.nexus-map/` is missing and the task involves cross-service wiring, public contract changes, or broad refactors, propose regenerating it before editing.
+- After tasks that change service boundaries, startup flows, or major dependencies, update `.nexus-map/` before finishing.

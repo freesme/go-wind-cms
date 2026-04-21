@@ -6,6 +6,18 @@ GoWind（风行内容中台）— 企业级无头内容中枢（Headless Content
 - 后端基于 [golang](https://go.dev/) + [微服务框架 go-kratos](https://go-kratos.dev/)
 - 前端基于 [Vue.js 3](https://vuejs.org/) + [TypeScript](https://www.typescriptlang.org/)
 
+## 新手教程
+
+如果你是第一次接触这个仓库，建议直接从 [guide/README.md](guide/README.md) 开始。
+
+`guide/` 目录是一套面向新手的完整教程，会按当前代码真实结构说明：
+
+- 项目结构和运行架构
+- 基础组件和常用包的职责
+- 本地启动、调试、排错
+- 如何新增一个接口
+- 如何判断并创建一个新的服务
+
 ## 技术栈
 
 - [Kratos](https://go-kratos.dev/) -- B站微服务框架
